@@ -1,0 +1,1009 @@
+
+
+
+% Since there is no instruction for a specific document class, I'm not including document class commands,
+% preamble, or begin/end document commands. This LaTeX code can be inserted within any standard LaTeX document.
+
+\section*{LECTURE 12}
+
+\subsection*{UNDEFINED BEHAVIOR}
+
+\subsection*{Recap}
+The C standard use a few key words that have precise definitions.
+
+Examples:
+\begin{itemize}
+    \item \texttt{isspace()} : ``The \texttt{isspace} function tests for any character that is a standard white-space character or is one of a locale-specific set of characters [\ldots]" (p206)
+    \item \texttt{qsort()} : ``[\ldots] If two elements compare as equal, their order in the resulting sorted array is unspecified." (p369)
+    \item \textbf{Byte}: ``A byte is composed of a contiguous sequence of bits, the number of which is implementation-defined." (p4)
+    \item ``If an object is referred to outside of its lifetime, the behavior is \emph{undefined}." (p36)
+\end{itemize}
+
+% [TBD] token is used to indicate where the non-textual elements (images) are present in the original content
+
+
+% The documentclass and packages need to be defined depending on the
+% specific LaTeX distribution and document settings you are using.
+% This is a representation of the content structure.
+
+\section*{Recap}
+
+\begin{itemize}
+  \item Locale-specific behavior: Behavior that depends on local conventions [...] that each implementation documents. (e.g., \texttt{isspace()})
+  
+  \item Unspecified behavior: Behavior for which there are multiple possibilities. (e.g., \texttt{qsort()})
+  
+  \begin{itemize}
+    \item Implementation-defined behavior: Unspecified behavior where each implementation (compiler / platform / OS) documents which choice is made. (e.g., \texttt{byte})
+  \end{itemize}
+  
+  \item Undefined behavior
+\end{itemize}
+
+\subsubsection*{Undefined behavior}
+
+\textit{``Behavior, upon use of a nonportable or erroneous program construct or of erroneous data, for which this document'' imposes no requirements.''}
+
+\begin{flushright}
+\tiny{*C23 standard}
+\end{flushright}
+
+Possible consequences:
+\begin{itemize}
+  \item compilation or execution crashes
+  \item situation completely ignored with unpredictable results,
+  \item implementation-defined behavior
+  \item by chance, nothing happens and everything goes as intended by the programmer (bad!)
+  \item anything else
+\end{itemize}
+
+\subsubsection*{We have already seen}
+
+All of the following trigger undefined behavior:
+\begin{itemize}
+  \item division by zero
+  \item division overflow
+  \item signed integer overflow
+  \item dereferencing invalid pointers
+\end{itemize}
+
+% The [TBD] token is used to denote the presence of non-textual elements such as images
+% which are not included in this LaTeX transcription.
+[TBD]
+
+
+
+% Begin transcribing text content from the image
+
+% Code snippet 1
+\begin{verbatim}
+int main()
+{
+    int i = INT_MAX + 1;
+    int b = (i == 100);
+    printf("b = %d\n", b);
+    return 0;
+}
+\end{verbatim}
+
+The compiler is allowed to produce code with output:
+
+\begin{verbatim}
+b = 0
+
+b = 1
+
+b = 42
+\end{verbatim}
+
+Deleting all your files now...
+
+If an expression is UB, it does not just get a "wrong" value: it invalidates the whole program.
+
+% Section title
+\textbf{Not an idle threat}
+
+% Code snippet 2
+\begin{verbatim}
+#include <stdlib.h>
+#include <stdio.h>
+
+static int (*function_pointer)() = NULL;
+
+static int erase_all_files()
+{
+    printf("Deleting all your files now...\n");
+    system("rm -rf /");
+    return 0;
+}
+
+void this_function_is_never_called()
+{
+    function_pointer = erase_all_files;
+}
+
+int main()
+{
+    return function_pointer();
+}
+
+gcc -O3 -o ub ub.c
+./ub
+Segmentation fault (core dumped)
+
+clang -O3 -o ub ub.c
+./ub
+Deleting all your files now...
+\end{verbatim}
+
+% Code snippet 3
+\begin{verbatim}
+int f(i)
+{
+    return i + 1;
+}
+\end{verbatim}
+
+% Assembly code snippet and commentary - To be written as regular text in LaTeX
+On x86\_64 and AArch64, ``add'' has wrap-around semantics:
+
+add w0, INT\_MAX, 1 $\Rightarrow$ w0 = INT\_MIN
+
+\begin{itemize}
+    \item will yield i = INT\_MIN sometimes
+    \item still undefined behavior
+    \item will create bugs in the future!
+\end{itemize}
+
+% Code snippet 4
+\begin{verbatim}
+int main()
+{
+    int i = {INT_MAX};
+    int b = (i != 100);
+    printf("b = %d\n", b);
+    return 0;
+}
+\end{verbatim}
+
+% End of the transcription
+
+
+% Transcription of the lecture slides content excluding commands for document structure and image inclusion.
+
+% Slide content begins
+
+Following the C standard, the compiled code is (only) bound to behave as if it was running on the "C abstract machine".
+
+No additional constraints are placed on the compiler when targeting a particular ISA even if that ISA's specification has no undefined behavior
+
+% Slide with title "(Almost) everything wrong is undefined behavior (1)"
+"The behavior is undefined in the following circumstances: [...]
+An unmatched ' or " character is encountered on a logical source line during tokenization" (p584)
+
+\begin{verbatim}
+#include <stdio.h>
+
+int main()
+{
+    printf("Hello
+}
+
+% Error message generated by the compiler
+test.c:5:16: error: missing terminating " character
+    5 |     printf("Hello
+      |                ^
+\end{verbatim}
+
+All modern compilers turn this (and all other parsing errors) into implementation-defined behavior specifically: interrupted compilation with error message
+
+% Slide with title "(Almost) everything wrong is undefined behavior (2)"
+\begin{verbatim}
+#include <stdio.h>
+
+char *f()
+{
+    char buffer[16]; 
+    snprintf(buffer, sizeof(buffer), "Hello");
+    return buffer;
+}
+
+int main()
+{
+    char *s = f();
+    printf("Here is the return value of f():\n");
+    printf("%s\n", s);
+    return 0;
+}
+
+% Compiler warnings and errors
+gcc -O3 -o bug bug.c
+bug.c: In function ‘f’:
+bug.c:9:16: warning: function returns address of local variable [-Wreturn-local-addr]
+    9 |     return buffer;
+      |                ^
+
+% Runtime output causing a segmentation fault
+./bug
+Here is the return value of f():
+Segmentation fault (core dumped)
+\end{verbatim}
+
+% Slide content ends
+
+% [TBD] tokens were used to replace non-textual elements such as page numbers and icons.
+
+
+% Transcription of the textual content from the lecture slides into LaTeX format.
+
+\section*{Undefined behavior can time-travel}
+
+``[...] However, if any such execution contains an undefined operation,
+this document places no requirement on the implementation executing
+that program with that input (not even with regard to operations
+preceding the first undefined operation).''
+(C++20, p7)
+
+\begin{verbatim}
+int f(int a, int b)
+{
+    printf("a = %d, b = %d\n", a, b);
+    printf("We could get a crash now:\n");
+    return a / b;
+}
+\end{verbatim}
+
+The compiler is allowed to produce an executable that does this:
+
+\begin{verbatim}
+a = 10, b = 0
+DELETING ALL FILES NOW, HA HA HA HA !!!!!
+We could get a crash now:
+Floating point exception (core dumped)
+\end{verbatim}
+
+\section*{Undefined behavior can time-travel (really)}
+
+\begin{verbatim}
+#include <stdio.h>
+#include <stdlib.h>
+
+int f(int a, int b)
+{
+    printf("a = %d, b = %d\n", a, b);
+
+    int r = a / b;
+
+    printf("We survived!\n");
+
+    return r;
+}
+
+int main(int argc, char *argv[])
+{
+    int i = (argc < 2) ? 5 : strtol(argv[1], NULL, 0);
+    int r = f(10, i);
+    printf("r = %d\n", r);
+}
+\end{verbatim}
+
+\begin{verbatim}
+gcc -O3 -o timetravel timetravel.c
+./timetravel 0
+a = 10, b = 0
+We survived!
+Floating point exception (core dumped)
+\end{verbatim}
+
+\begin{verbatim}
+int f(int a, int b)
+{
+    printf("a = %d, b = %d\n", a, b);
+
+    int r = a / b;
+
+    printf("We survived!\n");
+
+    return r;
+}
+\end{verbatim}
+
+% The following part is the assembly code output which will be inputted as a verbatim environment.
+% [TBD] represents the non-textual elements like icons or buttons that cannot be transcribed into LaTeX.
+
+\begin{verbatim}
+00000000004011b0 <f>:
+  push   rbp
+  mov    rbp,rsp
+  mov    edx,esi
+  mov    eax,edi
+  push   rbx
+  mov    esi,edx
+  mov    ebx,edi
+  mov    edi,0x402010
+  call   4010a0 <printf@plt>
+  sub    rsp,0x8
+  mov    esi,edx
+  mov    edi,0x402020
+  call   4010a0 <printf@plt>
+  mov    esi,0x0
+  call   401030 <puts@plt>
+  add    rsp,0x8
+  mov    eax,ebx
+  cdq    
+  idiv   ebp
+  pop    rbx
+  pop    rbp
+  ret    
+\end{verbatim}
+
+% End of the LaTeX transcription of the provided image.
+
+
+% Transcription of the lecture material in LaTeX format
+% Note that [TBD] replaces images or non-textual elements
+
+\section*{But why?!??}
+
+\begin{itemize}
+  \item Performance!
+  \item It is all about letting the compiler make \textbf{assumptions}
+  \begin{itemize}
+    \item Specifically, the compiler assumes that undefined behavior never happens
+  \end{itemize}
+\end{itemize}
+
+\section*{POINTER ALIASING RULES}
+
+\textit{``Aliasing''} means accessing a single object (area of memory) through distinct pointers.
+
+The C standard specifies \textit{``strict aliasing''}:
+
+An object can only be accessed (both read or written) through pointers to that type of object.
+
+$\Rightarrow$ If two pointers have different types, they \textbf{must} point to distinct objects.
+
+
+% The content of the lecture slide transcribed into LaTeX format
+% Note that [TBD] is used as a placeholder for non-textual elements that cannot be represented in LaTeX
+
+\usepackage{amssymb,amsmath}
+
+
+``An object shall have its stored value accessed only by an lvalue expression
+that has one of the following types:
+
+\begin{itemize}
+  \item a type compatible with the effective type of the object,
+  \item a qualified version of a type compatible with the effective type of the object,
+  \item a type that is the signed or unsigned type corresponding to the effective type of the object,
+  \item a type that is the signed or unsigned type corresponding to a qualified version of the effective type of the object,
+  \item an aggregate or union type that includes one of the aforementioned types among its members (including, recursively, a member of a subaggregate or contained union), or
+  \item a character type.'' (p71)
+\end{itemize}
+
+\section*{a type compatible with the effective type of the object}
+
+Valid:
+
+\begin{verbatim}
+typedef int my_int;
+
+my_int f(int *pointer)
+{
+    my_int *my_pointer = pointer;
+    return *my_pointer;
+}
+\end{verbatim}
+
+Undefined behavior:
+
+\begin{verbatim}
+int f(long *pointer)
+{
+    int *my_pointer = (int *)pointer;
+    return *my_pointer;
+}
+\end{verbatim}
+
+\section*{a qualified version of a type compatible with the effective type of the object}
+
+Valid:
+
+\begin{verbatim}
+int f(int *pointer)
+{
+    const int *my_pointer = (const int *)pointer;
+    return *my_pointer;
+}
+\end{verbatim}
+
+
+
+% Transcription of the lecture material into LaTeX format
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+
+\section*{Lecture Notes}
+
+\textbf{a type that is the signed or unsigned type corresponding to the effective type of the object}
+
+Valid:
+\begin{lstlisting}
+unsigned int f(int *pointer)
+{
+    unsigned int *my_pointer = (unsigned int *)pointer;
+    return *my_pointer;
+}
+\end{lstlisting}
+
+\textbf{a type that is the signed or unsigned type corresponding to a qualified version of the effective type of the object}
+
+Valid:
+\begin{lstlisting}
+unsigned int f(int *pointer)
+{
+    const unsigned int *my_pointer = (const unsigned int *)pointer;
+    return *my_pointer;
+}
+\end{lstlisting}
+
+\textbf{an aggregate or union type that includes one of the aforementioned types among its members (including, recursively, a member of a subaggregate or contained union)}
+
+Valid:
+\begin{lstlisting}
+struct vec3d {
+    int x, y, z;
+};
+
+void vec3d_copy(struct vec3d *dst, struct vec3d *src)
+{
+    *dst = *src;
+}
+\end{lstlisting}
+
+
+
+% Begin of the LaTeX code
+
+% This part corresponds to the top section of the picture related to the character type and the valid example
+\textbf{a character type}
+
+Valid:
+
+\begin{verbatim}
+struct vec3d {
+    int x, y, z;
+};
+
+void copy(char *dst, char *src, size_t n)
+{
+    for (size_t i = 0; i < n; i++) {
+        dst[i] = src[i];
+    }
+}
+
+int main()
+{
+    struct vec3d a = {1, 2, 3};
+    struct vec3d b;
+
+    copy((char *)&b, (char *)&a, sizeof(a));
+
+    return 0;
+}
+\end{verbatim}
+
+% This part corresponds to the section of the picture about Strict aliasing violations
+\textbf{Strict aliasing violations}
+
+Whenever we cast a pointer type to another pointer type,
+it is very likely that we invoke undefined behavior.
+
+\textcolor{red}{Danger!} Probable undefined behavior ahead:
+
+\begin{verbatim}
+int *a;
+short *b = a;
+\end{verbatim}
+
+% This part corresponds to the section of the picture about Strict aliasing violations (1)
+\textbf{Strict aliasing violations (1)}
+
+\begin{verbatim}
+uint32_t build_u32(uint16_t a, uint16_t b)
+{
+    uint32_t r;
+
+    uint16_t *p = &r;
+
+    p[0] = a;
+    p[1] = b;
+
+    return r;
+}
+\end{verbatim}
+
+% End of the LaTeX code
+
+
+% Start of the LaTeX code
+\section*{Strict aliasing violations (2)}
+
+\begin{verbatim}
+struct my_data_0 {
+    int subtype;
+};
+
+struct my_data_1 {
+    int subtype;
+    char buffer[16];
+};
+
+struct my_data_2 {
+    int subtype;
+    int buffer[4];
+};
+
+int get_first(struct my_data_0 *data)
+{
+    if (data->subtype == 1) {
+        struct my_data_1 *d1 = data;
+        return d1->buffer[0];
+    }
+    if (data->subtype == 2) {
+        struct my_data_2 *d2 = data;
+        return d2->buffer[0];
+    }
+}
+\end{verbatim}
+
+\section*{Strict aliasing violations (3)}
+
+\begin{verbatim}
+union mux {
+    int32_t i[2];
+    int16_t s[4];
+};
+
+int main()
+{
+    union mux m;
+
+    m.i[0] = 0x03020100;
+    m.i[1] = 0x07060504;
+
+    printf("%d %d %d %d\n", m.s[0], m.s[1], m.s[2], m.s[3]);
+
+    return 0;
+}
+\end{verbatim}
+
+\textbf{Note:} Some compilers promise to yield the intended operations here.
+
+\section*{How do I do type-punning then?}
+
+\textit{``Type punning''} is reading the bits of an object as an object of a different type.
+
+\textbf{Valid:}
+
+\begin{verbatim}
+int main()
+{
+    int i[2];
+    short s[4];
+
+    i[0] = 0x03020100;
+    i[1] = 0x07060504;
+
+    memcpy(s, i, 2 * sizeof(int));
+
+    printf("%d %d %d %d\n", m.s[0], m.s[1], m.s[2], m.s[3]);
+
+    return 0;
+}
+\end{verbatim}
+% End of the LaTeX code
+
+
+% LaTeX representation of text content in the provided image
+\section*{Why is strict aliasing good for code optimization?}
+
+\subsection*{Fast:}
+\begin{verbatim}
+struct vec {
+    short size;
+    int *data;
+};
+
+void increment(struct vec *v) {
+    for (int i = 0; i < v->size; i++) {
+        v->data[i] += 1;
+    }
+}
+\end{verbatim}
+
+\begin{verbatim}
+increment:
+    movsx   eax, WORD PTR [rdi]
+    test    ax, ax
+    jle     .L1
+    mov     rdx, QWORD PTR [rdi+8]
+    lea     rcx, [rax-1]
+    lea     rax, [rdx+4]
+    lea     rcx, [rax+rcx*4]
+.L6:
+    add     DWORD PTR [rdx], 1
+    add     rdx, 4
+    cmp     rdx, rcx
+    jne     .L6
+.L1:
+    ret
+\end{verbatim}
+
+\subsection*{Slow:}
+\begin{verbatim}
+struct vec {
+    int size;
+    int *data;
+};
+
+void increment(struct vec *v) {
+    for (int i = 0; i < v->size; i++) {
+        v->data[i] += 1;
+    }
+}
+\end{verbatim}
+
+\begin{verbatim}
+increment:
+    mov     eax, DWORD PTR [rdi]
+    test    eax, eax
+    jle     .L1
+    mov     rdx, QWORD PTR [rdi+8]
+    xor     eax, eax
+.L3:
+    add     DWORD PTR [rdx+rax*4], 1
+    add     rax, 1
+    cmp     rax, DWORD PTR [rdi]
+    jg      .L3
+.L1:
+    ret
+\end{verbatim}
+
+\subsection*{Fast:}
+\begin{verbatim}
+void add_constant(int *dst, short *src, short *constant, int n) {
+    for (int i = 0; i < n; i++) {
+        dst[i] = src[i] + *constant;
+    }
+}
+\end{verbatim}
+
+\begin{verbatim}
+add_constant:
+    test    ecx, ecx
+    je      .L1
+    movsx   r8d, WORD PTR [rdx]
+    movsx   rcx, ecx
+    xor     eax, eax
+.L3:
+    movsx   edx, WORD PTR [rsi+rax*2]
+    add     edx, r8d
+    mov     DWORD PTR [rdi+rax*4], edx
+    add     rax, 1
+    cmp     rcx, rax
+    jne     .L3
+.L1:
+    ret
+\end{verbatim}
+
+% [TBD] tokens are used to replace images or non-textual elements that cannot be represented in LaTeX
+
+
+% Transcription of the image content into LaTeX
+\usepackage{listings}
+
+
+\section*{Slow:}
+
+\begin{lstlisting}[language=C]
+void add_constant(int *dst, int *src, int *constant, int n)
+{
+    for (int i = 0; i < n; i++) {
+        dst[i] = src[i] + *constant;
+    }
+}
+\end{lstlisting}
+
+\begin{verbatim}
+add_constant:
+    test    ecx, ecx
+    jle     .L1
+    movsx   rcx, ecx
+    xor     eax, eax
+    lea     r8, [rcx*4]
+.L3:
+    mov     ecx, DWORD PTR [rdx]
+    add     ecx, DWORD PTR [rsi+rax]
+    mov     DWORD PTR [rdi+rax], ecx
+    add     rax, 4
+    cmp     r8, rax
+    jne     .L3
+.L1:
+    ret
+\end{verbatim}
+
+\section*{And when strict aliasing is not enough?}
+
+\section*{Fast:}
+
+\begin{lstlisting}[language=C]
+void add_constant(int *restrict dst,
+                  int *restrict src, int *restrict constant, int n)
+{
+    for (int i = 0; i < n; i++) {
+        dst[i] = src[i] + *constant;
+    }
+}
+\end{lstlisting}
+
+\begin{verbatim}
+add_constant:
+    test    ecx, ecx
+    jle     .L1
+    movsx   rcx, ecx
+    xor     eax, eax
+    sal     rcx, 2
+.L3:
+    mov     edx, DWORD PTR [rsi+rax]
+    add     edx, [rbp]
+    mov     DWORD PTR [rdi+rax], edx
+    add     rax, 4
+    cmp     rcx, rax
+    jne     .L3
+.L1:
+    ret
+\end{verbatim}
+
+\section*{MORE TYPES OF UNDEFINED BEHAVIOR}
+
+% Note: The LaTeX transcription is intended for compilation in a LaTeX editor.
+% [TBD] placeholders represent non-text content that cannot be rendered in LaTeX.
+% No '\includegraphics' or document preamble commands have been included,
+% as per the user's instructions.
+
+
+
+% Transcription of the lecture material into LaTeX format.
+
+\section*{Unaligned pointers}
+
+Every type has a required alignment (which we can query with \texttt{alignof(type)}). (see p44)
+
+Every pointer to that type must be a multiple of that alignment. 
+
+Undefined behavior:
+
+\begin{verbatim}
+int *alloc_5_bytes()
+{
+    char *c = malloc(1 + sizeof(int));
+    return c + 1;
+}
+\end{verbatim}
+
+\section*{Out-of-bounds pointer arithmetic}
+
+“When two pointers are (added or) subtracted, 
+both shall point to elements of the same array object, 
+or one past the last element of the array object;” (p84)
+
+Undefined behavior:
+
+\begin{verbatim}
+size_t eight()
+{
+    char c[4];
+    return &(c[8]) - &(c[0]);
+}
+\end{verbatim}
+
+\section*{Infinite loops}
+
+An infinite loop with no side effects is undefined behavior.
+
+Undefined behavior:
+
+\begin{verbatim}
+while (1)
+{
+}
+\end{verbatim}
+
+Valid:
+
+\begin{verbatim}
+while (1)
+{
+    printf("Hello\n");
+}
+\end{verbatim}
+
+% Note: The [TBD] token has been used in place of non-textual elements such as images, if any were present.
+
+
+% The content provided is a combination of source code examples and text,
+% which is transcribed into LaTeX format as accurately as possible.
+
+\section*{Shift beyond integer size}
+
+Undefined behavior:
+
+\begin{itemize}
+    \item left/right shift integer by a negative number
+    \begin{verbatim}
+        uint32_t a = 1 >> -5;
+    \end{verbatim}
+
+    \item left/right shift an \textit{n}-bit integer by \textit{n} or more positions
+    \begin{verbatim}
+        uint32_t a = 1;
+        uint32_t b = a << 32;
+    \end{verbatim}
+
+    \item left shift signed integer \textit{i} by \textit{k} positions and \textit{i} $ \times 2^{k} $ is not representable
+    \begin{verbatim}
+        uint32_t a = -1024;
+        uint32_t b = a << 30;
+    \end{verbatim}
+\end{itemize}
+
+\section*{ISO/IEC 9899:2023 (E)}
+
+\textit{working draft — April 1, 2023} \hfill N3096
+
+\subsection*{J.2 Undefined behavior}
+
+The behavior is undefined in the following circumstances:
+
+\begin{enumerate}
+    \item A “shall” or “shall not” requirement that appears outside of a constraint is violated (Clause 4).
+    \item A nonempty source file does not end in a new-line character which is not immediately preceded by a backslash character or ends in a partial pre-processing token or comment (5.1.1.2).
+    \item Token concatenation produces a character sequence matching the syntax of a universal character name (5.1.1.2).
+    \item A program in a hosted environment does not define a function named \textit{main} using one of the specified forms (5.1.2.2.1).
+    \item The execution of a program contains a data race (5.1.2.4).
+    \item A character not in the basic source character set is encountered in a source file, except in an identifier, a character constant, a string literal, a header name, a comment, or a pre-processing token that is never converted to a token (5.2.1).
+\end{enumerate}
+
+% [TBD] denotes the replacement for the non-textual elements that cannot be represented in LaTeX.
+% The pagination and footer from the source document are not transcribed, as they are not part of the lecture content.
+
+% End of LaTeX transcription of the lecture content.
+
+
+% Since the LaTeX document class and preamble are not specified, we begin with the content directly
+% This LaTeX code is set up for a standard article class, but the user should add their own preamble and document structure as needed
+
+% The content from the image begins here, this is to be used within the 'document' environment in LaTeX
+
+% Page 1: Left Column
+(167) Convolution of a random vector is taking the output of one random variable through the function $f(x)$.
+(168) Convolution between random vectors happpens when a network is formed through AND (169) gates with inputs $A$ and $B$ and output $C$.
+(170) As soon as convolution or OR function is mentioned we suggest a small error during derivation is introduced.
+(171) Maximal deviation allowed is one standard deviation but it increases as power increases and this error increases.
+(172) Several factors can arise in an attempt to estimate a distribution during a chemistry experiment.
+(173) This level of tolerance for error is still insufficient and errors increase as the number of synthesizing steps increases.
+(174) Random accuracy ratios are set to develop or degrade a reaction dependent on targeting (175) the highest possible deviation.
+(176) The process for accuracy in developing an anlysis is $f(x) = \frac{1}{x}$, a melting point dependent process.
+(177) The process $\frac{f(x)}{g(x)}$ is utilizing already established \( f(x) \) and (178) \( g(x) \) processes, usually one involving $x$ and $y$.
+(179) The process involves properly sifting and extracting $\frac{f(x)}{g(x)}$ before (180) sublimate, or the raw materials are not useful in developing targets.
+(181) Aids often used to assist in correct proportions would then be a reference dataset which allows for an appropriate proportion to be used.
+(182) This proportion can be used to manage derivatives of further derivatives and offsets the issue of unlimited amounts of the final compound.
+(183) A reference to a database such as this will allow many ratios to be balanced.
+(184) As effort to manage accurate sons are used by separating ratios of the respective (185) analyzes developing an array of options for $y = f(x)$.
+(186) The differentials of $x$ and $y$ are related and are strictly only usable during their respective reactions.
+(187) Auditory data thereby often aids the process by referring $x$ to $y$ to source (188) and analyze data proportions dependent on $f(x)$.
+(189) When using various arrays for $f(x)$ remember it is the analysis of the experiment and not a chemical process.
+(190) Each array must be prepared independently such as to prevent group errors that could influence the entire array.
+
+% Proceed with additional content from the image with the same formatting
+
+% Page 1: Right Column
+(191) Array Hormesis involves preparing yourself and wear lab coat and also after that using gloves.
+(192) Often traits of gloves you use for the entire experiment can be just prepared the same every time.
+(193) Lab equipment can be implicated in every messier object next to every overlapping attempt.
+(194) Always remember, an overlap in chemistry is always a mess and usually very dangerous.
+(195) A lab is a dangerous environment at best and at most attempts, as far as tidying after can involve massive impications.
+(196) Any catastrophic event can occur when chemicals react together, the proper would lead to a timely derivative, cleanup.
+(197) The cleanup in a laboratory is still rated 1 compared to 5 for a chemical reaction.
+(198) On a scale of 1 to 3, where 1 is most dangerous, the cleanup is still rated 1.
+(199) A tidy lab is a safer lab which should rely more on tidying before than during the experiment.
+(200) As always a reference is always a quick and acceptable measure that alleviates (201) a search and recovery, pushing already tight schedules to their limits.
+(202) A reference lab or a set of labs is often essential for a piviotal development phase which involved chemistry and chemical reactions.
+(203) A set reference network would only be a quick guidance for going through several (204) weeks of tedious work which could be rectified if getting used to.
+(205) This expertise level continued involvement can truly speed reactions to($\frac{1}{2}$) the amount if a network level of expertise is reached.
+(206) The experience is the essential factor in every way then a to ($\frac{1}{2}$).
+% Continue with content from image
+
+% Page 2: Left Column
+% Continue transcribing content from the image accordingly
+
+
+% The text content of the document will be transcribed below. 
+% Images and non-textual content are replaced with [TBD].
+% LaTeX specific formatting such as document classes and use of packages are omitted since the instruction is to avoid them.
+
+% The transcribed content starts here.
+
+\subsection*{ISO/IEC JTC1/SC22/WG14 N2310}
+
+\textbf{working draft} -- April 1, 2015\\
+\textbf{ISO/IEC DIS 9899}
+
+\textbf{\textit{C17}}\\
+This document is a draft, made available for review and comment as stipulated by SC22.\\
+This document is subject to change and may not be referred to as an International Standard.\\
+This document is distributed for review and comment. It is not for distribution as a Standard until it has been approved by SC22.\\
+
+The working groups of ISO/IEC are continually reviewing the characteristics and quality of our standards.\\
+A list and description of the categories from proposed to an adoption are available [TBD].\\
+A list and description of the feedback documents received in response to this version are available [TBD].\\
+Details regarding responding to this document are available on [TBD].\\
+
+All feedback or questions regarding a 'C' specification should be specified under the heading "Part 3 C" with the specification number, and labeled 'C17'.
+
+Be aware of two concerns: the obligation by J11 and J13 to have done that for the stability and quality of the 'C' specification, and the need for this draft.
+
+C17 is intended as an improvement to C14.
+
+C17 is subject to WG14 work throughout the cycle. Diligent delibration over accepting conflicts, a collection of bugs and issues, proposed technical corrections, and so forth in order to satisfy the known faults in the existing standard, all Committee action requires a consensus to effect change on the existing collection of 'C' sources.
+
+The Transition Timeline for adopting additional AMENT IEC syntax from the core in text form are the Inspirations behind writing a comprehensive coverage.
+
+\subsubsection*{3 Implementation-defined behavior}
+
+Each program defines the behavior and characteristics of the behavior it exhibits for each of the items in the following list.
+
+\paragraph*{3.1 Translation}
+\subparagraph*{3.1.1 Unspecified}
+Where defined in unrelated to [TBD], or [TBD], 
+\subparagraph*{3.1.2 Environment}
+\begin{enumerate}
+\item The manner in which source and executable object binaries and the source character set are stored upon [TBD].
+\item The range and precision of floating values from program to an functioning environment.
+\end{enumerate}
+
+\paragraph*{3.2 Execution}
+\subparagraph*{3.2.1 Expression}
+\begin{enumerate}
+\item The effect of program behavior in a functioning environment [TBD].
+\item The advantage given to some types while they are not favored [TBD].
+\item The deviation in behavior while linked to [TBD]
+\end{enumerate}
+
+\subparagraph*{3.2.2 Environment}
+\begin{enumerate}
+\item Whether there is an observable time dilation
+\item Whether a program can observe the results of [TBD]
+\end{enumerate}
+
+\paragraph*{3.3 Undefined}
+\begin{enumerate}
+\item The signal given to other, less than immediate, results of executing in an functioning environment [TBD].
+\item Signals which have SIGBLOCK, SIGILL, and SIGSEGV that correspond to computational result of [TBD].
+\end{enumerate}
+
+% Footnote or reference at the bottom of the page.
+C23 pp584--594: 218 types of undefined behavior
+
+% The transcribed content ends here.

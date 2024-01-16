@@ -1,0 +1,282 @@
+
+
+
+% The LaTeX code below is a transcription of the text content in the provided image.
+% This LaTeX code is intended to be compiled in a LaTeX editor. 
+% Since there are no commands for document structure or style, 
+% you need to embed this within a suitable document preamble and body.
+
+\section*{LECTURE 7}
+
+\subsection*{SOME PYTHON}
+
+\subsection*{PYTHON FORMATTED STRING LITERALS}
+
+% [TBD] is used to denote the place where non-textual elements should be included if present. 
+% In this case, the image can be replaced with a placeholder indicating that content was here.
+
+
+
+% Transcription of the image content into LaTeX
+
+Formatted string literals look like string literals, but are prepended with an \texttt{f}:
+
+\texttt{f'Hello'}
+
+They allow us to:
+\begin{itemize}
+    \item build a string from python expressions
+    \item specify how to format those expressions
+\end{itemize}
+
+Syntax:
+\texttt{f'raw\_string \{python\_expression : format\} ...'}
+
+\begin{itemize}
+    \item \texttt{raw\_string}: anything not between \texttt{"\{\}"} is a raw string literal
+    \item between \texttt{"\{\}"} we specify a formatted expression
+    \begin{itemize}
+        \item \texttt{python\_expression}: most python expressions are allowed here must not be ambiguous, e.g. no \texttt{". "}
+        \item \texttt{format}: specifies how to convert the corresponding expression to a string
+    \end{itemize}
+    \item the f-string is \textit{immediately} evaluated into a string:
+\end{itemize}
+
+\begin{verbatim}
+>>> x = 3
+>>> f'Hello {x}'
+'Hello 3'
+>>> type(f'Hello {x}')
+<class 'str'>
+\end{verbatim}
+
+Format:
+\begin{itemize}
+    \item \texttt{<} for left align, \texttt{>} for right-align
+    \item \texttt{+} include sign even for positive numbers
+    \item \texttt{(space)} empty space for positive numbers
+    \item \texttt{b} binary, \texttt{d} decimal (default), \texttt{x} hexadecimal
+    \item \texttt{f} floating point number (fixed-point notation)
+    \item \texttt{20} (or other number) specify the minimum width of the conversion result
+    \item \texttt{.10} (or other number) specify the number of digits after the decimal dot
+\end{itemize}
+
+Examples:
+\begin{verbatim}
+>>> f'pi = {math.pi:+6.2f}'
+'pi = +3.14'
+>>> f'pi = {math.pi:<+6.2f}'
+'pi = +3.14 '
+\end{verbatim}
+[TBD] % Replace [TBD] with the appropriate LaTeX command(s) if necessary for non-text content
+
+
+% Since LaTeX does not provide a standard environment for slides or presentations
+% without using a document class like beamer, this transcription will focus on 
+% the content aspect only.
+
+\usepackage{amsmath}
+
+
+\section*{Documentation:}
+
+\begin{itemize}
+    \item f-strings
+    \item format specification
+\end{itemize}
+
+\section*{STRING METHODS}
+
+\begin{itemize}
+    \item \texttt{str.find(substr)}: Return the lowest index in the \texttt{str} where substring \texttt{substr} is found. Return -1 if \texttt{substr} is not found.
+    \item \texttt{str.replace(old, new)}: Return a copy of \texttt{str} with all occurrences of substring \texttt{old} replaced by \texttt{new}.
+    \item \texttt{str.strip(chars)}: Return a copy of the string with the leading and trailing characters removed. The \texttt{chars} argument is a string specifying the set of characters to be removed. If omitted or None, the \texttt{chars} argument defaults to removing whitespace.
+\end{itemize}
+
+
+
+% Start of the LaTeX transcription of lecture material
+
+\begin{itemize}
+    \item \texttt{str.split(sep=None, maxsplit=-1)}: Return a list of the words in the string, using \texttt{sep} as the delimiter string. If \texttt{sep} is None, runs of consecutive whitespace are regarded as a single separator (the result will contain no empty strings). If \texttt{maxsplit} is given, at most \texttt{maxsplit} splits are done.
+    \item \texttt{str.join(iterable)}: Return the concatenation of the strings in \texttt{iterable}. The separator between elements is \texttt{str}.
+\end{itemize}
+
+% The arrow indicating "String methods" represents a transition or
+% continuation to another part of the presentation. In LaTeX,
+% this is not something we can represent with text, but the following
+% comment indicates that there was such a transition.
+% > string methods
+
+% The phrase "CONDITIONAL EXPRESSIONS" in a large font size and centered
+% could be represented in LaTeX as a section or a plain centered text
+% depending on the context. Here, it is shown as a plain text.
+\begin{center}
+    CONDITIONAL EXPRESSIONS
+\end{center}
+
+% End of the LaTeX transcription of lecture material
+
+
+% Content transcribed from image into LaTeX
+% When compiling, you may choose to use packages like listings for proper formatting of code
+
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Define listing style for Python code
+\lstdefinestyle{mystyle}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=tb,
+    rulecolor=\color{black},
+}
+
+\lstset{style=mystyle}
+
+
+% Section: Syntax
+Syntax:
+
+\begin{lstlisting}
+x if C else y
+\end{lstlisting}
+
+% Section: Example
+Example:
+
+\begin{lstlisting}
+>>> x = 5
+>>> 'big' if x > 10 else 'small'
+'small'
+\end{lstlisting}
+
+% Section: Information about evaluation
+Only the appropriate value is evaluated
+
+\begin{lstlisting}
+>>> 1 / 0
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ZeroDivisionError: division by zero
+\end{lstlisting}
+
+% Section: Appropriate value evaluated (example)
+Only the appropriate value is evaluated (example)
+
+\begin{lstlisting}
+>>> import math
+>>> x = 4
+>>> 1 / x if x != 0 else math.inf
+0.25
+
+>>> x = 0
+>>> 1 / x if x != 0 else math.inf
+inf
+\end{lstlisting}
+
+% Footer: hint to documentation
+\textgreater{} documentation
+
+
+
+% Use the 'article' class for basic document formatting
+
+
+% Title of the lecture slide
+\section*{LIST COMPREHENSIONS}
+
+% Description of list comprehension syntax in itemized list format
+\subsection*{List comprehension syntax:}
+\begin{itemize}
+  \item [\texttt{[ expression for variable in iterable ]}]
+  \item iterates over the values in \texttt{iterable}
+  \item at each iteration, assign value to \texttt{variable}
+  \item evaluate \texttt{expression} (may refer to \texttt{variable})
+  \item result becomes one list entry
+\end{itemize}
+
+% The Python examples are included using verbatim to preserve whitespace and formatting
+\subsection*{Examples:}
+\begin{verbatim}
+>>> [i * 2 for i in range(8)]
+[0, 2, 4, 6, 8, 10, 12, 14]
+
+>>> [str(i) for i in range(8)]
+['0', '1', '2', '3', '4', '5', '6', '7']
+\end{verbatim}
+
+
+
+% Example of list comprehension for zero padding numbers
+\verb|>>> [f'{i:02d}' for i in range(8)]|
+\verb|['00', '01', '02', '03', '04', '05', '06', '07']|
+
+% Example of list comprehension for binary representation with padding
+\verb|>>> [f'{i:03b}' for i in range(8)]|
+\verb|['000', '001', '010', '011', '100', '101', '110', '111']|
+
+% Title for the next section
+\section*{DICTIONARY COMPREHENSIONS}
+
+% Explanation and syntax for dictionary comprehensions
+Dictionary comprehension syntax:
+\verb|{ key_expr : val_expr for variable in iterable }|
+
+Same as list comprehension, but for dict.
+
+% Example of dictionary comprehension
+Example:
+\verb|>>> { i : f'{i:02b}' for i in range(4) }|
+\verb|{0: '00', 1: '01', 2: '10', 3: '11'}|
+
+
+% Generator Expressions section
+\section*{GENERATOR EXPRESSIONS}
+
+% Description of generator expression syntax
+Generator expression syntax: \\
+(same as list comprehension, but with parentheses)
+
+% Generator expression format
+\begin{equation*}
+(\text{expression} \quad \textbf{for} \quad \text{variable} \quad \textbf{in} \quad \text{iterable} )
+\end{equation*}
+
+Same as list comprehension, but creates a generator (iterable)
+
+% Example of generator expressions
+Example:
+
+% Python code demonstration in LaTeX
+\begin{verbatim}
+>>> a = (i * 2 for i in range(2 ** 28))
+>>> a
+<generator object <genexpr> at 0x7fa9195c5d80>
+>>> sum(a)
+72057593769492480
+\end{verbatim}
+
+Note: there is no tuple comprehension
+
+% Section for Documentation
+\subsubsection*{Documentation:}
+\begin{itemize}
+    \item list comprehensions
+    \item dict comprehensions
+    \item generator expressions
+\end{itemize}
+
+% The [TBD] token replaces the images or other non-textual elements in the image provided.
+[TBD]
+
+
+I'm sorry, but I can't transcribe the image content if you don't provide the image. Please provide the image you want transcribed into LaTeX format, and I'll be happy to help you.

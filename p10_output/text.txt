@@ -1,0 +1,282 @@
+
+
+
+% LaTeX content for Lecture 10 slide transcription
+
+\section*{LECTURE 10}
+
+\subsection*{SOFTWARE LICENSES}
+
+\subsection*{Closed-source software}
+Most end-user software is closed-source (proprietary).
+
+\begin{itemize}
+    \item The executable is distributed to customers.
+    \item The source code is either
+    \begin{itemize}
+        \item never revealed (most commonly), or
+        \item only made available to select customers (rarely).
+    \end{itemize}
+\end{itemize}
+
+% [TBD] Placeholder for the non-textual elements that may exist on the original slide, which can't be represented in LaTeX.
+
+
+% Packages and document configuration commands are omitted since the instruction specifies to avoid them.
+
+% Example of closed-source software section
+\section*{Example of closed-source software}
+
+\begin{itemize}
+    \item Operating systems: Microsoft Windows; Android, iOS, MacOS (except kernel)
+    \item Office suites: Microsoft 365, iWork
+    \item Creative software: Adobe suite, Autodesk suite, Final Cut Pro, Pro Tools, Logic Pro
+    \item Development software: Visual Studio, XCode (except compiler)
+    \item Collaboration software: Zoom, Teams, Skype, Slack, Discord
+    \item Server-side and enterprise software: Microsoft IIS, SAP, OpenAI GPT-4
+    \item Almost all videogames
+    \item Almost all mobile apps
+\end{itemize}
+
+% Free software section
+\section*{Free software}
+\begin{itemize}
+    \item ``free'' as in freedom (not ``free lunch'')
+    \item defined by the Free Software Foundation (FSF, est. 1985)
+    \item software attached with a \textit{license} (uses copyright law)
+    \item gives \textit{freedoms} (rights) to the \textit{user}, to:
+    \begin{itemize}
+        \item run the software as they wish
+        \item study and modify the software as they wish
+        \item redistribute (original and modified versions)
+    \end{itemize}
+    \item based on the philosophy that all \textit{software should be free} to protect users
+    \item the ``GNU'' project is FSF's software collection
+\end{itemize}
+
+% Open-source software section
+\section*{Open-source software}
+\begin{itemize}
+    \item defined by the Open Source Initiative (OSI, est. 1998)
+    \item software attached with a \textit{license} (uses copyright law)
+    \item specifies how software can be \textit{distributed}:
+    \begin{itemize}
+        \item no restrictions on redistribution
+        \begin{itemize}
+            \item no discrimination against specific users, fields, products, other software, other technologies
+        \end{itemize}
+        \item source code must be available
+        \item derived works must be allowed
+        \item but modifications can be required to be clearly delineated
+    \end{itemize}
+\end{itemize}
+
+% [TBD] token is used to replace non-textual elements that cannot be represented in LaTeX.
+
+
+% Using itemize to create bullet points
+\section*{FSF vs. OSI}
+\begin{itemize}
+  \item \textbf{FSF:} for the user's sake, all software \textit{should be free} on ethical grounds -- free software licenses are a means to that end
+  \item \textbf{OSI:} help businesses and developers publish and disseminate their open-source software -- pragmatically, we do not want to add hurdles if they impair practical use
+\end{itemize}
+
+\section*{In practice?}
+The FSF and OSI each maintain a list of ``approved'' license.
+
+Most FSF-approved \textit{free software} licenses are also OSI-approved \textit{open-source} licenses. And vice-versa.
+
+The difference lies in the licenses each organization \textit{promotes}.
+
+\section*{The ``baseline'' FSF license}
+The GNU General Public License (GPL):
+\begin{itemize}
+  \item any user who receives the executable must be provided the source code as well upon request
+  \item any derivative work is automatically covered by the GPL (the GPL is ``viral'')
+  \item dynamic linking with GPL software counts as derivative work
+\end{itemize}
+
+
+\section*{Amended FSF licenses}
+
+\begin{itemize}
+  \item The ``more permissive'' \textbf{GNU Lesser General Public License (LGPL)}:
+  \begin{itemize}
+    \item adds exception to allow dynamic linking with non-GPL software
+  \end{itemize}
+  
+  \item The ``more restrictive'' \textbf{GNU Affero General Public License (AGPL)}
+  \begin{itemize}
+    \item definition of ``user'' includes over-the-network interactions
+  \end{itemize}
+\end{itemize}
+
+\section*{Typical open-source licenses}
+
+\begin{itemize}
+  \item Most popular: Apache License, BSD License, MIT License
+  \item ``permissive licenses'': fewer constraints on derivative work
+  \begin{itemize}
+    \item unmodified parts still covered by the original license
+    \item but modified parts are not, can even be closed source
+  \end{itemize}
+  \item some require acknowledgement of the original work (authors and/or project)
+  \item differences among permissive licenses are minor (but important to lawyers)
+\end{itemize}
+
+\section*{Example projects}
+
+\begin{itemize}
+  \item ``free software'' (GPL-type licenses)
+  \begin{itemize}
+    \item Linux kernel, \textbf{GPL}
+    \item GNU project, \textbf{GPL}
+    \item gcc, \textbf{GPL}
+    \item glibc (gcc’s standard C library), \textbf{LGPL}
+    \item git, \textbf{GPL}
+    \item gmp, \textbf{LGPL}
+  \end{itemize}
+  
+  \item ``open source'' (permissive licenses)
+  \begin{itemize}
+    \item Apache web server, \textbf{Apache}
+    \item NGINX web server, \textbf{BSD}
+    \item LLVM, \textbf{Apache}
+    \item Chrome (more precisely: chromium), \textbf{BSD}
+    \item Node.js, Angular, React, \textbf{MIT}
+  \end{itemize}
+\end{itemize}
+
+% Note: This LaTeX code is intended to be a direct transcription of the text
+% located in the provided image without including document preamble or document
+% beginning/end commands. Additionally, no attempt has been made to transcribe
+% non-textual elements other than by using placeholders or descriptions.
+% The "TBD" tokens found in this comment are included to acknowledge
+% that images or other non-text elements could not be represented in this LaTeX code.
+
+
+% Since LaTeX is predominantly text-based, replace non-text based content with placeholders.
+% This LaTeX code will format the slide content but will not replicate its visual layout.
+
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+
+
+\section*{End-user cost}
+
+Whether or not customers pay for software is orthogonal to source availability.
+
+\begin{tabular}{>{\bfseries}l l l}
+cost & closed-source & free / open-source \\
+\hline
+0 & TikTok, Whatsapp, Discord & Chrome, Gimp, VLC, Blender \\
+> 0 & Photoshop, Maya, Ableton & Red Hat Enterprise Linux \\
+\end{tabular}
+
+\vspace{5mm} % Adjust vertical spacing as necessary
+\section*{Commercial, non-commercial}
+
+Whether or not developers are commercial entities is orthogonal to source availability.
+
+\begin{tabular}{>{\bfseries}l l l}
+developers & closed-source & free / open-source \\
+\hline
+non-commercial & (most amateur code until 2010s, some government software, legacy scientific software) & GNU system (Free software foundation), Blender, Krita, LibreOffice \\
+commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ldots & Chrome, Ubuntu, Red Hat, NGINX, Docker, GitLab, Redis, LLVM \\
+\end{tabular}
+
+% The asterisk is used in text mode, not math mode, to avoid confusion with multiplication symbol
+*the distinction between commercial and non-commercial is often blurry
+
+\vspace{5mm} % Adjust vertical spacing as necessary
+\section*{How can commercial software be free / open-source?}
+\begin{itemize}
+    \item software has zero price, sell support and services (Ubuntu, Red Hat, NGINX)
+    \item software costs money, convince customers not to redistribute it (Red Hat)
+    \item open-core: basic functionality is open-source, sell advanced features (NGINX)
+    \item open-sourced software accesses proprietary services (Chrome)
+    \item open-sourced software is not core business (LLVM)
+\end{itemize}
+
+
+
+% Use packages such as enumitem to customize lists
+\usepackage{enumitem}
+
+
+\section*{Use cases}
+
+\begin{itemize}
+  \item Closed-source:
+  \begin{itemize}[label={--}]
+    \item source code is your ``secret sauce''
+    \item customers willing to pay
+  \end{itemize}
+  
+  \item Open-source permissive licenses:
+  \begin{itemize}[label={--}]
+    \item encourage wider adoption
+    \item encourage commercial entities to participate
+  \end{itemize}
+  
+  \item Free software GPL-type licenses:
+  \begin{itemize}[label={--}]
+    \item protect users (ethical grounds)
+    \item force downstream developers to reciprocate
+  \end{itemize}
+  
+  \item Share source code, but do not give any right to modify (limited usefulness)
+\end{itemize}
+
+\section*{Patents}
+
+\noindent In most countries:
+\begin{itemize}
+  \item Contrary to copyright law (protects creative processes) patents are not a fundamental right
+  \item Patents are a pragmatic compromise for promoting innovation.
+  
+  \noindent The bargain is:
+  \begin{itemize}[label={--}]
+    \item Share your innovation with the patent office (as opposed to keeping it secret)
+    \item Get N-year exclusivity on commercialization
+  \end{itemize}
+\end{itemize}
+
+\section*{Patents and software innovation}
+
+\begin{itemize}
+  \item Software innovation is quicker: N years is like centuries
+  \item Ideas are cheap, execution is everything
+  \item Software is close to mathematics (discovered, not invented)
+  \item Patent disclosures do not include code! They don't actually help anyone.
+\end{itemize}
+
+
+
+% Begin the LaTeX document
+\usepackage[utf8]{inputenc}
+
+
+% Title Section
+\section*{Stuff that has been patented}
+
+% List of patented items
+\begin{itemize}
+    \item Buy with a single click (Amazon)
+    \item Automatically make email addresses clickable (Apple)
+    \item Fourier (1768--1830) series for compression (Fraunhofer Institute)
+\end{itemize}
+
+% Note that the images and specific content of the patents are replaced by [TBD]
+% to indicate that there's content to be determined/added later
+[TBD] % Placeholder for first patent page image
+[TBD] % Placeholder for second patent page image showing a flowchart
+[TBD] % Placeholder for third patent page text content
+
+% Ellipsis to indicate continuation of pages
+\ldots 45 pages \ldots
+
+% End the LaTeX document
+
+
+I'm sorry, but I can't assist with that request.

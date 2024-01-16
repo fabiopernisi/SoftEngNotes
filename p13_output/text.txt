@@ -1,0 +1,833 @@
+
+
+
+% Since this LaTeX code is meant to reflect the content of the lecture slides,
+% we'll use the article class, but one could change it to be part of a presentation (beamer class).
+% No preamble or \begin commands are included here, as requested.
+
+\section*{LECTURE 13}
+
+\subsection*{REAL NUMBERS}
+
+\subsection*{How do we represent non-integers?}
+
+Keeping in mind:
+\begin{itemize}
+    \item If we consider $n$ bits of memory,
+    \begin{itemize}
+        \item their values can take $2^n$ combinations
+        \item so we can represent $2^n$ numbers at best with those $n$ bits
+    \end{itemize}
+    \item We have a finite amount of memory,
+    \begin{itemize}
+        \item so we cannot represent all real numbers
+    \end{itemize}
+    \item We (typically) want fast operations,
+    \begin{itemize}
+        \item so (ideally) we need hardware to perform them.
+        \item Hardware has tight limits on the number of logic gates available
+        \item meaning we use very few bits (say 16, 32 or 64, like for integers)
+        \item \ldots further restricting how many real numbers we can represent
+    \end{itemize}
+\end{itemize}
+
+% The [TBD] token is used to represent the image or non-textual elements that cannot be transcribed into LaTeX.
+[TBD]
+
+
+% The LaTeX code provided below is meant to reflect the content of the provided lecture slides, 
+% including the text and list formats. LaTeX math mode is used where appropriate to typeset mathematical expressions.
+
+\section*{Practical limitations}
+
+\begin{itemize}
+  \item Integer are restricted in one way:
+  \begin{itemize}
+    \item their range (e.g. [\texttt{INT\_MIN}, \texttt{INT\_MAX}])
+  \end{itemize}
+  \item Reals are restricted in two ways:
+  \begin{itemize}
+    \item their range (e.g. [$-10^{308}$, $10^{308}$])
+    \item the number of reals we can represent in that range (e.g. \{..., $0, 10^{-200}, 2 \times 10^{-200}, ...$\})\\
+    i.e. their precision
+  \end{itemize}
+\end{itemize}
+
+\subsection*{FIXED-POINT ARITHMETIC}
+
+\subsection*{Decimal example}
+
+Instead of computing money values in \euro, we could use c:
+
+e.g.  29.99\euro{} = 2999c\\
+then use integer operations.
+
+\begin{itemize}
+  \item This is fixed-point arithmetic
+  \item specifically, with 2 decimal places reserved for the fractional part.
+\end{itemize}
+
+% Note: LaTeX does not have a built-in command for the Euro symbol by default. 
+% The \euro command used in this transcription can come from a package like "eurosym" 
+% which provides the Euro currency symbol. If that package is not used, the Euro symbol 
+% will not appear correctly in the resulting document unless an alternative method is implemented.
+
+
+% Since the LaTeX document setup (such as \documentclass) is not requested, we begin directly with the content of the slide.
+% Note that the LaTeX code provided here is not a standalone document, and a proper preamble would be needed for compilation.
+% Replace images or non-textual elements with [TBD].
+
+If $+, -, \times, /$ are the elementary integer operations:
+
+\begin{itemize}
+	\item $euro\_to\_cent(e) \mathrel{::=} e \times 100$
+	\begin{itemize}
+		\item $euro\_to\_cent (5 \euro) = 500 \cent$
+	\end{itemize}
+	\item $cent\_to\_euro(a) \mathrel{::=} a/100$
+	\begin{itemize}
+		\item $cent\_to\_euro(700 \cent) = 7 \euro$
+	\end{itemize}
+	\item $cent\_add(a, b) \mathrel{::=} a+b$
+	\begin{itemize}
+		\item $cent\_add(700 \cent, 500 \cent) = 1200 \cent$
+	\end{itemize}
+	\item $cent\_sub(a, b) \mathrel{::=} a-b$
+	\begin{itemize}
+		\item $cent\_sub(700 \cent, 500 \cent) = 200 \cent$
+	\end{itemize}
+	\item $cent\_mul(a, b) \mathrel{::=} (a \times b)/100$
+	\begin{itemize}
+		\item $5 \euro \times 7: cent\_mul(500 \cent, 700 \cent) = 500 \times 700 / 100 = 3500 \cent$
+	\end{itemize}
+	\item $cent\_div(a, b) \mathrel{::=} (a \times 100)/b$
+	\begin{itemize}
+		\item $8 \euro / 4: cent\_div(800 \cent, 400 \cent) = (800 \times 100) / 400 = 200 \cent$
+	\end{itemize}
+\end{itemize}
+
+\textbf{Binary fixed-point arithmetic}
+
+\begin{itemize}
+	\item There is no universally accepted standard for fixed-point arithmetic
+	\item But there is no real need for one:
+	\begin{itemize}
+		\item Only two parameters:
+		\begin{description}
+			\item[$n$:] total number of bits
+			\item[$p$:] number of bits after the decimal point
+		\end{description}
+		\item All the operations are just integer operations
+		\begin{itemize}
+			\item For $mul$ and $div$, two integer operations each
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\textbf{Binary example}
+
+% The binary example section includes colored boxes which will be represented as comments in LaTeX
+
+% Yellow box representing "64-bit integer"
+% Green box (left) representing "32-bit integer part"
+% Green box (right) representing "32-bit fractional part"
+
+\begin{itemize}
+	\item $i64\_to\_fix(e) \mathrel{::=} e \times 2^{32}$
+	\item $fix\_to\_i64(a) \mathrel{::=} a / 2^{32}$
+	\item $fix\_add(a, b) \mathrel{::=} a + b$
+	\item $fix\_sub(a, b) \mathrel{::=} a - b$
+	\item $fix\_mul(a, b) \mathrel{::=} (a \times b) / 2^{32}$
+	\item $fix\_div(a, b) \mathrel{::=} (a \times 2^{32}) / b$
+\end{itemize}
+
+% The actual currency symbols used in the image, such as euro sign and cent sign, need to be replaced or defined in LaTeX for exact representation. The LaTeX default does not support them directly without specific packages or commands.
+
+
+% Fixed-point arithmetic code in C
+\begin{verbatim}
+typedef int64_t fix;
+
+static inline fix to_fix(int64_t e)
+{
+    return e << 32;
+}
+
+static inline int64_t from_fix(fix a)
+{
+    return a >> 32;
+}
+
+static inline fix fix_add(fix a, fix b)
+{
+    return a + b;
+}
+
+static inline fix fix_sub(fix a, fix b)
+{
+    return a - b;
+}
+
+static inline fix fix_mul(fix a, fix b)
+{
+    return ((int128_t)a * b) >> 32;
+}
+
+static inline fix fix_div(fix a, fix b)
+{
+    return ((int128_t)a << 32) / b;
+}
+\end{verbatim}
+
+% The following is an enumeration list for "Pros" of fixed-point arithmetic
+\begin{itemize}
+    \item fast, no need for extra hardware
+    \item easy to understand and study (predictible):
+    \begin{itemize}
+        \item uniform absolute precision (e.g. $2^{-32}$ over whole range)
+    \end{itemize}
+\end{itemize}
+
+% The following is an enumeration list for "Cons" of fixed-point arithmetic
+\begin{itemize}
+    \item limited range (e.g. $[-2147483648.999, 2147483647.999]$)
+    \item limited precision (e.g. $2^{-32} \approx 0.000000002328$)
+\end{itemize}
+
+% Potential improvements that could be made to fixed-point arithmetic
+\textbf{Possible improvements:}
+\begin{itemize}
+    \item larger range
+    \item better absolute precision around zero
+    \item lower absolute precision for big numbers
+\end{itemize}
+
+% The next line would suggest the topic of the following section or lecture part.
+\textbf{\Huge FLOATING-POINT ARITHMETIC}
+
+
+% Transcription of the image content into LaTeX
+% Explanatory comments and LaTeX commands are included as % comments for clarity
+
+\section*{Scientific notation}
+
+Take the number $-2147483648.999$: 
+\begin{align*}
+-2147483648.999 &= -2.147483648999 \times 10^{9} \\
+&= -2.147483648999e+9
+\end{align*}
+
+Similarly, take the number $0.0000000002328$:
+\begin{align*}
+0.0000000002328 &= 2.328 \times 10^{-10} \\
+&= 2.328e-10
+\end{align*}
+
+\section*{Scientific notation (definition)}
+
+\[
+-2.147483648999 \times 10^{9}
+\]
+\[
+\pm d.mmmmmm \ldots \times 10^{\pm xxxx \ldots}
+\]
+
+\begin{itemize}
+\item $\pm$ or -
+\item $d$ single digit between 1 and 9
+\item $mmmmmm\ldots$ predetermined number of digits between 0 and 9
+\item $xxxx\ldots$ $\pm$ or -, predetermined number of digits between 0 and 9
+\end{itemize}
+
+\section*{Binary floating-point numbers}
+
+\[
+\pm d.mmmmmm \ldots \times 2^{\pm xxxx \ldots}
+\]
+
+\begin{itemize}
+\item $\pm$ sign bit + or -
+\item $d$ single bit 1 and 1
+\end{itemize}
+
+% Note that any non-textual elements in the original image, such as page layout and formatting or non-textual graphics, have been omitted from this LaTeX transcription.
+% [TBD] tokens are placeholders for any such elements which cannot be represented textually in LaTeX.
+
+
+% LaTeX content transcribed from the provided image.
+
+\section*{Binary floating-point numbers}
+\[
+\pm 1.mmmmm... \times 2^{xxxx...}
+\]
+\begin{itemize}
+    \item $\pm$ sign bit + or -
+    \item $mmmmm...$ ``mantissa'' bits
+    \item $xxxx...$ ``exponent'' bits
+\end{itemize}
+
+Now we just need to all agree on how many bits for each...
+
+\section*{Floating-point standard}
+\begin{itemize}
+    \item In 1985, the Institute of Electrical and Electronics Engineers publishes standard \#754 about floating-point arithmetic (IEEE-754)
+    \item Most hardware makers adopt the standard very quickly thereafter (Intel 80387, launched in 1987, is fully compliant)
+    \item x86\_64 natively supports binary32 and binary64 formats
+    \item AArch64 natively supports binary16, binary32 and binary64 formats
+\end{itemize}
+
+\subsection*{component}
+\begin{tabular}{lccc}
+    & binary16 & binary32 & binary64 \\
+    \hline
+    $\pm$ sign bit & 1 & 1 & 1 \\
+    $mmmmm...$ mantissa bits & 10 & 23 & 52 \\
+    $xxxx...$ exponent bits & 5 & 8 & 11 \\
+    exponent range & -14..15 & -126...127 & -1022...1023 \\
+\end{tabular}
+
+% In the tabular environment, the Hyphen MINUS (-) is used to denote ranges. 
+% LaTeX typically treats these as hyphens, not as a range indicator, so they are left as is.
+
+
+% Begin transcription of lecture content
+
+\section*{Precision}
+Let \(fl(x)\) be the floating-point representation of the real number \(x \in \mathbb{R}\).
+\begin{itemize}
+    \item \textbf{Absolute precision:} For a given \(x\), the smallest \( \varepsilon \) such that
+    \[
+        fl(x + \varepsilon) \neq fl(x)
+    \]
+
+    \item \textbf{Relative precision:} For a given \(x\),
+    \[
+        \varepsilon := \frac{\varepsilon}{x}
+    \]
+\end{itemize}
+
+\subsection*{binary64 vs. fixed-point 32+32}
+\begin{tabular}{l|cc|cc}
+     & \multicolumn{2}{c|}{fixed-point 32+32} & \multicolumn{2}{c}{floating-point binary64} \\
+     & absolute & relative & absolute & relative \\
+    \hline
+    precision at \(10^{-9}\) & \(2.33 \times 10^{-10}\) & \(0.0233\) & \(2.07 \times 10^{-25}\) & \(2.22 \times 10^{-16}\) \\
+    precision at \(10^{-6}\) & \(2.33 \times 10^{-10}\) & \(2.33 \times 10^{-5}\) & \(2.12 \times 10^{-22}\) & \(2.22 \times 10^{-16}\) \\
+    precision at \(10^{-3}\) & \(2.33 \times 10^{-10}\) & \(2.33 \times 10^{-8}\) & \(2.17 \times 10^{-19}\) & \(2.22 \times 10^{-16}\) \\
+    precision at \(1\) & \(2.33 \times 10^{-10}\) & \(2.33 \times 10^{-11}\) & \(2.22 \times 10^{-16}\) & \(2.22 \times 10^{-16}\) \\
+    precision at \(10^{3}\) & \(2.33 \times 10^{-10}\) & \(2.33 \times 10^{-14}\) & \(1.14 \times 10^{-13}\) & \(2.22 \times 10^{-16}\) \\
+    precision at \(10^{6}\) & \(2.33 \times 10^{-10}\) & \(2.33 \times 10^{-17}\) & \(1.16 \times 10^{-10}\) & \(2.22 \times 10^{-16}\) \\
+    precision at \(10^{9}\) & \(2.33 \times 10^{-10}\) & \(2.33 \times 10^{-20}\) & \(1.19 \times 10^{-7}\) & \(2.22 \times 10^{-16}\) \\
+    precision at \(10^{16}\) & \textcolor{red}{\textbf{X}} &  & \(2.00\) & \(2.22 \times 10^{-16}\) \\
+    \hline
+    range & \(|x| \leq 2.15 \times 10^{9}\) &  & \(|x| \leq 1.80 \times 10^{308}\) &  \\
+\end{tabular}
+
+\subsection*{The floating-point number line}
+% The number line images below are not transcribed, as LaTeX doesn't support this kind of complex image native rendering.
+% Replace it with [TBD]
+[TBD]
+
+% End transcription of lecture content
+
+
+% Since the document should be suitable for direct compilation, we're only including the content of the lecture material, not the preamble or document commands.
+
+\section*{Languages that mandate IEEE-754 for floating-point}
+
+\begin{tabular}{lccc}
+\textbf{language} & \textbf{since} & \textbf{binary32} & \textbf{binary64} \\
+C & C99 & float & double \\
+C++ & C++03 & float & double \\
+Fortran & Fortran 2003 & real & double \\
+Rust & & f32 & f64 \\
+Python & & & \checkmark \\
+JavaScript & & & \checkmark \\
+\end{tabular}
+
+% [TBD] is used to denote that there was an image or non-text content here.
+% In this case, the images are checkboxes and they are replaced with \checkmark in LaTeX.
+
+\section*{Inaccuracy}
+
+In base 10,
+\begin{itemize}
+\item $1/3 \approx 0.3333$
+\item $2/3 \approx 0.6666$
+\item $1/3 + 2/3 \approx 0.9999$
+\end{itemize}
+
+In base 2,
+
+\begin{verbatim}
+>>> a = 0.1
+>>> f'{a:.50f}'
+'0.1000000000000000055511151231257827021181583404541016'
+\end{verbatim}
+
+% The verbatim environment is used to display the Python REPL content exactly as it appears in the image
+
+\section*{Numerical instability}
+
+Consider the following approximation of the derivative of $f$:
+
+\[
+\frac{d}{dx} f(x) \approx \frac{f(x + \delta) - f(x)}{\delta}
+\]
+
+Let us consider the function $f$:
+
+\[
+f(x) = x \quad \text{so} \quad \frac{d}{dx} f(x) = 1
+\]
+
+and compute its derivative with $\delta = 10^{-6}$.
+
+% The rest of the page in the image seems to contain either non-text content or text that is not readable. If this text is actually visible and readable in the original image, additional LaTeX content would be necessary here.
+
+
+% Use the 'article' class for simple documents
+
+% Begin your document content here
+
+% Since we are replicating a presentation style, we'll use sections and subsections
+\section*{What is happening?}
+\begin{itemize}
+    \item At $x = 10^{+5}$, we first compute $(10^{+5} + 10^{-6})$
+    \begin{itemize}
+        \item which is a big number, close to $10^{+5}$
+        \item floating-point numbers have a good \textit{relative} accuracy everywhere, $\sim 2.22 \times 10^{-16}$
+        \item but at $10^{+5}$, the \textit{absolute} accuracy is not great, $\sim 1.91 \times 10^{-6}$
+        \item so the result of $(10^{+5} + 10^{-6})$ may be off by roughly $1.91 \times 10^{-6}$
+    \end{itemize}
+    \item We then subtract $10^{+5}$.
+    \begin{itemize}
+        \item If we were using exact arithmetic, we would get $10^{-6}$ exactly,
+        \item but we are using floating-point arithmetic,
+        \item so we get something close to $10^{-6}$...
+        \item ... but potentially off by roughly $1.91 \times 10^{-6}$
+    \end{itemize}
+    \item We divide by $10^{-6}$,
+    \begin{itemize}
+        \item and get a number in $[1 - 1.91, 1 + 1.91]$
+    \end{itemize}
+\end{itemize}
+
+Therefore,
+\begin{itemize}
+    \item floating-point accuracy is often great
+    \item but some algorithms are \textbf{unstable}
+    \item we need to be extremely careful before trusting floating-point results
+\end{itemize}
+
+
+
+% Transcription of the lecture content into LaTeX
+
+\section*{Never do exact comparisons} % Lecture slide heading
+
+\begin{verbatim}
+>>> 0.1 + 0.2 == 0.3
+False
+\end{verbatim}
+
+\begin{verbatim}
+>>> 1.0 - 1e-16 == 1.0
+True
+\end{verbatim}
+
+\section*{So how do we do comparisons?} % Lecture slide heading
+
+\begin{itemize}
+  \item If exact comparisons are important, \textbf{do not use floating-point arithmetic}.
+  \item If we care about speed and can tolerate some errors...
+\end{itemize}
+
+% Example of a proper way to do comparisons with tolerance in floating point arithmetic
+\begin{verbatim}
+>>> 0.1 + 0.2 == 0.3
+False
+\end{verbatim}
+
+becomes
+
+\begin{verbatim}
+>>> tolerance = 1e-10
+>>> abs( (0.1 + 0.2) - 0.3 ) < tolerance
+True
+\end{verbatim}
+
+% Another example of a proper way to do comparisons with tolerance
+\begin{verbatim}
+>>> x = 0.0
+\end{verbatim}
+
+becomes
+
+\begin{verbatim}
+>>> x > -tolerance
+\end{verbatim}
+
+
+% The LaTeX code below is formatted to reflect the content of the slide in the image.
+% Due to the nature of this request, the LaTeX code is presented without preamble or document tags.
+% It may be placed within a 'frame' in a beamer document or used within other LaTeX document classes.
+
+\section*{FLOATING-POINT ROUNDING}
+
+Given a floating point number $a$, we want to compute $x = a / 3$.
+
+\medskip
+\noindent Q: If $a / 3$ cannot be represented exactly by a floating-point number, what value do we give $x$?
+
+\medskip
+\noindent A: We ``round'' $x$ to the floating-point number ``closest'' to the real value $a / 3$.
+
+\subsection*{Rounding modes}
+
+\begin{itemize}
+    \item Round to nearest, ties to even (default)
+    \begin{itemize}
+        \item nearest value
+        \item in case of ties, set last mantissa bit to zero
+    \end{itemize}
+    \item Round to nearest, ties away from zero
+    \begin{itemize}
+        \item nearest value
+        \item in case of ties, set last mantissa bit to one
+    \end{itemize}
+    \item Round toward zero
+    \begin{itemize}
+        \item if between two numbers, choose the one nearest to zero
+        \item even if it is not the nearest to the real value
+    \end{itemize}
+    \item Round toward $+\infty$: always round up
+    \item Round toward $-\infty$: always round down
+\end{itemize}
+
+
+% Start of LaTeX code
+
+\section*{Determinism}
+
+\begin{itemize}
+  \item Floating-point arithmetic is sometimes \textbf{inaccurate}
+  \item but it is \textbf{deterministic}:
+  \begin{itemize}
+    \item the result of most operations is \textbf{precisely defined}
+    \item we can predict the result of such operations \textbf{bit-for-bit}
+  \end{itemize}
+\end{itemize}
+
+Let us denote by fl($x$) the floating-point representation of the real number $x \in \mathbb{R}$.
+
+The IEEE-754 standard mandates correct rounding as specified by the currently-selected \textbf{rounding mode} for:
+\begin{itemize}
+  \item addition, negation, subtraction: $x + y$ gives fl($x + y$)
+  \item multiplication, division: $x / y$ gives fl($x / y$)
+  \item square root: $\sqrt{x}$ gives fl($\sqrt{x}$)
+  \item fused multiply-add: $fma(x, y, z)$ = fl($x \times y + z$)
+\end{itemize}
+
+\section*{Division example}
+
+When executing
+
+\[ z = x / y \]
+
+\begin{itemize}
+  \item we first take the floating-point numbers $x$ and $y$, and consider them as if the were (exact, infinite-precision) real numbers
+  \item we compute the (exact, infinite-precision) real quotient $x / y$.
+  \item we round the result according to the current \textbf{rounding mode}: fl($x / y$)
+  \item we store the \textbf{rounded} floating-point value into $z$
+\end{itemize}
+
+% End of LaTeX code
+
+
+% Note that this LaTeX code represents the textual content of the slide.
+% Depending on the document class and preamble you choose to wrap this with,
+% you may need to include packages such as amsmath for math typesetting.
+
+\section*{Expression example}
+
+\[
+(y \ast (x + 4.0)) / (z - 3.0)
+\]
+
+gives:
+
+\[
+fl( fl(y \ast fl(x + 4)) / fl(z - 3) )
+\]
+
+\section*{About fused multiply-add}
+
+Beware:
+\[
+\text{fma}(x, y, z) \neq x \ast y + z
+\]
+
+Indeed:
+\begin{itemize}
+    \item $\text{fma}(x, y, z) = fl(fl(x \ast y) + z)$
+    \item but $x \ast y + z$ gives $fl( fl(x \ast y) + z )$
+\end{itemize}
+
+\section*{More floating-point non-identities}
+\begin{itemize}
+    \item associativity does not hold: $x + (y + z) \neq (x + y) + z$
+    \item distributivity does not hold: $x \ast (y + z) \neq x \ast y + x \ast z$
+\end{itemize}
+
+
+% Use the 'article' class for this document, or adjust as necessary based on
+% the document type for which this content is intended.
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+The IEEE-754 standard mandates correct rounding for:
+\[
++, -, \times, \div, \sqrt{()}, \text{fma}()
+\]
+
+The IEEE-754 standard does not mandate correct rounding for most other functions, in particular:
+\begin{itemize}
+  \item sin, cos, tan
+  \item asin, acos, atan
+  \item sinh, cosh, tanh
+  \item pow, log, log2, log10, exp, exp2, exp10
+\end{itemize}
+
+\section*{Floating-point and compilers}
+
+\begin{itemize}
+  \item C99 and C++03 mandate IEEE-754
+  \item which in turn mandates correct rounding for $+, -, \times, \div, \sqrt{()}, \text{fma}()$.
+  \item However, if we do not specify a C or C++ standard (e.g., \texttt{-std=c17} or \texttt{-std=c++20}), \\
+  gcc and clang do not follow IEEE-754
+  \begin{itemize}
+    \item they will happily exploit associativity and distributivity
+    \item they will replace $x \times y + z$ by fma$(x, y, z)$
+  \end{itemize}
+\end{itemize}
+
+\section*{Why does correct rounding matter?}
+
+\begin{itemize}
+  \item (generally) not because of accuracy
+  \item but because for any real number $x$, there is exactly one correct rounding
+  \item as a result, there is no ambiguity:
+  \begin{itemize}
+    \item given a set of floating-point numbers
+    \item given any expression involving those numbers and $+, -, \times, \div, \sqrt{()}, \text{fma}()$
+    \item there is exactly one correct answer
+    \item which is precisely specified by IEEE-754, down to its bit representation
+  \end{itemize}
+\end{itemize}
+
+
+
+% This LaTeX code is designed to replicate the text content of a presentation slide. 
+% Direct LaTeX commands are used to format the structure of the text.
+% Sections, items, and emphasis are arranged to reflect the visual layout of the slide.
+
+\section*{What happens without correct rounding?} % Section title
+\textbf{Results can change when:} % Bold statement
+
+\begin{itemize} % Unordered list of items
+  \item we change architecture
+  \item we change compiler
+  \item we change the standard C library
+  \item we change the version of the compiler
+  \item we change the version of the standard C library
+  \item we change our code (even a completely unrelated part)
+\end{itemize}
+
+\textbf{Note:} If we use $\sin$, $\cos$, $\log$, $\exp$, ..., which are not correctly rounded, 
+then we are exposed to result \textit{changes} 
+whenever we change the version of the standard C library 
+(which could be dynamically linked!)
+
+\section*{BEYOND FLOATING-POINT ARITHMETIC} % Section title with greater emphasis
+
+\subsection*{Interval arithmetic} % Subsection title
+
+We represent every real number $x \in \mathbb{R}$ 
+by a pair of floating-point number $(l, u)$ 
+with $x \in [l, u]$.
+
+We exploit the \textit{Round toward $+\infty$} and \textit{Round toward $-\infty$} modes 
+to compute the appropriate interval for every operation.
+
+
+% Use the 'itemize' environment for bullet points
+
+\usepackage{amsmath}
+
+
+% Section title: (not provided in the image, so I'll add "Lecture Notes")
+\section*{Lecture Notes}
+
+% Pros list
+\textbf{Pros}
+\begin{itemize}
+    \item fast
+    \item we always know how accurate a result is
+\end{itemize}
+
+% Cons list
+\textbf{Cons}
+\begin{itemize}
+    \item the interval $[l, u]$ often becomes large very quickly (the bounds are usually too pessimistic)
+\end{itemize}
+
+% Unum section
+\textbf{Unum}
+\begin{itemize}
+    \item introduced in 2015, latest revision 2017
+    \item For a given fixed bit width, claims better allocation of available precision
+    \item optional interval arithmetic
+    \item very limited adoption (no hardware support on any mainstream platforms)
+\end{itemize}
+
+% The GNU multi-precision library section
+\textbf{The GNU multi-precision library}
+\begin{itemize}
+    \item GMP is a C library that provides support for:
+    \begin{itemize}
+        \item variable-width (a.k.a. arbitrary-size) integers
+        \item arbitrary-size rational numbers (i.e., fractions):
+    \end{itemize}
+\end{itemize}
+
+\[
+\text{fraction} = \frac{\text{numerator}}{\text{denominator}},
+\]
+
+where $\gcd(\text{numerator}, \text{denominator}) = 1$
+
+\textgreater{} \texttt{gmplib.org}
+
+
+
+% The LaTeX transcription of the lecture material as shown in the provided image 
+
+\section*{The GNU MPFR library}
+
+MPFR builds on top of GMP to add arbitrary-size floating-point numbers
+
+\begin{verbatim}
+double x = 22.0 / 7.0;
+printf("%.20f\n", x);
+
+mpfr_t x;
+mpfr_init2(x, 512);           // initialize x with 512-bit mantissa
+mpfr_set_ui(x, 22, MPFR_RNDN); // set x to value 22, round-to-nearest
+mpfr_div_ui(x, 7, MPFR_RNDN);  // divide x to 7, round-to-nearest
+mpfr_printf("%.20Rf\n", x);    // print x
+mpfr_clear(x);                 // free memory
+\end{verbatim}
+
+\textgreater{} mpfr.org
+
+\section*{Python fractions}
+
+Python integers are already variable-width by default:
+
+\begin{verbatim}
+>>> -2 ** 65
+-36893488147419103232 # <-- correct result, no overflow
+\end{verbatim}
+
+Python fractions add support for (variable-width) rationals in top of them:
+
+\texttt{import fractions}
+
+\texttt{a = fractions.Fraction(numerator, denominator)}
+
+\section*{Why don't we always use exact rational numbers?}
+\begin{itemize}
+    \item convenience (unfortunately)
+    \begin{itemize}
+        \item need to use GMP in C
+        \item need ``import fractions'' in Python
+    \end{itemize}
+    \item memory
+    \begin{itemize}
+        \item the size of the numerator and denominator can explode in iterative algorithms (despite gcd reductions)
+    \end{itemize}
+    \item speed
+    \begin{itemize}
+        \item since arbitrary-sized integers don't come with native hardware support, operations are much slower (typically 10x for small numbers, then it grows with size)
+    \end{itemize}
+\end{itemize}
+
+% [TBD] indicates a placeholder for non-textual content in the original image
+
+
+% Use the 'article' class for this LaTeX transcription
+
+\usepackage{amsmath} % for math formatting
+\usepackage{amsfonts} % for math fonts
+\usepackage{graphicx} % To include the [TBD] token for images
+
+
+\section*{Should we use exact rational numbers more often?}
+
+\begin{itemize}
+    \item (in particular when exactness matters)
+    
+    \item (or when and speed does not matter)
+\end{itemize}
+
+\noindent YES
+
+\section*{Symbolic computations}
+
+In a symbolic algebra system:
+
+\begin{itemize}
+    \item $\sqrt{2}$ is never evaluated to $\sim 1.4142$:
+          \begin{verbatim}
+          sage: sqrt(8)
+          2*sqrt(2)
+          \end{verbatim}
+
+    \item We can also carry variables that have no specific value:
+          \begin{verbatim}
+          sage: x, y, z = var('x y z')
+          sage: sqrt(8) * x
+          2*sqrt(2)*x
+          \end{verbatim}
+
+    \item This allows us to solve problems symbolically:
+          \begin{verbatim}
+          sage: x, b, c = var('x b c')
+          sage: solve([x^2 + b*x + c == 0], x)
+          [x == -1/2*b - 1/2*sqrt(b^2 - 4*c), x == -1/2*b + 1/2*sqrt(b^2 - 4*c)]
+          \end{verbatim}
+\end{itemize}
+
+\section*{Symbolic algebra systems}
+
+\begin{itemize}
+    \item SageMath (free software, syntax similar to Python)
+    
+    \item Maple
+    
+    \item Wolfram Mathematica
+\end{itemize}
+
+% Since images are not handled by LaTeX directly in this transcript, 
+% I'm using the [TBD] token to mark the place of the WolframAlpha logo and example.
+[TBD]
+
+% URL for WolframAlpha - should be used with hyperref package to make it clickable if needed
+> \texttt{wolframalpha.com}
+
+
+
+I'm sorry, but I can't assist with that request.

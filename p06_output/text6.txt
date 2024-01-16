@@ -1,14 +1,35 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{comment}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\title{Lecture 6}
+\author{Giosuè Castellano, Fabio Pernisi}
+\date{January 2024}
+\maketitle
+
+\tableofcontents
 
 
+\section{LECTURE 6}
 
-% Since LaTeX is primarily used for typesetting, the following code is focused on content.
-% The code presumes a simple document structure and text formatting.
-% The original slide layout, colors, and font styles are not replicated.
-% This is due to the instructions to focus on content for compatibility in any LaTeX editor.
-
-\section*{LECTURE 6}
-
-\subsection*{APPLICATION BINARY INTERFACES (ABI)}
+\subsection{APPLICATION BINARY INTERFACES (ABI)}
 
 \begin{itemize}
     \item most Windows laptops, Linux laptops and pre-M1 Macs share the same ISA: \texttt{x86\_64}
@@ -22,10 +43,10 @@ e.g., iPhone vs. Android phone
 
 
 % Assuming a standard article class for this LaTeX transcription
-\usepackage{listings} % for source code listing
+% for source code listing
 
 
-\section*{What is an ABI?}
+\subsubsection{What is an ABI?}
 
 An application binary interfaces (ABI) defines:
 \begin{itemize}
@@ -41,7 +62,7 @@ An application binary interfaces (ABI) defines:
 
 It is called binary because it is independent of the language in which applications are written (i.e., it is related to the machine code, not to the source code)
 
-\section*{ABI: function calls (x86\_64)}
+\subsubsection{ABI: function calls (x86\_64)}
 
 % The source code is within a listings environment
 \begin{lstlisting}[language=C]
@@ -54,7 +75,7 @@ int main()
 }
 \end{lstlisting}
 
-\subsection*{clang / Linux / x86\_64}
+\paragraph{clang / Linux / x86\_64}
 
 \begin{lstlisting}
 main:
@@ -68,7 +89,7 @@ main:
     .asciz "Hello\n"
 \end{lstlisting}
 
-\subsection*{MSVC / Windows / x86\_64}
+\paragraph{MSVC / Windows / x86\_64}
 
 \begin{lstlisting}
 _DATA   SEGMENT
@@ -85,7 +106,7 @@ SLN3:
 main    ENDP
 \end{lstlisting}
 
-\section*{ABI: function calls (AArch64)}
+\subsubsection{ABI: function calls (AArch64)}
 
 % The source code is within a listings environment
 \begin{lstlisting}[language=C]
@@ -98,7 +119,7 @@ int main()
 }
 \end{lstlisting}
 
-\subsection*{clang / MacOS / AArch64}
+\paragraph{clang / MacOS / AArch64}
 
 \begin{lstlisting}
 main:
@@ -114,7 +135,7 @@ main:
     .asciz "Hello\n"
 \end{lstlisting}
 
-\subsection*{MSVC / Windows / AArch64}
+\paragraph{MSVC / Windows / AArch64}
 
 \begin{lstlisting}
 IMPORT  |puts
@@ -135,10 +156,9 @@ SLN3:
 
 
 % The LaTeX transcription of the lecture slide
-\usepackage[utf8]{inputenc}
 
 
-\section*{PORTABLE CODE}
+\subsection{PORTABLE CODE}
 
 % [TBD] is used to indicate the location of non-textual elements, such as images, that cannot be represented in LaTeX.
 How do we ship code that work across all platforms?
@@ -150,9 +170,8 @@ How do we ship code that work across all platforms?
 
 % Transcription of the image content into LaTeX format
 
-\usepackage[utf8]{inputenc}
 
-\section*{Option 1: interpreters}
+\subsubsection{Option 1: interpreters}
 \begin{itemize}
   \item use interpreted languages, ship source
   \begin{itemize}
@@ -166,7 +185,7 @@ How do we ship code that work across all platforms?
   \end{itemize}
 \end{itemize}
 
-\section*{Option 2: multiple compilations}
+\subsubsection{Option 2: multiple compilations}
 \begin{itemize}
   \item compile one executable on each platform
   \item in some cases, cross-compilation is possible
@@ -176,17 +195,12 @@ How do we ship code that work across all platforms?
   \end{itemize}
 \end{itemize}
 
-\subsection*{What if we cannot (or do not want to) recompile?}
+\paragraph{What if we cannot (or do not want to) recompile?}
 
 [TBD] % Placeholder for non-textual elements that cannot be represented in LaTeX
 
 
-
-% Since the LaTeX document preamble and document environment are not required
-% according to the user's instructions, the content is provided directly for inclusion
-% in an existing LaTeX document.
-
-\section*{Option 3: Translation}
+\subsubsection{Option 3: Translation}
 \textbf{Use case:} same OS, different ISA
 \begin{itemize}
     \item Translation is a form of compilation
@@ -195,7 +209,7 @@ How do we ship code that work across all platforms?
 \end{itemize}
 \textit{Example: Apple Rosetta 2 translates \texttt{x86\_64} into \texttt{AArch64}}
 
-\section*{Option 4: Compatibility layers}
+\subsubsection{Option 4: Compatibility layers}
 \textbf{Use case:} different OSs, same ISA
 \begin{itemize}
     \item add OS support for a foreign ABI
@@ -214,7 +228,7 @@ How do we ship code that work across all platforms?
     \end{itemize}
 \end{itemize}
 
-\section*{Option 5: emulation}
+\subsubsection{Option 5: emulation}
 \begin{itemize}
     \item an emulator is an \textbf{interpreter} for machine code (e.g. QEmu)
     \item much slower than running the code
@@ -235,7 +249,7 @@ How do we ship code that work across all platforms?
 % Visual elements such as images are denoted with [TBD] as placeholders.
 % Please replace [TBD] with the actual figures if needed, using the \includegraphics command from the graphicx package.
 
-\section*{Option 6: virtualization}
+\subsubsection{Option 6: virtualization}
 
 \begin{itemize}
     \item virtualization is essentially hardware-assisted emulation \\
@@ -244,7 +258,7 @@ How do we ship code that work across all platforms?
     \item like emulation, runs a full-blown \textbf{operating system}
 \end{itemize}
 
-\subsection*{Example: Apple Parallels}
+\paragraph{Example: Apple Parallels}
 
 % Placeholder for the image that was in the original content.
 [TBD]
@@ -258,10 +272,10 @@ How do we ship code that work across all platforms?
 % Two sections are identified: Host OS and Guest OS 
 % [TBD] tokens replace non-textual content, e.g., images of laptops and operating systems interfaces.
 
-\section*{Host OS}
+\paragraph{Host OS}
 [TBD] % Replace with appropriate content description or figure inclusion commands if necessary
 
-\section*{Guest OS}
+\paragraph{Guest OS}
 [TBD] % Replace with appropriate content description or figure inclusion commands if necessary
 
 % End of the transcription of the lecture material.
@@ -269,7 +283,7 @@ How do we ship code that work across all platforms?
 
 % Preamble and document setup is assumed to be handled elsewhere since you have requested not to include these parts.
 
-\section*{Definitions}
+\paragraph{Definitions}
 
 \begin{itemize}
   \item The \textbf{hypervisor} is the software that manages the \textbf{guest OS}.
@@ -283,7 +297,7 @@ Let \textbf{guest OSs} believe they have direct access to hardware...
 
 ... but every hardware access is tightly controlled by the \textbf{hypervisor}
 
-\section*{Virtualization is the main technology enabling ``cloud computing''.}
+\paragraph{Virtualization is the main technology enabling ``cloud computing''.}
 
 \begin{itemize}
   \item Amazon Web Services runs \textbf{Xen}
@@ -301,7 +315,7 @@ Let \textbf{guest OSs} believe they have direct access to hardware...
 
 % Begin LaTeX code transcription
 
-\section*{Option 7: containers}
+\subsubsection{Option 7: containers}
 \textbf{Use case:} Same ISA, same kernel, different OS.
 
 \begin{itemize}
@@ -317,9 +331,9 @@ Let \textbf{guest OSs} believe they have direct access to hardware...
   \item A Debian 12 guest with specific libraries installed, on a Debian 12 host
 \end{itemize}
 
-\section*{APPLICATION PROGRAMMING INTERFACES (API)}
+\subsection{APPLICATION PROGRAMMING INTERFACES (API)}
 
-\subsection*{Definition}
+\subsubsection{Definition}
 An API defines how a library (or any other service) is to be used.
 
 % End LaTeX code transcription
@@ -327,23 +341,23 @@ An API defines how a library (or any other service) is to be used.
 
 % Start of the LaTeX document content
 
-\section*{Library API}
+\subsubsection{Library API}
 
 \verb|FILE *fopen(const char *path, const char *mode);|
 
 \verb|open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closedfd=True, opener=None)|
 
-\section*{Web API}
+\subsubsection{Web API}
 
 \verb|GET https://www.google.com/search?q=<query>|
 
-\subsection*{Example:}
+\paragraph{Example:}
 
 \verb|google-chrome https://www.google.com/search?q=Software%20Engineering|
 
 \verb|GET https://cloudflare.com/cdn-cgi/trace|
 
-\subsection*{Example:}
+\paragraph{Example:}
 
 \verb|curl -s "https://cloudflare.com/cdn-cgi/trace"|
 
@@ -373,7 +387,7 @@ curl --request PUT \
 \end{verbatim}
 
 % Heading for APIs and portability
-\section*{APIs and portability}
+\subsubsection{APIs and portability}
 \begin{itemize}
   \item many APIs are cross-platform
   \begin{itemize}
@@ -389,7 +403,7 @@ curl --request PUT \
 \end{itemize}
 
 % Heading for DEPENDENCIES
-\section*{DEPENDENCIES}
+\subsection{DEPENDENCIES}
 [TBD] % Placeholder for non-textual content since LaTeX cannot directly represent images or visual content without appropriate commands
 
 % End of the LaTeX document content
@@ -397,7 +411,6 @@ curl --request PUT \
 
 % The LaTeX content below replicates the lecture material from the image provided, structured as an article. Note that specific formatting commands may need to be adjusted according to the document's actual requirements and class used.
 
-\usepackage[utf8]{inputenc}
 \renewcommand{\labelitemii}{$\star$}
 
 
@@ -415,7 +428,7 @@ curl --request PUT \
   Which version do we install?
 \end{itemize}
 
-\section*{Package managers}
+\subsubsection{Package managers}
 
 Package managers solve this problem for you. \\
 They can solve it...
@@ -434,7 +447,7 @@ They can solve it...
   \end{itemize}
 \end{itemize}
 
-\section*{Limitations}
+\subsubsection{Limitations}
 
 \begin{itemize}
   \item package selection may be limited (packaging is labor-intensive)
@@ -448,11 +461,11 @@ They can solve it...
 % This is a LaTeX transcription of the lecture material from an image
 % The document preamble and setup are omitted assuming the document class and necessary packages are already set
 
-\section*{TUTORIAL}
+\subsection{TUTORIAL}
 
-\section*{TREATING INTEGERS AS STRINGS OF BITS}
+\subsubsection{TREATING INTEGERS AS STRINGS OF BITS}
 
-\section*{Binary OR}
+\subsubsection{Binary OR}
 
 \begin{verbatim}
 >>> x = 0b110000 | 0b000011
@@ -475,10 +488,9 @@ They can solve it...
 
 
 % Transcription of the image content into LaTeX
-\usepackage[utf8]{inputenc}
 
 
-\section*{Binary AND}
+\subsubsection{Binary AND}
 \begin{verbatim}
 >>> x = 0b111100 
 >>>     & 0b001111
@@ -486,7 +498,7 @@ They can solve it...
 '001100'
 \end{verbatim}
 
-\section*{Binary XOR}
+\subsubsection{Binary XOR}
 \begin{verbatim}
 >>> x = 0b101010 
 >>>     ^ 0b110011
@@ -494,7 +506,7 @@ They can solve it...
 '011001'
 \end{verbatim}
 
-\section*{Binary shift left}
+\subsubsection{Binary shift left}
 \begin{verbatim}
 >>> x = 0b000110 << 2
 >>> f"{x:06b}"
@@ -506,8 +518,6 @@ They can solve it...
 
 
 % LaTeX transcription of python code related to bit shifting.
-\documentclass[12pt]{article}
-\usepackage[utf8]{inputenc}
 \begin{verbatim}
 >>> x = 1 << 16
 >>> f"{x:b}"
@@ -526,3 +536,5 @@ Binary shift right
 >>> f"{x:06b}"
 '000110'
 \end{verbatim}
+
+\end{document}
