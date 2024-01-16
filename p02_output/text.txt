@@ -1,0 +1,748 @@
+
+
+
+```latex
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+\section*{LECTURE 2}
+
+\subsection*{INTEGERS (CONTINUED)}
+
+\textbf{Two's complement:}
+\begin{itemize}
+    \item Given a single $n$-bit pattern,
+    \begin{itemize}
+        \item let $u$ be its unsigned value
+        \item let $s$ be its signed value,
+    \end{itemize}
+    \item If bit $(n - 1) = 0$, then:
+    \begin{itemize}
+        \item $s := u$
+    \end{itemize}
+    \item If bit $(n - 1) = 1$, then:
+    \begin{itemize}
+        \item $s := u - 2^n$
+    \end{itemize}
+\end{itemize}
+
+\textbf{4-bit example:}
+
+\begin{center}
+\begin{tabular}{c|cccccccccccccccc}
+bit pattern & 0000 & 0001 & 0010 & 0011 & 0100 & 0101 & 0110 & 0111 & 1000 & 1001 & 1010 & 1011 & 1100 & 1101 & 1110 & 1111 \\
+\hline
+unsigned $u$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
+signed $s$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & -1 \\
+\end{tabular}
+\end{center}
+
+\end{document}
+```
+
+This LaTeX transcription represents the textual content of the provided image while adhering to the structure and formatting of the lecture material. Any non-textual elements, such as images in the slides, have been replaced with appropriate placeholders or omitted.
+
+
+```latex
+% Start of document content
+
+\begin{itemize}
+    \item bit $(n - 1) = 0 \Rightarrow s = u$
+    \item bit $(n - 1) = 1 \Rightarrow s = u - 2^n$
+\end{itemize}
+
+In general:
+
+\begin{center}
+\begin{tabular}{cccc}
+    bit pattern & unsigned $u$ & signed $s$ \\
+    \hline
+    $00 \ldots 0$ & $0$ & $0$ \\
+    $01 \ldots 1$ & $(2^{n-1}) - 1$ & $(2^{n-1}) - 1$ \\
+    $10 \ldots 0$ & $(2^{n-1})$ & $-(2^{n-1})$ \\
+    $11 \ldots 1$ & $(2^n) - 1$ & $-1$ \\
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+    \item Unsigned: $u \in \{0, \ldots, (2^n) - 1\}$
+    \item Signed: $s \in \{-(2^{n-1}), \ldots, -1, 0, \ldots, (2^{n-1}) - 1\}$
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{ccc}
+  $n$ bits & $-2^{bits-1}$ (min) & $2^{bits-1} - 1$ (max) \\
+  \hline
+    8  & $-128$         & 127 \\
+    16 & $-32768$       & 32767 \\
+    32 & $-2,147,483,648$ & $2,147,483,647$ \\
+    64 & $\approx -9.10^{18}$ & $\approx 9.10^{18}$ \\
+    128 & $\approx -2.10^{38}$ & $\approx 2.10^{38}$ \\
+\end{tabular}
+\end{center}
+
+Conversely:
+
+\begin{itemize}
+    \item if $s \geq 0$
+    \begin{itemize}
+        \item represent with bit pattern of $u = s$.
+    \end{itemize}
+
+    \item if $s < 0$
+    \begin{itemize}
+        \item represent with bit pattern of $u = 2^n - |s|$.
+    \end{itemize}
+
+    \item if $s \notin \{-(2^{n-1}), \ldots, (2^{n-1}) - 1\}$
+    \begin{itemize}
+        \item cannot represent, need larger $n$
+    \end{itemize}
+\end{itemize}
+
+% End of document content
+```
+
+Please note:
+- This LaTeX code snippet is intended for inclusion within a larger document and does not include preamble or document starting commands.
+- The '\ldots' command is used to represent ellipses "..." in the bit pattern.
+- The tabular environment is used to represent tables.
+- The itemize environment is used to represent bullet points.
+- Ensured that minus signs are used for negative numbers and approximations.
+- It is assumed that 'bits' written in the table header is intended to be a variable rather than text, so it is formatted as such.
+- Approximations are represented with the \approx symbol.
+
+
+```latex
+% Preamble and document start commands are not included, as requested, 
+% but they will be necessary when compiling this LaTeX code in an editor.
+
+\section*{Sign extension}
+
+Let us represent \( s = -5 \) in n-bit signed binary (two's complement):
+
+\[ u = 2^n - | s | = 2^n - 5 \]
+
+\begin{center}
+\begin{tabular}{c c c}
+n & s & u & bit pattern \\
+\hline
+4 & -5 & 11 & 1011 \\
+5 & -5 & 27 & 11011 \\
+6 & -5 & 59 & 111011 \\
+7 & -5 & 123 & 1111011 \\
+8 & -5 & 251 & 11111011 \\
+9 & -5 & 507 & 111111011 \\
+10 & -5 & 1019 & 1111111011 \\
+11 & -5 & 2043 & 11111111011 \\
+12 & -5 & 4091 & 111111111011 \\
+\end{tabular}
+\end{center}
+
+\section*{Increasing the number of bits}
+
+To convert an n-bit number to an \( (n + k) \)-bit number (\( k \geq 0 \)):
+
+\begin{itemize}
+    \item Unsigned:
+    \begin{itemize}
+        \item Additional high-order (leftmost) bits are set to zero
+    \end{itemize}
+    \item Signed (\textquote{sign extension\textquote}):
+    \begin{itemize}
+        \item Additional high-order (leftmost) bits are set to the value of bit \( (n - 1) \)
+    \end{itemize}
+\end{itemize}
+
+% The next section includes a table that translates binary to hexadecimal to decimal.
+% We use the tabular environment for this table.
+% To maintain readability, we divide it into three separate tabular environments. 
+
+\section*{Base 16}
+
+Hexadecimal digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f
+
+\begin{minipage}{.33\linewidth}
+\centering
+\begin{tabular}{c c c}
+binary & hexadecimal & decimal \\
+\hline
+0000 0000 & 00 & 0 \\
+0000 0001 & 01 & 1 \\
+0000 0010 & 02 & 2 \\
+0000 0011 & 03 & 3 \\
+0000 0100 & 04 & 4 \\
+0000 0101 & 05 & 5 \\
+0000 0110 & 06 & 6 \\
+0000 0111 & 07 & 7 \\
+0000 1000 & 08 & 8 \\
+0000 1001 & 09 & 9 \\
+0000 1010 & 0a & 10 \\
+0000 1011 & 0b & 11 \\
+0000 1100 & 0c & 12 \\
+0000 1101 & 0d & 13 \\
+0000 1110 & 0e & 14 \\
+0000 1111 & 0f & 15 \\
+\end{tabular}
+\end{minipage}%
+\begin{minipage}{.33\linewidth}
+\centering
+\begin{tabular}{c c c}
+binary & hexadecimal & decimal \\
+\hline
+0001 0000 & 10 & 16 \\
+0001 0001 & 11 & 17 \\
+0001 0010 & 12 & 18 \\
+0001 0011 & 13 & 19 \\
+0001 0100 & 14 & 20 \\
+0001 0101 & 15 & 21 \\
+0001 0110 & 16 & 22 \\
+0001 0111 & 17 & 23 \\
+0001 1000 & 18 & 24 \\
+0001 1001 & 19 & 25 \\
+0001 1010 & 1a & 26 \\
+0001 1011 & 1b & 27 \\
+0001 1100 & 1c & 28 \\
+0001 1101 & 1d & 29 \\
+0001 1110 & 1e & 30 \\
+0001 1111 & 1f & 31 \\
+\end{tabular}
+\end{minipage}%
+\begin{minipage}{.33\linewidth}
+\centering
+\begin{tabular}{c c c}
+binary & hexadecimal & decimal \\
+\hline
+0010 0000 & 20 & 32 \\
+0010 0001 & 21 & 33 \\
+0010 0010 & 22 & 34 \\
+0010 0011 & 23 & 35 \\
+0010 0100 & 24 & 36 \\
+0010 0101 & 25 & 37 \\
+0010 0110 & 26 & 38 \\
+0010 0111 & 27 & 39 \\
+0010 1000 & 28 & 40 \\
+0010 1001 & 29 & 41 \\
+0010 1010 & 2a & 42 \\
+0010 1011 & 2b & 43 \\
+0010 1100 & 2c & 44 \\
+0010 1101 & 2d & 45 \\
+0010 1110 & 2e & 46 \\
+0010 1111 & 2f & 47 \\
+\end{tabular}
+\end{minipage}
+
+% End of document command is not included, as only the content is to be transcribed.
+```
+
+
+```latex
+% Begin the list for pros and cons
+\begin{itemize}
+    \item Pros:
+    \begin{itemize}
+        \item Directly maps to binary numbers: \\
+        hex 12f3 = binary 0001 0010 1111 0011
+        \item More compact than binary
+        \item Directly maps to bytes: \\
+        two hex digits = one byte
+    \end{itemize}
+
+    \item Cons:
+    \begin{itemize}
+        \item Not human-friendly (esp. for arithmetic)
+    \end{itemize}
+\end{itemize}
+
+% Separation or new section indication for "CHARACTERS AND TEXT"
+\newpage % or some other divider like \section{}
+
+% Begin the itemize structure for the question and the characteristics
+\begin{itemize}
+    \item How do we map bit patterns to characters in order to form text?
+    \begin{itemize}
+        \item Many standards
+        \item Some similarities
+        \item Some incompatibilities
+    \end{itemize}
+\end{itemize}
+``` 
+
+This LaTeX code snippet assumes that you are working within a document, and these items are part of a larger set of content. That means document preamble and `\begin{document}` and `\end{document}` commands are not included, as requested. The `\newpage` command is optional based on whether you want to keep the sections separate like in the slide or if you prefer to continue in the same page.
+
+
+```latex
+% The image content is transcribed into LaTeX below, with any non-textual elements
+% replaced by the token [TBD] as instructed.
+
+\section{ASCII (1963--)}
+\begin{itemize}
+    \item American Standard Code for Information Interchange
+    \item Each character stored stored in 1 byte (8 bits, 256 possible characters)
+    \item 128 standardized characters
+    \item Many derivatives specify the remaining 128
+\end{itemize}
+
+[TBD] % This is a placeholder for the ASCII table image in the slide
+
+\section{Unicode (1988--)}
+\subsection*{Code Points and Encodings}
+\begin{itemize}
+    \item Associates ``code points" (roughly, characters) to integers
+    \item Up to 1,112,064 code points (currently 149,186 assigned)
+    \item First 128 code points coincide with ASCII
+    \item Multiple possible encodings into bytes (``transmission formats''):
+    \begin{itemize}
+        \item UTF-8
+        \begin{itemize}
+            \item First 128 code points encoded into a single byte (backward compatible with ASCII)
+            \item Sets most significant bit (bit 7) to 1 to signify ``more bytes needed''
+            \item Up to 4 bytes per code point
+            \item Default on BSD, iOS/MacOS, Android/Linux and on most internet communications
+        \end{itemize}
+        \item UTF-16
+        \begin{itemize}
+            \item Code points are encoded by either two or four bytes
+            \item Default on Windows, for Java code, and for SMS
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Aims and Challenges}
+\begin{itemize}
+    \item Aims at encoding all languages:
+    \begin{itemize}
+        \item including extinct ones
+        \item left-to-right, right-to-left or vertical
+        \item and more (emojis [TBD]) % Emoji image should be here; replaced with [TBD]
+    \end{itemize}
+    \item Some ``characters'' require multiple code points (flag emojis, skin tone modifiers)
+    \item What is even a ``character''? (code point, glyph, grapheme, cluster)
+    \item Unicode is extremely complicated
+    \item Latest version (v15.0.0, 2022) specification is 1,060 pages
+\end{itemize}
+```
+
+
+```latex
+% The content were slides, so we use a document class suitable for presentations
+\documentclass{beamer}
+
+\begin{document}
+
+% Slide 1
+\begin{frame}
+    \frametitle{HARDWARE}
+    Logic gates allow us to compute Boolean functions ``instantly'' (subject to physical limits).
+
+    But we need \textit{many} logic gates, even for simple things (like 64-bit integer division).
+
+    $\rightarrow$ We break down complex algorithms into simple steps.
+\end{frame}
+
+% Slide 2
+\begin{frame}
+    \frametitle{COMPONENTS IN A COMPUTER}
+    \begin{itemize}
+        \item Logic gates
+        \item A clock
+        \item Memory
+        \item Input and output devices
+    \end{itemize}
+\end{frame}
+
+\end{document}
+```
+
+Please note:
+- This LaTeX code assumes the use of the Beamer class for presentation slides.
+- Custom styling, slide transitions, and other Beamer settings are not included, as the provided screenshot does not show any such details.
+- Additional packages might be required depending on the actual LaTeX installation and setup.
+- This transcription is suitable for compiling with a LaTeX editor or distribution that includes the Beamer class.
+
+
+```latex
+% The LaTeX transcription of the slide content, without \documentclass or the preamble that would be needed for compilation
+
+\section*{A first abstraction}
+\begin{itemize}
+    \item Memory is \( N \) bits \( \in \{0, 1\}^N \) (e.g. for 16 GB, \( N \approx 128.10^9 \))
+    \item At every clock cycle (e.g. 1.2 GHz), we update the memory:
+    \[ x'_i \leftarrow f_i(x) \quad \forall i = 0, \ldots, N \]
+    \item Some of the memory comes from input devices
+    \item Some of the memory is sent to output devices
+\end{itemize}
+
+\section*{A more realistic model}
+\begin{itemize}
+    \item We cannot update the whole memory at every clock cycle
+    \begin{itemize}
+        \item That would be \( 128 \times 10^9 \times 1.2 \times 10^9 = 153.6 \times 10^{18} \) B/s
+        \item \(\approx 153,600,000,000 \) GB/s
+    \end{itemize}
+    \item As of 2023, memory maxes out at \(\approx 800 \) GB/s
+    \item Instead, at each cycle, we only read/write a tiny amount of memory
+    \item We cannot have too many different Boolean function \( f_i \)
+    \item Instead, at each cycle, the computer executes one of a limited set of \textbf{instructions} in a \textbf{processor} (aka. ``Central Processing Unit'', CPU), e.g.
+    \begin{itemize}
+        \item no memory read / write
+        \item 64-bit arithmetic (+, -, \(\times\), \(\ldots\))
+        \item comparison (<, >, \(\ldots\))
+        \item branch (if, while, \(\ldots\))
+    \end{itemize}
+\end{itemize}
+
+\section*{INSTRUCTION SET ARCHITECTURES (ISA)}
+% [TBD] represents where non-textual elements (like images) are present in the original content but not included here.
+```
+
+This transcription assumes that the document preamble and necessary packages will be added by the user, as requested. The sections are unnumbered with `\section*`, and each bullet list is represented by the `\begin{itemize} ... \end{itemize}` environment. Mathematical expressions are included in LaTeX math mode. The transcription does not include the slide formatting, background, or any graphical elements, adhering strictly to the text content.
+
+
+```latex
+% Start of LaTeX code
+
+% Slide heading
+\section*{An ISA specifies:}
+\begin{itemize}
+    \item How the machine is organized (memory, etc.)
+    \item What instructions are available
+    \item How instructions are encoded into bits
+\end{itemize}
+
+% Subheading for the section
+\subsection*{Two major ISAs in practice:}
+\begin{itemize}
+    \item \textbf{x86\_64} (aka. x64, x86\_64, AMD64): Intel\textsuperscript{\textregistered} and AMD\textsuperscript{\textregistered} 64-bit CPUs
+    \item \textbf{AArch64} (aka. ARM64): ARM\textsuperscript{\textregistered}-based 64-bits CPUs (phones, Apple M1 \& M2)
+\end{itemize}
+
+% Listing of older and less prominent ISAs
+\subsubsection*{Many older and less prominent ISAs:}
+x86, Itanium, ARMv7, RISC-V, PowerPC, \ldots
+
+% Code snippet
+\subsection*{Code snippet}
+\begin{verbatim}
+int f(int a, int b, int c)
+{
+    return (a * b) / c;
+}
+\end{verbatim}
+
+% x86_64 Example
+\subsubsection*{x86\_64:}
+\begin{verbatim}
+89 f8 89 d1 0f af c6 99 f7 f9 c3
+\end{verbatim}
+\begin{verbatim}
+f:
+    mov eax, edi      # 89 f8
+    mov ecx, edx      # 89 d1
+    imul eax, esi     # 0f af c6
+    cdq               # 99
+    idiv ecx          # f7 f9
+    ret               # c3
+\end{verbatim}
+
+% AArch64 Example
+\subsubsection*{AArch64:}
+\begin{verbatim}
+1b 01 7c 00 1a c2 0c 00 0d 5f 03 c0
+\end{verbatim}
+\begin{verbatim}
+f:
+    mul w0, w0, w1   # 1b 01 7c 00
+    sdiv w0, w0, w2  # 1a c2 0c 00
+    ret              # 0d 5f 03 c0
+\end{verbatim}
+
+% Slide heading for Assembly
+\section*{Assembly}
+\begin{itemize}
+    \item Assembly is the lowest-level programming language
+    \item Assembly is in 1:1 correspondence with binary encoding of instructions
+    \item Typically, one line per instruction
+\end{itemize}
+
+% End of LaTeX code
+```
+
+This code assumes that you have a document preamble set up properly that allows for sectioning and verbatim environments. The `\section*`, `\subsection*`, and `\subsubsection*` commands create section headings, all without numbering (as indicated by the asterisk). The `\begin{itemize}` and `\end{itemize}` allow for bullet points, while the `\begin{verbatim}` and `\end{verbatim}` environments are used to display the code and assembly language in a monospaced font which preserves the spacing as is common in code listings.
+
+
+```latex
+% Instructions for x86_64 architecture
+\begin{tabular}{lll}
+\textbf{f:} & & \\
+\texttt{mov eax, edi} & \# 89 f8 & \\
+\texttt{mov ecx, edx} & \# 89 d1 & \\
+\texttt{imul eax, esi} & \# 0f af c6 & \\
+\texttt{cdq} & \# 99 & \\
+\texttt{idiv ecx} & \# f7 f9 & \\
+\texttt{ret} & \# c3 & \\
+\end{tabular}
+
+% Instruction definitions for x86_64
+\begin{tabular}{lll}
+\texttt{mov a, b} & move & $a \leftarrow b$ \\
+\texttt{imul a, b} & signed integer multiply & $a \leftarrow a \times b$ \\
+\texttt{idiv a} & signed integer divide & eax $\leftarrow$ eax $/$ b \\
+\texttt{cdq} & convert double-word (32 bits) to quad-word (64 bits) & sign-extend eax into edx:eax \\
+\texttt{ret} & return & return to calling function \\
+\end{tabular}
+
+% Instructions for AArch64 architecture
+\begin{tabular}{lll}
+\textbf{f:} & & \\
+\texttt{mul w0, w0, w1} & \# 1b 01 7c 00 & \\
+\texttt{sdiv w0, w0, w2} & \# 1a c2 0c 00 & \\
+\texttt{ret} & \# d6 5f c3 00 & \\
+\end{tabular}
+
+% Instruction definitions for AArch64
+\begin{tabular}{lll}
+\texttt{mul a, b, c} & multiply & $a \leftarrow b \times c$ \\
+\texttt{sdiv a, b, c} & signed integer divide & $a \leftarrow b / c$ \\
+\texttt{ret} & return & return to calling function \\
+\end{tabular}
+
+% Registers section
+% x86_64 Registers
+\begin{tabular}{p{0.45\textwidth} p{0.5\textwidth}}
+\multicolumn{2}{l}{\textbf{Registers}} \\
+\textbf{x86_64:} & \textbf{AArch64:} \\
+\texttt{mov eax, edi} & \texttt{mul w0, w0, w1} \\
+\texttt{mov ecx, edx} & \texttt{sdiv w0, w0, w2} \\
+\texttt{imul eax, esi} & \texttt{ret} \\
+\texttt{cdq} & \\
+\texttt{idiv ecx} & \\
+\texttt{ret} & \\
+\end{tabular}
+
+\begin{itemize}
+\item small, fixed set of variables that can be accessed instantly
+\item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
+\item special registers and flags (not accessible directly)
+\item larger registers for extended operations (e.g. non-integer numbers)
+\end{itemize}
+```
+
+This LaTeX transcription assumes that the document class and necessary packages for table creation are already set up since the instructions did not specify to include such details.
+
+
+```latex
+% Register overview for x86_64 architecture
+\section*{Registers (x86\_64)}
+
+\begin{itemize}
+    \item sixteen 64-bit registers:
+    \begin{verbatim}
+    rax, rbx, rcx, rdx, rsp, rbp, rsi, rdi, r8, r9, r10, r11, r12, r13, r14, r15
+    \end{verbatim}
+    
+    \item we can access the lower 32 bits separately:
+    \begin{verbatim}
+    eax, ebx, ecx, edx, esp, ebp, esi, edi, r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d
+    \end{verbatim}
+    
+    \item we can access the lower 16 bits separately:
+    \begin{verbatim}
+    ax, bx, cx, dx, bp, sp, si, di, r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w
+    \end{verbatim}
+    
+    \item we can access the lower 8 bits separately:
+    \begin{verbatim}
+    al, bl, cl, dl, bpl, spl, sil, dil, r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
+    \end{verbatim}
+    
+    \item we can access bits 8-15 separately for some registers:
+    \begin{verbatim}
+    ah, bh, ch, dh
+    \end{verbatim}
+\end{itemize}
+
+% [TBD] should be replaced with a proper table environment if needed, however, the content within is purely a placeholder for the actual image content.
+\begin{verbatim}
+Example:
+[TBD] % Replace this with an actual table or text representation if necessary
+\end{verbatim}
+
+% Register overview for AArch64 (ARM) architecture
+\section*{Registers (AArch64)}
+
+\begin{itemize}
+    \item thirty-one 64-bit registers:
+    \begin{verbatim}
+    x0, ..., x30
+    \end{verbatim}
+    
+    \item we can access the lower 32 bits separately:
+    \begin{verbatim}
+    w0, ..., w30
+    \end{verbatim}
+    
+    \item register 31 (\texttt{x31}, \texttt{w31}) is read-only (zero in most cases)
+\end{itemize}
+```
+
+
+```latex
+% There are multiple sections in the image, each representing a different concept or code snippet.
+% I will transcribe each section in the order they appear on the image, using LaTeX commands to format the text.
+
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+
+% The bit diagram and example
+\begin{tabular}{|c|c|c c c c c c c c|}
+\hline
+bits & 63...56 & 55...48 & 47...40 & 39...32 & 31...24 & 23...16 & 15...8 & 7...0 \\
+\hline
+64 & & & & & x0 & & & \\
+32 & & & & & & & w0 & \\
+\hline
+\end{tabular}
+
+% Example text above the bit diagram
+Example:
+
+% The word "MEMORY" appears in the center of the image. This should be represented in LaTeX as a section heading or similar.
+\section*{MEMORY}
+
+% Next, there is a function definition and two code snippets for x86_64 and AArch64 architectures.
+% I'll transcribe these into a LaTeX 'verbatim' environment to preserve the formatting of the code.
+
+\verb|int g(int *a, int *b)|
+\verb|{|
+\verb|  return *a + *b;|
+\verb|}|
+
+% Two separate columns or minipages would be used to represent the x86_64 and AArch64 code.
+% Use comment to denote these as code for different architectures.
+% x86_64 architecture code
+x86\_64:
+\begin{verbatim}
+g:
+    mov eax, DWORD PTR [rsi]
+    add eax, DWORD PTR [rdi]
+    ret
+\end{verbatim}
+
+% AArch64 architecture code
+AArch64:
+\begin{verbatim}
+g:
+    ldr w0, [x0]
+    ldr w1, [x1]
+    add w0, w2, w0
+    ret
+\end{verbatim}
+
+\end{document}
+```
+
+
+```latex
+% We will create a simple document structure to reflect the lecture content
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+
+\section*{Memory}
+
+\begin{itemize}
+  \item From a process' perspective, memory is seen as a single long array of \textbf{bytes} (8 bits)
+  \item Like registers, memory can be accessed in larger chunks (16, 32 or 64 bits)
+  \item But the smallest addressable unit is the byte
+\end{itemize}
+
+\subsection*{Byte ordering}
+
+% Since the table contains ellipsis to indicate a continuous range of addresses and values,
+% we will represent it in LaTeX with the corresponding notation
+\begin{tabular}{lllllllll}
+\textbf{address} & 0 & 1 & 2 & \ldots & 239 & 240 & 241 & 242 \\
+\textbf{value (hex)} & ef & cd & ab & 89 & \ldots & ff & a0 & a1 & a2 & a3 & 42 & \ldots \\
+\end{tabular}
+
+\begin{itemize}
+  \item the byte at address 240 is (hex) \texttt{a0} = (decimal) 160
+  \item the byte at address 241 is (hex) \texttt{a1} = (decimal) 161
+  \item the byte at address 242 is (hex) \texttt{a2} = (decimal) 162
+  \item the byte at address 243 is (hex) \texttt{a3} = (decimal) 163
+\end{itemize}
+
+Q: What is the value of the 32-bit integer at address 240? \\
+A: It depends!
+
+% Another table with ellipsis
+\subsection*{Byte ordering / ``Endianess''}
+\begin{tabular}{lllllllll}
+\textbf{address} & 0 & 1 & 2 & \ldots & 239 & 240 & 241 & 242 \\
+\textbf{value (hex)} & ef & cd & ab & 89 & \ldots & ff & a0 & a1 & a2 & a3 & 42 & \ldots \\
+\end{tabular}
+
+\begin{itemize}
+  \item ``big-endian'' (BE): 32-bit int at 240 is (hex) \texttt{a0 a1 a2 a3}
+  \begin{align*}
+    &= (\text{decimal}) 160 \times 2^{24} + 161 \times 2^{16} + 162 \times 2^{8} + 163 \\
+    &= (\text{decimal}) 2,694,947,491
+  \end{align*}
+  \item ``little-endian'' (LE): 32-bit int at 240 is (hex) \texttt{a3 a2 a1 a0}
+  \begin{align*}
+    &= (\text{decimal}) 163 \times 2^{24} + 162 \times 2^{16} + 161 \times 2^{8} + 160 \\
+    &= (\text{decimal}) 2,745,344,416
+  \end{align*}
+\end{itemize}
+
+% Notes about system architecture endianness
+\begin{itemize}
+  \item \texttt{x86\_64} is LE
+  \item \texttt{AArch64} is LE by default (LE-only on Windows, MacOS, Linux)
+\end{itemize}
+
+\end{document}
+```
+
+This LaTeX document structure recreates the text content shown in the image. The ellipsis in the address and value rows are represented using `\ldots`, and the structure provided here is a simple recreation without elaborate formatting or layout commands, to keep the focus on the lecture's text content as requested.
+
+
+```latex
+\section{Bit ordering}
+
+Because we cannot access individual bits on a CPU (smallest chunk is a byte),
+bit ordering does not matter here.
+
+However the same problem crops up in other contexts (USB, Ethernet, Wifi, ...)
+
+\section{Memory access notation}
+
+% Lists are created using the 'itemize' environment.
+\begin{itemize}
+    \item In assembly, accessing memory is denoted using ``[]'' and ``''
+    % Sub-lists are also created using 'itemize', nested within the parent 'itemize'.
+    \begin{itemize}
+        % The 'texttt' command is used for inline monospaced (typewriter) text, which is often used for code.
+        \item Moving the value 240 into a register:
+        \begin{itemize}
+            \item \texttt{mov eax, 240} \% eax = 240
+            \item \texttt{ldr w0, 240} \% w0 = 240
+        \end{itemize}
+        \item Moving the 4 bytes of memory at address 240 into a register:
+        \begin{itemize}
+            % The 'texttt' command is used again for inline code.
+            \item \texttt{mov eax, DWORD PTR [240]} \% eax = (hex) a3a2a1a0
+            \item \texttt{ldr w0, [240]} \% w0 = (hex) a3a2a1a0
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+% The [TBD] token is used here to denote that there was an image or non-textual element in the original source that couldn't be represented in LaTeX directly.
+[TBD]
+
+```

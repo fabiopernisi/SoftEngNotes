@@ -1,0 +1,606 @@
+
+
+
+```latex
+% Use the 'article' class for this LaTeX transcription
+\documentclass{article}
+
+% Since the LaTeX code is expected to be ready for compilation, the preamble and
+% beginning of the document will be left out. Please insert this code into a LaTeX
+% editor and complete the document structure as needed.
+
+\begin{document}
+
+\section*{LECTURE 3}
+
+\subsection*{COMPILATION}
+
+\textbf{A compiler:}
+
+\begin{itemize}
+    \item reads source code,
+    \item forms chunks of
+    \begin{itemize}
+        \item data (constants, global variables)
+        \item executable machine code (functions)
+    \end{itemize}
+    \item associates a \textit{symbol} to each chunk (variable or function name)
+    \item writes all into an ``object'' (``.o'') file (format: ELF, COFF, Mach-O)
+\end{itemize}
+
+The compiler leaves blank all \textit{references to symbols} \\
+(incl. external symbols like global variables and global functions)
+
+% The [TBD] token is used to indicate a non-textual element in the source that cannot
+% be represented in LaTeX, as per the user's instructions (e.g., images, charts, etc.).
+[TBD]
+
+% End of document (the following line should be in the actual LaTeX document)
+\end{document}
+```
+
+Please note that this transcription excludes the preamble, document beginning, and end commands. To test this code, you would need to insert it into a proper LaTeX document that includes the `\documentclass{article}` command at the top, followed by `\begin{document}` to start the content and `\end{document}` to finish it. The [TBD] token is used as a placeholder for any non-textual elements that are not described in the task. Use this code within a LaTeX editor to compile the lecture's text content.
+
+
+```latex
+% Since this is text content transcription, I am including only the textual elements of the slides
+% as you requested, without preamble, document environment, or graphical elements.
+
+\section*{Example}
+
+\begin{verbatim}
+#include <stdio.h>
+
+int the_number = -1;
+
+int main()
+{
+    scanf("%d", &the_number);
+    return 0;
+}
+
+...
+
+OBJECT  GLOBAL  DEFAULT  the_number
+...
+
+0000000000000000 <main>:
+   0:   48 83 ec 08           sub    rsp,0x8
+   4:   bf 00 00 00 00        mov    edi,0x0
+   9:   b8 00 00 00 00        mov    eax,0x0
+   e:   e8 fc ff ff ff        call   15 <main+0x15>
+  13:   31 c0                 xor    eax,eax
+  15:   48 83 c4 08           add    rsp,0x8
+  19:   c3                    ret
+\end{verbatim}
+
+\section*{Linking}
+
+A linker reads "object" files and writes an executable file.
+
+\begin{itemize}
+    \item it assigns a position in memory to every chunk of code and data
+    \item it sets the value of the corresponding \textbf{symbol} to this position
+    \item it resolves all references to \textbf{symbols}:
+\end{itemize}
+
+replaces all references with the numeric value of the corresponding position in memory
+
+\section*{Example}
+
+\begin{verbatim}
+#include <stdio.h>
+
+int the_number = -1;
+
+int main()
+{
+    scanf("%d", &the_number);
+    return 0;
+}
+
+...
+
+  54: 000000000040048c  0  OBJECT  GLOBAL DEFAULT  24 the_number
+...
+
+  63: 00000000004014a0  28 FUNC    GLOBAL DEFAULT  14 main
+
+00000000004014a0 <main>:
+4014a0:   48 83 ec 08           sub    rsp,0x8
+4014a4:   be 00 40 00 00        mov    esi,0x400000
+4014a9:   bf 10 20 40 00        mov    edi,0x402010
+4014ae:   b8 00 00 00 00        mov    eax,0x0
+4014b3:   e8 f8 ff ff ff        call   4010a0 <__isoc99_scanf@plt>
+4014b8:   31 c0                 xor    eax,eax
+4014ba:   48 83 c4 08           add    rsp,0x8
+4014be:   c3                    ret
+\end{verbatim}
+
+% End of the LaTeX transcription of the lecture's text content.
+```
+
+
+```latex
+\section*{Static and dynamic linking}
+
+\begin{itemize}
+    \item Static linking is performed in order to prepare an executable (.exe, ...) file.
+    \item Dynamic linking is performed every time the executable is run
+    \begin{itemize}
+        \item Object files built to be dynamically linked are called
+        \begin{itemize}
+            \item shared objects (.so, Linux, MacOS), or
+            \item dynamically-linked libraries (.dll, Windows)
+        \end{itemize}
+        \item Typically used for
+        \begin{itemize}
+            \item System libraries
+            \item Plugins
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\section*{Why a separate linking phase?}
+
+\begin{itemize}
+    \item Separate linking simplifies compilations
+    \begin{itemize}
+        \item (allows the compiler to write code using functions and variables it has not seen yet)
+    \end{itemize}
+    \item It allows us to break down our code into multiple files...
+    \begin{itemize}
+        \item that can be compiled separately
+    \end{itemize}
+    \item It allows using code written and compiled by other people
+    \begin{itemize}
+        \item saves time
+        \item lets us use closed-source software
+    \end{itemize}
+    \item Dynamic linking allows us to use system libraries without shipping them
+    \item It reduces the size of executables
+    \item It helps in masking some system incompatibilities
+    \begin{itemize}
+        \item (e.g. run the same .exe on Windows 10 and 11)
+    \end{itemize}
+    \item It allows updating system libraries separately
+\end{itemize}
+
+\section*{Why a separate linking phase?}
+
+\begin{itemize}
+    \item The compiler does not know the code inside external object files
+    \begin{itemize}
+        \item it cannot check for mistakes based on that knowledge
+    \end{itemize}
+    \item It cannot optimize code based on that knowledge (at least for dynamic linking)
+    \item Dynamically-linked libraries add complexity
+    \begin{itemize}
+        \item (separate installation, incompatible versions, etc.)
+    \end{itemize}
+\end{itemize}
+```
+
+% The LaTeX code above transcribes the textual content of the provided
+% lecture slide image. It includes sections and bulleted lists to reflect the
+% slide's organization. Please note that this does not include preamble or
+% document type commands, and it's meant to be compiled as part of a larger
+% LaTeX document that already has the necessary structure and packages set up.
+
+
+```latex
+% Document class and packages would normally be specified here, but as per the instructions, 
+% we are focusing on transcribing the lecture content. Remember to wrap this content 
+% in a proper LaTeX document structure when compiling.
+
+\section*{Libraries}
+
+Libraries are collections of functions (and data) that can be used by different executables
+\begin{itemize}
+    \item \texttt{libjpeg}: read/write jpeg files
+    \item \texttt{libssl}: cryptography
+    \item \texttt{BLAS}: fast vector and matrix operations
+    \item \texttt{Qt}: cross-platform GUI toolkit
+\end{itemize}
+
+Most languages have a \textit{standard library}
+
+\begin{itemize}
+    \item Distinct from the language itself, but usually necessary in any program
+    \item The C language provides no functions. \\
+    (All basic utilities (\texttt{strlen}, \texttt{printf}, \texttt{exit}) come from the standard library.)
+    \item It is normally \textbf{dynamically linked}
+\end{itemize}
+
+\section*{Optimizing compilers}
+
+% The code should be written inside a verbatim environment or using a package like listings for proper formatting.
+
+\begin{verbatim}
+int main()
+{
+    int r = 0;
+
+    for (int i = 0; i < 10000000; i++)
+        r += i * 2;
+
+    return r;
+}
+\end{verbatim}
+
+% Assembly code can also be included in a verbatim environment.
+
+\begin{verbatim}
+000000000040102b <main>:
+  40102b:	b8 80 84 e8 03          mov    eax,0x3e8480 // <- 2,000,000
+  401030:    c3                      ret
+\end{verbatim}
+
+\subsection*{Note}
+\begin{itemize}
+    \item[] ``Optimal'' = ``best''
+    \item[] ``Optimizing'' = ``going towards the best possible result''
+    \item[] Do not say: ``I made my code \textit{more optimal}''
+    \item[] Do say: ``I \textit{optimized my code some more}''
+    
+    or 
+    
+    ``I made my code faster''
+\end{itemize}
+
+% [TBD] token used for representing the non-textual content that cannot be transcribed into LaTeX.
+```
+
+
+
+```latex
+% Transcribing slide content into LaTeX format
+
+\section*{OPERATING SYSTEMS}
+
+The operating system (OS) manages the computer and provides services to applications.
+
+\subsection*{Components:}
+\begin{itemize}
+    \item The kernel handles:
+    \begin{itemize}
+        \item most of the boot process (what happens upon power on)
+        \item memory allocation and sharing
+        \item input/output devices, through ``drivers'' (often dynamically loaded)
+        \item application coexistence and cooperation
+    \end{itemize}
+    \item Optionally:
+    \begin{itemize}
+        \item \textbf{Standard libraries} for some languages (C, C++, .NET, Swift, \ldots)
+        \item Some additional common \textbf{libraries}
+        \item User interface (UI): command-line (CLI), graphical (GUI)
+        \item Some tools: CLI utilities, compilers, settings/configuration apps
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Popular OSs:}
+\begin{itemize}
+    \item Windows
+    \item MacOS, iOS (base OS: Darwin, kernel: XNU)
+    \item Android, SteamOS (kernel: Linux)
+\end{itemize}
+
+\subsection*{Other current OSs:}
+\begin{itemize}
+    \item Debian, Ubuntu, Suse, Fedora, Arch, RHEL, AL2 (base OS: GNU, kernel: Linux)
+    \item FreeBSD, OPNsense, TrueNAS, pfSense (base OS \& kernel: FreeBSD)
+    \item OpenBSD
+\end{itemize}
+
+All the above except Windows are descendants from ``Unix''
+```
+
+
+```latex
+% Begin the document content here. The preamble and document class commands are not included 
+% as specified in the instructions.
+
+FILE *f = fopen("my_file.txt", "r");
+
+\section*{On my system:}
+\begin{itemize}
+  \item \texttt{fopen()} is part of the \textbf{standard library}
+  \item \texttt{fopen()} calls Unix-specific \texttt{open()}, also in the \textbf{standard library}
+  \item \texttt{open()} is a wrapper for the open system call in the \textbf{Linux kernel}
+  % Replace the following source code with verbatim environment or listings package if needed
+  \begin{verbatim}
+    # open("my_file.txt", O_RDONLY);
+    mov rdi, 0x402010        # pointer to "my_file.txt"
+    mov rsi, 0               # O_RDONLY == 0
+    mov rax, 2               # open is syscall #2
+    syscall
+  \end{verbatim}
+  \item the \textbf{Linux kernel} uses its filesystem and SSD drivers to open the file
+  \item it returns a file descriptor (\texttt{int})
+  \item \texttt{fopen()} allocates a structure with buffers and the file descriptor, returns it
+\end{itemize}
+
+\section*{Levels of abstraction}
+\begin{itemize}
+  \item the processor only does elementary operations (move 64-bit to/from memory)
+  \item the \textbf{kernel} implements basic functionality (managing devices, reading data from a file)
+  \item the \textbf{standard library} provides more, OS-independent functionality (buffering, parsing data)
+  \item other \textbf{libraries} may allow even more (e.g. decompressing a video file)
+\end{itemize}
+
+\section*{MEMORY (AGAIN)}
+% [TBD] token represents placeholder for any non-textual elements which are not represented in the LaTeX format.
+
+% End the document content here.
+```
+
+Please note that for the verbatim section, depending on your LaTeX setup, you might need to use a different environment or a package like `listings` for proper formatting. The `\begin{verbatim}` and the corresponding `\end{verbatim}` in the example above is a simplistic approach for in-line code display.
+
+
+```latex
+% Since this is LaTeX code only for the text content of the slides, 
+% no preamble or begin document commands are included.
+% Please add these before compiling in a LaTeX environment.
+
+\section*{Recall this example:}
+
+\begin{verbatim}
+#include <stdio.h>
+
+int the_number = -1;
+
+int main()
+{
+    scanf("%d", &the_number);
+    return 0;
+}
+\end{verbatim}
+
+\begin{verbatim}
+... 
+54: 000000000040400c     4 OBJECT  GLOBAL DEFAULT   24 the_number
+...
+63: 0000000000401040    28 FUNC    GLOBAL DEFAULT   14 main
+0000000000401040 <main>:
+401040:   48 83 ec 08             sub    rsp,0x8
+401044:   be 4c 40 40 00          mov    esi,0x40404c
+401049:   bf 10 20 40 00          mov    edi,0x402010
+40104e:   e8 cd 00 00 00          call   4010\xxx\xxx<__isoc99_scanf@plt>
+401053:   31 c0                    xor    eax,eax
+401055:   48 83 c4 08             add    rsp,0x8
+401059:   c3                       ret  
+40105b:   90                       nop
+40105c:   0f 1f 40 00             [TBD]
+401060:   00 
+...\end{verbatim}
+
+\textbf{Memory is virtualized}
+
+\begin{itemize}
+    \item every process sees memory as if it was alone
+    \item every time a process accesses memory, the hardware translates the virtual address into a hardware address
+    \item the translation uses a \textit{page table} managed by the \textbf{kernel}
+\end{itemize}
+
+\begin{center}
+Page table (managed by the \textbf{kernel}):
+
+\begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{page} & \textbf{virtual address} & \textbf{hardware address} \\
+    \hline
+    0 & 0 -- 4095 & 65536 -- 69631 \\
+    \hline
+    1 & 4096 -- 8191 & 20480 -- 24575 \\
+    \hline
+    2 & 8192 -- 12287 & 4096 -- 8191 \\
+    \hline
+    ... & ... & ... \\
+    \hline
+\end{tabular}
+\end{center}
+
+\begin{verbatim}
+# x86_64
+mov eax, DWORD PTR [4100]
+
+# AArch64
+ldr w0, [4100]
+\end{verbatim}
+
+\begin{itemize}
+    \item the processor looks up virtual address 4100 in the page table
+    \item it finds page 1, base 4096, plus offset 4
+    \item page 1 has hardware address 20480
+    \item the memory access is at hardware address 20480 + 4 = 20484
+\end{itemize}
+
+% The [TBD] token replaces the non-textual element, which is an opcode not explicitly shown in the image.
+```
+
+
+```latex
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\begin{document}
+
+\section*{Page table}
+
+\begin{itemize}
+    \item the page table itself is in memory!
+    \item at a specific hardware address
+    \item various techniques to make page lookup faster (it is a tree, with a cache)
+\end{itemize}
+
+\section*{Memory allocation}
+
+\begin{itemize}
+    \item the kernel finds free hardware addresses (unused by any process)
+    \item for the virtual addresses:
+    \begin{itemize}
+        \item either the process request specific virtual addresses
+        \item or the kernel finds free virtual addresses (unused by this process)
+    \end{itemize}
+    \item the kernel adds suitable entries in the page table
+    \item the kernel returns the virtual address to the process
+\end{itemize}
+
+\section*{Virtual memory}
+
+\textbf{Cons:}
+\begin{itemize}
+    \item slow!
+    \item memory sharing between processes must be (initially) mediated by the kernel
+\end{itemize}
+
+\textbf{Pros:}
+\begin{itemize}
+    \item simplifies memory management for the process
+    \item enables process separation (a process cannot snoop on or crash another)
+    \item enables fast move for large chunks of memory (just update the page table)
+    \item allows fast input/output on devices \\
+    (non-memory devices can be mapped to virtual addresses)
+    \item allows extending memory:
+    \begin{itemize}
+        \item using storage devices (``swap'')
+        \item using compression
+        \item using overcommit
+    \end{itemize}
+\end{itemize}
+
+\end{document}
+```
+
+% Note: The LaTeX code provided is ready to be compiled. The sections and items are based on the structure of the lecture material from the provided image. The commands and environment used here are standard and should not require any modifications to work. There are no figures or tables in the provided image, so no use of \includegraphics or other figure/table-related commands is necessary. The image content was replaced by [TBD] since images cannot be transcribed into LaTeX.
+
+
+```latex
+% Since the image contains programming code and diagrams which represent a stack with function calls,
+% the LaTeX code below only transcribes the programming code. The diagrams (like stack diagrams) are
+% replaced with [TBD] to indicate that this part of the image needs to be described or handled differently
+% if compiling the LaTeX document.
+
+\documentclass{article}
+\usepackage{listings} % Include the listings-package
+
+\begin{document}
+\begin{lstlisting}[language=C]
+void f1(void)
+{
+    uint64_t a, b;
+    f2();
+    f3();
+}
+\end{lstlisting}
+
+% [TBD]: Diagram illustrating the stack after f1() is called and allocates space for variables a and b.
+
+\begin{lstlisting}[language=C]
+void f2(void)
+{
+    uint64_t c;
+    f3();
+}
+
+void f3(void)
+{
+    // function body not shown in the image
+}
+\end{lstlisting}
+
+% [TBD]: Diagram illustrating the stack when f1() calls f2. Space for variable 'R' which is likely a
+% return address or a placeholder for the return value is also noted in the stack diagram.
+
+% [TBD]: Diagram illustrating the stack after f2() is called and allocates space for variable c.
+\end{document}
+```
+
+% Note to the user: To compile the above LaTeX code, replace [TBD] with appropriate description of diagrams
+% or include graphics of the stack diagrams if available. The "listings" package is used to format the C code.
+% Additional formatting options can be added to the "lstlisting" environments to more closely match the style
+% seen in the image if desired.
+
+
+```latex
+% Transcribed lecture content from an image to LaTeX
+
+\documentclass{article}
+\usepackage{amsmath} % For math formatting
+\usepackage{listings} % For code listing
+\usepackage{graphicx} % For [TBD] token
+
+\begin{document}
+
+% Content 1: C code of function f1
+\begin{lstlisting}[language=C]
+void f1(void)
+{
+    uint64_t a, b;
+    f2();
+    f3();
+}
+\end{lstlisting}
+
+% Stack visualization for function f1 call (Replaced with [TBD])
+[TBD]
+
+% Content 2: C code of functions f2 and f3
+\begin{lstlisting}[language=C]
+void f2(void)
+{
+    uint64_t c;
+    f3();
+}
+
+int f3(void)
+{
+
+}
+\end{lstlisting}
+
+% Stack visualization of the call "f2(): call f3()" (Replaced with [TBD])
+[TBD]
+
+% Content 3: C code of function f1 with a removed arrow and explanation
+\begin{lstlisting}[language=C]
+void f1(void)
+{
+    uint64_t a, b;
+    f2();
+    f3();
+}
+\end{lstlisting}
+
+% Stack visualization of the call "f3(): return (to f2())" (Replaced with [TBD])
+[TBD]
+
+% Content 4: C code of functions f1, f2, and f3
+\begin{lstlisting}[language=C]
+void f1(void)
+{
+    uint64_t a, b;
+    f2();
+    f3();
+}
+
+void f2(void)
+{
+    uint64_t c;
+    f3();
+}
+
+int f3(void)
+{
+
+}
+\end{lstlisting}
+
+% Stack visualization of the call "f2(): return (to f1())" (Replaced with [TBD])
+[TBD]
+
+\end{document}
+```
+
+Please note that this LaTeX transcription is structured based on the order and content of the presented lecture material. Each C code block is enclosed in a `lstlisting` environment, with the language specified as C. The visual stack representations are replaced with the placeholder [TBD] since LaTeX cannot naturally recreate such images. 
+
+Ensure that the LaTeX environment you are using has the required packages (`amsmath`, `listings`, `graphicx`) installed or available. If there are any actual images to embed, you would replace `[TBD]` with `\includegraphics{path_to_image}` after uploading the images to the LaTeX project.
