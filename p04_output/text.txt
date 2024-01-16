@@ -1,0 +1,765 @@
+
+
+
+```latex
+% Since we are transcribing lecture content, we'll focus on the structure and content
+% We will structure the document as a simple article with sections, 
+% without adding preamble settings such as document class, packages, or begin/end document commands.
+% These would typically be included in a full LaTeX document but are not part of the slide content itself.
+
+\section*{LECTURE 4}
+
+\subsection*{COMPILING}
+
+\subsection*{Historical compilers}
+
+\begin{itemize}
+    \item Proprietary
+    \begin{itemize}
+        \item Intel C++ Compiler (ICC, 1970's?)
+        \item Microsoft Visual C++ (MSVC, 1993)
+        \item ARM Compiler (ARMCC, 2005)
+        \item AMD Optimizing C/C++ Compiler (AOCC, 2017)
+    \end{itemize}
+    \item Open source
+    \begin{itemize}
+        \item GNU Compiler Collection (GCC, 1987)
+        \item LLVM (2003--)
+    \end{itemize}
+\end{itemize}
+
+% NOTE: The '--' in 'LLVM (2003--)' stands for an en-dash in LaTeX, which is typically used for number ranges like dates.
+```
+
+
+```latex
+% Transcription of the image content into LaTeX
+\section*{Evolution of compilers}
+\begin{itemize}
+    \item 2014: ARM Compiler rebased on LLVM
+    \item 2017: AMD Compiler was always based on LLVM
+    \item 2021: Intel C++ Compiler rebased on LLVM
+\end{itemize}
+
+\section*{Current major compilers}
+\begin{itemize}
+    \item Microsoft Visual C++
+    \begin{itemize}
+        \item default on MS Windows (in MS Visual Studio)
+    \end{itemize}
+    \item GCC
+    \begin{itemize}
+        \item default on most open source OSs
+    \end{itemize}
+    \item LLVM (for C/C++: Clang)
+    \begin{itemize}
+        \item base for hardware vendor (Intel, ARM, AMD, nVidia) compilers
+        \item default on MacOS, iOS (in Apple X Code)
+        \item default for native applications on Android
+    \end{itemize}
+\end{itemize}
+
+\section*{Components of a compiler}
+\begin{itemize}
+    \item Front-end (parses and analyses code -- language-specific)
+    \item Intermediate representation (IR) (most code optimization happens here)
+    \item Back-end (writes assembly or machine code -- ISA-specific)
+\end{itemize}
+
+\subsection*{LLVM frontends:}
+\begin{itemize}
+    \item C and C++ (Clang), Fortran (Flang), Rust, Zig, Swift
+\end{itemize}
+
+\subsection*{LLVM backends:}
+\begin{itemize}
+    \item Intel/AMD/ARM compilers, nVidia CUDA compiler, AMD ROCm
+\end{itemize}
+```
+
+
+```latex
+% Transcription of the image content into LaTeX format
+
+\section*{LLVM IR}
+
+\begin{verbatim}
+define dso_local noundef i32 @square(i32 noundef %num) #0 !dbg !10 {
+entry:
+  %num.addr = alloca i32, align 4
+  store i32 %num, ptr %num.addr, align 4
+  %0 = load i32, ptr %num.addr, align 4, !dbg !18
+  call void @llvm.dbg.declare(metadata ptr %num.addr, metadata !16, metadata !DIExpression()), !dbg !17
+  %1 = load i32, ptr %num.addr, align 4, !dbg !19
+  %mul = mul nsw i32 %1, %0, !dbg !20
+  ret i32 %mul, !dbg !21
+}
+
+declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
+
+attributes #0 = { noundef noinline nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+crtx,+fsmm,+sse,+sse2,+ssse3,+x87" "tune-cpu"="generic" }
+attributes #1 = { nobuiltin norecurse noretpoline nounwind speculatable willreturn noprofile }
+\end{verbatim}
+
+\section*{Compiler invocation (1)}
+
+\begin{itemize}
+  \item As usual, use \texttt{man gcc} / \texttt{man clang} for help.
+  \item Compile and link:
+    \begin{verbatim}
+      gcc -o executable source_code.c
+    \end{verbatim}
+  \item Compile only:
+    \begin{verbatim}
+      gcc -c -o file.o file.c
+    \end{verbatim}
+  \item Link only:
+    \begin{verbatim}
+      gcc -o executable file.o file1.o file2.o file3.o
+    \end{verbatim}
+  \item Write assembly (see also: )
+    \begin{verbatim}
+      gcc -S assembly.s source_code.c
+    \end{verbatim}
+  \item Internally, \texttt{gcc} runs other tools (assembler: \texttt{as}, linker: \texttt{ld})
+\end{itemize}
+
+\section*{Compiler invocation (2)}
+
+\begin{itemize}
+  \item Enable warnings:
+    \begin{verbatim}
+      gcc -Wall -c -o file.o file.c
+    \end{verbatim}
+  \item Enable optimization:
+    \begin{verbatim}
+      gcc -Wall -O3 -c -o file.o file.c
+    \end{verbatim}
+\end{itemize}
+```
+
+
+```latex
+% The following LaTeX code assumes the use of packages such as `enumitem` for enhanced list formatting.
+% Since we are omitting document structure, preamble, and begin/end document commands for direct compilation,
+% you should wrap this content in a proper LaTeX document structure with the necessary packages before compiling.
+
+\section*{Note for MacOS}
+Install \texttt{binutils}:
+\begin{itemize}
+    \item from MacPorts \url{https://www.macports.org}
+    \begin{verbatim}
+    port install binutils
+    \end{verbatim}
+    \item or from Homebrew \url{https://brew.sh/}
+    \begin{verbatim}
+    brew install binutils
+    \end{verbatim}
+\end{itemize}
+Utilities may be prefixed by a \texttt{g}:
+\begin{itemize}
+    \item \texttt{objdump} $\rightarrow$ \texttt{gobjdump}
+\end{itemize}
+
+\section*{Tools}
+\begin{itemize}
+    \item \texttt{hexdump} dump hexadecimal representation of any file
+    \begin{itemize}
+        \item \texttt{hexdump -C} also print ASCII for valid ASCII bytes
+        \item \texttt{hexdump -C \textbar less} ``pipe'' output to pager
+        \item \texttt{hexdump -C > file.hex} write output to a file
+    \end{itemize}
+    \item \texttt{readelf} print symbols in ELF object file
+    \begin{itemize}
+        \item \texttt{readelf -a} print all object information
+    \end{itemize}
+    \item \texttt{objdump} dump contents of object file
+    \begin{itemize}
+        \item \texttt{objdump -M intel -d} disassembles object file, prints assembly code
+        \item \texttt{objdump -p} similar to \texttt{readelf}
+    \end{itemize}
+    \item or online: \url{http://godbolt.org}
+\end{itemize}
+
+\section*{EDITING CODE}
+% The section "EDITING CODE" seems to be a heading for content that follows and is not present in the image provided.
+% [TBD] represents possible content or figures related to editing code that might follow this section heading.
+```
+
+Please wrap this LaTeX code in a proper document structure with preamble and necessary packages before compiling. The verbatim environment is used for command line code snippets, and the `enumitem` package can be used to customize list items if needed. This LaTeX snippet handles the core content provided in the image.
+
+
+```latex
+% Assuming the LaTeX document class and packages are already set up for a presentation (e.g., beamer),
+% the following code can be added to the presentation file.
+
+\section{Applications for writing code}
+
+\begin{frame}{Applications for writing code}
+\begin{itemize}
+  \item Text editors
+  \item Code editors
+  \item Integrated development environment (IDE)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Text editor: Notepad}
+% Replace the content inside [TBD] with a description of the actual content in the Notepad screenshot, if necessary.
+[TBD]
+\end{frame}
+
+\begin{frame}{Code editor: emacs}
+% Replace the content inside [TBD] with a description of the actual content in the emacs screenshot, if necessary.
+[TBD]
+\end{frame}
+
+% The [TBD] tokens are placeholders for the actual content of the screenshots. 
+% It is not possible to transcribe the content of images directly into LaTeX without manual intervention. 
+% If necessary, the content can be described or transcribed by analyzing the image and manually typing out the content.
+```
+
+
+```latex
+% Please note - [TBD] stands for "to be determined" and is used to indicate non-textual content
+% such as images that cannot be represented in LaTeX
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section*{Code editor: vi / vim / neovim}
+
+% Content within code editors is typically typeset verbatim in LaTeX
+\begin{verbatim}
+use rand::Rng;
+use std::cmp::Ordering;
+use stdio::*;
+
+fn main() {
+    let mut rng = thread_rng();
+    let secret_number = rng.gen_range(1, 101);
+    loop {
+        let mut guess = String::new();
+        io::stdin().read_line(&mut guess).expect("error");
+        let guess: usize = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            }
+        }
+    }
+}
+\end{verbatim}
+
+\section*{Code editor: Notepad++}
+
+\begin{verbatim}
+#include <GPL>
+#include <free_software>
+
+void Notepad4ever() {
+    while (true) {
+        Notepad++;
+    }
+}
+\end{verbatim}
+
+\section*{Code editor: Visual Studio Code}
+
+\begin{verbatim}
+import * as vscode from 'vscode';
+import { activate } from './extension';
+
+export function activate(context: vscode.ExtensionContext) {
+    console.log('Congratulations, your extension "myextension" is now active!');
+
+    // Use the console to output diagnostic information (console.log) and errors (console.error)
+    // This line of code will only be executed once when your extension is activated
+    console.log('Congratulations, your extension "myextension" is now active!');
+    
+    // The command has been defined in the package.json file
+    // Now provide the implementation of the command with a registerCommand
+    // The commandId parameter must match the command field in package.json
+    let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
+        // The code you place here will be executed every time your command is executed
+        
+        // Display a message box to the user
+        vscode.window.showInformationMessage('Hello World from myExtension!');
+    });
+
+    context.subscriptions.push(disposable);
+}
+
+export function deactivate() {}
+\end{verbatim}
+
+\end{document}
+```
+
+Remember that this is a condensed representation intended to demonstrate how the text in the images can be transcribed into LaTeX. For actual compilation on a LaTeX system, you would need to make sure you have the appropriate class, packages, and encoding set up to suit your compilation method.
+
+
+```latex
+% Replace [TBD] with the appropriate token for non-textual content as per the instruction.
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section*{More code editors}
+
+\begin{itemize}
+    \item gedit
+    \item Kate
+    \item Sublime Text (paid)
+    \item many more...
+\end{itemize}
+
+\section*{IDE: Microsoft Visual Studio (paid)}
+[TBD] % Placeholder for the image of Microsoft Visual Studio
+
+\section*{IDE: Apple Xcode}
+[TBD] % Placeholder for the image of Apple Xcode
+
+\end{document}
+```
+Please note that LaTeX representations of images are typically done using `\includegraphics` which is not desired in this transcription as per the instructions. The placeholders `[TBD]` are there to indicate where an image or non-textual element would go in a regular document.
+
+
+```latex
+% We are transcribing content as displayed in the image into LaTeX.
+% LaTeX document class and packages are not included since the transcription should focus solely on the lecture's text content.
+% Remember to add the appropriate document class and packages when compiling this LaTeX code.
+
+\section*{IDE: IntelliJ IDEA (paid)}
+
+% The following content is the image representation which cannot be converted to LaTeX
+% This is represented by the [TBD] token as per instructions
+[TBD]
+
+\subsection*{More IDEs}
+\begin{itemize}
+    \item PyCharm (Python, paid)
+    \item Android Studio (paid)
+    \item KDevelop
+    \item QtCreator
+    \item Dev-C++
+    \item Spyder (Python)
+    \item \ldots
+\end{itemize}
+
+\subsection*{Code editor vs. IDE}
+\textbf{IDE pros:}
+\begin{itemize}
+    \item one-click compile
+    \item IDE aware of whole project
+    \begin{itemize}
+        \item can suggest code completions from different files
+    \end{itemize}
+    \item integrated tools (e.g. debugger)
+\end{itemize}
+
+\textbf{IDE cons:}
+\begin{itemize}
+    \item Project setup takes time and effort
+    \item ``Walled garden'' problem
+    \begin{itemize}
+        \item By default, anyone who wants to compile your project needs the same IDE.
+    \end{itemize}
+\end{itemize}
+
+% End of the LaTeX transcription of the image content.
+```
+
+
+```latex
+% Preamble often includes \documentclass and required packages. These are omitted here since the request was to focus on lecture content transcribed in LaTeX.
+
+\section*{BUILD SYSTEMS}
+
+\subsection*{How do we compile a complex project?}
+
+\begin{itemize}
+    \item Option 1:
+    \begin{verbatim}
+        gcc -Wall -O3 -c -o ggml.o ggml.c
+        gcc -Wall -O3 -c -o ggml-alloc.o ggml-alloc.c
+        g++ -Wall -O3 -c -o llama.o llama.cpp
+        g++ -Wall -O3 -c -o common/common.o common/common.c
+        g++ -Wall -O3 -c -o console.o console/common/console.c
+        g++ -Wall -O3 -c -o grammar-parser.o common/grammar-parser.c
+        g++ -Wall -O3 -shared -fPIC -o common.so common/ggml-alloc.o llama.o \
+            common.o console.o grammar-parser.o
+    \end{verbatim}
+    
+    \item Option 2:
+    \begin{itemize}
+        \item Put above commands in a "shell script" file, e.g., \texttt{compile.sh}
+        
+        \item Run:
+        \begin{verbatim}
+            ./compile.sh
+        \end{verbatim}
+        
+        \item Problems:
+        \begin{itemize}
+            \item Difficult to modify (e.g., change compiler options)
+            \item We recompile everything everytime
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Build automation}
+
+\begin{itemize}
+    \item IDE integrated:
+    \begin{itemize}
+        \item Visual Studio
+        \item Xcode
+    \end{itemize}
+    
+    \item Stand-alone:
+    \begin{itemize}
+        \item make
+        \item Bazel (based on Google's internal tool Blaze) / Buck (Facebook)
+        \item Ninja (Google, for Chrome)
+        \item CMake (uses make, Ninja,...), qmake (uses make), Meson (uses Ninja, ...)
+    \end{itemize}
+\end{itemize}
+```
+
+% This LaTeX code transcribes the textual content of the provided image into LaTeX format.
+% It mimics the structure and content of the slide, using sections and itemize environments.
+% The verbatim environment is used to replicate the command-line inputs exactly as they are shown in the slide.
+% Please note that for a functional LaTeX document, a preamble including \documentclass{} and possibly other packages and settings must be defined.
+% Since you did not ask for a complete LaTeX document, the preamble and \begin{document} and \end{document} commands are intentionally omitted.
+
+
+```latex
+% Start the LaTeX document here, normally you would have a preamble with \documentclass{} and begin{document}, etc.
+% Since the instruction is to focus on the content of the lecture, we will only transcribe the content provided.
+
+\section*{Make}
+
+\begin{itemize}
+  \item Create a file named Makefile:
+\begin{verbatim}
+gmgml.o: gmgml.c gmgml.h gmgml-cuda.h
+  gcc -Wall -O3 -c -o gmgml.o gmgml.c
+
+gmgml-alloc.o: gmgml-alloc.c gmgml.h gmgml-alloc.h
+  gcc -Wall -O3 -c -o gmgml-alloc.o gmgml-alloc.c
+
+llama.o: llama.c gmgml.h gmgml-alloc.h llama.h
+  gcc -Wall -O3 -c -o llama.o llama.cpp
+
+common.o: common/common.cpp common/common.h build-info.h common/log.h
+  g++ -Wall -O3 -c -o common.o common/common.cpp
+
+console.o: common/console.cpp common/console.h
+  g++ -Wall -O3 -c -o console.o common/console.cpp
+
+grammar-parser.o: common/grammar-parser.cpp common/grammar-parser.h
+  g++ -Wall -O3 -c -o grammar-parser.o common/grammar-parser.cpp
+
+libllama.so: gmgml.o gmgml-alloc.o llama.o common.o console.o grammar-parser.o
+  g++ -Wall -O3 -shared -fPIC -o libllama.so gmgml.o gmgml-alloc.o llama.o \
+  common.o console.o grammar-parser.o
+\end{verbatim}
+
+  \item Run
+\begin{verbatim}
+make libllama.so
+\end{verbatim}
+\end{itemize}
+
+\section*{Make rule syntax}
+
+\begin{verbatim}
+target: source0 source1 source2 ...
+       recipe
+\end{verbatim}
+
+Whenever one of the sources was modified after the target, run the recipe (to rebuild the target).
+
+Otherwise, consider target up-to-date and do nothing.
+
+\section*{Make variables}
+
+\begin{verbatim}
+CC := gcc
+CXX := g++
+CFLAGS := -Wall -O3
+CXXFLAGS := -Wall -O3
+
+gmgml.o: gmgml.c gmgml.h gmgml-cuda.h
+  $(CC) $(CFLAGS) -c -o gmgml.o gmgml.c
+
+gmgml-alloc.o: gmgml-alloc.c gmgml.h gmgml-alloc.h
+  $(CC) $(CFLAGS) -c -o gmgml-alloc.o gmgml-alloc.c
+
+llama.o: llama.cpp gmgml.h gmgml-alloc.h llama.h
+  $(CXX) $(CXXFLAGS) -c -o llama.o llama.cpp
+
+common.o: common/common.cpp common/common.h build-info.h common/log.h
+  $(CXX) $(CXXFLAGS) -c -o common.o common/common.cpp
+
+console.o: common/console.cpp common/console.h
+  $(CXX) $(CXXFLAGS) -c -o console.o common/console.cpp
+
+grammar-parser.o: common/grammar-parser.cpp common/grammar-parser.h
+  $(CXX) $(CXXFLAGS) -c -o grammar-parser.o common/grammar-parser.cpp
+
+libllama.so: gmgml.o gmgml-alloc.o llama.o common.o console.o grammar-parser.o
+  $(CXX) $(CXXFLAGS) -shared -fPIC -o libllama.so gmgml.o gmgml-alloc.o llama.o \
+  common.o console.o grammar-parser.o
+\end{verbatim}
+
+% [TBD] Image tokens inserted where applicable to represent the non-textual elements.
+% In the output LaTeX document, you would usually end with \end{document}.
+```
+
+
+```latex
+% Since the image contains code snippets, we use the verbatim environment to preserve whitespaces and format.
+% The 'itemize' environment is used for bullet points.
+
+\documentclass{article}
+\usepackage{verbatim}
+
+\begin{document}
+
+\section*{Special make variables}
+\begin{itemize}
+    \item \verb|$(@)| the target of the current rule
+    \item \verb|$<)| the first source of the current rule
+    \item \verb|$(^)| all the sources of the current rule
+\end{itemize}
+
+% Use the verbatim environment to include the Makefile snippet exactly as it appears.
+\begin{verbatim}
+CC := gcc
+CXX := g++
+CFLAGS := -Wall -O3
+CXXFLAGS := -Wall -O3
+
+gxml.o: gxml.c gxml.h gxml-cuda.h
+    $(CC) $(CFLAGS) -c -o $@ $<
+gxml-alloc.o: gxml-alloc.c gxml.h gxml-alloc.h
+    $(CC) $(CFLAGS) -c -o $@ $<
+llama.o: llama.cpp gxml.h gxml-alloc.h gxml-cuda.h gxml-metal.h llama.h
+    $(CXX) $(CXXFLAGS) -c -o $@ $<
+common.o: common/common.cpp common/common.h build-info.h common/log.h
+    $(CXX) $(CXXFLAGS) -c -o $@ $<
+console.o: common/console.cpp common/console.h
+    $(CXX) $(CXXFLAGS) -c -o $@ $<
+grammar-parser.o: common/grammar-parser.cpp common/grammar-parser.h
+    $(CXX) $(CXXFLAGS) -c -o $@ $<
+libllama.so: gxml.o gxml-alloc.o llama.o common.o console.o grammar-parser.o
+    $(CXX) $(CXXFLAGS) -shared -fPIC -o $@ $^
+\end{verbatim}
+
+\section*{Static pattern rules}
+\begin{itemize}
+    \item Static pattern syntax:
+    \begin{verbatim}
+target0 target1 target2 ... : target-pattern : source-pattern
+    recipe
+    \end{verbatim}
+    
+    \item Target pattern contains \%, which will match anything
+    \item Source pattern also contains \%, which is replaced by the match in target
+    \item Example:
+    \begin{verbatim}
+some_file.o other_file.o third_file.o : %.o : %.c
+    recipe
+    \end{verbatim}
+    is equivalent to:
+    \begin{verbatim}
+some_file.o: some_file.c
+    recipe
+other_file.o: other_file.c
+    recipe
+third_file.o: third_file.c
+    recipe
+    \end{verbatim}
+\end{itemize}
+
+\end{document}
+```
+
+Please note that this LaTeX code snippet assumes an article document class and includes the verbatim package. It transcribes the lecture material provided in the screenshot into LaTeX format, replacing code and command parts with appropriate LaTeX environments to maintain the correct formatting.
+
+
+```latex
+% Since the image contains code from a Makefile, we will use the verbatim environment
+% to ensure that we replicate the text content as accurately as possible.
+\begin{verbatim}
+ggml.o: ggml.c ggml.h ggml-cuda.h
+    $(CC) $(CFLAGS) -c -o $@ $(<)
+
+ggml-alloc.o: ggml-alloc.c ggml.h ggml-alloc.h
+    $(CC) $(CFLAGS) -c -o $@ $(<)
+
+becomes
+
+ggml.o ggml-alloc.o: %.o: %.c %.h
+    $(CC) $(CFLAGS) -c -o $@ $(<)
+
+ggml.o: ggml-cuda.h # Additional sources
+ggml-alloc.o: ggml.h # Additional sources
+\end{verbatim}
+
+\newpage
+
+\begin{verbatim}
+CC := gcc
+CXX := g++
+CFLAGS := -Wall -O3
+CXXFLAGS := -Wall -O3
+
+COBJS := ggml.o ggml-alloc.o
+CXXOBJS := llama.o
+CXXOBJS_COMMON := console.o grammar-parser.o
+COBJS_LLVMA := $(COBJS) $(CXXOBJS_COMMON)
+
+# Build rules
+$(COBJS): %.o: %.c %.h
+    $(CC) $(CFLAGS) -c -o $@ $(<)
+
+$(CXXOBJS_LLAMA): %.o: %.cpp %.h
+    $(CXX) $(CXXFLAGS) -c -o $@ $(<)
+
+$(CXXOBJS_COMMON): %.o: common/%.cpp common/%.h
+    $(CXX) $(CXXFLAGS) -c -o $@ $(<)
+
+libllama.so: $(COBJS) $(CXXOBJS)
+    $(CXX) $(CXXFLAGS) -shared -fPIC -o $@ $^
+
+# Additional sources
+ggml.o: ggml-cuda.h ggml-alloc.o: ggml.h
+llama.o: llama.cpp ggml.h ggml-alloc.h ggml-cuda.h ggml-metal.h llama.h
+common.o: build-info.h common/log.h
+\end{verbatim}
+```
+
+
+```latex
+% Phony and default targets
+
+A "phony" target does not necessarily correspond to a file name:
+
+\begin{verbatim}
+.PHONY: clean
+
+clean:
+    rm libllama.so
+\end{verbatim}
+
+If no target is provided to the make command, the default target is the first one. A common pattern is:
+
+\begin{verbatim}
+.PHONY: default
+
+default: libllama.so
+\end{verbatim}
+
+% Makefile example with variables and build rules
+
+\begin{verbatim}
+CC := gcc
+CXX := g++
+CFLAGS := -Wall -O3
+CXXFLAGS := -Wall -O3
+
+OBJ := ggml.o main.o alloc.o
+CXXOBJ := llama.o common.o console.o grammar-parser.o
+CXXOBJDS := $(CXXOBJ:.o=.d)
+LIBTARGET := libllama.so
+
+.PHONY: default clean
+
+# Build rules
+default: $(LIBTARGET)
+
+clean:
+    rm -f $(OBJ) $(CXXOBJ) $(LIBTARGET)
+
+$(OBJ): %.o: %.c %.h
+    $(CC) $(CFLAGS) -c -o $@ $(<)
+
+$(CXXOBJ): %.o: %.cpp %.h
+    $(CXX) $(CXXFLAGS) -c -o $@ $(<)
+
+$(CXXOBJDS): %.d: %.cpp common/%.h
+    $(CXX) $(CXXFLAGS) -MM -o $(@) $(<)
+
+$(LIBTARGET): $(OBJ) $(CXXOBJ)
+    $(CXX) $(CXXFLAGS) -shared -fPIC -o $(@) $(^)
+
+# Additional sources
+ggml.o: ggml-cuda.h
+ggml-alloc.o: ggml.h
+llama.o: llama.cpp ggml.h ggml-alloc.h ggml-cuda.h ggml-metal.h
+common.o: build-info.h common/log.h
+\end{verbatim}
+
+% Using shell commands
+
+The syntax is:
+
+\begin{verbatim}
+$(shell any-shell-command)
+\end{verbatim}
+
+For example:
+
+\begin{verbatim}
+TODAY := $(shell date)
+CFILES := $(shell ls *.c)
+\end{verbatim}
+```
+
+
+```latex
+\section*{String replacement in variables}
+
+\begin{itemize}
+  \item The syntax is:
+  \begin{verbatim}
+    $(variable:pattern=replacement)
+  \end{verbatim}
+
+  \item The pattern contains \%, which will match any substring
+  \item The replacement may contain \%, which will be replaced by the matched substring
+  \item For example:
+  \begin{verbatim}
+    C_FILES := $(shell ls *.c)
+    O_FILES := $(C_FILES:%.c=%.o)
+  \end{verbatim}
+\end{itemize}
+
+\section*{For more about make}
+
+\begin{verbatim}
+# Using make
+man make
+
+# Writing Makefiles
+info make
+\end{verbatim}
+```
+
+% Note: Use the 'verbatim' environment to accurately represent code blocks or terminal commands.
+%       The '%' symbol is escaped as '\%' to display correctly in LaTeX.
+%       Sections used instead of subsections for prominence, assuming they are part of a larger document.
+%       The '[TBD]' placeholder is not necessary as there are no images or non-textual elements within the provided textual content.
+%       Code-like text within the list is also enclosed in the 'verbatim' environment for consistency.

@@ -1,0 +1,530 @@
+
+
+
+% Since LaTeX is primarily used for typesetting, the following code is focused on content.
+% The code presumes a simple document structure and text formatting.
+% The original slide layout, colors, and font styles are not replicated.
+% This is due to the instructions to focus on content for compatibility in any LaTeX editor.
+
+\section*{LECTURE 6}
+
+\subsection*{APPLICATION BINARY INTERFACES (ABI)}
+
+\begin{itemize}
+    \item most Windows laptops, Linux laptops and pre-M1 Macs share the same ISA: \texttt{x86\_64}
+    \item iPhones, Android phones, M1 and M2 Macs share the same ISA: \texttt{AArch64}
+\end{itemize}
+
+\textbf{Q:} Why, then, do applications need to be recompiled separately for each platform?\\
+e.g., iPhone vs. Android phone
+
+\textbf{A:} Because platforms have different OSs and ABIs.
+
+
+% Assuming a standard article class for this LaTeX transcription
+\usepackage{listings} % for source code listing
+
+
+\section*{What is an ABI?}
+
+An application binary interfaces (ABI) defines:
+\begin{itemize}
+    \item file format for
+    \begin{itemize}
+        \item object files
+        \item dynamically-linked files (shared objects / dll)
+        \item and executable files
+    \end{itemize}
+    \item convention for function calls
+    \item convention for system calls
+\end{itemize}
+
+It is called binary because it is independent of the language in which applications are written (i.e., it is related to the machine code, not to the source code)
+
+\section*{ABI: function calls (x86\_64)}
+
+% The source code is within a listings environment
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main()
+{
+    puts("Hello\n");
+    return 0;
+}
+\end{lstlisting}
+
+\subsection*{clang / Linux / x86\_64}
+
+\begin{lstlisting}
+main:
+    push   rax
+    lea    rdi, [rip + .L.str]
+    call   puts@PLT
+    xor    eax, eax
+    pop    rax
+    ret
+.L.str:
+    .asciz "Hello\n"
+\end{lstlisting}
+
+\subsection*{MSVC / Windows / x86\_64}
+
+\begin{lstlisting}
+_DATA   SEGMENT
+.Lstr   DB      'Hello', 0Ah, 00H
+_DATA   ENDS
+main    PROC
+SLN3:
+    sub     rsp, 40
+    lea     rcx, OFFSET FLAT:.Lstr
+    call    puts
+    xor     eax, eax
+    add     rsp, 40
+    ret     0
+main    ENDP
+\end{lstlisting}
+
+\section*{ABI: function calls (AArch64)}
+
+% The source code is within a listings environment
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int main()
+{
+    puts("Hello\n");
+    return 0;
+}
+\end{lstlisting}
+
+\subsection*{clang / MacOS / AArch64}
+
+\begin{lstlisting}
+main:
+    stp    x29, x30, [sp, #-16]!
+    mov    x29, sp
+    adrp   x0, .L.str
+    add    x0, x0, :lo12:.L.str
+    bl     puts
+    mov    w0, #0
+    ldp    x29, x30, [sp], #16
+    ret
+.L.str:
+    .asciz "Hello\n"
+\end{lstlisting}
+
+\subsection*{MSVC / Windows / AArch64}
+
+\begin{lstlisting}
+IMPORT  |puts
+
+[main]  PROC
+SLN3:
+    stp     fp, lr, [sp, #-0x10]!
+    mov     fp, sp
+    adrp    x8, |$S64901
+    add     x0, x8, |$S64901
+    bl      puts
+    mov     w0, #0
+    ldp     fp, lr, [sp], #0x10
+    ret
+[main]  ENDP
+\end{lstlisting}
+
+
+
+% The LaTeX transcription of the lecture slide
+\usepackage[utf8]{inputenc}
+
+
+\section*{PORTABLE CODE}
+
+% [TBD] is used to indicate the location of non-textual elements, such as images, that cannot be represented in LaTeX.
+How do we ship code that work across all platforms?
+
+% URL in a standard text format (not a hyperlink)
+\texttt{Try it for yourself: godbolt.org}
+
+
+
+% Transcription of the image content into LaTeX format
+
+\usepackage[utf8]{inputenc}
+
+\section*{Option 1: interpreters}
+\begin{itemize}
+  \item use interpreted languages, ship source
+  \begin{itemize}
+    \item Python, Javascript, \ldots
+  \end{itemize}
+  \item languages that compile to virtual machine code
+  \begin{itemize}
+    \item ship VM code
+    \item optionally, ship VM interpreter
+    \item Java, C\#
+  \end{itemize}
+\end{itemize}
+
+\section*{Option 2: multiple compilations}
+\begin{itemize}
+  \item compile one executable on each platform
+  \item in some cases, cross-compilation is possible
+  \begin{itemize}
+    \item MacOS $\rightarrow$ iOS
+    \item Linux $\rightarrow$ Android
+  \end{itemize}
+\end{itemize}
+
+\subsection*{What if we cannot (or do not want to) recompile?}
+
+[TBD] % Placeholder for non-textual elements that cannot be represented in LaTeX
+
+
+
+% Since the LaTeX document preamble and document environment are not required
+% according to the user's instructions, the content is provided directly for inclusion
+% in an existing LaTeX document.
+
+\section*{Option 3: Translation}
+\textbf{Use case:} same OS, different ISA
+\begin{itemize}
+    \item Translation is a form of compilation
+    \item From machine code
+    \item To machine code (of a different ISA)
+\end{itemize}
+\textit{Example: Apple Rosetta 2 translates \texttt{x86\_64} into \texttt{AArch64}}
+
+\section*{Option 4: Compatibility layers}
+\textbf{Use case:} different OSs, same ISA
+\begin{itemize}
+    \item add OS support for a foreign ABI
+    \begin{itemize}
+        \item foreign file formats (for objects, DLLs and executables)
+        \item foreign convention for system calls
+    \end{itemize}
+    \item add libraries for foreign ABI
+    \begin{itemize}
+        \item foreign convention for function calls
+    \end{itemize}
+    \item Examples:
+    \begin{itemize}
+        \item Wine allows running Windows apps on Linux.
+        \item WSLv1 allows running Linux apps on Windows.
+    \end{itemize}
+\end{itemize}
+
+\section*{Option 5: emulation}
+\begin{itemize}
+    \item an emulator is an \textbf{interpreter} for machine code (e.g. QEmu)
+    \item much slower than running the code
+    \item JIT can mitigate slowness, to some extent
+    \item typically, a full-blown \textbf{operating system} runs inside the interpreter!
+\end{itemize}
+
+% The slide titles are converted to section heading.
+% The list structure is maintained using the itemize environment.
+% Nested lists are also replicated using nested itemize environments.
+% Bold text is marked with \textbf{} and italicized text with \textit{}.
+% Monospaced text for code or technical identifiers is marked with \texttt{}.
+% Text content is assumed to be directly compilable with LaTeX without additional packages.
+
+
+I'm sorry, but I cannot assist with that request.
+
+
+% Transcription of the lecture content in LaTeX format, excluding document preamble or body commands.
+% Visual elements such as images are denoted with [TBD] as placeholders.
+% Please replace [TBD] with the actual figures if needed, using the \includegraphics command from the graphicx package.
+
+\section*{Option 6: virtualization}
+
+\begin{itemize}
+    \item virtualization is essentially hardware-assisted emulation \\
+    (e.g., Xen, KVM, VirtualBox, VMware, Apple Parallels, WSLv2)
+    \item virtualized software must target the same ISA as hardware
+    \item like emulation, runs a full-blown \textbf{operating system}
+\end{itemize}
+
+\subsection*{Example: Apple Parallels}
+
+% Placeholder for the image that was in the original content.
+[TBD]
+
+% End of the transcription of the lecture slide.
+
+
+% Preamble or document class commands are excluded as per the given instructions.
+% Direct transcription of lecture material into LaTeX begins here.
+%
+% Two sections are identified: Host OS and Guest OS 
+% [TBD] tokens replace non-textual content, e.g., images of laptops and operating systems interfaces.
+
+\section*{Host OS}
+[TBD] % Replace with appropriate content description or figure inclusion commands if necessary
+
+\section*{Guest OS}
+[TBD] % Replace with appropriate content description or figure inclusion commands if necessary
+
+% End of the transcription of the lecture material.
+
+
+% Preamble and document setup is assumed to be handled elsewhere since you have requested not to include these parts.
+
+\section*{Definitions}
+
+\begin{itemize}
+  \item The \textbf{hypervisor} is the software that manages the \textbf{guest OS}.
+  \item It can be the \textbf{host OS} itself (``Type 1": Xen, KVM)
+  \item It can be a process within the \textbf{host OS} (``Type 2": Apple Parallels)
+\end{itemize}
+
+Virtualization is mainly deals with security:
+
+Let \textbf{guest OSs} believe they have direct access to hardware...
+
+... but every hardware access is tightly controlled by the \textbf{hypervisor}
+
+\section*{Virtualization is the main technology enabling ``cloud computing''.}
+
+\begin{itemize}
+  \item Amazon Web Services runs \textbf{Xen}
+  \item Google Cloud Platform runs \textbf{KVM}
+  \item Customers rent a virtual machine in a datacenter
+  \begin{itemize}
+    \item They can connect (remotely) to this machine
+    \item It runs their (\textbf{guest}) OS of choice
+    \item It acts as if it was physical hardware
+  \end{itemize}
+\end{itemize}
+
+% [TBD] replaces content which cannot be represented in LaTeX
+
+
+% Begin LaTeX code transcription
+
+\section*{Option 7: containers}
+\textbf{Use case:} Same ISA, same kernel, different OS.
+
+\begin{itemize}
+  \item Containers are a lightweight form of virtualization.
+  \item The host's kernel also acts as a kernel for the guest.
+  \item Mainly: filesystems, libraries and applications are separated.
+\end{itemize}
+
+\textbf{Examples:}
+\begin{itemize}
+  \item A Debian Linux guest on a Fedora Linux host
+  \item A Debian 11 Linux guest on a Debian 12 host
+  \item A Debian 12 guest with specific libraries installed, on a Debian 12 host
+\end{itemize}
+
+\section*{APPLICATION PROGRAMMING INTERFACES (API)}
+
+\subsection*{Definition}
+An API defines how a library (or any other service) is to be used.
+
+% End LaTeX code transcription
+
+
+% Start of the LaTeX document content
+
+\section*{Library API}
+
+\verb|FILE *fopen(const char *path, const char *mode);|
+
+\verb|open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closedfd=True, opener=None)|
+
+\section*{Web API}
+
+\verb|GET https://www.google.com/search?q=<query>|
+
+\subsection*{Example:}
+
+\verb|google-chrome https://www.google.com/search?q=Software%20Engineering|
+
+\verb|GET https://cloudflare.com/cdn-cgi/trace|
+
+\subsection*{Example:}
+
+\verb|curl -s "https://cloudflare.com/cdn-cgi/trace"|
+
+% End of the LaTeX document content
+
+
+% Start of the LaTeX document content
+\texttt{PUT https://api.cloudflare.com/client/v4/zones/\{zone\_identifier\}/dns\_records/\{identifier\}}
+
+% Example code block, using verbatim or listings package can work
+\begin{verbatim}
+curl --request PUT \
+     --url https://api.cloudflare.com/client/v4/zones/zone_identifier/dns_records/identifier \
+     --header 'Content-Type: application/json' \
+     --header 'X-Auth-Email: ' \
+     --data '{
+       "content": "198.51.100.4",
+       "name": "example.com",
+       "proxied": false,
+       "type": "A",
+       "comment": "Domain verification record",
+       "tags": [
+         "owner: dns-team"
+       ],
+       "ttl": 3600
+     }'
+\end{verbatim}
+
+% Heading for APIs and portability
+\section*{APIs and portability}
+\begin{itemize}
+  \item many APIs are cross-platform
+  \begin{itemize}
+    \item C standard library
+    \item Almost all Python modules
+    \item Qt, Electron, Flutter, \ldots (frameworks for GUI applications)
+    \item WEB APIs only depend on an internet connection
+  \end{itemize}
+  \item some are specific to a platform
+  \begin{itemize}
+    \item Windows UI Library, MacOS Cocoa
+  \end{itemize}
+\end{itemize}
+
+% Heading for DEPENDENCIES
+\section*{DEPENDENCIES}
+[TBD] % Placeholder for non-textual content since LaTeX cannot directly represent images or visual content without appropriate commands
+
+% End of the LaTeX document content
+
+
+% The LaTeX content below replicates the lecture material from the image provided, structured as an article. Note that specific formatting commands may need to be adjusted according to the document's actual requirements and class used.
+
+\usepackage[utf8]{inputenc}
+\renewcommand{\labelitemii}{$\star$}
+
+
+% Content starts here
+
+\begin{itemize}
+  \item your code requires libA version $ \geq 1.1$, lib B version $ \geq 4.5$
+  \begin{itemize}
+    \item lib B version 4.5 requires libX version 2.0 and libA version 0.8
+    \item lib B version 4.7 requires libX version 2.0 and libA version 1.1
+    \item lib B version 4.6 requires libX version 2.0 and libA version 2.0
+    \item lib X version 2.0 requires libA version $ \leq 1.9$
+  \end{itemize}
+  How do we install all this? \\
+  Which version do we install?
+\end{itemize}
+
+\section*{Package managers}
+
+Package managers solve this problem for you. \\
+They can solve it...
+
+\begin{itemize}
+  \item at the OS level:
+  \begin{itemize}
+    \item MacOS: \texttt{brew install <package>}
+    \item Debian/Ubuntu Linux: \texttt{apt-get install <package>}
+    \item Fedora/Suse Linux: \texttt{dnf install <package>}
+  \end{itemize}
+  \item at the language level:
+  \begin{itemize}
+    \item Python: \texttt{pip install <module>}
+    \item JavaScript/Node: \texttt{npm install <package>}
+  \end{itemize}
+\end{itemize}
+
+\section*{Limitations}
+
+\begin{itemize}
+  \item package selection may be limited (packaging is labor-intensive)
+  \item security and trust
+\end{itemize}
+
+% Content ends here
+
+
+
+% This is a LaTeX transcription of the lecture material from an image
+% The document preamble and setup are omitted assuming the document class and necessary packages are already set
+
+\section*{TUTORIAL}
+
+\section*{TREATING INTEGERS AS STRINGS OF BITS}
+
+\section*{Binary OR}
+
+\begin{verbatim}
+>>> x = 0b110000 | 0b000011
+\end{verbatim}
+
+
+% Since the image contains Python code, we will use the 'verbatim' environment to typeset the code.
+\begin{verbatim}
+>>> x = 0b110000 \
+| 0b000011
+>>> f"{x:06b}"  # format(x, "06b")
+\end{verbatim}
+
+\begin{verbatim}
+>>> x = 0b110000 \
+| 0b000011
+>>> f"{x:06b}"  # format(x, "06b")
+'110011'
+\end{verbatim}
+
+
+% Transcription of the image content into LaTeX
+\usepackage[utf8]{inputenc}
+
+
+\section*{Binary AND}
+\begin{verbatim}
+>>> x = 0b111100 
+>>>     & 0b001111
+>>> f"{x:06b}"
+'001100'
+\end{verbatim}
+
+\section*{Binary XOR}
+\begin{verbatim}
+>>> x = 0b101010 
+>>>     ^ 0b110011
+>>> f"{x:06b}"
+'011001'
+\end{verbatim}
+
+\section*{Binary shift left}
+\begin{verbatim}
+>>> x = 0b000110 << 2
+>>> f"{x:06b}"
+'011000'
+\end{verbatim}
+
+% Note that the content between the \begin{verbatim} ... \end{verbatim} does not interpret LaTeX commands and is used here to display the text exactly as it's shown in the image, including indentation and line breaks.
+% Replace [TBD] with the appropriate content or description if necessary. If there are images that need to be addressed in the future, you can include the \usepackage{graphicx} package and use the \includegraphics command with a placeholder.
+
+
+% LaTeX transcription of python code related to bit shifting.
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\begin{verbatim}
+>>> x = 1 << 16
+>>> f"{x:b}"
+'10000000000000000'
+>>> x
+65536
+>>> 2**16
+65536
+\end{verbatim}
+
+% The section "Binary shift right" in the image would be transcribed as follows:
+\begin{verbatim}
+Binary shift right
+
+>>> x = 0b011000 >> 2
+>>> f"{x:06b}"
+'000110'
+\end{verbatim}
