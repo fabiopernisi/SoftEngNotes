@@ -1,0 +1,164 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\title{Software Engineering Course Notes}
+\author{[Your Name]}
+\date{[Date]}
+\maketitle
+
+\section*{Chapter 2}
+
+\textbf{Bit Patterns and Integer Representation}
+
+\begin{itemize}
+    \item $\text{bit}\,(n-1)=0\quad\Rightarrow\quad s=u$
+    \item $\text{bit}\,(n-1)=1\quad\Rightarrow\quad s=u-2^{n}$
+\end{itemize}
+
+In general:
+
+\begin{tabular}{c c c c c c c}
+    bit pattern & 00...0 & 01...1 & 10...0 & 11...1 & \\
+    \hline
+    unsigned $u$ & 0 & $\cdots$ & $(2^{n-1})-1$ & $(2^{n-1})$ & $\cdots$ & $(2^{n})-1$ \\
+    \hline
+    signed $s$ & 0 & & $(2^{n-1})-1$ & $-(2^{n-1})$ & & $-1$ \\
+\end{tabular}
+
+\begin{itemize}
+    \item Unsigned: $u\in\{0,\ldots,(2^{n})-1\}$
+    \item Signed: $s\in\{-(2^{n-1}),\ldots,-1,0,\ldots(2^{n-1})-1\}$
+\end{itemize}
+
+\textbf{Increasing the number of bits}
+
+To convert an $n$-bit number to an $(n+k)$-bit number $(k\geq 0)$:
+
+\begin{itemize}
+    \item Additional high-order (leftmost) bits are set to zero for unsigned numbers.
+    \item For signed numbers ("sign extension"), additional high-order bits are set to the value of bit $(n-1)$.
+\end{itemize}
+
+\textbf{Hexadecimal Representation}
+
+\begin{itemize}
+    \item Directly maps to binary numbers: hex 12f3 = binary 0001 0010 1111 0011.
+    \item More compact than binary and directly maps to bytes: two hex digits = one byte.
+    \item Not human-friendly, especially for arithmetic operations.
+\end{itemize}
+
+\textbf{Mapping Bit Patterns to Characters}
+
+\begin{itemize}
+    \item Many standards exist with some similarities and incompatibilities.
+\end{itemize}
+
+\textbf{Unicode (1988-)}
+
+\begin{itemize}
+    \item Associates "code points" to integers with up to 1,112,064 code points.
+    \item First 128 code points coincide with ASCII.
+    \item Multiple possible encodings into bytes.
+    \item Unicode aims to encode all languages, including extinct ones, and various writing systems.
+    \item Some characters require multiple code points.
+    \item Unicode specification is complex (v15.0.0, 2022 specification is 1,060 pages).
+\end{itemize}
+
+\section*{Appendix A}
+
+\textbf{Logic Gates and Boolean Functions}
+
+Logic gates allow us to compute Boolean functions "instantly" (subject to physical limits). However, we need many logic gates even for simple operations like 64-bit integer division.
+
+\begin{itemize}
+    \item Logic gates
+    \item A clock
+    \item Memory
+    \item Input and output devices
+\end{itemize}
+
+\textbf{Memory and CPU Processes}
+
+\begin{itemize}
+    \item Memory update rates and constraints (e.g., 153,600,000,000 GB/s vs. current 800 GB/s).
+    \item Limited set of Boolean functions $f_{i}$ executed by the CPU.
+\end{itemize}
+
+\section*{Introduction}
+
+\textbf{Machine Organization and Instruction Set Architectures (ISAs)}
+
+\begin{itemize}
+    \item Discussion on how the machine is organized (memory, etc.), what instructions are available, and how instructions are encoded into bits.
+    \item Two major ISAs in practice: x86\_64 and AArch64.
+    \item Other ISAs include x86, Itanium, ARMv7, RISC-V, PowerPC, etc.
+\end{itemize}
+
+\textbf{Assembly Language}
+
+\begin{itemize}
+    \item Assembly is the lowest-level programming language in 1:1 correspondence with binary encoding of instructions.
+    \item Example instructions in assembly language are provided for both x86\_64 and AArch64 architectures.
+\end{itemize}
+
+\section*{Registers}
+
+\textbf{x86\_64 and AArch64 Registers}
+
+\begin{itemize}
+    \item Small, fixed set of variables that can be accessed instantly.
+    \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers.
+    \item Special registers and flags not directly accessible.
+    \item Larger registers for extended operations (e.g., non-integer numbers).
+\end{itemize}
+
+\textbf{Register Examples}
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    bits & 63...56 & 55...48 & 47...40 & 39...32 & 31...24 & 23...16 & 15...8 & 7...0 \\
+    \hline
+    64 & \multicolumn{6}{c|}{\(\mathrm{rax}\)} \\
+    \hline
+    32 & \multicolumn{6}{c|}{\(\mathrm{eax}\)} \\
+    \hline
+    16 & \multicolumn{6}{c|}{\(\mathrm{ax}\)} \\
+    \hline
+    8 & \multicolumn{6}{c|}{\(\mathrm{ah}\)} \\
+    \hline
+\end{tabular}
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    bits & 63...56 & 55...48 & 47...40 & 39...32 & 31...24 & 23...16 & 15...8 & 7...0 \\
+    \hline
+    64 & \multicolumn{8}{c|}{31 64-bit registers: \(\mathtt{x0,...,x30}\)} \\
+    \hline
+    32 & \multicolumn{8}{c|}{Lower 32 bits: \(\mathtt{w0,...,w30}\)} \\
+    \hline
+\end{tabular}
+
+\section*{Memory and Addressing}
+
+\textbf{Memory from a Process Perspective}
+
+\begin{itemize}
+    \item Memory is seen as a single long array of bytes, with the smallest addressable unit being a byte.
+    \item Accessing memory in larger chunks (16, 32, or 64 bits) is possible.
+\end{itemize}
+
+\textbf{Endianess and Memory Access}
+
+\begin{itemize}
+    \item Different endianess interpretations (big-endian and little-endian) for a 32-bit integer at a specific memory address.
+    \item Example assembly instructions for accessing memory in both x86\_64 and AArch64 architectures.
+\end{itemize}
+
+\end{document}
