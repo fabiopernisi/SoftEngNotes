@@ -1,0 +1,1198 @@
+
+
+
+% Since the image only contains a title slide, we will replicate this as a section in LaTeX
+\section*{LECTURE 16} % The asterisk '*' prevents LaTeX from numbering this section
+
+\subsection*{PERFORMANCE} % Similarly, the asterisk prevents numbering of the subsection
+
+% [TBD] is a placeholder for non-textual content that was in the image but not transcribed into LaTeX
+% If there are elements such as graphs or diagrams that are described in the lecture content, 
+% they should be described here as well.
+
+
+% We start with the section titles and bullet points, as captions and lists respectively.
+
+\section*{We are here}
+
+\begin{itemize}
+    \item Part 1: How computers works
+    \begin{itemize}
+        \item Boolean logic, integers
+        \item Instructions
+        \item Memory
+    \end{itemize}
+    \item Part 2: Software development
+    \begin{itemize}
+        \item Compiling, make
+        \item ABIs \& APIs
+        \item git
+    \end{itemize}
+    \item Part 3: Correctness
+    \begin{itemize}
+        \item Specifications
+        \item Documentation, testing
+        \item Static \& dynamic analysis, debugging
+    \end{itemize}
+    \item Part 4: Performance $\leftarrow$ \textbf{TODAY}
+    \begin{itemize}
+        \item CPU pipelines, caches
+        \item Data structures
+        \item Parallel computation
+    \end{itemize}
+\end{itemize}
+
+\section*{What is performance?}
+
+We want computers to perform required actions while minimizing their use of \textbf{resources}:
+\begin{itemize}
+    \item Time
+    \item Power use (mobile, servers)
+    \item Network use (mobile)
+    \item Memory use (peak RAM usage)
+    \item Storage (solid state drive / hard disk drive)
+\end{itemize}
+
+We care about those resources in proportion to their cost (financial, emotional, etc.)
+
+\section*{How do we achieve good performance?}
+
+% Representing the high-level and low-level as sub-sections
+% Downwards arrow can be represented with the `\downarrow` command. 
+
+\subsection*{High level}
+\begin{enumerate}
+    \item Pick a good algorithm
+    \begin{itemize}
+        \item specifically, an algorithm with low computational complexity:
+        \item $O(\log(n))$ better than $O(n^2)$ better than $O(n^6)$ better than $O(2^n)$
+        \item we can hope for great improvements, $100\times$ faster, $1000\times$, etc.
+        \item $\rightarrow$ first thing to try!
+    \end{itemize}
+    \item Pick an algorithm that is fast on the computers you use and implement it well
+    \begin{itemize}
+        \item this course!
+        \item smaller improvements: from a few percent to $50\times$ faster
+    \end{itemize}
+    \item Translate the implementation into efficient instructions (compilers do that well)
+\end{enumerate}
+\subsection*{Low level}
+% [TBD] replaces any missing content, such as the downward arrow that would signify a passage from 'High level' to 'Low level'.
+[TBD]
+
+% Note: The document structure is not included, as per the instructions.
+% No preamble or begin/end document commands are included.
+% The lecturer's pointer, design elements, and slide number are not translatable to LaTeX, hence ignored.
+
+
+% Preamble or document class declarations are not required as per the user's request
+% Begin the document content
+\section*{What hides inside the big-O?}
+
+Let us compare two algorithms:
+\begin{itemize}
+    \item Algorithm A has complexity $O(n^2)$
+    \item Algorithm B has complexity $O(n \log(n))$
+\end{itemize}
+
+% [TBD] is used to replace the graphical content - the chart comparing Algorithm A and B
+[TBD]
+
+% Descriptive text below the graph
+\noindent
+\makebox[\textwidth][c]{ % Center the following two lines with a wider text width
+    \begin{tabular}{cc}
+        Algorithm A & Algorithm B \\
+        $O(n^2)$ & $O(n \log(n))$ \\
+    \end{tabular}
+}
+
+\bigskip % Provide some space before the next section
+
+Specifically,
+\begin{itemize}
+    \item Algorithm A performs $2n^2 + 16$ operations
+    \item Algorithm B performs $16n \log(n) + 64$ operations
+\end{itemize}
+
+% End of document content
+
+
+% Since the LaTeX transcription should not include \includegraphics or document formatting commands
+% This LaTeX code snippet reflects only the textual lecture material provided in the image.
+
+\[
+\begin{array}{cc}
+\text{Algorithm A} & \text{Algorithm B} \\
+2n^2 + 16 & 16n \log(n) + 64 
+\end{array}
+\]
+
+% The images in the provided content have been marked as [TBD] to indicate the position of a
+% non-textual element that cannot be represented directly in LaTeX. 
+% The reader or user of this LaTeX should replace [TBD] with the appropriate figure inclusion commands
+% and graphics, if they have the actual figures to include.
+
+% Graph 1 [TBD]
+
+% Graph 2 [TBD]
+
+% Graph 3 [TBD]
+
+% Any captions, axis labels, or markers within the graph images are not transcribed, as LaTeX does not
+% contain the capability to extract text from image content. The user of this LaTeX code should manually
+% add such details as needed by using appropriate LaTeX graphing packages and commands such as pgfplots or tikz.
+
+
+% Preamble such as \documentclass, \usepackage... is omitted as per the instruction. Begin with actual content.
+
+\section*{Which algorithm do we choose?}
+
+Assume that
+\begin{itemize}
+    \item Algorithm A is insertion sort
+    \item Algorithm B is merge sort
+\end{itemize}
+
+\section*{Merge sort example}
+
+% Below, the visualization of the merge sort process is not included as direct LaTeX content.
+% Instead, [TBD] tokens are used as placeholders for the graphical representation.
+[TBD]
+
+% The Python code shown in the image will be included here using the verbatim or listings environment.
+\begin{verbatim}
+def merge_sort(a):
+	# single-element list
+	if (len(a) < 1):
+		return [a]
+
+	# two-elements list
+	if (len(a) == 2):
+		if (a[0] <= a[1]):
+			return [a[0], a[1]]
+		else:
+			return [a[1], a[0]]
+
+	# split list, sort each part
+	pivot = len(a) // 2
+	part1 = merge_sort(a[:pivot])
+	part2 = merge_sort(a[pivot:])
+
+	# merge parts
+	r = []
+	i1 = 0
+	i2 = 0
+	while i1 < len(part1) or i2 < len(part2):
+		if (not i1 == len(part1)) and ((i2 == len(part2)) or (part1[i1] < part2[i2])):
+			r.append(part1[i1])
+			i1 = i1 + 1
+		else:
+			r.append(part2[i2])
+			i2 = i2 + 1
+	
+	return r
+\end{verbatim}
+
+% The [TBD] at the end of this document indicates the space for the slide progress indicator
+% which is typically not included in LaTeX documents but can be approximated with custom commands
+% or external package if needed.
+[TBD]
+
+
+% Start of LaTeX content
+% All textual content from the lecture is transcribed below.
+% Non-textual elements such as images are replaced with [TBD].
+
+\usepackage{amsmath}
+
+
+% Since LaTeX does not support direct insertion of source code with syntax highlighting,
+% we will use verbatim environments or listings package for the Python code.
+% Please include the appropriate package in your LaTeX preamble if you choose to use listings.
+% Here we use verbatim for simplicity.
+
+\begin{verbatim}
+def merge_sort(a):
+    # single-element list
+    if (len(a) =< 2):
+        return insertion_sort(a)
+
+    # split list, sort each part
+    pivot = len(a) // 2
+    
+    part1 = merge_sort(a[:pivot])
+    part2 = merge_sort(a[pivot:])
+    
+    # merge parts
+    r = []
+    i1 = 0
+    i2 = 0
+    
+    while i1 < len(part1) or i2 < len(part2):
+        if (not i1 == len(part1) and (i2 == len(part2) or part1[i1] < part2[i2])):
+            r.append(part1[i1])
+            i1 = i1 + 1
+        else:
+            r.append(part2[i2])
+            i2 = i2 + 1
+    
+    return r
+\end{verbatim}
+
+\begin{itemize}
+    \item[\textbf{Note:}] The function \verb|insertion_sort| is referenced but not defined here.
+\end{itemize}
+
+% The following is an interpretation of the text in the bottom part of the image which was partly obscured by a graph.
+\emph{We should pick the right algorithm for each value of \( n \):}
+
+% Placeholder for the graph image
+[TBD]
+
+% End of LaTeX content
+
+
+
+% Note: You will need to include the appropriate document class
+% and packages such as `amsmath` for this LaTeX code to compile correctly.
+
+% Slide 1 Content
+But here, we can do even better: we can combine algorithms
+
+% [TBD] - Placeholder for first graph image
+
+This is how sort algorithms are implemented in practice
+
+% [TBD] - Placeholder for second graph image
+
+% Slide 2 Content
+\section*{CPU PIPELINES}
+
+% Slide 3 Content
+\section*{Back to instructions}
+
+Instruction decoding:
+
+\begin{verbatim}
+48 2b 06        sub    rax, QWORD PTR [rsi]
+48 af           imul   rax, QWORD PTR [rsi]
+48 af af 06     imul   rax, QWORD PTR [rdx]
+\end{verbatim}
+
+From \texttt{48 af af 06}, the CPU needs to understand:
+
+\begin{itemize}
+  \item that it must perform a multiplication (as opposed to, say, a subtraction)
+  \item that one term is the value of a 64-bit register, \texttt{rax}
+  \item that the other term comes from memory: the 64-bit value pointer to by \texttt{rsi}
+\end{itemize}
+
+
+% Start of the LaTeX content from the lecture slide
+
+% Slide title
+\section*{What happens after instruction decoding?}
+
+% Assembly instruction example
+\texttt{mul rax, QWORD PTR [rsi]}
+
+% Bullet points explaining the CPU operations
+\begin{itemize}
+    \item the CPU has Boolean circuitry to compute multiplications
+    \item it must ensure that one of the two inputs of the multiplier is \texttt{rax}
+    \item the CPU has Boolean circuitry to access memory
+    \item it must ensure that the input of the memory circuitry is \texttt{rsi}
+    \item it sets the second input of the multiplier to the output of the memory circuitry
+    \item it stores the output of the multiplier back to \texttt{rax}
+\end{itemize}
+
+% Note about the impossibility of single cycle operations
+\textbf{It is no longer possible to do all this in a single cycle} \\
+(e.g., at 4 GHz, i.e. 4 billion cycles per second, so in 0.25 ns)
+
+% Description of the cycles needed for different operations
+\subsection*{Imagine that it takes:}
+\begin{itemize}
+    \item one cycle to decode an instruction
+    \item one cycle to fetch data from memory
+    \item one cycle to perform arithmetic
+\end{itemize}
+
+% Assembly instructions and corresponding cycle diagrams, replaced with [TBD] as LaTeX cannot represent the diagrams.
+\texttt{sub rax, [rdi]} \\
+% [TBD] represents the cycle diagram for 'sub rax, [rdi]'
+[TBD]
+
+\texttt{imul rbx, [rsi]} \\
+% [TBD] represents the cycle diagram for 'imul rbx, [rsi]'
+[TBD]
+
+% Below are placeholders for the cycle diagrams that were visually represented in the image
+decoder - [TBD] \\
+memory - [TBD] \\
+arithmetic - [TBD] \\
+% Additional placeholders if needed
+[TBD] \\
+[TBD]
+
+% End of the LaTeX content from the lecture slide
+
+
+% Since this is a LaTeX transcription of text content, we focus on the tabular representation and content transcribed accurately.
+% The layout in the original image might not be fully preserved due to the limitations of LaTeX's tabular environment.
+% [TBD] token is used to indicate the place where non-textual information such as images or diagrams should be inserted.
+
+\usepackage{array} % for better tables
+\usepackage{xcolor} % for color
+
+\begin{tabular}{ | l | l | l | l | l | }
+\hline
+- & - & sub rax, [rdi] & - & - \\ \hline
+decoder & - & imul rbx, [rsi] & \color{green}{decode ``imul''} & - \\ \hline
+memory & - & - & - & - \\ \hline
+arithmetic & - & - & - & - \\ \hline
+\end{tabular}
+
+\vspace{5mm} % adds some space between the tables
+
+\begin{tabular}{ | l | l | l | l | l | }
+\hline
+- & - & sub rax, [rdi] & - & - \\ \hline
+decoder & - & - & - & - \\ \hline
+memory & - & imul rbx, [rsi] & \color{green}{fetch [rsi]} & - \\ \hline
+arithmetic & - & - & - & - \\ \hline
+\end{tabular}
+
+\vspace{5mm} % adds some space between the tables
+
+\begin{tabular}{ | l | l | l | l | l | }
+\hline
+- & - & sub rax, [rdi] & - & - \\ \hline
+decoder & - & - & - & - \\ \hline
+memory & - & - & - & - \\ \hline
+arithmetic & - & imul rbx, [rsi] & \color{green}{compute rbx * [rsi]} & - \\ \hline
+\end{tabular}
+
+
+
+% Since the lecture content seems to be an illustration of assembly language instructions 
+% and stages of instruction execution in a pipeline, we replicate the text content with 
+% alignment and color indications as comments.
+
+\usepackage{xcolor} % Required for coloring text
+
+% We assume the use of 'tabular' environment for alignment.
+% We also assume that 'color' commands are used to indicate the colored text.
+% The exact colors would need to be defined or approximated in the LaTeX preamble,
+% which is not provided here since we focus exclusively on the lecture content.
+
+\begin{tabular}{ll}
+  % First block
+  -                & -                \\
+  \hline
+  decoder          & \textcolor{green}{sub rax, [rdi]} decode \textcolor{green}{"sub"} \\
+                   & -                \\
+  \hline
+  memory           & -                \\
+                   & -                \\
+  \hline
+  arithmetic       & -                \\
+  imul rbx, [rsi] &                  \\
+                   & -                \\
+\end{tabular}
+
+\vspace{1cm} % Adding vertical space to separate the blocks
+
+\begin{tabular}{ll}
+  % Second block
+  -                & -                \\
+  \hline
+  decoder          & -                \\
+                   & -                \\
+  \hline
+  memory           & \textcolor{green}{sub rax, [rdi]} fetch \textcolor{green}{[rdi]}  \\
+                   & -                \\
+  \hline
+  arithmetic       & -                \\
+  imul rbx, [rsi] &                  \\
+                   & -                \\
+\end{tabular}
+
+\vspace{1cm} % Adding vertical space to separate the blocks
+
+\begin{tabular}{ll}
+  % Third block
+  -                & -                \\
+  \hline
+  decoder          & -                \\
+                   & -                \\
+  \hline
+  memory           & -                \\
+                   & -                \\
+  \hline
+  arithmetic       & \textcolor{green}{sub rax, [rdi]} compute \textcolor{green}{rax - [rdi]} \\
+  imul rbx, [rsi] &                  \\
+                   & -                \\
+\end{tabular}
+
+
+
+% Since this is a transcription, we do not include preamble or begin/end document. 
+% We assume the use of packages like amsmath for formatting purposes, if required.
+
+% Transcription of textual content starts here
+
+% Table representing the first image where CPU components are listed with dashes for stages of instruction execution
+\begin{tabular}{lllll}
+-       & -        & -        & -        & -       \\
+        &          &          &          &         \\
+-       & -        & -        & -        & -       \\
+        & decoder  &          & memory   &         \\
+-       & -        & -        & -        & -       \\
+        &          & arithmetic &         &         \\
+-       & -        & -        & -        & -       \\
+sub     & rax,     & [rdi]    &          &         \\
+imul    & rbx,     & [rsi]    &          &         \\
+\end{tabular}
+
+% Paragraph explaining the instruction cycles
+Each instruction takes 3 cycles
+
+However, in this model,
+\begin{itemize} % Begin list
+  \item while the memory circuitry is busy fetching QWORD PTR {[rsi]}, the multiplier is idle
+  \item while the multiplier computes the result, the memory is idle
+  \item during instruction decoding, everything else is idle
+\end{itemize}
+We can exploit this!
+
+% Header for the next section
+\textbf{Pipelined execution}
+
+% Table representing the pipeline execution process
+\begin{tabular}{lllll}
+sub     & rax,     & {[rdi]}  &          &         \\
+imul    & rbx,     & {[rsi]}  &          &         \\
+add     & rcx,     & {[rbp]}  &          &         \\
+        &          &          &          &         \\
+-       & decoder  & (idle)   &          &         \\
+-       & memory   & (idle)   &          &         \\
+-       & arithmetic& (idle)  &          &         \\
+        &          &          &          &         \\
+-       &          & -        &          & -       \\
+        &          &          &          &         \\
+-       &          & -        &          & -       \\
+\end{tabular}
+
+% End of the transcription
+
+
+% Since LaTeX does not support direct representation of visual content such as images,
+% we replace it with the token [TBD] and focus on the text content.
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+
+\section*{Pipelined execution}
+
+\begin{tabular}{l l}
+    - \\
+    sub rax, [rdi] \\
+    imul rbx, [rsi] \\
+    add rcx, [rbp] \\
+    - & (idle) \\
+    - & (idle) \\
+    - & (idle) \\
+    - \\
+    - \\
+    - \\
+\end{tabular}
+
+\bigskip
+
+\begin{tabular}{l l}
+    \textbf{decoder} & \\
+                     & \\
+    - \\
+    - \\
+    sub rax, [rdi] \\
+    imul rbx, [rsi] \\
+    add rcx, [rbp] & decode ``add'' \\
+    - & (idle) \\
+    - & (idle) \\
+    \textbf{memory} & \\
+                     & \\
+    - \\
+    - \\
+    - & (idle) \\
+    \textbf{arithmetic} & \\
+                         & \\
+    - \\
+    - \\
+    - & (idle) \\
+\end{tabular}
+
+\bigskip
+
+\begin{tabular}{l l}
+    \textbf{decoder} & \\
+                     & \\
+    - \\
+    - \\
+    - \\
+    sub rax, [rdi] \\
+    imul rbx, [rsi] & decode ``imul'' \\
+    add rcx, [rbp] & fetch ``rbp'' \\
+    - & (idle) \\
+    \textbf{memory} & \\
+                     & \\
+    - \\
+    \textbf{arithmetic} & \\
+                         & \\
+    - \\
+    - & (idle) \\
+\end{tabular}
+
+
+
+% This is a LaTeX transcription of the textual content from a lecture on "Pipelined Execution"
+
+\usepackage{amsmath}
+\usepackage{color}
+\definecolor{decodeColor}{rgb}{1,0,0} % Custom color for "decode" stage
+\definecolor{fetchColor}{rgb}{0,1,0} % Custom color for "fetch" stage
+\definecolor{computeColor}{rgb}{0,0,1} % Custom color for "compute" stage
+
+
+\section*{Pipelined execution}
+
+\begin{verbatim}
+                -
+                -
+                -
+                -
+decoder        sub rax, [rdi]   \textcolor{decodeColor}{decode "sub"}
+memory         imul rbx, [rsi]  \textcolor{fetchColor}{fetch [rsi]}
+arithmetic     add rcx, [rbp]   \textcolor{computeColor}{compute rcx + [rbp]}
+                -
+                -
+                -
+\end{verbatim}
+
+\section*{Pipelined execution}
+
+\begin{verbatim}
+                -
+                -
+                -
+                -
+                -            (idle)
+decoder        -
+memory         sub rax, [rdi]   \textcolor{fetchColor}{fetch [rdi]}
+arithmetic     imul rbx, [rsi]  \textcolor{computeColor}{compute rbx + [rsi]}
+                add rcx, [rbp]
+                -
+                -
+\end{verbatim}
+
+\section*{Pipelined execution}
+
+\begin{verbatim}
+                -
+                -
+                -
+                -
+                -            (idle)
+                -            (idle)
+decoder        -
+memory         -
+arithmetic     sub rax, [rdi]   \textcolor{computeColor}{compute rax + [rdi]}
+                imul rbx, [rsi]
+                add rcx, [rbp]
+                -
+\end{verbatim}
+
+
+
+% Since the document preamble and begin/end document tags are not needed for this transcription, we start directly with the transcription of the slides' content.
+
+\section*{Pipelined execution}
+
+% The following is a tabular representation of the pipeline.
+% The [TBD] token is used to replace non-textual elements such as images or drawings.
+\begin{tabular}{ll}
+\multicolumn{2}{c}{[TBD]} \\ % This [TBD] replaces the actual pipelined execution diagram.
+\multicolumn{1}{c}{decoder} & \multicolumn{1}{c}{(idle)} \\
+\multicolumn{1}{c}{memory} & \multicolumn{1}{c}{(idle)} \\
+\multicolumn{1}{c}{arithmetic} & \multicolumn{1}{c}{(idle)} \\
+sub rax, [rdi] & \\
+imul rbx, [rsi] & \\
+add rcx, [rbp] & \\
+\end{tabular}
+
+\section*{Throughput vs. latency}
+
+\begin{itemize}
+    \item Latency:
+    \begin{itemize}
+        \item Executing each instruction still takes 3 cycles!
+    \end{itemize}
+    \item Throughput:
+    \begin{itemize}
+        \item But on average, we execute up to 1 instruction per cycle.
+    \end{itemize}
+\end{itemize}
+
+\section*{Data dependencies}
+
+% The following is a tabular representation of data dependencies in the pipeline.
+% Once again, [TBD] is used to replace the actual diagram since LaTeX code can't represent it directly.
+\begin{tabular}{ll}
+mul rcx, [rdx] & \\
+add rdx, [rsi] & \\
+\multicolumn{2}{c}{[TBD]} \\ % This [TBD] replaces the data dependencies diagram.
+\multicolumn{1}{c}{decoder} &  \multicolumn{1}{c}{(idle)} \\
+\multicolumn{1}{c}{memory} & \multicolumn{1}{c}{(idle)} \\
+\multicolumn{1}{c}{arithmetic} & \multicolumn{1}{c}{(idle)} \\
+\end{tabular}
+
+% All text contents of the slides are transcribed above. Diagrams and graphical elements cannot be represented in LaTeX directly and are indicated by [TBD].
+
+
+% The following LaTeX code is a transcription of the lecture material presented in the image.
+% Timelines or similar graphical elements are represented with dashes and parentheses as appropriate.
+% Since there is no direct way to represent these graphics in pure LaTeX without additional packages or commands,
+% they are transcribed in a manner that suggests their appearance and function.
+
+\section*{Data dependencies}
+
+% First section
+\begin{itemize}
+  \item \verb|mul rcx, [rdx]|
+  \item \verb|add rdx, [rsi]|
+\end{itemize}
+\begin{tabular}{l l l}
+decoder    & -             & (idle) \\
+memory     & -             & (idle) \\
+arithmetic & -             & (idle) \\
+\end{tabular}
+
+% Second section
+\begin{itemize}
+  \item \verb|mul rcx, [rdx]|
+  \item \verb|add rax, [rsi]| \textbf{decode "add"}
+\end{itemize}
+\begin{tabular}{l l l}
+decoder    &               &        \\
+memory     & -             & (idle) \\
+arithmetic & -             & (idle) \\
+\end{tabular}
+
+% Third section
+\begin{itemize}
+  \item \verb|mul rcx, [rdx]| \textbf{decode "mul"}
+  \item \verb|add rdx, [rsi]| \textbf{fetch [rsi]}
+\end{itemize}
+\begin{tabular}{l l l}
+decoder    &               &        \\
+memory     &               &        \\
+arithmetic & -             & (idle) \\
+\end{tabular}
+
+
+% Since LaTeX is a typesetting system and there's no 'one true way' to transcribe the content,
+% the following LaTeX code is one possible transcription that emphasizes semantic structure
+% over exact visual reproduction of the original slides, suitable for an article or report.
+
+\section*{Data dependencies}
+
+\begin{tabular}{l l l}
+\textbf{decoder}    & -             & (idle)           \\
+\textbf{memory}     & mul rcx, [rdx] & (rdx not ready)  \\
+\textbf{arithmetic} & add rdx, [rsi] & add [rsi] to rdx \\
+\end{tabular}
+
+\vspace{2em} % Vertical space to separate the content blocks
+
+\begin{tabular}{l l l}
+\textbf{decoder}    & -             & (idle)          \\
+\textbf{memory}     & mul rcx, [rdx] & fetch [rdx]     \\
+\textbf{arithmetic} & -             & (idle)          \\
+                    & add rdx, [rsi] &                 \\
+\end{tabular}
+
+\vspace{2em} % Vertical space to separate the content blocks
+
+\begin{tabular}{l l l}
+\textbf{decoder}    & -             & (idle)             \\
+\textbf{memory}     & -             & (idle)             \\
+\textbf{arithmetic} & mul rcx, [rdx] & compute rcx * [rdx] \\
+                    & add rdx, [rsi] &                     \\
+\end{tabular}
+
+% [TBD] indicates a placeholder for non-textual content in the original image that cannot be represented in LaTeX.
+% If there is a need to describe the visual aspects, additional packages and commands are required,
+% which are not included in this transcript meant for direct compilation without modification.
+
+
+% LaTeX transcription of the lecture material
+
+\section*{Data dependencies}
+
+\begin{verbatim}
+            | decoder | memory | arithmetic
+------------|---------|--------|------------
+            |         |        |
+------------|---------|--------|------------
+            | -       | -      | -
+(idle)      |         | (idle) | 
+------------|---------|--------|------------
+            |         |        |
+            |         | (idle) | 
+------------|---------|--------|------------
+            |         |        |
+mul rcx,    |         |        | (idle)
+[rdx]       |         |        |
+------------|---------|--------|------------
+            |         |
+add rdx,    |         |
+[rsi]       |         |
+\end{verbatim}
+
+\section*{Conditional branching}
+
+\begin{verbatim}
+if (a < b) {       |     cmp rdi, rsi
+    yyy            |     jge .L1
+}                  |     yyy
+zzz                |     .L1:
+                    |     zzz
+------------|---------
+            |
+YYY         |
+------------|---------
+jge .L1     |
+------------|---------
+cmp rdi, rsi|
+------------|---------|--------
+            | decoder | memory | arithmetic
+------------|---------|--------|------------
+            | -       | -      | -
+(idle)      |         | (idle) | 
+------------|---------|--------|------------
+            |         |        |
+            |         | (idle) | 
+------------|---------|--------|------------
+            |         |        |
+\end{verbatim}
+
+\section*{Conditional branching}
+
+\begin{verbatim}
+if (a < b) {       |     cmp rdi, rsi
+    yyy            |     jge .L1
+}                  |     yyy
+zzz                |     .L1:
+                    |     zzz
+------------|---------
+            |
+YYY         |
+------------|---------
+jge .L1     |
+------------|---------
+            | cmp rdi, rsi
+            | decode "cmp"
+\end{verbatim}
+
+
+% Since this LaTeX transcription is primarily focused on the content, 
+
+\section*{Conditional branching}
+
+\begin{verbatim}
+if (a < b) {
+    YYY
+}
+zzz
+\end{verbatim}
+
+\begin{tabbing}
+\hspace*{2.5cm} \= \hspace*{2.5cm} \= \hspace*{2.5cm} \kill
+\> cmp      \> rdi, rsi     \\
+\> jge      \> .L1          \\
+\> YYY      \>              \\ 
+\> .L1:     \> zzz          \\
+\end{tabbing}
+
+\begin{tabbing}
+\hspace*{2.5cm} \= \hspace*{2.5cm} \= \hspace*{2.5cm} \kill
+decoder    \> jge .L1       \> decode "jge"     \\
+memory     \> cmp rdi, rsi  \> (still idle)     \\
+arithmetic \> -             \> (idle)           \\
+\end{tabbing}
+
+\vspace{5mm} % Providing some vertical space between sections
+
+\section*{Conditional branching}
+
+\begin{verbatim}
+if (a < b) {
+    YYY
+}
+zzz
+\end{verbatim}
+
+\begin{tabbing}
+\hspace*{2.5cm} \= \hspace*{2.5cm} \= \hspace*{2.5cm} \kill
+decoder \> YYY or ZZZ ???  \> choose one or wait? \\
+memory  \> jge .L1        \> (still idle)         \\
+arithmetic \> cmp rdi, rsi \> compare rdi and rsi  \\
+\end{tabbing}
+
+\vspace{5mm} % Providing some vertical space between sections
+
+\section*{Branch prediction}
+
+\begin{itemize}
+\item in practice, the CPU will try to predict which branch will be taken (based on past choices at that specific instruction)
+\item and speculatively choose that branch
+\end{itemize}
+
+
+% Since LaTeX does not have a standard format for lecture slides, we represent the content as a simple document with sections for each step.
+
+% Start of the document content
+
+YYY 3
+
+YYY 2
+
+decoder YYY decoding YYY
+memory jge .L1 (still idle)
+arithmetic cmp rdi, rsi compare rdi and rsi
+
+% Next part of the document content
+
+YYY 3
+
+decoder YYY 2 decoding YYY 2
+memory YYY (still idle)
+arithmetic jge .L1 decide taken branch
+cmp rdi, rsi
+
+% Last part of the document content
+
+ZZZ $\leftarrow$ going here instead
+
+decoder YYY 3 Misprediction!
+memory YYY 2 Misprediction!
+arithmetic YYY Misprediction!
+jge .L1
+cmp rdi, rsi
+
+% End of the document content
+
+% Note to user: any specific formatting such as colors, arrows, and lines representing stages would require further LaTeX packages and is not represented here.
+
+
+% Since the image contains an illustration that cannot be fully expressed in LaTeX, 
+% a placeholder [TBD] is used to indicate where the illustration would be.
+% The actual LaTeX content begins after the placeholder.
+
+[TBD] % This is where the illustration from the image would be placed in the document.
+
+% The bullet points from the "In practice" section of the image.
+\begin{itemize}
+    \item When all goes perfect, processors can actually execute more than one instruction per cycle
+    \item Modern processor pipelines have between 5 and 40 stages
+    \item At each stage, there are multiple circuitry blocks (decoders, arithmetic and logic unit (ALU) "ports", etc.)
+    \item Branch mispredict penalty is typically $\geq 10$ cycles
+    \item Main memory latency is 50--200 cycles
+\end{itemize}
+
+% The heading and bullet points from the "How do we write good code?" section of the image.
+\section*{How do we write good code?}
+\begin{itemize}
+    \item These parameters vary widely from CPU to CPU
+    \item Specific characteristics are often not public
+    \item It is almost impossible to predict the number of cycles a given set of instructions will take (in the presence of branches and memory accesses)
+    \item $\Rightarrow$ Qualitatively: we try to \textit{understand} the phenomena at play
+    \item $\Rightarrow$ Quantitatively: We \textit{measure} at runtime
+\end{itemize}
+
+% End of the LaTeX content from the image.
+
+
+% Start of LaTeX Code
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+
+\section*{Out-of-order execution}
+
+% First slide content
+add rdx, rdi \\
+add rcx, rbx \\
+mov rax, [rsi] \\
+
+\begin{tabular}{l|c|c}
+memory & ALU 1 & ALU 2 \\ \hline
+&   &  \\
+&   &  \\
+mov rax, [rsi] &   &  \\
+&   &  \\
+&   &  \\
+&   &  \\
+\end{tabular}
+
+% Second slide content
+\section*{Out-of-order execution}
+
+% Following the document style, "-" represents a blank space or placeholder for future content.
+add rdx, rdi \\
+add rcx, rbx \\
+mov rax, [rsi] -- \\
+
+\begin{tabular}{l|c|c}
+memory & ALU 1 & ALU 2 \\ \hline
+&   &  \\
+add rdx, rdi &   &  \\
+add rcx, rbx &   &  \\
+mov rax, [rsi] -- &   &  \\
+&   &  \\
+&   &  \\
+&   &  \\
+\end{tabular}
+
+% Third slide content
+\section*{Out-of-order execution}
+
+% Similar to previous slides, with "-" symbolizing placeholders.
+mov rax, [rsi] -- \\
+
+\begin{tabular}{l|c|c}
+memory & ALU 1 & ALU 2 \\ \hline
+&   &  \\
+&   &  \\
+&   &  \\
+mov rax, [rsi] -- &   &  \\
+add rdx, rdi -- & add rcx, rbx -- &  \\
+&   &  \\
+&   &  \\
+&   &  \\
+\end{tabular}
+
+% End of LaTeX Code
+
+
+% Use the 'article' class with a 12pt font size
+\documentclass[12pt]{article}
+
+% Begin the document environment
+
+% Title for the first section
+\section*{Out-of-order execution}
+
+% An empty line to emulate the spacing in the image
+\mbox{}\\
+
+% Representation of the content using 'tabular' environments
+% Each row consists of a horizontal line and operation details
+\begin{tabular}{l c l}
+    % Blank rows for visual spacing
+    \hline
+    \\
+    \hline
+    \\
+    \hline
+    \\
+    % Memory operation row
+    \hline
+    memory & mov rax, [rsi] & \\
+    \hline
+    % ALU operations rows
+    ALU 1 & add rcx, rbx & ALU 2\\
+    \hline
+    & add rdx, rdi & \\
+    \hline
+    % Blank row for visual spacing
+    \\
+\end{tabular}
+
+% The title for the second section appears after two clear lines
+\mbox{}\\
+\mbox{}\\
+\section*{Out-of-order execution}
+
+% An empty line to emulate the spacing in the image
+\mbox{}\\
+
+% Representation of the content using 'tabular' environments
+% Each row consists of a horizontal line and operation details
+\begin{tabular}{l c l}
+    % Blank rows for visual spacing
+    \hline
+    \\
+    \hline
+    \\
+    \hline
+    \\
+    % Memory operation row
+    \hline
+    memory &  & \\
+    \hline
+    % ALU operations rows
+    ALU 1 & mov rax, [rsi] & ALU 2\\
+    \hline
+    & add rcx, rbx & \\
+    \hline
+    & add rdx, rdi & \\
+    \hline
+    % Blank row for visual spacing
+    \\
+\end{tabular}
+
+% Title for the bottom footer area
+% We use a larger font size to emulate the image's content
+\begin{center}
+    {\LARGE MEMORY}
+\end{center}
+
+% End of the document environment
+
+
+% Lecture material transcription into LaTeX
+
+\usepackage[utf8]{inputenc}
+
+
+\section*{Access to memory (``random access memory'' or RAM) is slow}
+
+% [TBD] Placeholder for image content that cannot be represented in LaTeX
+
+On desktop computers, RAM is typically on distinct integrated circuit (IC) packages,
+physically centimeters away from the CPU.
+
+Solution: \textbf{caching}
+
+\subsection*{Caching}
+
+Level 1 (``L1'') cache:
+\begin{itemize}
+    \item The CPU contains a \textbf{small amount of extremely fast memory}
+    \item This memory \textbf{requires many of logic gates} on-package
+    \item But it is \textbf{always available} (no latency)
+    \item The CPU contains logic to decide which part of the main memory gets stored in its L1 cache
+    \item This continuously changes over time
+\end{itemize}
+
+Level 2 (``L2'') cache:
+\begin{itemize}
+    \item slower than L1
+    \item but requires fewer logic gates, so we can have more
+\end{itemize}
+
+Level 3 (``L3'') cache:
+\begin{itemize}
+    \item slower than L2
+    \item but requires fewer logic gates, so we can have more
+\end{itemize}
+
+
+
+% Since the content of the image is a series of diagrams representing CPU cache levels,
+% we can only approximate the textual content in LaTeX using a tabular or similar environment.
+% We will replace the actual diagrams with a description inside a table.
+% The arrows and specific graphical representations are omitted but can be described.
+
+\usepackage{array} % For better columns
+
+
+% The diagrams represent three different CPU cache hierarchy configurations.
+
+% First configuration: Single level cache
+\begin{tabular}{cc}
+CPU & L1 \\
+    & 32 KB \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between diagrams
+
+% Second configuration: Two-level cache with latency
+\begin{tabular}{ccc}
+CPU & L1             & L2 \\
+    & 32 KB          & 256 KB \\
+    &                & 4 cycles \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between diagrams
+
+% Third configuration: Three-level cache with latency for each level
+\begin{tabular}{cccc}
+CPU & L1             & L2              & L3 \\
+    & 32 KB          & 256 KB          & 3 MB \\
+    &                & 4 cycles        & 40 cycles \\
+\end{tabular}
+
+
+% Note: The actual representation of the diagrams would require the usage of a graphics package
+% such as TikZ in LaTeX, which goes beyond the immediate scope of this transcription request.
+% Latency values and cache sizes are presented in a tabular format instead of a diagrammatic one.
+
+
+% Since the image contains diagrams and specific formatting that cannot be translated directly into LaTeX,
+% these elements are summarized with descriptive placeholders.
+
+\usepackage[utf8]{inputenc}
+
+
+% Title of the section
+\section*{Typical configuration}
+
+% Bullet points with descriptions
+\begin{itemize}
+    \item memory transits through in units of one cache line
+    \begin{itemize}
+        \item 64 bytes on x86\_64
+        \item 128 bytes on M1 Macs
+    \end{itemize}
+    \item there is no concept of locality beyond cache lines
+    \item every memory access is performed through L1 cache
+    \item when all cache entries are full, we need to overwrite one
+    \begin{itemize}
+        \item $\rightarrow$ cache eviction policies e.g. least-recently used (LRU)
+    \end{itemize}
+    \item pipelined CPUs feature a memory prefetcher (speculatively fills caches in advance)
+\end{itemize}
+
+\subsection*{Zen 4 Cache}
+
+% Placeholder for the Zen 4 Cache table, as the precise table layout cannot be represented without additional commands
+[TBD: Table summarizing Zen 4 Cache configurations, including the size, associativity, and line size for L1I cache, L1D cache, L2 cache, L3 cache]
+
+
+
+% LaTeX transcription of lecture slide content
+\usepackage[utf8]{inputenc}
+
+% Begin document content
+
+\section*{How do we write good code?}
+
+\begin{itemize}
+    \item Again, cache operation varies widely from CPU to CPU
+    \item It is almost impossible to predict how it will behave with complex instruction streams
+    \item $\Rightarrow$ Qualitatively: we try to \textbf{understand} how caches work
+    \item $\Rightarrow$ Quantitatively: We \textbf{measure} at runtime
+\end{itemize}
+
+% End of LaTeX transcription
+
+% Notes: 
+% Replace the 'article' class with 'beamer' if you wish to create presentation slides in LaTeX.
+% Simple bulleted list items are created using the 'itemize' environment.
+% The arrows are written using the math mode symbol 'Rightarrow'.
+% The words 'understand' and 'measure' are emphasized using the 'textbf' command to replicate the bold formatting in the slide.

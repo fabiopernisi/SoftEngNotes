@@ -1,0 +1,175 @@
+
+
+
+% Title: LECTURE 18
+\section*{LECTURE 18}
+
+% Title: HARDWARE PERFORMANCE COUNTERS
+\subsection*{HARDWARE PERFORMANCE COUNTERS}
+
+% The following text explains the time stamp counter as a hardware-aided performance-measuring tool.
+The simplest hardware-aided performance-measuring tool is:
+the \textbf{time stamp counter (TSC)}
+
+% The below is a bullet list with information about the time stamp counter.
+\begin{itemize}
+    \item Introduced by \textbf{Intel} with the Pentium architecture (1993)
+    \item Similar feature available on \textbf{ARM} since ARMv7 (1996)
+    \item Special integer register
+    \item Incremented by one at a constant rate (e.g. every clock cycle)
+    \item Reading this register has high latency ($>$10 cycles)
+    \item Useful for microbenchmarks and instrumentation
+    \item \texttt{time.time()} / \texttt{clock\_gettime()} use this internally
+\end{itemize}
+% End of the LaTeX transcription of the textual content of the slide.
+
+
+% LaTeX content transcribed from the image
+
+\section*{More complex performance counters}
+
+Since then, Intel and ARM have added many more performance counters:
+
+\begin{itemize}
+  \item executed (“retired”) instructions
+  \item branches
+  \begin{itemize}
+    \item successfully predicted
+    \item mispredicted branches
+  \end{itemize}
+  \item memory accesses
+  \begin{itemize}
+    \item found in L1 cache
+    \item L1 misses, found in L2 cache
+    \item L2 misses, found in (last-level) L3 cache
+    \item L3 misses, found in main memory
+  \end{itemize}
+  \item TLB (page table cache) hits
+  \item TLB misses
+\end{itemize}
+
+\begin{itemize}
+  \item Pros
+  \begin{itemize}
+    \item always measured
+    \item no performance penalty
+    \item no interference with normal execution
+  \end{itemize}
+  \item Cons
+  \begin{itemize}
+    \item only an aggregate measure (totals)
+  \end{itemize}
+\end{itemize}
+
+\section*{Linux perf}
+
+\texttt{perf stat ./application}
+
+\begin{verbatim}
+Performance counter stats for './application':
+
+      3,216.90 msec task-clock                #    1.000 CPUs utilized
+             8      context-switches          #    2.487 /sec
+             1      cpu-migrations            #    0.311 /sec
+           205      page-faults               #    0.997 K/sec
+9,462,528,623      cycles                    #    2.935 GHz                     (58.8%)
+7,596,311,032      instructions              #    0.80  insn per cycle          (58.8%)
+1,105,737,213      branches                  #  337.629 M/sec                   (58.8%)
+   1,685,287      branch-misses             #    0.1% of all branches          (58.8%)
+2,162,695,901      L1-dcache-loads           #  672.289 M/sec                   (58.8%)
+   1,030,132      L1-dcache-load-misses      #    0.48% of all L1-dcache accesses (23.5%)
+   1,069,962,731   LLC-loads                 #  332.321 M/sec                   (58.8%)
+      457,302      LLC-load-misses           #   61.67% of all LLC cache accesses (23.5%)
+2,161,856,801      dTLB-loads                #  672.049 M/sec                   (23.5%)
+     359,193      dTLB-load-misses           #    0.02% of all dTLB cache accesses (23.5%)
+      901,713      iTLB-loads                #    2.814 M/sec                   (23.5%)
+      81,624      iTLB-store-misses          #   25.374 K/sec                   (23.5%)
+
+   3.217382987 seconds time elapsed
+
+   3.167788000 seconds user
+   0.022723000 seconds sys
+\end{verbatim}
+
+\section*{STOCHASTIC INSTRUMENTATION}
+
+
+% Since this is a transcription of lecture material, I will not include any preamble, 
+% document beginning or ending commands; rather, I will transcribe the content ready
+% for inclusion in a larger document.
+
+% Slide title: Limitations of performance counters
+\section*{Limitations of performance counters}
+
+\begin{itemize}
+    \item How could we find \textbf{hot spots}\\
+    (small groups of instructions that the application spends a lot of time running)
+    
+    \item What about performance counts (cache misses, mispredicted branches,\ldots)\\
+    at those \textbf{hot spots}?
+    
+    \item Instrumentation is expensive (and affects accuracy)
+\end{itemize}
+
+% Slide title: Solution: stochastic instrumentation
+\section*{Solution: stochastic instrumentation}
+
+\begin{itemize}
+    \item every N cycles (e.g., every 1,000,000th cycle / every 0.1ms), a \textbf{sample} is taken
+    \item the \textbf{sample} records:
+    \begin{itemize}
+        \item which instruction is currently being executed
+        \item optionally, what it is waiting for (instr. decoding, pipeline bubble, memory access,\ldots)
+        \item optionally, instruction addresses of the last few branches
+        \item optionally, whether those branches were successfully predicted
+    \end{itemize}
+\end{itemize}
+
+% Slide title: Stochastic instrumentation
+\subsection*{Stochastic instrumentation}
+\begin{itemize}
+    \item Pros
+    \begin{itemize}
+        \item no performance penalty
+        \item no interference with normal execution
+        \item accuracy naturally increases on hotspots
+    \end{itemize}
+    \item Cons
+    \begin{itemize}
+        \item none
+    \end{itemize}
+\end{itemize}
+
+% Since the slides may contain non-textual elements such as images and page number indicators,
+% I have replaced them with [TBD] where necessary.
+
+
+
+\usepackage[utf8]{inputenc}
+
+
+\section*{Analysis applications}
+
+\begin{itemize}
+  \item Linux
+  \begin{itemize}
+    \item \texttt{perf record / perf report}
+    \item KDAB hotspot
+  \end{itemize}
+  \item MacOS: Apple XCode Instruments
+  \item Windows: Visual Studio (``dynamic instrumentation'' / ``collection via sampling'')
+  \item Intel-specific: vTune
+  \item AMD-specific: uProf
+\end{itemize}
+
+\section*{Bottom-up analysis}
+% [TBD] - Placeholder for the bottom-up analysis image from the Intel VTune Profiler
+
+\section*{Flame graphs}
+% [TBD] - Placeholder for the flame graphs image
+
+
+
+Certainly! Below is the LaTeX representation of the textual content. However, I can't provide an accurate transcription without an image to reference. If you upload an image with textual content, I can transcribe it into LaTeX for you.
+
+Since no actual content is provided, please provide the image with the lecture material you wish to have transcribed, and I'll assist you accordingly.
