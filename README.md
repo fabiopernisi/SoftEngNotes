@@ -24,15 +24,15 @@ Where the `\paragraph{}` command needs to be defined as follows:
 ```
 
 ### Numbering, case and spacing conventions
-Sections should be numbered, i.e. no `*` after any Heading keywords (`section`, `subsection`, and so on). This will allow to have a table of contents. \
-✅ `\section{my_section}`, `\subsection{my_subsection}`\
-❌ `\section*{my_section}`, `\subsection*{my_subsection}`
+- Sections should be numbered, i.e. no `*` after any Heading keywords (`section`, `subsection`, and so on). This will allow to have a table of contents. \
+    ✅ `\section{my_section}`, `\subsection{my_subsection}`\
+    ❌ `\section*{my_section}`, `\subsection*{my_subsection}`
 
-Every Section Should __not__ be entirely in Uppercase:\
-✅ `\section{Code Portability}`\
-❌ `\section{CODE PORTABILITY}`
+- Every Section Should __not__ be entirely in Uppercase:\
+    ✅ `\section{Code Portability}`\
+    ❌ `\section{CODE PORTABILITY}`
 
-Every section should start with a `\newpage` command
+- Every section should start with a `\newpage` command
 
 ### Cleaning and Postprocessing
 Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the raw outputs of the GPT4 vision model. Please include the cleaned up version of each folder `p<i>_output` with the name `text<i>.txt`.
