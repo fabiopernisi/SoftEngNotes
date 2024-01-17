@@ -48,6 +48,6 @@ Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the r
 | Lecture 21  |   ⚙️       |          ⚙️         |
 | Lecture 22  |   ⚙️       |          ⚙️         |
 
-Here\
+Here:
 - ✅ the file has been cleaned/enriched according to the Contributing guidelines
 - ⚙️ work in progress
