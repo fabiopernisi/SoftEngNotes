@@ -32,7 +32,7 @@ Where the `\paragraph{}` command needs to be defined as follows:
     ✅ `\section{Code Portability}`\
     ❌ `\section{CODE PORTABILITY}`
 
-- Every section should start with a `\newpage` command
+- Every section should be preceeded by a `\newpage` command
 
 ### Cleaning and Postprocessing
 Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the raw outputs of the GPT4 vision model. Please include the cleaned up version of each folder `p<i>_output` with the name `text<i>.txt`.
