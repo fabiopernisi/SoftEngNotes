@@ -1,9 +1,10 @@
 # SoftEngNotes
-This repository contains the file with the lecture notes for the course "20875 - Software Engineering" at Bocconi University.
+This repository contains the file with the lecture notes for the course "20875 - Software Engineering" taught in the MSc in Artificial Intelligence at Bocconi University.\
+The notes have been adapted from the material provided by Professor [Laurent Poirrier](https://www.poirrier.ca/courses/softeng/). This repo contains the transcription of the notes at the link, with some small changes and with more material and text.
 
 ## Contributing
 ### Headers convention
-The file `skeleton.txt` contains a sample latex format that includes several packages (probably all that you would ever need), including `hyperref`, to make the table of contents clickable.\\
+The file `skeleton.txt` contains a sample latex format that includes several packages (probably all that you would ever need), including `hyperref`, to make the table of contents clickable.\
 Please adopt the following convention when contributing to the latex notes:
 - every Lecture represents a `section`
 - every title that uses a whole slide is a `subsection`
