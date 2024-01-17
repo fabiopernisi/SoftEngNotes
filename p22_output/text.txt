@@ -1,0 +1,903 @@
+
+
+
+% Since the image contains textual content with a specific layout (title and subtitle), 
+% we will replicate that structure as closely as possible using LaTeX.
+
+
+% Define custom title format
+\titleformat{\section}
+  {\Huge\bfseries}     % Format for the section title
+  {}                   % Label for the section
+  {0em}                % Separation between label and section title
+  {\filcenter}         % Code before the section title
+
+\titleformat{\subsection}
+  {\Large\bfseries}    % Format for the subsection title
+  {}                   % Label for the subsection
+  {0em}                % Separation between label and subsection title
+  {\filcenter}         % Code before the subsection title
+
+% Remove 'Section' prefix from `\section` command
+\renewcommand{\thesection}{}
+
+
+\section{LECTURE 22}
+\subsection{PARALLEL COMPUTATION}
+
+
+
+% Since LaTeX is not concerned with slide/page layout as a typical presentation software would be,
+% the following code is a sequence of sections and items representing the lecture's text content.
+% There is no direct representation of visual style (like colors or exact positioning).
+
+\section*{0. PARALLELISM THAT DOES NOT REQUIRE PROGRAMMER INTERVENTION}
+
+\subsection*{Pipelines}
+\begin{itemize}
+    \item CPU pipelines can be viewed as implementing some form of parallelism in the sense that multiple executions are being executed simultaneously.
+    \item For example, one instruction’s arithmetic is performed (in an ALU) while the next is being decoded.
+    \item However, from the programmer’s perspective, everything must happen as if there was no parallelism at all.
+\end{itemize}
+
+\subsection*{Multitasking}
+% [TBD] - This section contains an image which is not representable in LaTeX.
+% The image depicts multitasking on a computer system with various applications open on a Windows desktop.
+
+
+% Preamble required packages would include article, graphicx, amsmath, etc.
+% But as per instruction not including the package declarations or document beginning and end commands.
+
+\section*{Multitasking}
+
+\begin{itemize}
+    \item Multitasking allows multiple executables to run “simultaneously” (even on a single processor)
+    \item Regularly, the \textbf{scheduler} (part of the OS kernel) decides which task gets to run on a processor.
+\end{itemize}
+
+\section*{Multitasking on a single-core processor}
+
+% The images are represented by [TBD] as they cannot be transcribed into LaTeX.
+[TBD]
+
+% Here we would have a description of the diagram if necessary for the reader.
+% Diagram 1: Tasks 0, 1, 2 are running, Tasks 3 and 4 are sleeping - All are connected to a single CPU 0.
+
+[TBD]
+
+% Diagram 2: Only Task 0 running indicated by an arrow, Tasks 1, 2 are running, Tasks 3 and 4 are sleeping - All are connected to a single CPU 0.
+
+% End of document content
+
+
+% Since LaTeX doesn't handle images directly without using packages like graphicx,
+% the content of the images is described as placeholders.
+
+
+
+\section*{Multitasking on a single-core processor}
+
+% There are three diagrams in the displayed image.
+% No specific commands are required to recreate the diagrams
+% as they are non-textual content and will be replaced by [TBD] as per instructions.
+% The textual content from the diagrams will be provided as descriptions.
+
+% First diagram description
+\begin{itemize}
+    \item Diagram with 5 tasks labeled from task 0 to task 4.
+    \item Task 0, task 1, and task 2 are marked as (running).
+    \item Task 3 and task 4 are marked as (sleeping).
+    \item An arrow points from task 0 to a rectangle labeled CPU 0, indicating task 0 is currently utilizing CPU 0.
+\end{itemize}
+[TBD] % Placeholder for the first diagram
+
+% Second diagram description (identical to the first one)
+\begin{itemize}
+    \item Diagram with 5 tasks labeled from task 0 to task 4.
+    \item Task 0, task 1, and task 2 are marked as (running).
+    \item Task 3 and task 4 are marked as (sleeping).
+    \item An arrow points from task 1 to a rectangle labeled CPU 0, indicating task 1 is currently utilizing CPU 0.
+\end{itemize}
+[TBD] % Placeholder for the second diagram
+
+% Third diagram description (identical to the first one)
+\begin{itemize}
+    \item Diagram with 5 tasks labeled from task 0 to task 4.
+    \item Task 0, task 1, and task 2 are marked as (running).
+    \item Task 3 and task 4 are marked as (sleeping).
+    \item An arrow points from task 2 to a rectangle labeled CPU 0, indicating task 2 is currently utilizing CPU 0.
+\end{itemize}
+[TBD] % Placeholder for the third diagram
+
+
+
+% Start of LaTeX content
+\section{Multitasking on a single-core processor}
+
+% Since we cannot include images, we represent the diagrams with [TBD]
+% Diagram representation - First image
+[TBD]
+
+% Diagram representation - Second image
+[TBD]
+
+\begin{itemize}
+  \item The scheduler is called:
+  \begin{itemize}
+    \item at regular intervals $f$ times per second, by default:
+    \begin{itemize}
+      \item Linux: $f = 1000\ \text{Hz}\ (\text{see CONFIG\_HZ})$
+      \item macOS: $f = 100\ \text{Hz}\ (\text{see sysctl kern.clockrate})$
+      \item Windows 10: $f = 64\ \text{Hz}\ (\text{see timeBeginPeriod()})$
+    \end{itemize}
+    \item when an task performs a system call (\texttt{open()}, \texttt{write()}, \texttt{exit()}, ...)
+    \item when a ``hardware interrupt'' happens:
+    \begin{itemize}
+      \item keyboard received a keypress
+      \item network device received data
+      \item storage device finished writing
+      \item sound/video device ready to receive next buffer
+      \item \ldots
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+% End of LaTeX content
+
+
+% Preemptive multitasking section
+\section*{Preemptive multitasking}
+\begin{itemize}
+  \item When the scheduler decides to interrupt a running process (e.g. to run another)
+  \begin{itemize}
+    \item the process is said to ``preempted''
+    \item it becomes ``runnable''
+  \end{itemize}
+  \item When a process executes a system call,
+  \begin{itemize}
+    \item it starts ``sleeping''
+    \item after the requested operation is performed,
+    \begin{itemize}
+      \item in some cases, it will run again
+      \item in other cases, it becomes runnable and will only run when a CPU is available
+    \end{itemize}
+    \item many system calls can take a long time to perform (``blocking'' system calls):
+    \begin{itemize}
+      \item \texttt{read()}, \texttt{write()}, \texttt{recv()}, \texttt{send()}
+    \end{itemize}
+  \end{itemize}
+
+% Preemptive multitasking subsection with examples
+\subsection*{Preemptive multitasking}
+\begin{itemize}
+  \item At any given time, most tasks are sleeping
+  \begin{itemize}
+    \item waiting for data (e.g. from network)
+    \item waiting for user interaction (e.g. keyboard or touch input)
+    \item waiting on a timer (tasks that run at regular interval)
+  \end{itemize}
+  \item The only tasks that are normally running/runnable are those performing CPU-intensive operations
+  \begin{itemize}
+    \item graphics rendering
+    \item audio/video/data compression and decompression
+    \item computations
+    \item etc.
+  \end{itemize}
+\end{itemize}
+
+% [TBD] token to denote the replacement of a non-textual element that cannot be represented in LaTeX directly
+[TBD] % This represents the screenshot of a system monitor tool like 'htop'
+
+
+% Since the image content is instructional material regarding multi-core processors and
+% task distribution, we provide a textual representation of the content which includes
+% descriptions of the diagrams as [TBD], as they cannot be rendered in LaTeX directly.
+
+
+
+\section*{Multitasking on a multi-core processor}
+
+% First diagram description
+% Four tasks (task 0 to task 3) are available to run, and each task is placed on a separate
+% CPU (from CPU 0 to CPU 3).
+\begin{itemize}
+    \item task 0 (running)
+    \item task 1 (running)
+    \item task 2 (running)
+    \item task 3 (running)
+    \item task 4 (running)
+\end{itemize}
+\begin{itemize}
+    \item CPU 0
+    \item CPU 1
+    \item CPU 2
+    \item CPU 3
+\end{itemize}
+% [TBD] Diagram of tasks assigned to CPUs (1st scenario).
+
+% Second diagram description
+% Each task is assigned to a separate CPU core with arrows pointing from each task to the
+% corresponding CPU (from task 0 to CPU 0, task 1 to CPU 1, and so on).
+% [TBD] Diagram of tasks assigned to CPUs with arrows (2nd scenario).
+
+% Third diagram description
+% A similar assignment of tasks to CPUs as in the second diagram, but with task 4
+% also being assigned to CPU 3, indicating that CPU 3 is handling two tasks.
+% [TBD] Diagram of tasks assigned to CPUs with task 4 shared by CPU 3 (3rd scenario).
+
+
+
+% Preamble would normally go here with document class, usepackage, etc.
+% But for simplicity, we are only including the necessary LaTeX code transcribed from the image.
+
+\section*{Multitasking on a multi-core processor} % Top heading
+
+% First diagram
+% We use the tabular environment to mimic the layout. This is not the optimal way to draw diagrams,
+% but since we are focusing on text transcription, this will represent the image's text content.
+% Replace with tikz or other graphical tool commands for actual diagrams in a real document.
+\begin{tabular}{cccccc}
+task 0 & task 1 & task 2 & task 3 & task 4 \\
+(running) & (running) & (running) & (running) & (running) \\
+\multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{} \\
+CPU 0 & CPU 1 & CPU 2 & CPU 3 & \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between the diagrams.
+
+% Second diagram (identical to the first one, therefore repeated)
+\begin{tabular}{cccccc}
+task 0 & task 1 & task 2 & task 3 & task 4 \\
+(running) & (running) & (running) & (running) & (running) \\
+\multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{} \\
+CPU 0 & CPU 1 & CPU 2 & CPU 3 & \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between the diagrams.
+
+% Third diagram (identical to the first two, therefore repeated)
+\begin{tabular}{cccccc}
+task 0 & task 1 & task 2 & task 3 & task 4 \\
+(running) & (running) & (running) & (running) & (running) \\
+\multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{\downarrow} & \multicolumn{1}{c}{} \\
+CPU 0 & CPU 1 & CPU 2 & CPU 3 & \\
+\end{tabular}
+
+% Note: [TBD] tokens were not added as there were no non-textual elements that required it.
+% The diagrams are composed purely of text which has been transcribed into the tabular environment.
+
+
+% Preamble and document start commands should be added by the user as required
+% This LaTeX code is focused exclusively on the textual content of the slide provided
+
+\begin{itemize}
+    \item From a hardware perspective:
+    \begin{itemize}
+        \item A CPU corresponds to a single integrated circuit (``IC'') package
+        \item A computer can (rarely) have multiple CPUs
+        \begin{itemize}
+            \item Typically only found in datacenters, rarely more than 2
+        \end{itemize}
+        \item Each CPU can have multiple \textit{cores}
+        \begin{itemize}
+            \item generally 2-8 cores on laptops
+            \item up to 128 on datacenter CPUs
+        \end{itemize}
+    \end{itemize}
+    \item From a software perspective:
+    \begin{itemize}
+        \item Everything that can run a task is generally called a ``CPU''
+        \item Only the kernel's scheduler will (sometimes) care about CPU vs. core
+        \item All other software is unaware of the difference
+    \end{itemize}
+
+    \item A CPU can have multiple copies of some logic blocks
+    \item very common for arithmetic and logic units (ALUs)
+\end{itemize}
+
+% The following assembly-like instruction sequences are placeholders
+% and have been translated as directly as possible.
+\begin{verbatim}
+    add rdx, rdi
+    add rcx, rbx
+    mov rax, [rsi]
+
+    memory
+    ALU 1
+    -
+    ALU 2
+    -
+    -
+    -
+\end{verbatim}
+
+\begin{itemize}
+    \item \textbf{Simultaneous Multithreading (SMT)}
+    \begin{itemize}
+        \item From a hardware perspective:
+        \begin{itemize}
+            \item With Simultaneous Multithreading (SMT) (a.k.a. Hyperthreading),
+            \item each core can run multiple (generally 2) tasks (``threads'')
+            \item but they share many logic blocks (in particular ALUs)
+            \item SMT \textit{works well} when those logic blocks would otherwise be idle
+            \item SMT is \textit{ineffective} when those logic blocks are the bottleneck
+        \end{itemize}
+        \item From a software perspective:
+        \begin{itemize}
+            \item Everything that can run a task is generally called a ``CPU''
+            \item Only the kernel's scheduler will (sometimes) care about CPU vs. core vs. \textit{thread}
+            \item All other software is unaware of the difference
+            \item ``Thread'' has a different meaning in software
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+
+
+% Since LaTeX is primarily a typesetting system for producing high-quality documents, the document preamble and packages required for typesetting are not included. Below is the transcription of the slide content.
+
+\section{SIMD}
+SIMD
+\begin{itemize}
+    \item SIMD stands for Single Instruction Multiple Data
+    \item new, larger registers (in addition to the general purpose ones): ``vector registers''
+\end{itemize}
+
+% The table representation is skipped as [TBD] because it cannot be represented textually within the scope of this task.
+[TBD]
+
+\begin{itemize}
+    \item but
+    \begin{itemize}
+        \item SIMD registers cannot be treated as big integers
+        \item individual ``lanes'' (8-, 16-, 32- or 64-bit parts) generally cannot be accessed individually
+    \end{itemize}
+\end{itemize}
+
+\subsection*{SIMD registers}
+\begin{itemize}
+    \item On Intel (and AMD) ISAs:
+    \begin{itemize}
+        \item SSE (~1999): 8 128-bit registers xmm0 - xmm7
+        \item AVX (~2011): 16 256-bit registers ymm0 - ymm15
+        \item AVX-512 (~2016, but not yet generally available): 32 512-bit registers zmm0 - zmm31
+    \end{itemize}
+    \item On ARM:
+    \begin{itemize}
+        \item Neon (~2005): 16 128-bit registers Q0 - Q15
+    \end{itemize}
+\end{itemize}
+
+% The LaTeX transcription provided above faithfully represents the text content of the slide, with [TBD] replacing the non-textual elements, namely the register diagram. The presentation style, e.g., colors and layout, isn't transcribed, as LaTeX documents typically dictate their own style according to the document class and additional styling packages used.
+
+
+% Start of the LaTeX code
+\section*{Example}
+
+\begin{verbatim}
+void add_one(float v[4])
+{
+    v[0] += 1.0;
+    v[1] += 1.0;
+    v[2] += 1.0;
+    v[3] += 1.0;
+}
+
+add_one:  vbroadcastss xmm0, DWORD PTR .LC1[rip]   # xmm0 <- ( 1.0, 1.0, 1.0, 1.0 )
+          vaddps xmm0, xmm0, XMMWORD PTR [rdi]    # xmm0 <- xmm0 + [v]  (4x 32-bits)
+          vmovups XMMWORD PTR [rdi], xmm0
+          ret
+\end{verbatim}
+
+\section*{Counter-example}
+
+\begin{verbatim}
+void many_ops(float v[4])
+{
+    v[0] += 1.0;
+    v[1] += 2.0;
+    v[2] += 3.0;
+    v[3] /= v[2];
+}
+
+many_ops:  vmovss xmm1, DWORD PTR .LC0[rip]
+           vinsertps xmm1, xmm1, DWORD PTR .LC1[rip], 0x10
+           vinsertps xmm1, xmm1, DWORD PTR .LC2[rip], 0x20
+           vinsertps xmm1, xmm1, DWORD PTR [rdi+8], 0x30    # <-- MUL
+           vmovss xmm2, DWORD PTR [rdi+4]
+           vaddps xmm2, xmm2, DWORD PTR .LC1[rip]          # <-- vsubss
+           vaddps xmm0, xmm2, DWORD PTR [rdi]
+           ADD
+           DIV
+           vmovss xmm3, xmm1, xmm3
+           vunpcklps xmm0, xmm0, xmm2
+           vunpckhps xmm1, xmm1, xmm3
+           vmovups xmm2, xmm0
+           vmovups xmm0, XMMWORD PTR [rdi], xmm0
+           ret
+\end{verbatim}
+
+\subsection*{How to use SIMD}
+\begin{itemize}
+    \item Rely on compilers (\textit{``autovectorization''})
+    \item Write assembly code
+    \item Use compiler \textit{``intrinsics''}
+    \begin{itemize}
+        \item Intrinsics look like C functions
+        \item but the compiler knows how to translate them to specific assembly code
+        \item \textbf{Intel intrinsics guide}
+        \item \textbf{ARM intrinsics}
+    \end{itemize}
+\end{itemize}
+
+% The image or non-textual elements that cannot be represented in LaTeX have been replaced with [TBD]
+[TBD]
+
+% End of the LaTeX code
+
+
+% Due to the nature of this question, we are only transcribing textual content
+% of a presumed lecture slide into LaTeX. No preamble, begin/end document, or 
+% specific document classes are included as they are beyond the scope of the
+% request.
+
+% Slide title
+\section*{THREAD-LEVEL CONCURRENCY}
+
+% Section with bullet points about processes and threads
+\subsection*{Processes and threads}
+\begin{itemize}
+    \item When the OS runs an executable, it gets its own \textit{process}
+    \item A single executable (if run multiple times) can have multiple independent processes
+    \item Memory is virtualized: each process has its own view of the memory it owns
+    \item A process can create (“spawn”) multiple \textit{threads}
+    \item Like processes, each thread is an individual task from the point of view of the scheduler
+    \item Within a process, threads share a same view of the process memory
+\end{itemize}
+
+% Transcription of the code snippet in the image
+% Note that the exact syntax of the code and functions referred might not compile
+% without specific libraries or definitions which are not included here
+\begin{verbatim}
+for (int x = 0; x < nx; x++) {
+    __m256d v = ...; // ommission for brevity
+    __m256d oldmax = max[x];
+    __m256d newmax = _mm256_max_pd(oldmax, v);
+    _mm256_storeu_pd(&max[x], newmax);
+    __m256d keep = _mm256_cmp_pd(oldmax, newmax, _CMP_EQ_OQ);
+    max[x] = newmax,
+    maxi[x] = _mm256_or_si256(_mm256_and_si256(keep, maxi[x]), _mm256_andnot_si256(keep, i));
+}
+\end{verbatim}
+
+% Footnote-like note about referring to a guide
+% Noted as LaTeX doesn't have a straightforward way to denote text specifically at the
+% bottom of a slide without additional packages or environments
+\footnotesize{> refer to the intrinsics guide}
+
+% Replace [TBD] with the appropriate representation of non-textual content
+% In this case, the non-textual content (presumable images or graphics) are not transcribed 
+[TBD] % for the actual image content, which should be replaced by users with proper figures if they wish to include them.
+
+
+% Replicating the lecture content into LaTeX format
+
+% The image contents that can be represented in LaTeX are transcribed below. 
+% [TBD] is used as a placeholder for the graphical elements that cannot be represented in LaTeX
+
+% [TBD] - Represents the block diagram for processes and threads
+
+\begin{itemize}
+    \item Pro: Communication between threads is extremely efficient
+    \begin{itemize}
+        \item Just write something to memory,
+        \item let other threads read it through the same pointer
+    \end{itemize}
+    
+    \item Con: Because memory is shared, synchronizing threads is \textbf{very complex}
+\end{itemize}
+
+\bigskip % Adding some vertical space for separation
+
+\textbf{Wrong code (1)}
+
+\begin{verbatim}
+int ready = 0; // one if there is some data in the buffer, zero otherwise
+int buffer = 0; // data in the buffer
+
+// Every pushed element must be popped exactly once.
+// push() will block until the buffer is empty/available/"not ready"
+// pop() will block until the buffer is nonempty/"ready"
+
+void push(int value)
+{
+    while (ready == 1) {
+        // wait
+    }
+    buffer = value;
+    ready = 1;
+}
+
+int pop()
+{
+    while (ready == 0) {
+        // wait
+    }
+    ready = 0;
+    return buffer;
+}
+\end{verbatim}
+
+
+% Since LaTeX is not primarily meant for transcribing code, we use the verbatim environment to reproduce the code exactly as it is, including white spaces and line breaks.
+
+
+% Transcription of the image content into LaTeX
+
+\textbf{The C compiler is free to reorder this:}
+
+\begin{verbatim}
+void push(int value)
+{
+    while (ready == 1) {
+        // wait
+    }
+    buffer = value;
+    ready = 1;
+}
+\end{verbatim}
+
+\textbf{into this:}
+
+\begin{verbatim}
+void push(int value)
+{
+    buffer = value;
+    while (ready == 1) {
+        // wait
+    }
+    ready = 1;
+}
+\end{verbatim}
+
+\textbf{Wrong code (1)}
+
+\textbf{The C compiler is free to infer that this loop:}
+
+\begin{verbatim}
+while (ready == 1) {
+    // wait
+}
+\end{verbatim}
+
+\textit{has either zero or infinitely many iterations without side effects (UB);}
+
+\textit{thus remove the loop!}
+
+
+
+% The LaTeX transcription of the source code from the lecture material
+
+% Title for the first code block
+\section*{Wrong code (2)}
+
+% Declaring variables with comments
+volatile int ready = 0; % one if there is some data in the buffer, zero otherwise
+volatile int buffer = 0; % data in the buffer
+
+% Definition of the push function
+void push(int value)
+{
+    while (ready == 1) { % wait
+    }
+
+    buffer = value;
+    ready = 1;
+}
+
+% Definition of the pop function
+int pop()
+{
+    while (ready == 0) { % wait
+    }
+    
+    ready = 0;
+    return buffer;
+}
+
+% A visual scenario representation [TBD]
+% Text represented within the visual representation is excluded as [TBD] replaces non-textual elements
+
+% Title for the second code block
+\section*{Wrong code (3)}
+
+% Declaring variables with comments
+volatile int ready = 0; % one if there is some data in the buffer, zero otherwise
+volatile int buffer = 0; % data in the buffer
+
+% Definition of the push function
+void push(int value)
+{
+    while (ready == 1) { % wait
+    }
+
+    buffer = value;
+    ready = 1;
+}
+
+% Definition of the pop function with a slight change
+int pop()
+{
+    while (ready == 0) { % wait
+    }
+
+    int b = buffer;
+    ready = 0;
+    return b;
+}
+
+% Note: The [TBD] token replaces the visual representation of thread execution
+% which cannot be included within a LaTeX document as it is non-textual content.
+
+
+% Transcription of the lecture content into LaTeX format
+
+\section*{Thread 0}
+
+% Code block for Thread 0
+\begin{verbatim}
+void push(int value) // push('A')
+{
+    while (ready == 1) {
+        // wait
+    }
+    buffer = value;
+    ready = 1;
+}
+\end{verbatim}
+
+% Comments indicating the state changes for Thread 0
+% ready = 0
+% buffer = 'X'
+
+% State changes not directly related to code are replaced with [TBD]
+% Diagrammatic state changes cannot be transcribed into LaTeX verbatim
+% and are thus denoted as [TBD].
+
+\section*{Thread 1}
+
+% Code block for Thread 1
+\begin{verbatim}
+void push(int value) // push('B')
+{
+    while (ready == 1) {
+        // wait
+    }
+    buffer = value;
+    ready = 1;
+}
+\end{verbatim}
+
+% Comments indicating the state changes for Thread 1
+% ready = 0
+% buffer = 'X'
+
+% Diagrammatic state changes cannot be transcribed into LaTeX verbatim
+% and are thus denoted as [TBD].
+
+\section*{Solution}
+
+% Points under the "Solution" section
+\begin{itemize}
+    \item low-level: compiler intrinsics for ``atomic'' operations:
+    combined operations that are performed as a single unit
+    no thread will every see the memory in an intermediate state
+    
+    \item high-level: use libraries that correctly implement some primitives:
+    locks, queues, etc.
+    \begin{itemize}
+        \item Posix threads (``pthreads''; Linux, MacOS)
+        \item OpenMP (Open Multi-Processing; portable)
+    \end{itemize}
+\end{itemize}
+
+\section*{3. DISTRIBUTED COMPUTING}
+
+% Additional explanatory notes
+
+% The sections are marked with \section*{} to avoid numbering as the image
+% does not show any numbering scheme.
+
+% The code blocks are wrapped with the "verbatim" environment to reproduce them
+% exactly as they are, including white spaces and without interpreting LaTeX
+% commands as the code contains C/C++ syntax.
+
+% The points under "Solution" are typeset using itemize to create bullet points.
+
+% Sub-points about Posix threads and OpenMP are formatted as nested lists.
+
+% The section titled "3. DISTRIBUTED COMPUTING" is transcribed as is, with its
+% numbering likely indicating a larger structure within the overall document or
+% presentation.
+
+
+% LaTeX transcription of lecture material
+% The lecture material is about Distributed Computing and its advantages and disadvantages.
+% The section on Hardware Acceleration is not detailed here, so we represent it as a section
+% heading only.
+
+\section*{Distributed computing}
+
+\begin{itemize}
+  \item In distributed computing, processes do not share memory
+  \item They must communicate by explicitly sending data to each other (\texttt{send()}, \texttt{recv()}, etc.) typically over the network
+\end{itemize}
+
+\subsection*{Distributed computing}
+
+\begin{itemize}
+  \item \textbf{Con:} Communication is much slower than multithreading
+  \item \textbf{Pros:}
+  \begin{itemize}
+    \item Easier to implement and reason about
+    \item Scales to higher levels of parallelism
+    \begin{itemize}
+      \item As of today, off-the-shelf computers can have up to 2 processors $\times$ 128 cores $\times$ 2 SMT threads = 512 concurrent software threads
+      \item With distributed computing, networked computers can work together in parallel
+    \end{itemize}
+  \end{itemize}
+  \item \textbf{Libraries:}
+  \begin{itemize}
+    \item Message Passing Interface (MPI)
+    \item \ldots % This represents an ellipsis where additional libraries might be listed
+  \end{itemize}
+\end{itemize}
+
+\section*{HARDWARE ACCELERATION}
+
+% The section for Hardware Acceleration is left blank because there is no information about it in the supplied image
+
+
+% The document content begins here. No preamble or document class commands are included as the instruction specifies to exclude them.
+
+\section*{Graphics processing units (GPUs)}
+
+\begin{itemize}
+  \item GPUs were designed to perform the same simple, repetitive operations
+  \begin{itemize}
+      \item on many pixels (``fragment shaders''), or
+      \item on many 3D coordinates (``vertex shaders'')
+  \end{itemize}
+\end{itemize}
+
+\section*{Examples (GLSL)}
+
+\begin{verbatim}
+float box(in vec2 st, in vec2 size){
+    size = vec2(0.5) - size*0.5;
+    vec2 uv = smoothstep(size,
+                         size+vec2(0.01),
+                         st);
+    uv *= smoothstep(size,
+                     size+vec2(0.01),
+                     vec2(1.0)-st);
+    return uv.x*uv.y;
+}
+\end{verbatim}
+
+\section*{Examples (GLSL)}
+
+\begin{verbatim}
+vec3 rgb2hsb( in vec3 c ){
+    vec4 K = vec4(0., -1./3, 2./3, -1.);
+    vec4 p = mix(vec4(c.bg, K.wz),
+                 vec4(c.gb, K.xy),
+                 step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r),
+                 vec4(c.r, p.yzx),
+                 step(p.x, c.r));
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs((q.z + (q.w - q.y) / (6.0 * d + e)),
+                    d / (q.x + e),
+                    q.x));
+}
+\end{verbatim}
+
+% Since LaTeX does not natively support rendering of the syntax of programming languages like GLSL, we use the verbatim environment.
+% This accurately represents the code, but does not add syntax highlighting or other features that might be found in a dedicated package.
+% Also note that any images or graphical content mentioned in the instructions have been replaced with a [TBD] token.
+
+
+% Preamble or document class commands are not included as per the user's requirement.
+% Begin the document content here
+
+\section*{Examples (CUDA)}
+
+\begin{verbatim}
+inline __device__ float3 roundAndExpand(float3 v, ushort *w) {
+    v.x = rintf(__saturatef(v.x) * 31.0f);
+    v.y = rintf(__saturatef(v.y) * 63.0f);
+    v.z = rintf(__saturatef(v.z) * 31.0f);
+    
+    *w = ((ushort)(v.x) << 11) | ((ushort)(v.y << 5)) | (ushort)v.z;
+    // approximate integer bit expansion.
+    v.x = 0.032258064516f;
+    v.y = 0.015873015873f;
+    v.z = 0.032258064516f;
+    return v;
+}
+\end{verbatim}
+
+\textbf{\textbullet\ GPUs were designed to perform the same simple, repetitive operations}
+\begin{itemize}
+    \item on many pixels ("fragment shaders"), or
+    \item on many 3D coordinates ("vertex shaders")
+\end{itemize}
+\textbf{\textbullet\ they generally adopt a SIMT ("single instruction, multiple threads") model}
+\begin{itemize}
+    \item \textbf{hundreds of threads} working on different sets of data
+    \item but \textbf{running the exact same instructions}
+\end{itemize}
+\textbf{\textbullet\ good fit for long loops performing repetitive operations}\\
+\textbf{\textbullet\ bad fit for if/then/else}
+
+\section*{How do we use GPUs?}
+
+\textbf{\textbullet\ GPUs are programmed in special-purpose languages}
+
+\textbf{\textbullet\ Typically, all GPU code is compiled}
+\begin{itemize}
+    \item during application startup,
+    \item by the device driver
+    \item for the specific GPU device installed (amount and subdivision of threads, memory, etc.)
+\end{itemize}
+
+\textbf{\textbullet\ Two dominant players in the GPU market: nVidia and AMD}
+
+\textbf{\textbullet\ Three major GPU programming languages:}
+\begin{itemize}
+    \item CUDA (nVidia, proprietary),
+    \item ROCm (AMD, open-source),
+    \item OpenCL (cross-platform, open-source)
+\end{itemize}
+
+% Images or non-textual elements that cannot be represented in LaTeX have been replaced with [TBD].
+% End of the document content
+
+
+% MATRIX MULTIPLICATION LECTURE CONTENT
+\section*{MATRIX MULTIPLICATION}
+
+% Define N=8192 section with its content and table
+\subsection*{N = 8192}
+8192 $\times$ 8192 matrix multiplication \\
+precision: fp64 (``double") \\
+CPU: AMD Ryzen 7900 x3d
+
+\begin{tabular}{l l l}
+matmul\_1 & straightforward implementation & 2932.059 s \quad 1x \\
+matmul\_2 & transpose B matrix & 357.569 s \quad 8x \\
+matmul\_3 & block multiply & 67.105 s \quad 44x \\
+matmul\_4 & same code as matmul\_3, SIMD & 32.876 s \quad 89x \\
+matmul\_5 & OpenBLAS & 15.555 s \quad 188x 1x \\
+matmul\_6 & OpenBLAS, 24 threads & 1.962 s \quad 1494x 8x \\
+\end{tabular}
+
+% Define N=32768 section with its content and table
+\subsection*{N = 32768}
+32768 $\times$ 32768 matrix multiplication \\
+precision: fp32 (``float") - total 4 GB per matrix \\
+CPU Ryzen 7900 x3d (released Feb 2023)
+
+\begin{tabular}{l l l}
+matmul\_7 & OpenBLAS, 1 thread & 550.350 s \quad 1x \\
+matmul\_8 & OpenBLAS, 24 threads & 50.577 s \quad 11x \\
+matmul\_9 & cuBLAS, \textit{nVidia} A100 (Apr 2021) & 13.152 s \quad 42x \\
+matmul\_9 & cuBLAS, \textit{nVidia} H100 (Mar 2022) & ? s \quad 84x? \\
+\end{tabular}
+
+% [TBD] token is used to indicate where non-textual elements present in the original image would be placed if they were to be included.
+[TBD]
+
+
+I'm sorry, but there is no image content provided for me to transcribe into LaTeX format. If you provide an image with text, I can then help you with the transcription. Please upload the image, and I'll assist you accordingly.

@@ -1,0 +1,897 @@
+
+
+
+% Transcription of the lecture content in LaTeX format
+
+\section*{LECTURE 21}
+
+\section*{ASSOCIATIVE ARRAYS}
+
+\subsection*{Associative arrays}
+\begin{itemize}
+    \item also known as maps or dictionaries
+    \item are collections of (key, value) tuples, where
+    \begin{itemize}
+        \item key could be any string of bits (integer, character string, other data)
+        \item value is any data
+    \end{itemize}
+    \item that support
+    \begin{itemize}
+        \item insertion (add a (key, value) tuple)
+        \item deletion (remove a (key, value) tuple)
+        \item lookup given a key,
+        \begin{itemize}
+            \item find the corresponding value,
+            \item or determine that no such key has been added
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+
+% Start of LaTeX content transcription
+
+\section*{Naive implementation}
+
+Just some list of (key, value) tuples:
+\begin{align*}
+(k_0, v_0) \\
+(k_1, v_1) \\
+(k_2, v_2) \\
+(k_3, v_3) \\
+(k_4, v_4) \\
+(k_5, v_5) \\
+\ldots
+\end{align*}
+
+% We replace the table with LaTeX tabular environment 
+\begin{tabular}{lccc}
+\hline
+& Insertion & Deletion (after lookup) & Lookup \\
+\hline
+Linked list & $O(1)$ & $O(1)$ & $O(n)$ \\
+Dynamic array & $O(1)$ & $O(n)$ & $O(n)$ \\
+\hline
+\end{tabular}
+
+\section*{ASSOCIATIVE ARRAYS:}
+\subsection*{IMPLEMENTATIONS USING A TOTAL ORDER ON KEYS}
+
+\section*{Total order on keys}
+\begin{itemize}
+\item We assume that we can compare keys (i.e. evaluate key\textunderscore{i} $\leq$ key\textunderscore{j} for any i, j)
+\item Always possible in practice (reinterpret key bits as a big integer)
+\item Sometimes, a specialized $<$ operator makes sense (e.g. constant-size keys)
+\item key space may be infinite (arbitrary-sized keys)
+\end{itemize}
+
+% End of LaTeX content transcription
+
+
+% Sorted dynamic array of (key, value) tuples section
+\section*{Sorted dynamic array of (key, value) tuples}
+
+\begin{itemize}
+    \item Assume key$_{0} \leq$ key$_{1} \leq \dots \leq$ key$_{n}$.
+    \item Use bisection for key lookup
+\end{itemize}
+
+% Table comparing insertion, deletion, and lookup operations
+\begin{tabular}{lccc}
+\textbf{Data Structure} & \textbf{Insertion} & \textbf{Deletion (after lookup)} & \textbf{Lookup} \\
+\hline
+Linked list             & O(1)               & O(1)                            & O(n)             \\
+Dynamic array           & O(1)               & O(n)                            & O(n)             \\
+Sorted dynamic array    & O(n)               & O(n)                            & O(\log(n))       \\
+\end{tabular}
+
+% Binary search tree section
+\section*{Binary search tree}
+
+\begin{itemize}
+    \item Invariant: For any given node $i$,
+    \begin{itemize}
+        \item key$_{j}$ $<$ key$_{i}$ for every descendant node $j$ in the left subtree of $i$
+        \item key$_{j}$ $>$ key$_{i}$ for every descendant node $j$ in the right subtree of $i$
+    \end{itemize}
+    \item Main concern: depending on insertion order, we may get
+\end{itemize}
+
+% Placeholder for images depicting good and bad binary search trees
+% Actual images cannot be represented in LaTeX, hence the placeholder [TBD]
+[TBD: Illustrations of good and bad binary search trees]
+
+% Self-balancing binary search tree section
+\section*{Self-balancing binary search tree}
+
+\begin{itemize}
+    \item AVL trees
+    \item Red-black trees
+    \item B-trees, splay trees, treaps, \ldots
+\end{itemize}
+
+% Table comparing insertion, deletion, and lookup operations in self-balancing trees
+\begin{tabular}{lccc}
+\textbf{Data Structure}     & \textbf{Insertion}         & \textbf{Deletion (after lookup)} & \textbf{Lookup}      \\
+\hline
+Linked list                 & O(1)                       & O(1)                            & O(n)                 \\
+Dynamic array               & O(1)                       & O(n)                            & O(n)                 \\
+Sorted dynamic array        & O(n)                       & O(n)                            & O(\log(n))           \\
+Binary search tree          & O(n)                       & O(n)                            & O(n)                 \\
+AVL tree                    & O(\log(n))                 & O(\log(n))                      & O(\log(n))           \\
+Red-black tree              & O(\log(n))                 & O(\log(n))                      & O(\log(n))           \\
+\end{tabular}
+
+
+% The content in this LaTeX code corresponds to the text content of the lecture slides provided in the image.
+% This code is suitable for compilation in a LaTeX editor and is structured without specific slide framework commands.
+% The [TBD] token is used to replace non-textual content, such as images or complex diagrams, which cannot be represented in LaTeX text or which would require specific packages or commands.
+
+\documentclass[11pt]{article}
+
+\section*{Self-balancing binary search tree}
+
+\begin{itemize}
+    \item Cache behavior: ok, not great \\
+    (similar to other binary tree structures, e.g., heap)
+\end{itemize}
+
+% [TBD] token replaces a binary tree diagram. To include the actual tree diagram, a package like TikZ would be needed with appropriate commands.
+
+\section*{ASSOCIATIVE ARRAYS:}
+
+\subsection*{IMPLEMENTATIONS USING KEYS BITS}
+\subsubsection*{- TRIES}
+
+\section*{Trie}
+
+\begin{itemize}
+    \item A trie (or prefix tree) is a tree of static arrays of size $2^T$
+    \item Key bits are divided into chunks of $T$ bits: ``letters''
+    \item Each $T$-bits letter gives an index for one node's static arrays
+    \item Letters form a path in the tree (from root to leaf)
+\end{itemize}
+
+
+
+% Since the image includes content that mirrors a piece of code or console output,
+% we will use the verbatim environment to preserve whitespace and formatting.
+
+\begin{verbatim}
+T = 4
+
+\end{verbatim}
+
+\begin{verbatim}
+T = 4
+Insert (0xf92, V1) -> letters 2, f, 9
+
+\end{verbatim}
+
+\begin{verbatim}
+T = 4
+Insert (0xf92, V1) -> letters 2, f, 9
+
+0 1 2 3 4 5 6 7 8 9 a b c d e f
+\end{verbatim}
+
+% The [TBD] tokens are placeholders for the content that cannot be transcribed into LaTeX, 
+% such as images or other non-text elements.
+% This LaTeX code is structured in a manner that emulates the slide content from the provided image. 
+
+
+% Transcription of textual content in the image into LaTeX format.
+% Diagrams/images replaced with [TBD].
+
+T = 4 \\
+Insert (\texttt{0xf92}, V1) $\rightarrow$ letters 2, f, 9
+
+\begin{verbatim}
+    0123456789abcdef
+\end{verbatim}
+
+% Arrow and movement representations are omitted, replaced by [TBD] token.
+[TBD]
+
+\begin{verbatim}
+    0123456789abcdef
+\end{verbatim}
+
+% Arrow and movement representations are omitted, replaced by [TBD] token.
+[TBD]
+
+\begin{verbatim}
+    0123456789abcdef
+\end{verbatim}
+
+% Arrow and movement representations are omitted, replaced by [TBD] token.
+[TBD]
+
+
+% No document header or preamble is needed as requested, just the lecture material content.
+
+$T = 4$
+
+Insert $(0x9F, V1)$ $\rightarrow$ letters $2, f, g$
+
+Insert $(0x8d, V2)$ $\rightarrow$ letters $d, 8, c$
+
+% Arrows and the letter/number sequence diagrams are to be replaced with [TBD] as they cannot be transcribed into LaTeX directly.
+[TBD]
+
+[TBD]
+
+[TBD]
+
+
+% The LaTeX code provided below transcribes the text content of the lecture material in the image.
+% Non-textual elements and images have been replaced with the token [TBD] as per the guidelines.
+
+
+
+\section*{Slide 1}
+\begin{verbatim}
+T = 4
+Insert (0x8F92, V1) -> letters 2, f, g
+Insert (0x8C4D, V2) -> letters d, 8, c
+\end{verbatim}
+
+% [TBD] - Non-textual elements are omitted
+
+\section*{Slide 2}
+\begin{verbatim}
+T = 4
+Insert (0x8F92, V1) -> letters 2, f, g
+Insert (0x8C4D, V2) -> letters d, 8, c
+Insert (0x5322, V3) -> letters 2, 3, 5
+\end{verbatim}
+
+% [TBD] - Non-textual elements are omitted
+
+\section*{Slide 3}
+\begin{verbatim}
+T = 4
+Insert (0x8F92, V1) -> letters 2, f, g
+Insert (0x8C4D, V2) -> letters d, 8, c
+Insert (0x5322, V3) -> letters 2, 3, 5
+\end{verbatim}
+
+% [TBD] - Non-textual elements are omitted
+
+
+
+% Preamble and document start are not required as per the instruction to focus on lecture content transcription.
+% The LaTeX content starts below; replace [TBD] with the proper content in your final document if necessary.
+
+
+
+% First part of the lecture content
+T = 4 \\
+Insert (0x9f2, V1) $\rightarrow$ letters 2, f, g \\
+Insert (0x8cd, V2) $\rightarrow$ letters d, 8, c \\
+Insert (0x532, V3) $\rightarrow$ letters 2, 3, 5 \\
+
+% Placeholder for the first sequence of graphical diagrams
+[TBD] 
+
+% Second part of the lecture content
+T = 4 \\
+Insert (0x9f2, V1) $\rightarrow$ letters 2, f, g \\
+Insert (0x8cd, V2) $\rightarrow$ letters d, 8, c \\
+Insert (0x532, V3) $\rightarrow$ letters 2, 3, 5 \\
+
+% Placeholder for the second sequence of graphical diagrams
+[TBD]
+
+% End of LaTeX content
+
+
+% The following LaTeX code is a transcription of the lecture material from the image provided.
+% It should be noted that diagrams, graphs and other non-textual elements are replaced with [TBD].
+% Please insert this code snippet into a larger document with the appropriate preamble and document environment.
+
+\section*{Key space}
+
+\begin{itemize}
+    \item Let us denote
+    \begin{itemize}
+        \item $K$: the set of all values a key can take
+        \item $n$: number of tuples in the associative array
+    \end{itemize}
+    \item We say that the key space is ``sparse'' if $n \ll K$
+    \item We call it ``dense'' otherwise
+\end{itemize}
+
+\subsection*{``Dense'' key space}
+
+% The following code assumes a LaTeX package for algorithms or pseudo-code is available, 
+% such as algorithm2e or algorithmic, if this section is interpreted as pseudocode.
+% Else it can be considered as a simple textual enumeration.
+
+\begin{itemize}
+    \item $T = 4$
+    \item $n = 4096$
+    \item Insert $(0x001, V_0)$
+    \item Insert $(0x002, V_2)$
+    \item Insert $(0xffff, V_{4095})$
+\end{itemize}
+
+% Diagrams illustrating trie insertions would go here. Replace [TBD] with the actual diagram or use packages like tikz to recreate it.
+
+[TBD]
+
+\begin{itemize}
+    \item Insertion/deletion/lookup are $\sim O(3) = O(\log_{16} 4096) = O(\log_{2} n)$
+    \item but\dots
+    \item
+    \item \dots then why not use just a static array? (or equivalently choose $T = 12$)
+\end{itemize}
+
+\subsection*{``Sparse'' key space}
+
+\begin{itemize}
+    \item Tries only make sense when the key space is sparse
+    \begin{itemize}
+        \item a static array of the size of the whole key space would be too big
+    \end{itemize}
+    \item Complexity not dependent on number of entries
+    \begin{itemize}
+        \item Depends on key size and $T$
+    \end{itemize}
+    \item Memory overhead can be large
+    \begin{itemize}
+        \item worst case: every leaf node has a single tuple, $O(n \times 2^{T})$
+    \end{itemize}
+\end{itemize}
+
+
+% ASSOCIATIVE ARRAYS: IMPLEMENTATIONS USING KEYS BITS - HASH TABLES
+
+% Since this transcription is to be formatted in LaTeX directly, I'm omitting the document preamble and begin/end document commands, focusing solely on the content.
+
+\section*{ASSOCIATIVE ARRAYS:}
+\subsection*{IMPLEMENTATIONS USING KEYS BITS -- HASH TABLES}
+
+\begin{itemize}
+    \item Again, we denote
+    \begin{itemize}
+        \item $\mathcal{K}$: the set of all values a key can take
+        \item $n$: number of tuples in the associative array
+    \end{itemize}
+    \item If we had a ``dense'' key space ($n$ not much smaller than $\mathcal{K}$)
+    \begin{itemize}
+        \item then we would simply use a static array, indexed by keys
+    \end{itemize}
+    \item Could we map $\mathcal{K}$ into something dense?
+    \begin{itemize}
+        \item ... and then use a static array
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Hash function}
+
+\begin{itemize}
+    \item A hash function $h$ is a mapping $h : \mathcal{K} \rightarrow \mathcal{U}$ where $\mathcal{U} \subseteq \mathbb{N}$ and $|\mathcal{U}| \ll |\mathcal{K}|$ \\ (indeed $\mathcal{K}$ may not be a finite set, e.g. for arbitrary-sized keys)
+    \item Since $|\mathcal{U}| < |\mathcal{K}|$, hash functions are necessarily surjective
+    \item[] $\exists k_1 \neq k_2$ such that $h(k_1) = h(k_2)$
+    \item Examples of (usually bad) hash functions:
+    \begin{itemize}
+        \item take just the lower 8 bits of the key
+        \item $h : \mathbb{Z} \rightarrow \{0, \ldots, m - 1\}, \quad h(k) = k \mod m$
+    \end{itemize}
+\end{itemize}
+
+
+% The content reflects the text in the slides provided in the image.
+% Ensure that the amsmath package is included in the preamble for proper rendering.
+
+
+\section*{Hash table}
+
+\begin{itemize}
+    \item A hash table is a static array of size $|U|$
+    \item with an associated hash function \[ h : K \to U. \]
+    \item $(k, v)$ tuples are stored in the static array at index $h(k)$
+    \item Since $h$ is surjective, we may have collisions \\
+    (tuples with distinct keys stored at a same array index)
+\end{itemize}
+
+\section*{How to deal with collisions (1)}
+ 
+\begin{itemize}
+    \item Make the hash table
+    \begin{itemize}
+        \item a static array of linked lists, or
+        \item a static array of dynamic arrays
+    \end{itemize}
+    \item In case of collision, resort to $O(c)$ linear search \\
+    (where $c$ is the maximum number of collisions)
+    \begin{itemize}
+        \item in the worst case, $c = n$
+    \end{itemize}
+\end{itemize}
+
+% The following section contains a series of operations with corresponding hash values
+% and an illustration of data being placed into the hash table.
+% The illustration should be replaced by [TBD] as it cannot be represented in LaTeX.
+\[
+\begin{array}{l}
+h(k) = k \mod 16 \\
+\text{Insert} (0x9F82, V1) \to h(0x9F82) = 0x02 \\
+\text{Insert} (0x5AD6, V2) \to h(0x5AD6) = 0x0D \\
+\text{Insert} (0x5823, V3) \to h(0x5823) = 0x02 \\
+\end{array}
+\]
+\[ \text{[TBD]} \] % Placeholder for the hash table illustration
+
+
+
+% Preamble or document class commands are omitted as only the transcription of the lecture content is required
+
+\[
+h(k) = k \mod 16
+\]
+\begin{align*}
+\text{Insert }(0x9f2, \, V1) & \rightarrow h(0x9f2) = 0x2 \\
+\text{Insert }(0x8c8, \, V2) & \rightarrow h(0x8c8) = 0xd \\
+\text{Insert }(0x532, \, V3) & \rightarrow h(0x532) = 0x2 \\
+\text{Lookup }0x4d2 & \rightarrow h(0x4d2) = 0x2
+\end{align*}
+% Visual representation of hash table omitted, replaced by [TBD]
+[TBD]
+
+% Second variant with slightly different results, likely depicting different states in the hash table after operations
+\[
+h(k) = k \mod 16
+\]
+\begin{align*}
+\text{Insert }(0x9f2, \, V1) & \rightarrow h(0x9f2) = 0x2 \\
+\text{Insert }(0x8c8, \, V2) & \rightarrow h(0x8c8) = 0xd \\
+\text{Insert }(0x532, \, V3) & \rightarrow h(0x532) = 0x2 \\
+\text{Lookup }0x4d2 & \rightarrow h(0x4d2) = 0x2 \text{ - not found}
+\end{align*}
+% Visual representation of hash table omitted, replaced by [TBD]
+[TBD]
+
+% Note: The LaTeX code provided above should be placed within a LaTeX document, within the appropriate section such as a document or a math environment in order to compile.
+
+
+% Ensure that the necessary packages for lists and math are included when compiling this LaTeX document
+
+\section*{How to deal with collisions (2): Open addressing}
+
+\begin{itemize}
+  \item Insertion of \texttt{(key, value)}:
+  \begin{itemize}
+    \item Step 0: Compute index \texttt{i = h(key)}
+    \item Step 1: If \texttt{array[i]} is empty,
+    \begin{itemize}
+      \item place \texttt{(key, value)} there, done.
+    \end{itemize}
+    \item Step 2: Otherwise,
+    \begin{itemize}
+      \item let \texttt{i = (i + 1) mod |U|},
+      \item go back to Step 1.
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+% Below is an ASCII representation (and not actual LaTeX code) of the hash table state visual
+% Remember to replace or recreate the visual appropriately if necessary
+% [TBD] Image content describing the hash table state is not transcribed into LaTeX
+
+\begin{verbatim}
+h(k) = k mod 16
+Insert (0x8F92, V1)   -> h(0x8F92) = 0x2
+Insert (0x8C8D, V2)   -> h(0x8C8D) = 0xD
+Insert (0x532, V3)    -> h(0x532) = 0x2
+
+    0 1 2 3 4 5 6 7 8 9 a b c d e f
+    | |V3| | | | | | | | | | | |V2| |
+\end{verbatim}
+
+\begin{verbatim}
+h(k) = k mod 16
+Insert (0x8F92, V1)   -> h(0x8F92) = 0x2
+Insert (0x8C8D, V2)   -> h(0x8C8D) = 0xD
+Insert (0x532, V3)    -> h(0x532) = 0x2
+Insert (0x8C82, V4)   -> h(0x8C8D) = 0xD
+Lookup (0x4D2)        -> h(0x4D2) = 0x2
+
+    0 1 2 3 4 5 6 7 8 9 a b c d e f
+    | |V1V3| | | | | | | | | | | |V2| |
+\end{verbatim}
+
+% The actual visuals would need to be created using a LaTeX package capable of drawing such diagrams,
+% such as Tikz, or another method such as tabular environments or specialized hash table representation packages.
+
+
+% Since LaTeX doesn't handle images natively without \includegraphics, we'll use [TBD] to represent where an image would go.
+% Start of the LaTeX document content
+
+
+% First block of lecture content
+h(k) = k mod 16
+
+\begin{tabular}{ll}
+Insert &(0xf92, V1) & $\rightarrow$ & h(0xf92) = 0x2 \\
+Insert &(0x8c8, V2) & $\rightarrow$ & h(0x8c8) = 0xd \\
+Insert &(0x532, V3) & $\rightarrow$ & h(0x532) = 0x2 \\
+Lookup &0x4d2       & $\rightarrow$ & h(0x4d2) = 0x2 \\
+\end{tabular}
+
+[TBD] % Placeholder for the image that cannot be represented in LaTeX
+
+% Second block of lecture content (same as the first, suitable for direct use)
+h(k) = k mod 16
+
+\begin{tabular}{ll}
+Insert &(0xf92, V1) & $\rightarrow$ & h(0xf92) = 0x2 \\
+Insert &(0x8c8, V2) & $\rightarrow$ & h(0x8c8) = 0xd \\
+Insert &(0x532, V3) & $\rightarrow$ & h(0x532) = 0x2 \\
+Lookup &0x4d2       & $\rightarrow$ & h(0x4d2) = 0x2 \\
+\end{tabular}
+
+[TBD] % Placeholder for the image that cannot be represented in LaTeX
+
+% Third block of lecture content (same as the first, suitable for direct use)
+h(k) = k mod 16
+
+\begin{tabular}{ll}
+Insert &(0xf92, V1) & $\rightarrow$ & h(0xf92) = 0x2 \\
+Insert &(0x8c8, V2) & $\rightarrow$ & h(0x8c8) = 0xd \\
+Insert &(0x532, V3) & $\rightarrow$ & h(0x532) = 0x2 \\
+Lookup &0x4d2       & $\rightarrow$ & h(0x4d2) = 0x2 \\
+\end{tabular}
+
+[TBD] % Placeholder for the image that cannot be represented in LaTeX
+
+% End of the LaTeX document content
+
+
+% Since this is lecture content transcribed into LaTeX and not a full document,
+% Simply put the content below into a LaTeX document body where appropriate.
+
+h(k) = k \text{ mod } 16 \\
+\text{Insert } (0x9f12, V1) \rightarrow h(0x9f12) = 0x2 \\
+\text{Insert } (0x58, V2) \rightarrow h(0x58) = 0x8 \\
+\text{Insert } (0x2cd2, V3) \rightarrow h(0x2cd2) = 0x2 \\
+\text{Lookup } 0x4d2 \rightarrow h(0x4d2) = 0x2 \text{ not found}
+
+% [TBD] refers to the table which is not included in LaTeX transcription.
+[TBD] 
+
+\begin{itemize}
+  \item Lookup for key:
+  \begin{itemize}
+    \item Step 0: Compute index $i = h(\text{key})$
+    \item Step 1: If \texttt{array[$i$]} matches key,
+    \begin{itemize}
+      \item return \texttt{array[$i$]}.
+    \end{itemize}
+    \item Step 2: If \texttt{array[$i$]} is empty,
+    \begin{itemize}
+      \item return \textit{not found}.
+    \end{itemize}
+    \item Step 2: Otherwise,
+    \begin{itemize}
+      \item let $i = (i + 1) \mod |U|$,
+      \item go back to Step 1.
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\textbf{Probing}
+
+\begin{itemize}
+  \item Insertion of $(k, v)$:
+  \begin{itemize}
+    \item Step 0:
+    \begin{itemize}
+      \item Compute index $h_0 = h(k)$
+      \item Let $j = 0$
+    \end{itemize}
+    \item Step 1: If \texttt{array[$i(h_0, j)$]} is empty,
+    \begin{itemize}
+      \item place $(k, v)$ there, done.
+    \end{itemize}
+    \item Step 2: Otherwise,
+    \begin{itemize}
+      \item let $j = j + 1$,
+      \item go back to Step 1.
+    \end{itemize}
+  \end{itemize}
+  \item where $i(h_0, j)$ can be:
+  \begin{itemize}
+    \item $i(h_0, j) = (h_0 + j) \mod |U|$ as before
+    \item $i(h_0, j) = (h_0 + Kj) \mod |U|$ for some constant $K$ ("linear probing")
+    \item $i(h_0, j) = (h_0 + Kj + Lj^2) \mod |U|$ for some $K, L$ ("quadratic probing")
+  \end{itemize}
+\end{itemize}
+
+
+% Since the image is not to be included, it is replaced with the [TBD] token.
+% This LaTeX code represents the content of the slides as text.
+
+
+\section*{Good hash functions}
+
+\begin{itemize}
+  \item in practice, naive hash functions yield horrible collision rates \\
+  (even for random keys!)
+
+  \item good hash functions perform great on real (non-random) keys
+  \begin{itemize}
+    \item they take a non-uniform distribution of keys over \( K \)
+    \item map it into a distribution over \( U \) that ``looks'' uniformly random
+  \end{itemize}
+
+  \item Fowler–Noll–Vo (FNV), djb2, SipHash (lookup ``non-cryptographic hash functions'')
+  
+  \item Such generic hash functions \( h_0 \) typically return 32-, 64- or 128-bit numbers.
+  \begin{itemize}
+    \item we use index \( h(k) = h_0(k) \mod |U| \)
+  \end{itemize}
+\end{itemize}
+
+\section*{Complexity of hash table operations}
+
+\begin{itemize}
+  \item performance depends on
+  \begin{itemize}
+    \item density (\( \frac{n}{|U|} \))
+    \item key distribution
+    \item hash function
+    \item probing method
+  \end{itemize}
+  
+  \item when density approaches 1,
+  \begin{itemize}
+    \item increase \( |U| \) (e.g. double it)
+    \item rebuild hash table (``rehashing'')
+  \end{itemize}
+\end{itemize}
+
+% The following is the transcription of the example calculations on the slide.
+% However, they are nonsensical without the context of the hash function and values being calculated.
+% The diagrams/graphs have been omitted and are represented as [TBD].
+\[ h(k) = k \mod 16 \]
+\[ \text{Insert (0xf91c, V1)} \rightarrow h(0xf91c) = 0x2 \]
+\[ \text{Insert (0x8cd, V2)} \rightarrow h(0x8cd) = 0xd \]
+\[ \text{Insert (0x532, V3)} \rightarrow h(0x532) = 0x2 \]
+
+% Diagrams/graphs hash table representation
+[TBD]
+
+
+
+% LaTeX content transcribed from lecture slide image
+
+\section*{In practice}
+\begin{itemize}
+  \item as long as collision rate is kept low
+  \begin{itemize}
+    \item insert/delete/lookup are essentially \( O(1) \)
+  \end{itemize}
+  \item first hash table access is typically a cache miss (at least L1)
+  \item but with open addressing, in case of collisions, probing may not be
+\end{itemize}
+
+\section*{ASSOCIATIVE ARRAYS: PERFORMANCE}
+
+\begin{itemize}
+  \item Between self-balancing trees, tries and hash tables, no clearly superior data structure.
+  \item Data- and application-dependent.
+  \item Try, benchmark
+\end{itemize}
+
+% [TBD] is used as a placeholder for content that cannot be represented in LaTeX, such as images or other non-textual elements.
+
+
+% LaTeX content transcribed from the image provided.
+
+
+\section*{Hash tables often perform better... when suitable:}
+\begin{itemize}
+  \item when hashing is cheap
+  \item when we can ensure few collisions
+  \item when the order of magnitude of $n$ known in advance
+\end{itemize}
+
+\section*{Self-balancing trees are often more robust:}
+\begin{itemize}
+  \item much better worst case non-amortized complexity (rehashing!)
+\end{itemize}
+
+\section*{Tries can be faster when keys have a special structure}
+\begin{itemize}
+  \item page table (virtual address translation)
+  \item network routing (IP addresses)
+  \item GPT-type tokenizers
+\end{itemize}
+
+\section*{Combinations are possible and commonly used}
+\begin{itemize}
+  \item Hash table as a static array of self-balancing trees
+  \item Depth-K trie with self-balancing trees at leaf nodes
+  \item \ldots
+\end{itemize}
+
+
+
+% Preamble and document beginning are not included, as per instructions.
+
+\section*{SPATIAL DATA STRUCTURES}
+
+\subsection*{Spatial data structures}
+Spatial data structures store collections of vectors in $\mathbb{R}^m$.
+\begin{itemize}
+    \item they allow operations such as
+    \begin{itemize}
+        \item insertion (add a vector $\mathbf{x} \in \mathbb{R}^m$)
+        \item deletion (remove one vector)
+        \item find the vector closest to a given $\mathbf{y} \in \mathbb{R}^m$
+        \item for every inserted vector, find its nearest neighbor
+        \item for every inserted vector, find its $k$ nearest neighbors
+        \item for every inserted vector, find all other vectors within a distance $d$
+    \end{itemize}
+\end{itemize}
+
+\subsection*{The problem}
+\textit{``for every inserted vector, find all other vectors within a distance $d$''}
+
+% The image is replaced with [TBD] as per instruction for non-textual elements
+[TBD]
+
+% Document end not included, as per instructions.
+
+
+% Begin LaTeX transcription of image content
+
+Naively, this problem has $O(n^2)$ complexity:
+\begin{align*}
+R &:= \emptyset \\
+\text{For } i &= 0, \ldots, n - 1: \\
+&\quad \text{For } j = i + 1, \ldots, n - 1: \\
+&\quad\quad \text{If } \lVert x_i - x_j \rVert \leq d : \\
+&\quad\quad\quad R := R \cup \{(i,j)\}
+\end{align*}
+
+% Image content replaced with [TBD] as per the user request
+% [TBD] represents the images of grids with points and circle overlays found in the original image.
+Grids
+[TBD]
+
+Grids
+[TBD]
+
+% End LaTeX transcription of image content
+
+
+% The content of the slide is transcribed into LaTeX format.
+% [TBD] is used to denote the placeholder for images or diagrams as they cannot be represented in LaTeX through transcription.
+
+\section*{Grids}
+
+\begin{itemize}
+    \item \textbf{Pros:}
+    \begin{itemize}
+        \item quadratic only within grid cells
+    \end{itemize}
+    \item \textbf{Cons:}
+    \begin{itemize}
+        \item need finite bounds \(L \leq x_i \leq U\) for all \(x\), for all \(i\)
+        \item fixed cell size
+        \begin{itemize}
+            \item some may have too many \(x\)s
+            \item many may be empty
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\section*{Quadtrees and octrees}
+
+[TBD] % Placeholder for the first image - grid with scattered points
+
+% Since there is no text content associated with the images, no additional transcription is provided for them.
+
+\section*{Quadtrees and octrees}
+
+[TBD] % Placeholder for the second image - grid with scattered points and a highlighted area (circle with shading)
+
+% There is no additional textual content provided for this second image as well.
+
+
+% Since LaTeX does not typically handle images directly in-text, the image content is described as [TBD] in comments. 
+% If there were actual LaTeX code to generate such plots, it would typically involve packages such as pgfplots or TikZ for drawing the diagrams.
+
+
+
+\section*{Quadtrees and octrees}
+
+% [TBD: Image depicting an example of Quadtree spatial decomposition in a 2D space with points and a circular range query.]
+
+\section*{k-d trees}
+
+% [TBD: Two images depicting examples of k-d tree spatial decomposition in a 2D space with points and a circular range query.]
+
+% Since the actual points and the specific division of space are graphical, they are represented as [TBD] here.
+
+
+
+% Since the image content consists of two sections with titles and bullet points,
+% we transcribe it as is into LaTeX code using the 'itemize' environment for the bullet points.
+
+
+\section*{k-d trees}
+[TBD]
+
+\section*{Quadtrees, octrees, k-d trees}
+\begin{itemize}
+    \item Pros:
+    \begin{itemize}
+        \item no need for finite bounds \(L \leq x_i \leq U\) for all \(x\), for all \(i\)
+        \item variable cell size
+    \end{itemize}
+    \item Limitations:
+    \begin{itemize}
+        \item fixed cell shape (cubes / boxes)
+        \item poor fit for high-dimensional data:
+        \begin{itemize}
+            \item as \(m\) grows
+            \item data size grows linearly
+            \item number of cells grows exponentially
+            \item even if all points are on a 2-dimensional hyperplane
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\section*{Binary space partitioning}
+[TBD]
+
+
+
+
+
+\section*{Binary space partitioning}
+
+% Image placeholder - Original image is not provided in the LaTeX transcription
+% [TBD]
+
+\section*{Binary space partitioning}
+
+\begin{itemize}
+\item \textbf{Pros:}
+  \begin{itemize}
+  \item variable cell shape
+  \end{itemize}
+\item \textbf{Cons:}
+  \begin{itemize}
+  \item separating hyperplane computation is costly
+  \end{itemize}
+\item \textbf{Limitations:}
+  \begin{itemize}
+  \item not a good fit for high-dimensional data if, e.g., on a 2-dimensional curved manifold
+  \end{itemize}
+\end{itemize}
+
+
+
+% Since LaTeX preamble and document environment are not requested, only the essential content is provided below.
+
+% Title of the lecture slide
+\section*{Locality-sensitive hashing}
+
+% Begin itemized list
+\begin{itemize}
+    \item Design a function $h : \mathbb{R}^m \rightarrow \mathbb{R}$
+
+    \item such that $\| y - x \| small \implies | h(y) - h(x) | \text{ small, with high probability}$
+
+    \item Impossible in all generality
+
+    \item Depends on data
+\end{itemize}
+% End of the itemized list
+
+% [TBD] token is used to represent the slide/page number at the bottom which cannot be represented in LaTeX without a specific package or command like fancyhdr or footer.
+[TBD]
