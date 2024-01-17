@@ -1,0 +1,325 @@
+\newpage
+\section{Debugging}
+
+\subsection{Correctness (continued)}
+
+\subsubsection{We are here}
+
+\begin{itemize}
+    \item Part 1: How computers works
+    \begin{itemize}
+        \item Boolean logic, integers
+        \item Instructions
+        \item Memory
+    \end{itemize}
+
+    \item Part 2: Software development
+    \begin{itemize}
+        \item Compiling, make
+        \item ABIs \& APIs
+        \item git
+    \end{itemize}
+
+    \item Part 3: Correctness
+    \begin{itemize}
+        \item Specifications
+        \item Documentation, testing
+        \item Static \& dynamic analysis, debugging \textleftarrow \textbf{TODAY}
+    \end{itemize}
+
+    \item Part 4: Performance
+    \begin{itemize}
+        \item CPU pipelines, caches
+        \item Data structures
+        \item Parallel computation
+    \end{itemize}
+\end{itemize}
+
+% Additional instructions for proper compilation in LaTeX:
+
+
+% Slide Title
+\subsection{Debugging Techniques}
+
+% Slide content for "Instrumentation"
+\subsubsection{Instrumentation}
+\begin{itemize}
+  \item The basic approach to debugging is: \\
+  Check that what we \textit{think is true is actually true}.
+  
+  \item Narrow down the precise point at which \textit{execution} deviates from our \textit{assumptions}
+
+  \item We can use
+  \begin{itemize}
+    \item assertions: \texttt{assert} / \texttt{assert()}
+    \item debugging messages: \texttt{print()} / \texttt{printf()}
+    \item machine-readable output
+  \end{itemize}
+\end{itemize}
+
+% Slide content for "Crash instrumentation example"
+\subsubsection{Crash instrumentation example}
+\begin{verbatim}
+void perform_actions(struct state *s)
+{
+  action_a(s);
+  action_b(s);
+  action_c(s);
+  action_d(s);
+  action_e(s);
+}
+
+void perform_actions(struct state *s)
+{
+  printf("Action A...\\n");
+  action_a(s);
+  printf("Action B...\\n");
+  action_b(s);
+  printf("Action C...\\n");
+  action_c(s);
+  printf("Action D...\\n");
+  action_d(s);
+  printf("Action E...\\n");
+  action_e(s);
+  printf("Actions done.\\n");
+}
+
+Action A...
+Action B...
+Action C...
+Segmentation fault
+\end{verbatim}
+
+% Comment about the crash
+% crash in action_c() assuming no time-traveling UB.
+
+
+% Since LaTeX does not support source code highlighting out of the box,
+% we will use verbatim for the code sections and math environments for the rest.
+% The use of packages like listings or minted could provide better formatting for code.
+
+\subsubsection{Machine-readable output example}
+
+\begin{verbatim}
+def matrix_inverse(mtx):
+    ...
+    return result
+
+def matrix_inverse(mtx):
+    ...
+    error_matrix = mtx * result - matrix_identity()
+    matrix_write(mtx, "mtx.m")
+    matrix_write(result, "result.m")
+    assert max(max(error_matrix)) < 1e-5
+    return result
+\end{verbatim}
+
+\subsubsection{How to handle large test cases?}
+
+\begin{itemize}
+    \item assume our \texttt{matrix\_inverse()} code has a bug
+    \item we find a wrong result for a specific 2000x2000 matrix
+    \item how do we proceed?
+\end{itemize}
+
+\begin{itemize}
+    \item we would like to instrument \texttt{matrix\_inverse()} by printing the matrix at each step,
+    \item but a 2000x2000 matrix is too large to visualize
+\end{itemize}
+
+\subsubsection{Testcase reduction}
+
+\begin{itemize}
+    \item Input: $A \in \mathbb{R}^{n \times n}$
+    \item Step 1: construct $B \in \mathbb{R}^{m \times m}$ by selecting an arbitrary square submatrix of $A$
+    \item Step 2: test \texttt{matrix\_inverse()} on $B$
+    \item Step 3: if \texttt{matrix\_inverse($B$)} fails again, then $A \coloneqq B$
+    \item Step 4: go back to Step 1
+\end{itemize}
+
+\paragraph{Example approach:}
+\begin{itemize}
+    \item at first we can try removing a random half of the rows and columns of $A$
+    \item if it fails repeatedly, we try to remove fewer rows and columns of $A$
+    \item if it fails again, we remove a single row and column of $A$
+\end{itemize}
+
+% a placeholder for an element that cannot be represented in LaTeX
+% since we were asked to avoid adding document creation commands or \includegraphics
+[TBD] 
+
+% Note for the user: This placeholder should be replaced with a proper figure or table
+% depending on the actual content that is meant to be in its place.
+
+This process can be automated!
+
+
+% Start of LaTeX content
+
+
+\subsubsection{Code bisection}
+
+% Code block 1
+\begin{verbatim}
+void perform_actions(struct state *s)
+{
+    action_000(s);
+    action_001(s);
+    action_002(s);
+    ...
+    action_998(s);
+    action_999(s);
+}
+\end{verbatim}
+
+% Code block 2 with print statements
+\begin{verbatim}
+void perform_actions(struct state *s)
+{
+    printf("First action...\n");
+    action_000(s);
+    action_001(s);
+    action_002(s);
+    printf("Action 500...\n");
+    action_500(s);
+    ...
+    action_998(s);
+    action_999(s);
+    printf("Actions done.\n");
+}
+
+First action...
+Action 500...
+Segmentation fault
+\end{verbatim}
+
+% Arrow and text indicating crash range
+$\rightarrow$ crash between 500 and 999 (assuming no time-traveling UB).
+
+% Code block 3 with refined print statements
+\begin{verbatim}
+void perform_actions(struct state *s)
+{
+    printf("First action...\n");
+    action_000(s);
+    printf("Action 500...\n");
+    action_500(s);
+    printf("Action 750...\n");
+    action_750(s);
+    ...
+    action_998(s);
+    action_999(s);
+    printf("Actions done.\n");
+}
+
+First action...
+Action 500...
+Action 750...
+Segmentation fault
+\end{verbatim}
+
+% Arrow and text indicating refined crash range
+$\rightarrow$ crash between 750 and 999.
+
+% Code block 4 with more refined print statements
+\begin{verbatim}
+void perform_actions(struct state *s)
+{
+    printf("First action...\n");
+    action_000(s);
+    printf("Action 500...\n");
+    action_500(s);
+    printf("Action 750...\n");
+    action_750(s);
+    printf("Action 875...\n");
+    action_875(s);
+    ...
+    action_998(s);
+    action_999(s);
+    printf("Actions done.\n");
+}
+
+First action...
+Action 500...
+Action 750...
+Segmentation fault
+\end{verbatim}
+
+% Arrow and text indicating more refined crash range
+$\rightarrow$ crash between 750 and 875.
+
+% End of LaTeX content
+
+
+% The following LaTeX code is a transcription of the textual content from 
+% the lecture material presented in the image.
+
+
+\begin{lstlisting}[language=C]
+void perform_actions(struct state *s)
+{
+    printf("First action...\n");
+    action_000(s);
+    printf("Action 500...\n");
+    action_500(s);
+    printf("Action 750...\n");
+    action_750(s);
+    printf("Action 812...\n");
+    action_812(s);
+    printf("Action 875...\n");
+    action_875(s);
+    action_999(s);
+    printf("Actions done.\n");
+}
+\end{lstlisting}
+
+% Output and comments are represented as regular text.
+First action...
+Action 500...
+Action 750...
+Action 812...
+Segmentation fault
+
+% Comment indicating the issue diagnosed from the output
+--\ensuremath{\rightarrow} crash between 812 and 875.
+
+% Heading for the next section
+\subsubsection{Version bisection}
+
+\begin{lstlisting}
+git log --oneline
+9e9e6fc (HEAD -> main, origin/main) Added perf version check.
+ff3c21b Changed branch mispredict ratio displayed.
+fd49f78 Silently ignore branch events.
+85afe03 Support new perf-script brstack format with added spaces.
+77f8359 Made perf script output parsing more lenient.
+637f374 Version bump.
+47b578b Fixed erroneous use of atime, should have been mtime.
+1dad0df Moved objdump cache to /tmp.
+60a534a Added caching of objdump output.
+6f3c377 Some debugging code.
+b2daa9b Updated version.
+\end{lstlisting}
+
+% The following text indicates the direction of testing between versions
+% It can be placed in the margins or as inline comments.
+%-- test this
+
+
+
+% Since the instructions specified not to include document creation commands, 
+% the following LaTeX code does not include preamble or begin/end document tags.
+% It is assumed the user will add this code into an existing LaTeX document.
+\subsection{Debuggers}
+
+\begin{itemize}
+    \item A \textbf{debugger} is a tool that allows us to run our code step-by-step (e.g., line by line)
+    \item Between each step, we can examine
+    \begin{itemize}
+        \item program \textbf{output}
+        \item program \textbf{state} (i.e., variables)
+    \end{itemize}
+    \item Debuggers for interpreted languages are language-specific
+    \item Debuggers for compiled languages work at the assembly level
+\end{itemize}
+% [TBD] is used to denote the slide number or any other non-textual element that can't be represented in LaTeX
