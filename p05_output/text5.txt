@@ -1,0 +1,736 @@
+\newpage
+\section{Programming Languages}
+
+\subsection{Compilers vs Interpreters}
+
+
+
+% LaTeX code ends
+
+% Since LaTeX is a typesetting language, some commands might be specific to the document class or packages used.
+% The above example assumes a simple article or report document class without extra formatting packages.
+
+
+
+
+% The LaTeX transcription below focuses on the textual content of the lecture slides as displayed in the image.
+
+\subsubsection{Parsing}
+
+Parsing is the process of taking the source code and creating the corresponding abstract syntax tree (AST).
+
+Example:
+
+\begin{verbatim}
+t = 3 * ((y * w) + x)
+\end{verbatim}
+
+becomes:
+
+% [TBD] - This is where the abstract syntax tree diagram will be placed if this were to be replaced with a LaTeX-tree representation.
+
+\subsubsection{Compiler vs. interpreter}
+
+\begin{itemize}
+  \item A compiler:
+  \begin{itemize}
+    \item parses the source code into an AST
+    \item takes the AST and [...] writes the corresponding assembly / machine code
+  \end{itemize}
+  \item An interpreter:
+  \begin{itemize}
+    \item parses the source code into an AST
+    \item takes the AST and performs the corresponding operations
+  \end{itemize}
+\end{itemize}
+
+\paragraph{Example}
+
+What happens when we write the following Python code?
+
+\begin{verbatim}
+3.5 + 4.5
+\end{verbatim}
+
+The AST is:
+
+% [TBD] - This is where the abstract syntax tree diagram for the Python code expression will be placed if this were to be replaced with a LaTeX-tree representation.
+
+
+
+
+% Since this is a LaTeX transcription, we use the 'verbatim' environment to preserve the formatting of code segments.
+
+\begin{verbatim}
+Python/ast_opt.c:
+
+static int
+fold_binop(expr_ty node, PyArena *arena, _PyASTOptimizeState *state)
+{
+    PyObject *lv = _PyAST_Const(node->v.BinOp.left)->v.Constant.value;
+    PyObject *rv = _PyAST_Const(node->v.BinOp.right)->v.Constant.value;
+    PyObject *newval = NULL;
+
+    switch(node->v.BinOp.op) {
+        case Add:
+            newval = PyNumber_Add(lv, rv);
+            break;
+        case Sub:
+            newval = PyNumber_Subtract(lv, rv);
+            break;
+        case Mult:
+            newval = safe_multiply(lv, rv);
+            break;
+        ...
+    }
+    ...
+}
+
+Objects/abstract.c:
+
+PyObject *
+PyNumber_Add(PyObject *v, PyObject *w)
+{
+    PyObject *result = BINARY_OP1(v, w, NB_SLOT(nb_add), "+");
+    if (result == Py_NotImplemented) {
+        return result;
+    }
+    Py_DECREF(result);
+
+    PySequeceMethods *m = Py_TYPE(v)->tp_as_sequece;
+    if (m && m->sq_concat) {
+        result = (*m->sq_concat) (v, w);
+        assert(_Py_CheckSlotResult(v, w, "+", result != NULL));
+        return result;
+    }
+
+    return binop_type_error(v, w, "+");
+}
+
+Objects/floatobject.c:
+
+static PyObject *
+float_add(PyObject *v, PyObject *w)
+{
+    double a, b;
+    CONVERT_TO_DOUBLE(v, a);
+    CONVERT_TO_DOUBLE(w, b);
+    a = a + b;
+    return PyFloat_FromDouble(a);
+}
+\end{verbatim}
+
+% [TBD] tokens replace the images or non-textual elements that cannot be represented in LaTeX.
+
+
+
+
+% Since LaTeX requires a document structure to compile, we usually start with \documentclass
+% and the \begin{document} and  commands. However, since you asked for a
+% transcription without document commands, we'll focus on the content itself.
+
+% Here is the LaTeX transcription of the provided lecture material
+
+\subsubsection{Pros and cons}
+
+\paragraph{Advantages of interpreters:}
+\begin{itemize}
+  \item No need for a compilation step
+  \item In particular, no need to compile for each different platform (portability)
+\end{itemize}
+
+\paragraph{Disadvantages of interpreters:}
+\begin{itemize}
+  \item Interpreter needs to be present on the user's machine
+  \item An interpreter will run the code slower than native machine code
+\end{itemize}
+
+Compiled or interpreted is \textit{not an inherent property} of a language.
+
+\paragraph{Example: Python}
+\begin{itemize}
+  \item CPython (the reference and most common Python implementation) is an interpreter
+  \item Cython is a compiler
+\end{itemize}
+
+Still, languages usually have a \textbf{default / preferred way}
+
+\paragraph{Compiled languages:}
+\begin{itemize}
+  \item C, C++
+  \item Rust, Go, Zig
+  \item Pascal, Fortran, COBOL
+\end{itemize}
+
+\paragraph{Interpreted languages:}
+\begin{itemize}
+  \item Python, Javascript, Lua
+  \item Lisp, Perl, PHP, R, Ruby, VBScript
+\end{itemize}
+
+% All non-textual elements that cannot be represented in LaTeX have been replaced with [TBD].
+[TBD]
+
+% End of LaTeX transcription.
+
+
+
+
+% Transcription of the image's content into LaTeX format
+
+\subsubsection{Compile... to what?}
+
+\begin{itemize}
+    \item The Nim compiler produces C code (which is then compiled)
+    \item The Dart compiler produces JavaScript code (then interpreted)
+    \item Java compiles to ``Java Virtual Machine'' (JVM) code
+    \begin{itemize}
+        \item the JVM can be seen as an ISA for a processor that does not exist
+        \item the JVM code is shipped to the user
+        \item the JVM code is then interpreted
+        \item \textbf{advantage}: JVM code is portable
+        \item \textbf{drawback}: user must have the JVM interpreter installed
+    \end{itemize}
+    \item The Python interpreter (CPython) actually produces ``Python bytecode'' and immediately interprets it
+\end{itemize}
+
+\bigskip
+
+\begin{itemize}
+    \item What about shipping the source code to the user...
+    
+    \item ... then the user compiles it and runs it?
+    
+    \item The result would be both \textbf{portable and fast}.
+    
+    \item To avoid long compilation delays, compilation is done section-by-section (file, function or code block)...
+    
+    \item ... just before the corresponding code needs to be run.
+    
+    \item This is \textit{Just-in-time (JIT)} compilation.
+\end{itemize}
+
+\bigskip
+
+\subsubsection{Languages with JIT compilation}
+
+\begin{itemize}
+    \item Julia
+    \item C\#
+    \item Java (source code compiled to JVM code; JVM code JIT compiled to native code)
+    \item PyPy (Python)
+    \item LuaJIT (Lua)
+\end{itemize}
+
+% Note: the coloring of the words 'advantage' and 'drawback' should be done using custom commands or by including the xcolor package and defining colors named 'advantage' and 'drawback'. This LaTeX code snippet does not define colors and assumes the document will have the necessary package and color definitions.
+% Also, the icons/symbols next to the bullet points are not included since LaTeX doesn't readily support the exact representation of these icons. They should be represented by custom commands if needed.
+
+
+
+
+% Use the 'booktabs' package for better table quality
+
+
+\subsubsection{Pros and cons (summary)}
+
+\begin{tabular}{lcccc}
+\toprule
+ & Compiled & Interpreted & Compiled to VM & Just-in-time \\
+\midrule
+Needs compilation step & yes & no & yes & no \\
+Needs interpreter / VM & no & yes & yes & yes \\
+Portable & no & yes & yes & yes \\
+Speed & fast & slow & in-between & slow at first, then fast \\
+\bottomrule
+\end{tabular}
+
+\subsubsection{Language summary}
+
+\begin{itemize}
+    \item Ahead-of-time (AOT) compiled-to-machine-code languages:
+    \begin{itemize}
+        \item C, C++, Rust, Go, Zig, Pascal, Fortran, COBOL
+        \item Nim (through C)
+    \end{itemize}
+    \item Purely interpreted languages:
+    \begin{itemize}
+        \item Lisp, Perl, R, VBScript
+    \end{itemize}
+    \item Other:
+    \begin{itemize}
+        \item Python, Lua: internally compiled to bytecode, then interpreted
+        \item PyPy (Python), LuaJIT (Lua): internally compiled to bytecode, then JIT compiled
+        \item Java, C\#: explicitly compiled to bytecode (bytecode shipped to user), then JIT compiled
+        \item Julia: JIT compiled
+        \item JavaScript: interpreted and JIT compiled
+    \end{itemize}
+\end{itemize}
+
+\subsection{Types}
+
+% Note: The word "TYPES" at the end is separated by what appears to be a section. 
+% Since this is a single word and the context in which it is used is ambiguous, 
+% it is simply treated here as a section heading.
+
+% The LaTeX transcription of the lecture slide content
+
+\begin{lstlisting}[language=C]
+int a;
+// the type of a is int
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python]
+>>> a = 5
+>>> type(a)
+<class 'int'>
+\end{lstlisting}
+
+\subsubsection{Static or dynamic type checking}
+
+\begin{itemize}
+    \item Static type checking: type errors are always caught (e.g. at compile time)
+    \item Dynamic type checking: type errors are caught only when (if) the code is run
+\end{itemize}
+
+\paragraph{Dynamic type checking (Python):}
+
+\begin{lstlisting}[language=Python]
+def f():
+    return "this is a string" / 5
+    
+# ...
+# as long as f() is not used, not problem
+# ...
+
+f()
+
+TypeError: unsupported operand type(s) for /: 'str' and 'int'
+\end{lstlisting}
+
+\paragraph{Static type checking (C):}
+
+\begin{lstlisting}[language=C]
+int f()
+{
+    return "this is a string" / 5;
+    // even though f() is never used, this yields:
+    // error: invalid operands to binary / (have 'char *' and 'int')
+}
+
+// f() is never used
+\end{lstlisting}
+
+
+% Since the content in the image includes code examples and comments,
+% I'll use verbatim environment and comments in LaTeX.
+% LaTeX does not support syntax highlighting out of the box.
+% You might want to use packages like listings or minted for code highlighting.
+
+\paragraph{Dynamic type checking (JavaScript):}
+\begin{verbatim}
+function f()
+{
+    return "this is a string" / 5;
+    // returns special value NaN
+}
+\end{verbatim}
+
+\paragraph{Static type checking (TypeScript):}
+\begin{verbatim}
+function f(): number
+{
+    return "this is a string" / 5;
+    // ERROR: The left-hand side of an arithmetic operation must be of type
+    // 'any', 'number', 'bigint' or an enum type.(2362)
+    // (even if f() is never used)
+}
+\end{verbatim}
+
+\subsubsection{Strong and weak typing}
+\textbf{“Strong”} and \textbf{“weak”} are vague qualifiers to indicate how strict a language is with type conversions.
+
+\paragraph{Weak typing (C):}
+\begin{verbatim}
+int a = -1.8; // not an error, value silently truncated (towards zero) to -1
+\end{verbatim}
+
+\begin{verbatim}
+int *p = (int *)(long int)("abc" + 5) // will compile
+*p = 3; // will probably crash
+\end{verbatim}
+
+\paragraph{Strong typing (Python):}
+\begin{verbatim}
+>>> "a" * 4
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: can only concatenate str (not "int") to str
+\end{verbatim}
+\begin{verbatim}
+but
+
+>>> "a" * 4
+'aaaa'
+\end{verbatim}
+
+
+\subsection{Memory management}
+
+\subsubsection{Manual memory management in C:}
+
+\begin{verbatim}
+int getint()
+{
+    char *buffer = malloc(1024);
+    size_t n = fread(buffer, 1, 1023, stdin);
+    buffer[n] = 0;
+    return strtol(buffer, NULL, 0);
+}
+\end{verbatim}
+
+\begin{itemize}
+    \item We did not check that \texttt{malloc(1024)} worked
+    \item We forgot \texttt{free(buffer)}!
+\end{itemize}
+
+\begin{verbatim}
+int getint()
+{
+    char *buffer = malloc(1024);
+    if (buffer == NULL) {
+        perror("malloc()");
+        abort();
+    }
+    size_t n = fread(buffer, 1, 1023, stdin);
+    if (ferror(stdin)) {
+        perror("fread()");
+        abort();
+    }
+    buffer[n] = 0;
+    int r = strtol(buffer, NULL, 0);
+    free(buffer); // <-------- free memory
+    return r;
+}
+\end{verbatim}
+
+
+
+% Start of the LaTeX document for the lecture slide
+
+% Slide title "Automatic memory management"
+\subsubsection{Automatic memory management}
+
+% Slide content under the title
+\textbf{in Python:}
+
+% Python code example
+\begin{verbatim}
+def getint():
+    buffer = input()
+    return int(buffer)
+\end{verbatim}
+
+% Slide title "How does automatic memory management work?"
+\subsubsection{How does automatic memory management work?}
+
+% Slide content explaining automatic memory management
+We need to keep track of the memory that is in use.
+
+\begin{itemize}
+    \item Reference counting
+    \item Garbage collection
+\end{itemize}
+
+% Slide title "Reference counting"
+\subsubsection{Reference counting}
+
+% C code example for Reference counting
+\begin{verbatim}
+struct object_t {
+    int refcount;
+    ...
+};
+
+void object_ref(struct object_t *obj)
+{
+    obj->refcount = obj->refcount + 1;
+}
+
+void object_unref(struct object_t *obj)
+{
+    obj->refcount = obj->refcount - 1;
+    if (obj->refcount == 0) {
+        free(obj);
+    }
+}
+\end{verbatim}
+
+
+% The title is not provided in the image, so it is left out in the LaTeX document
+
+\paragraph{Refcount}
+\begin{itemize}
+  \item set to 1 when object created
+  \item incremented whenever object referenced (used)
+  \item decremented whenever object goes out of scope
+  \begin{itemize}
+    \item expression is processed but not assigned or returned
+    \item local variable
+  \end{itemize}
+\end{itemize}
+
+\begin{lstlisting}
+def f():
+    s = ("abc" + "def") + "ghi"
+    return t
+\end{lstlisting}
+
+\begin{enumerate}
+  \item "abc" created, refcount 1
+  \item "def" created, refcount 1
+  \item "abcdef" created, refcount 1
+  \item ("abc" + "def") is done, "abc" refcount 0, "def" refcount 0, both freed
+  \item "ghi" created, refcount 1
+  \item "abcdefghi" created, refcount 1
+  \item ("abc" + "def") + "ghi" is done, "abcdef" and "ghi" freed
+  \item s = "abcdefghi" done, but it is an assignment, refcount of "abcdefghi" stays 1
+  \item s referenced, refcount of "abcdefghi" becomes 2
+  \item t = s done, but it is an assignment, refcount stays 2
+  \item t referenced, refcount of "abcdefghi" becomes 3
+  \item return t is done, but it is a return, refcount of "abcdefghi" stays 3
+  \item s and t go out of scope, refcount of "abcdefghi" becomes 1
+\end{enumerate}
+
+\subsubsection{Problem with refcounting}
+\paragraph{Cycles:}
+
+\begin{lstlisting}
+class C:
+    pass
+
+def do_nothing():
+    a = C()
+    t = a
+    for i in range(10000000):
+        n = C()
+        t.prev = t
+        t = n
+    a.prev = t
+    return 1
+\end{lstlisting}
+
+% End of the LaTeX document with the lecture content
+
+
+
+
+
+\subsubsection{Garbage collection}
+
+\begin{itemize}
+  \item keep track of all variables in scope
+  \item keep track of all allocated blocks of memory
+  \item every few seconds, ``garbage collection''
+    \begin{itemize}
+      \item look through all the variables, if they reference some memory, mark it as in-use
+      \item look at every block, if not referenced, free it
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+  \item \textbf{Pro:} does not suffer from cycle issue
+  \item \textbf{Con:} memory usage can grow a lot between garbage collections
+  \item \textbf{Con:} garbage collections pauses can block the process for a long time (making it feel unresponsive)
+\end{itemize}
+
+\subsection{Other Language Features}
+
+\subsubsection{Macros}
+
+Macros allow us to generate fragments of source code automatically.
+
+\paragraph{C macro example:}
+
+\begin{verbatim}
+#define THIS_5X(A) A, A, A, A, A
+
+int array[10] = { THIS_5X(1), THIS_5X(2) };
+\end{verbatim}
+
+equivalent to:
+
+\begin{verbatim}
+int array[10] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 };
+\end{verbatim}
+
+
+
+
+% Macros section
+Macros can be useful: 
+
+\begin{verbatim}
+#define ARRAY_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
+\end{verbatim}
+
+But beware! They are just text replacement:
+
+\begin{verbatim}
+#define PRODUCT_WRONG(a, b) (a * b)
+int a = PRODUCT_WRONG(1 + 2, 3 + 4); // <-- 1 + 2 * 3 + 4 = 11
+\end{verbatim}
+
+\begin{verbatim}
+#define PRODUCT_CORRECT(a, b) ((a) * (b))
+int a = PRODUCT_CORRECT(1 + 2, 3 + 4); // <-- (1 + 2) * (3 + 4) = 21
+\end{verbatim}
+
+% Generics section
+\subsubsection{Generics}
+
+In C, those must be implemented separately:
+
+\begin{verbatim}
+void int_array_sort(int *array, int size);
+void float_array_sort(float *array, int size);
+\end{verbatim}
+
+In Python, because of dynamic type checking, there is no need:
+
+\begin{verbatim}
+def array_sort(array):
+    # "C", "<", ">", "=", etc. will work for either int and float
+\end{verbatim}
+
+The type of array will be figured out at runtime
+
+To solve this, C++ adds generics:
+
+\begin{verbatim}
+template <typename T> void array_sort(T *array);
+\end{verbatim}
+
+% Languages with generics section
+\subsubsection{Languages with generics}
+
+\begin{itemize}
+    \item C++
+    \item C\#
+    \item Java
+    \item Go
+    \item Rust
+    \item Swift
+    \item TypeScript
+    \item \ldots
+\end{itemize}
+
+
+
+
+\subsubsection{Object-oriented programming}
+
+A compound type is any type that is defined in terms of one or more other types.
+
+\begin{itemize}
+    \item In C:
+\begin{verbatim}
+struct point {
+    float x;
+    float y;
+};
+\end{verbatim}
+
+    \item In Python:
+\begin{verbatim}
+class Point:
+    def __init__(self):
+        self.x = 0.0
+        self.y = 0.0
+\end{verbatim}
+\end{itemize}
+
+In object-oriented programming (OOP), compound types (``classes'')
+can have functions attached to them (``methods'').
+
+\begin{itemize}
+    \item In C++:
+\begin{verbatim}
+struct point {
+    float x;
+    float y;
+    
+    void scale(float l) { x *= l; y *= l; }
+};
+\end{verbatim}
+
+    \item In Python:
+\begin{verbatim}
+class Point:
+    def __init__(self):
+        self.x = 0.0
+        self.y = 0.0
+
+    def scale(self, l):
+        self.x *= l
+        self.y *= l
+\end{verbatim}
+\end{itemize}
+
+As a consequence, in OOP, \emph{data} and the \emph{methods} that operate on them are usually defined close together.
+
+We can construct complex type hierarchies:
+\begin{itemize}
+    \item define a class for \emph{vehicle}, has a price method
+    \item define a class for \emph{bike}, inherits from \emph{vehicle}
+    \begin{itemize}
+        \item inherits the price method from \emph{vehicle} (no need to rewrite it)
+        \item among other properties, has two wheels
+    \end{itemize}
+    \item define a class for \emph{car}, inherits from \emph{vehicle}
+    \begin{itemize}
+        \item inherits the price method from \emph{vehicle} (no need to rewrite it)
+        \item among others has four wheels
+    \end{itemize}
+    \item etc.
+\end{itemize}
+
+
+
+% The content of the lecture in LaTeX format
+
+\subsubsection{Functional programming}
+
+In functional programming, functions are ``first-class'' types:
+
+\begin{itemize}
+    \item they can be used in expressions
+    \item they can be assigned to variables
+\end{itemize}
+
+\begin{verbatim}
+def map(array, fn):
+    r = array.copy()
+    for i in range(len(array)):
+        r[i] = fn(r[i])
+    return r
+
+def double_it(x):
+    return x * 2
+
+map([0, 1, 2, 3, 4], double_it)
+# -> [0, 2, 4, 6, 8]
+\end{verbatim}
+
+\subsubsection{Declarative and logic programming}
+
+We described what we want, not how to get it.
+
+\paragraph{Example SAT formulas:}
+
+x1 and (not x2) or x3 and (not x3)
+
+We described the constraints, not how to get a solution.
+
+% Note: The syntax presented in the SAT formulas section is informal and 
+% designed for readability rather than strict formal logic syntax.
+% It may be necessary to adjust it according to the context of use.
