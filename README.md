@@ -11,7 +11,7 @@ Please adopt the following convention when contributing to the latex notes:
 - every title followed by some text in the same slide is a `subsubsection`
 - every minor title or example is a `paragraph` (i.e. `\paragraph{minor_title}`)
 
-The `\paragraph{}` command needs to be defined as follows:
+Where the `\paragraph{}` command needs to be defined as follows:
 ```
 \usepackage{titlesec}
 
@@ -23,6 +23,7 @@ The `\paragraph{}` command needs to be defined as follows:
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 ```
 
+### Numbering, case and spacing conventions
 Sections should be numbered, i.e. no `*` after any Heading keywords (`section`, `subsection`, and so on). This will allow to have a table of contents. \
 ✅ `\section{my_section}`, `\subsection{my_subsection}`\
 ❌ `\section*{my_section}`, `\subsection*{my_subsection}`
