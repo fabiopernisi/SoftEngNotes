@@ -21,3 +21,29 @@ Every Section Should __not__ be entirely in Uppercase:\
 
 ### Cleaning and Postprocessing
 Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the raw outputs of the GPT4 vision model. Please include the cleaned up version of each folder `p<i>_output` with the name `text<i>.txt`.
+
+## Progress
+| file        | cleaning | additional material |
+|-------------|----------|---------------------|
+| Lecture 1   |   ✅      |          ⚙️         |
+| Lecture 2   |   ✅      |          ⚙️         |
+| Lecture 3   |   ⚙️       |          ⚙️         |
+| Lecture 4   |   ⚙️       |          ⚙️         |
+| Lecture 5   |   ⚙️       |          ⚙️         |
+| Lecture 6   |   ✅      |          ⚙️         |
+| Lecture 7   |   ⚙️       |          ⚙️         |
+| Lecture 8   |   ⚙️       |          ⚙️         |
+| Lecture 9   |   ⚙️       |          ⚙️         |
+| Lecture 10  |   ⚙️       |          ⚙️         |
+| Lecture 11  |   ⚙️       |          ⚙️         |
+| Lecture 12  |   ⚙️       |          ⚙️         |
+| Lecture 13  |   ⚙️       |          ⚙️         |
+| Lecture 14  |   ⚙️       |          ⚙️         |
+| Lecture 15  |   ⚙️       |          ⚙️         |
+| Lecture 16  |   ⚙️       |          ⚙️         |
+| Lecture 17  |   ⚙️       |          ⚙️         |
+| Lecture 18  |   ⚙️       |          ⚙️         |
+| Lecture 19  |   ⚙️       |          ⚙️         |
+| Lecture 20  |   ⚙️       |          ⚙️         |
+| Lecture 21  |   ⚙️       |          ⚙️         |
+| Lecture 22  |   ⚙️       |          ⚙️         |
