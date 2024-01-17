@@ -2,12 +2,12 @@
 
 
 % Slide Title
-\section*{LECTURE 11}
+\section{Lecture 11}
 
-\subsection*{PART 3: CORRECTNESS}
+\subsection{Part 3: Correctness}
 
 % Content Section "We are here"
-\subsection*{We are here}
+\subsection{We are here}
 \begin{itemize}
     \item Part 1: How computers works
     \begin{itemize}
@@ -41,9 +41,9 @@
 
 % Here begins the LaTeX transcription of the lecture material
 
-\subsection*{A NOTE ABOUT C}
+\subsection{A note about C}
 
-\subsection*{Why C?}
+\subsection{Why C?}
 \begin{itemize}
     \item The C language has deep flaws
     \item but the C ABI is everywhere:
@@ -59,7 +59,7 @@
     \end{itemize}
 \end{itemize}
 
-\subsection*{Why the C ABI?}
+\subsection{Why the C ABI?}
 The C ABI is simple:
 \begin{itemize}
     \item just functions and simple types: integer, pointer, \texttt{struct}
@@ -88,7 +88,7 @@ MyClass_method_OtherClass_ref_myFunction(MyClass *self, OtherClass *c);
 
 % LaTeX transcription of the lecture's text content
 
-\subsection*{Other ABIs}
+\subsection{Other ABIs}
 
 \begin{itemize}
     \item There are multiple C++ ABI specifications
@@ -100,10 +100,10 @@ MyClass_method_OtherClass_ref_myFunction(MyClass *self, OtherClass *c);
 \end{itemize}
 
 % The slide is separated by page breaks or sections, here's the next section
-\subsection*{SPECIFICATIONS}
+\subsection{Specifications}
 
 % And another section break or page break
-\subsection*{WHAT IS EVEN THE C LANGUAGE?}
+\subsection{What is even the C language?}
 
 % Notes for each section have been separated by sections, assuming they are on different slides.
 % [TBD] token replaces images or non-textual elements that cannot be represented in LaTeX.
@@ -155,7 +155,7 @@ clang -03 -c -std=c2x -o is_zero.o is_zero.c
 % but the content is continued as a separate section for clarity
 
 % "What is valid C?" slide
-\subsection*{What is valid C?}
+\subsection{What is valid C?}
 \begin{itemize}
     \item Pragmatically, C code is valid if your compiler produces a valid executable.
     \item However, there are many compilers.
@@ -184,7 +184,7 @@ clang -03 -c -std=c2x -o is_zero.o is_zero.c
 
 Hence \verb|-std=c2x|
 
-\subsection*{Who defines the C language nowadays?}
+\subsection{Who defines the C language nowadays?}
 
 \begin{itemize}
     \item A ``working group'' within ISO: ``WG14''
@@ -197,7 +197,7 @@ Hence \verb|-std=c2x|
     \item \textgreater{} C23 draft (742 pages)
 \end{itemize}
 
-\subsection*{BEHAVIORS}
+\subsection{Behaviours}
 
 [TBD] % Replace this with the content that is applicable or an explanation of the non-textual element, as this indicates a non-textual part of the slide.
 
@@ -205,11 +205,11 @@ Hence \verb|-std=c2x|
 
 % Note: Package imports and document preamble are not included as they are not part of the lecture content.
 
-\subsection*{LOCALE-SPECIFIC BEHAVIOR}
+\subsection{Locale-Specific Behavior}
 
 Behavior that depends on local conventions (nationality, culture, and language) that each implementation documents.
 
-\subsubsection*{Example}
+\paragraph{Example}
 
 Whether \texttt{islower()} returns true for characters other than the 26 lowercase Latin letters.
 
@@ -217,14 +217,14 @@ Whether \texttt{islower()} returns true for characters other than the 26 lowerca
 int a = islower('æ');
 \end{verbatim}
 
-\subsection*{UNSPECIFIED BEHAVIOR}
+\subsection{Unspecified Behavior}
 
 \begin{itemize}
   \item Behavior upon which this document provides two or more possibilities and imposes no further requirements on which is chosen in any instance
   \item Behavior that results from the use of an unspecified value
 \end{itemize}
 
-\subsubsection*{Examples}
+\paragraph{Examples}
 
 \begin{itemize}
   \item The order in which the arguments to a function are evaluated.
@@ -239,11 +239,11 @@ struct s {
 };
 \end{verbatim}
 
-\subsection*{IMPLEMENTATION-DEFINED BEHAVIOR}
+\subsection{Implementation-defined Behavior}
 
 Unspecified behavior where each implementation (compiler / platform / OS) documents how the choice is made
 
-\subsubsection*{Example}
+\paragraph{Example}
 
 The propagation of the high-order bit when a signed integer is shifted right.
 
@@ -260,7 +260,7 @@ On x86\_64 and AArch64: sign-extend
 
 % LaTeX transcription of the given lecture content
 
-\subsection*{UNDEFINED BEHAVIOR}
+\subsection{Undefined Behavior}
 
 Behavior, upon use of a nonportable or erroneous program construct or of erroneous data,
 for which this document imposes no \textbf{requirements}.
@@ -280,12 +280,7 @@ int *a = NULL;
 int b = *a;
 \end{verbatim}
 
-\subsection*{UNDEFINED BEHAVIOR}
-
-% [TBD] is used here to represent the missing page break or section distinction
-[TBD]
-
-\subsection*{Easy UB: division by zero}
+\subsection{Easy UB: division by zero}
 
 ``The result of the \texttt{/} operator is the quotient from the division of the first operand by the second;
 the result of the \texttt{\%} operator is the remainder.
@@ -307,7 +302,7 @@ Floating point exception (core dumped)
 % The LaTeX transcription presented above should be cleanly compiled in any LaTeX editor.
 % Images and non-textual content are denoted by [TBD] inline with the text.
 % Direct text content is accurately transcribed, with formatting represented by LaTeX commands.
-\subsection*{Easy UB? (division by zero)}
+\subsection{Easy UB? (division by zero)}
 
 \begin{verbatim}
 #include <stdio.h>
@@ -360,7 +355,7 @@ main.c:3:11: warning: division by zero is undefined [-Wdivision-by-zero]
 401140:   c3                       ret
 \end{verbatim}
 
-\subsection*{Easy UB: division overflow}
+\subsection{Easy UB: division overflow}
 
 \begin{quote}
 “When integers are divided, the result of the / operator is the algebraic quotient
@@ -437,7 +432,7 @@ a / -1 = -2147483648 is positive
 % Please note that the output displayed in the image has been transcribed as comments for completeness,
 % but in an actual LaTeX document, it would not be displayed as a verbatim section.
 
-\subsection*{Integer overflow}
+\subsection{Integer overflow}
 
 \begin{verbatim}
 #include <stdio.h>
@@ -460,7 +455,7 @@ Note: 1000 $>$ $2^8$ = 256.
 % The following is a binary representation, which is non-textual and is thus replaced by [TBD]
 [TBD]
 
-\subsection*{Unsigned integer overflow}
+\subsection{Unsigned integer overflow}
 
 \begin{itemize}
     \item Unsigned overflow is not undefined behavior
@@ -478,7 +473,7 @@ Note: 1000 $>$ $2^8$ = 256.
     \item x86\_64 and AArch64 instruction work in this same way
 \end{itemize}
 
-\subsection*{Signed integer overflow}
+\subsection{Signed integer overflow}
 
 \begin{itemize}
     \item x86\_64 and AArch64 instruction have wrap-around behavior
@@ -489,7 +484,7 @@ Note: 1000 $>$ $2^8$ = 256.
 
 % Document content starts here
 
-\subsection*{Signed integer overflow}
+\subsection{Signed integer overflow}
 
 \begin{verbatim}
 #include <stdio.h>
@@ -517,7 +512,7 @@ a = 2147483647 \\
 a + 1 = -2147483648 \\
 a + 1 = -2147483648 is positive
 
-\subsection*{Easy UB: invalid pointers}
+\subsection{Easy UB: invalid pointers}
 
 \textit{"If an invalid value has been assigned to the pointer, the behavior of the unary * operator is undefined." (p81)}
 
@@ -539,7 +534,7 @@ int main()
 ./main \\
 Segmentation fault (core dumped)
 
-\subsection*{Easy UB!?? (invalid pointers)}
+\subsection{Easy UB!?? (invalid pointers)}
 
 \begin{verbatim}
 int int_at(int *pointer)
