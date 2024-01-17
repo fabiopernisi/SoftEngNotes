@@ -1,35 +1,7 @@
-\documentclass[12pt]{article}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{tabularx}
-\usepackage{multirow}
-\usepackage{geometry}
-\usepackage{listings}
-\usepackage{comment}
-\usepackage[utf8]{inputenc}
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks,
-    citecolor=black,
-    filecolor=black,
-    linkcolor=black,
-    urlcolor=black
-}
-\geometry{a4paper, margin=1in}
+\newpage
+\section{Portability, Dependencies and Packaging}
 
-\begin{document}
-
-\title{Lecture 6}
-\author{Giosuè Castellano, Fabio Pernisi}
-\date{January 2024}
-\maketitle
-
-\tableofcontents
-
-
-\section{LECTURE 6}
-
-\subsection{APPLICATION BINARY INTERFACES (ABI)}
+\subsection{Appliaction Binary Interface (ABI)}
 
 \begin{itemize}
     \item most Windows laptops, Linux laptops and pre-M1 Macs share the same ISA: \texttt{x86\_64}
@@ -158,7 +130,7 @@ SLN3:
 % The LaTeX transcription of the lecture slide
 
 
-\subsection{PORTABLE CODE}
+\subsection{Portable Code}
 
 % [TBD] is used to indicate the location of non-textual elements, such as images, that cannot be represented in LaTeX.
 How do we ship code that work across all platforms?
@@ -331,7 +303,7 @@ Let \textbf{guest OSs} believe they have direct access to hardware...
   \item A Debian 12 guest with specific libraries installed, on a Debian 12 host
 \end{itemize}
 
-\subsection{APPLICATION PROGRAMMING INTERFACES (API)}
+\subsection{Application Programming Interfaces (API)}
 
 \subsubsection{Definition}
 An API defines how a library (or any other service) is to be used.
@@ -403,7 +375,7 @@ curl --request PUT \
 \end{itemize}
 
 % Heading for DEPENDENCIES
-\subsection{DEPENDENCIES}
+\subsection{Dependencies}
 [TBD] % Placeholder for non-textual content since LaTeX cannot directly represent images or visual content without appropriate commands
 
 % End of the LaTeX document content
@@ -461,7 +433,7 @@ They can solve it...
 % This is a LaTeX transcription of the lecture material from an image
 % The document preamble and setup are omitted assuming the document class and necessary packages are already set
 
-\subsection{TUTORIAL}
+\subsection{Tutorial}
 
 \subsubsection{TREATING INTEGERS AS STRINGS OF BITS}
 

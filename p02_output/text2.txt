@@ -1,13 +1,7 @@
+\newpage
+\section{Instructions and Memory}
 
-
-
-% Since this is a straightforward transcription of slide content, 
-% no specific document class or packages are defined here. 
-% This LaTeX snippet should be placed within an appropriate document 
-
-\section*{LECTURE 2}
-
-\subsection*{INTEGERS (CONTINUED)}
+\subsection{Integers (Continued)}
 
 \subsubsection*{Two's complement:}
 \begin{itemize}
@@ -29,15 +23,21 @@
 % The table below is formatted using the tabular environment
 % column alignments have been chosen to reflect the data structure
 
-\subsubsection*{4-bit example:}
+
+\paragraph{4-bit example:}
 \begin{center}
-\begin{tabular}{ c c c c c c c c c c c c c c c c }
+\resizebox{\textwidth}{!}{% Resize table to fit within the text width
+\begin{tabular}{ c c c c c c c c c c c c c c c c c }
+    \hline
     bit pattern & 0000 & 0001 & 0010 & 0011 & 0100 & 0101 & 0110 & 0111 & 1000 & 1001 & 1010 & 1011 & 1100 & 1101 & 1110 & 1111 \\
     \hline
     unsigned \textit{u} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
     signed \textit{s} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & -1 \\
+    \hline
 \end{tabular}
+}
 \end{center}
+
 % Note that the table above may need to be split across multiple lines 
 % or the font size adjusted depending on the document class and page width.
 
@@ -94,14 +94,14 @@ Conversely:
 
 % Sign extension table and explanations
 
-\section*{Sign extension}
+\subsubsection{Sign extension}
 
 Let us represent \( s = -5 \) in n-bit signed binary (two's complement):
 
 \( u = 2^n - \left| s \right| = 2^n - 5 \)
 
 \begin{center}
-\begin{tabular}{ccc}
+\begin{tabular}{cccc}
 n & s & u & bit pattern \\
 \hline
 4 & -5 & 11 & 1011 \\
@@ -116,7 +116,7 @@ n & s & u & bit pattern \\
 \end{tabular}
 \end{center}
 
-\section*{Increasing the number of bits}
+\subsubsection{Increasing the number of bits}
 
 To convert an n-bit number to an \( (n + k) \)-bit number (\( k \geq 0 \)):
 
@@ -133,66 +133,26 @@ To convert an n-bit number to an \( (n + k) \)-bit number (\( k \geq 0 \)):
 
 % Base 16 table
 
-\section*{Base 16}
+\subsubsection{Base 16}
 
 Hexadecimal digits: \( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f \)
 
 \begin{center}
-\begin{tabular}{cccc|ccc}
-% Header row for two columns
-\multicolumn{3}{c}{binary} & \multicolumn{3}{c}{hexadecimal} & \multicolumn{3}{c}{decimal} \\
+\textbf{4-bit example:} \\
+\begin{tabular}{|*{16}{c|}}
 \hline
-% First column
-0000 & 0000 & 00 & 0 & \\
-0001 & 0001 & 01 & 1 & \\
-0010 & 0010 & 02 & 2 & \\
-0011 & 0011 & 03 & 3 & \\
-0100 & 0100 & 04 & 4 & \\
-0101 & 0101 & 05 & 5 & \\
-0110 & 0110 & 06 & 6 & \\
-0111 & 0111 & 07 & 7 & \\
-1000 & 1000 & 08 & 8 & \\
-1001 & 1001 & 09 & 9 & \\
-1010 & 1010 & 0a & 10 & \\
-1011 & 1011 & 0b & 11 & \\
-1100 & 1100 & 0c & 12 & \\
-1101 & 1101 & 0d & 13 & \\
-1110 & 1110 & 0e & 14 & \\
-1111 & 1111 & 0f & 15 & \\
-% Second Column
-& 0001 & 0000 & 10 & 16 & \\
-& 0001 & 0001 & 11 & 17 & \\
-& 0001 & 0010 & 12 & 18 & \\
-& 0001 & 0011 & 13 & 19 & \\
-& 0001 & 0100 & 14 & 20 & \\
-& 0001 & 0101 & 15 & 21 & \\
-& 0001 & 0110 & 16 & 22 & \\
-& 0001 & 0111 & 17 & 23 & \\
-& 0001 & 1000 & 18 & 24 & \\
-& 0001 & 1001 & 19 & 25 & \\
-& 0001 & 1010 & 1a & 26 & \\
-& 0001 & 1011 & 1b & 27 & \\
-& 0001 & 1100 & 1c & 28 & \\
-& 0001 & 1101 & 1d & 29 & \\
-& 0001 & 1110 & 1e & 30 & \\
-& 0001 & 1111 & 1f & 31 & \\
-% Third Column
-& 0010 & 0000 & 20 & 32 & \\
-& 0010 & 0001 & 21 & 33 & \\
-& 0010 & 0010 & 22 & 34 & \\
-& 0010 & 0011 & 23 & 35 & \\
-& 0010 & 0100 & 24 & 36 & \\
-& 0010 & 0101 & 25 & 37 & \\
-& 0010 & 0110 & 26 & 38 & \\
-& 0010 & 0111 & 27 & 39 & \\
-& 0010 & 1000 & 28 & 40 & \\
-& 0010 & 1001 & 29 & 41 & \\
-& 0010 & 1010 & 2a & 42 & \\
-& 0010 & 1011 & 2b & 43 & \\
-& 0010 & 1100 & 2c & 44 & \\
-& 0010 & 1101 & 2d & 45 & \\
-& 0010 & 1110 & 2e & 46 & \\
-& 0010 & 1111 & 2f & 47 & \\
+\multicolumn{16}{|c|}{bit pattern} \\
+\hline
+0000 & 0001 & 0010 & 0011 & 0100 & 0101 & 0110 & 0111 & 1000 & 1001 & 1010 & 1011 & 1100 & 1101 & 1110 & 1111 \\
+\hline
+\multicolumn{16}{|c|}{unsigned $u$} \\
+\hline
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
+\hline
+\multicolumn{16}{|c|}{signed $s$} \\
+\hline
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & -1 \\
+\hline
 \end{tabular}
 \end{center}
 
@@ -221,9 +181,7 @@ Hexadecimal digits: \( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f \)
 \vspace{2em} % Adding vertical space for visual separation
 
 % The following line seems like a slide title, but without the proper context, it is formatted as plaintext.
-{\Large \textbf{CHARACTERS AND TEXT}}
-
-\vspace{2em} % Adding vertical space for visual separation
+\subsection{Characters and Text}
 
 How do we map bit patterns to characters in order to form text?
 
@@ -239,7 +197,7 @@ How do we map bit patterns to characters in order to form text?
 
 
 % Start of the document content
-\section*{ASCII (1963-)}
+\subsubsection{ASCII (1963-)}
 \begin{itemize}
     \item American Standard Code for Information Interchange
     \item Each character stored stored in 1 byte (8 bits, 256 possible characters)
@@ -250,7 +208,7 @@ How do we map bit patterns to characters in order to form text?
 % ASCII table representation is omitted and replaced by [TBD]
 [TBD] % This is a placeholder for the ASCII table image
 
-\section*{Unicode (1988-)}
+\subsubsection{Unicode (1988-)}
 \begin{itemize}
     \item Associates ``code points'' (roughly, characters) to integers
     \item Up to 1,112,064 code points (currently 149,186 assigned)
@@ -272,13 +230,13 @@ How do we map bit patterns to characters in order to form text?
     \end{itemize}
 \end{itemize}
 
-\section*{Unicode (1988-)}
+\subsubsection{Unicode (1988-)}
 \begin{itemize}
     \item Aims at encoding all languages:
     \begin{itemize}
         \item including extinct ones
         \item left-to-right, right-to-left or vertical
-        \item and more (emojis \emoji{pizza})
+        \item and more (emojis)
     \end{itemize}
     \item Some ``characters'' require multiple code points (flag emojis, skin tone modifiers)
     \item What is even a ``character''? (code point, glyph, grapheme, cluster)
@@ -290,7 +248,7 @@ How do we map bit patterns to characters in order to form text?
 
 % Replication of lecture content as a plain LaTeX document.
 
-\section*{HARDWARE}
+\subsection{Hardware}
 
 Logic gates allow us to compute Boolean functions ``instantly'' (subject to physical limits).
 
@@ -298,7 +256,7 @@ But we need many logic gates, even for simple things (like 64-bit integer divisi
 
 $\rightarrow$ We break down complex algorithms into simple steps.
 
-\section*{COMPONENTS IN A COMPUTER}
+\subsubsection{Components in a Computer}
 \begin{itemize}
     \item Logic gates
     \item A clock
@@ -312,7 +270,7 @@ $\rightarrow$ We break down complex algorithms into simple steps.
 
 % A LaTeX transcription of the lecture material, as requested.
 
-\section*{A first abstraction}
+\subsubsection{A first abstraction}
 
 \begin{itemize}
   \item Memory is $N$ bits $\in \{0, 1\}^N$ (e.g., for 16 GB, $N \approx 128 \cdot 10^9$)
@@ -324,7 +282,7 @@ $\rightarrow$ We break down complex algorithms into simple steps.
   \item Some of the memory is sent to output devices
 \end{itemize}
 
-\section*{A more realistic model}
+\subsubsection{A more realistic model}
 
 \begin{itemize}
   \item We cannot update the whole memory at every clock cycle
@@ -351,21 +309,21 @@ $\rightarrow$ We break down complex algorithms into simple steps.
 % conveyed without the need for visual styling. Therefore, the text is simply 
 % transcribed as plain text without any special formatting commands.
 
-\section*{INSTRUCTION SET ARCHITECTURES (ISA)}
+\subsection{Instruction Set Architectures (ISA)}
 
 % [TBD] tokens are placeholders for non-text content such as images or diagrams.
 
 
 % LaTeX content of the lecture slides regarding ISA and Assembly
 
-\section*{An ISA specifies:}
+\subsubsection{An ISA specifies:}
 \begin{itemize}
     \item How the machine is organized (memory, etc.)
     \item What instructions are available
     \item How instructions are encoded into bits
 \end{itemize}
 
-\subsection*{Two major ISAs in practice:}
+\subsubsection{Two major ISAs in practice:}
 \begin{itemize}
     \item \textbf{x86\_64} (a.k.a. x64, x86\_64, AMD64): Intel\textsuperscript{\textregistered} and AMD\textsuperscript{\textregistered} 64-bit CPUs
     \item \textbf{AArch64} (a.k.a. ARM64): ARM\textsuperscript{\textregistered}-based 64-bits CPUs (phones, Apple M1 \& M2)
@@ -376,7 +334,7 @@ Many older and less prominent ISAs:
     \item x86, Itanium, ARMv7, RISC-V, PowerPC, \ldots
 \end{itemize}
 
-\subsection*{Code Example and Assembly Representation}
+\paragraph{Code Example and Assembly Representation}
 % It's important to note that source code and assembly representations typically require verbatim environments like listings or verbatim, but they will not be used here for simplicity
 \texttt{ int f(int a, int b, int c)}
 \begin{verbatim}
@@ -423,7 +381,7 @@ f:
 % Arrows indicating the correspondence between the binary and the assembly code might be visual, replace with [TBD] for LaTeX transcription
 % [TBD] % Placeholder for assembly arrows in LaTeX
 
-\section*{Assembly}
+\subsubsection{Assembly}
 \begin{itemize}
     \item Assembly is the lowest-level programming language
     \item Assembly is in 1:1 correspondence with binary encoding of instructions
@@ -432,7 +390,7 @@ f:
 
 
 % Transcription of the lecture material into LaTeX format
-\section*{Instructions (x86\_64)}
+\subsubsection{Instructions (x86\_64)}
 
 \begin{verbatim}
 f:
@@ -452,7 +410,7 @@ f:
   \item \textbf{ret} \qquad return \hfill return to calling function
 \end{itemize}
 
-\section*{Instructions (AArch64)}
+\subsubsection{Instructions (AArch64)}
 
 \begin{verbatim}
 f:
@@ -467,9 +425,9 @@ f:
   \item \textbf{ret} \qquad return \hfill return to calling function
 \end{itemize}
 
-\section*{Registers}
+\subsubsection{Registers}
 
-\subsection*{x86\_64:}
+\paragraph{x86\_64:}
 \begin{verbatim}
 f:
  mov eax, edi       # 89 f8
@@ -487,7 +445,7 @@ f:
   \item larger registers for extended operations (e.g., non-integer numbers)
 \end{itemize}
 
-\subsection*{AArch64:}
+\paragraph{AArch64:}
 \begin{verbatim}
 f:
  mul w0, w0, w1     # 1b 01 7c 00
@@ -501,7 +459,7 @@ f:
 % Preamble or document class commands are excluded as per the requirement. 
 % The following LaTeX code is intended to be placed within a LaTeX document.
 
-\section*{Registers (x86\_64)}
+\subsubsection{Registers (x86\_64)}
 
 \begin{itemize}
     \item sixteen 64-bit registers:
@@ -534,7 +492,7 @@ f:
     \end{verbatim}
 \end{itemize}
 
-\subsection*{Example:}
+\paragraph{Example:}
 
 % The following tabular environment represents a table structure for the example.
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -554,7 +512,7 @@ f:
 % Note: [TBD] is used to represent images or non-textual elements that cannot be represented in LaTeX.
 % There is a color-filled cell spanning multiple columns in the table which is not represented here, as LaTeX color definitions are not required.
 
-\section*{Registers (AArch64)}
+\subsubsection{Registers (AArch64)}
 
 \begin{itemize}
     \item thirty-one 64-bit registers:
@@ -579,7 +537,7 @@ f:
 % The image content is not represented in LaTeX as requested.
 % [TBD] tokens in the comments denote the place for images or non-textual components.
 
-\section*{Example:}
+\paragraph{Example:}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
 \textbf{bits} & 63...56 & 55...48 & 47...40 & 39...32 & 31...24 & 23...16 & 15...8 & 7...0 \\
@@ -591,7 +549,7 @@ f:
 \end{tabular}
 
 % The word "MEMORY" might be a section title or a caption for the image; it's formatted as a section title.
-\section*{MEMORY}
+\subsection{Memory}
 
 % Assuming the code and the inline assembly are part of the document content, they are transcribed as verbatim.
 \begin{verbatim}
@@ -604,7 +562,7 @@ int g(int *a, int *b)
 % The assembly code for x86_64 and AArch64 architectures is part of the lecture material.
 % They are also transcribed as verbatim.
 
-\subsection*{x86\_64:}
+\paragraph{x86\_64:}
 \begin{verbatim}
 g:
   mov eax, DWORD PTR [rsi]
@@ -612,7 +570,7 @@ g:
   ret
 \end{verbatim}
 
-\subsection*{AArch64:}
+\paragraph{AArch64:}
 \begin{verbatim}
 g:
   ldr w0, [x0]
@@ -628,7 +586,7 @@ g:
 % Note: The actual LaTeX document structure such as \documentclass is omitted
 % as the goal is to directly transcribe the lecture material provided in the image.
 
-\section*{Memory}
+\subsubsection{Memory}
 
 \begin{itemize}
     \item From a process' perspective, memory is seen as a single long array of \textbf{bytes} (8 bits)
@@ -636,12 +594,15 @@ g:
     \item But the smallest addressable unit is the byte
 \end{itemize}
 
-\section*{Byte ordering}
+\subsubsection{Byte ordering}
 
 % Tabular representation is used to simulate the address-to-value mapping as shown in the image
-\begin{tabular}{c c c c c c c}
-    address & 0 & 1 & 2 & ... & \textbf{239} & \textbf{240} & \textbf{241} & \textbf{242} & \textbf{243} & 244 & ... \\
-    value (hex) & ef & cd & ab & 89 & ... & ff & \textbf{a0} & \textbf{a1} & \textbf{a2} & \textbf{a3} & 42 & ... \\
+\begin{tabular}{c c c c c c c c c c c c c}
+    \hline
+    address & 0 & 1 & 2 & ... & 239 & 240 & 241 & 242 & 243 & 244 & ... \\
+    \hline
+    value (hex) & ef & cd & ab & 89 & ... & ff & a0 & a1 & a2 & a3 & 42 & ... \\
+    \hline
 \end{tabular}
 
 \begin{itemize}
@@ -655,14 +616,18 @@ Q: What is the value of the 32-bit integer at address 240?
 
 A: It depends!
 
-\section*{Byte ordering / "Endianness"}
+\subsubsection{Byte ordering / "Endianness"}
 
 % Tabular representation is used to simulate the address-to-value mapping as shown in the image
 % [TBD] indicates that the visual representation of the dots is omitted.
-\begin{tabular}{c c c c c c c c c c c}
-    address & 0 & 1 & 2 & 3 & ... & \textbf{239} & \textbf{240} & \textbf{241} & \textbf{242} & \textbf{243} & 244 & ... \\
-    value (hex) & ef & cd & ab & 89 & ... & ff & \textbf{a0} & \textbf{a1} & \textbf{a2} & \textbf{a3} & 42 & ... \\
+\begin{tabular}{c c c c c c c c c c c c c}
+\hline
+address & 0 & 1 & 2 & 3 & ... & \textbf{239} & \textbf{240} & \textbf{241} & \textbf{242} & \textbf{243} & 244 & ... \\
+\hline
+value (hex) & ef & cd & ab & 89 & ... & ff & \textbf{a0} & \textbf{a1} & \textbf{a2} & \textbf{a3} & 42 & ... \\
+\hline
 \end{tabular}
+
 
 \begin{itemize}
     \item "big-endian" (BE): 32-bit int at 240 is (hex) \textbf{a0 a1 a2 a3}
@@ -685,14 +650,14 @@ A: It depends!
 
 % Transcription of the image content into LaTeX
 
-\section*{Bit ordering}
+\subsubsection{Bit ordering}
 
 Because we cannot access individual bits on a CPU (smallest chunk is a byte), 
 bit ordering does not matter here.
 
 However the same problem crops up in other contexts (USB, Ethernet, Wifi, \ldots)
 
-\section*{Memory access notation}
+\subsubsection{Memory access notation}
 
 \begin{itemize}
 \item In assembly, accessing memory is denoted using ``\texttt{[}'' and ``\texttt{]}''
@@ -710,6 +675,3 @@ ldr w0, [240]              # w0 = (hex) a3a2a1a0
 \end{verbatim}
 \end{itemize}
 \end{itemize}
-
-% [TBD] represents the location where non-textual elements such as images 
-% or other graphics were present in the original image and have been omitted.

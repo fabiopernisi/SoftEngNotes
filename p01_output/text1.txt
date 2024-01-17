@@ -1,0 +1,722 @@
+\newpage
+\section{Boolean Logic and Integers}
+
+\subsection{BOOLEAN LOGIC}
+
+\subsubsection*{Boolean values}
+\begin{itemize}
+\item False \( = 0 \)
+\item True \( = 1 \)
+\end{itemize}
+
+\subsubsection*{Boolean variables:}
+\[ x \in \{0, 1\} \]
+
+
+% The content in the lecture slides is transcribed below as plain LaTeX code.
+% Each section of the slide has been annotated with comments for clarity,
+% and the [TBD] token is used to indicate places where non-textual content,
+% like logic gate diagrams, would be located.
+
+\subsubsection{Boolean expressions}
+
+% The table for Boolean operators
+\begin{tabular}{l l l l l}
+\textbf{Boolean operators:}         &               &       &       & \\
+\hline
+operator    & math      & pseudocode & C code & logic gate \\
+negation    & $\neg$    & not        & !      & [TBD]      \\
+conjunction & $\land, \times$  & and         & \&\&, \&     & [TBD]      \\
+disjunction & $\lor, +$ & or          & ||, |      & [TBD]      \\
+\end{tabular}
+
+% Examples of expressions and function using Boolean operators
+\textbf{Example expression:}
+
+\begin{equation*}
+(a \text{ and } b) \text{ or } (\text{not } c)
+\end{equation*}
+
+\textbf{Example function:}
+
+\begin{equation*}
+f(a, b, c) := (a \text{ and } b) \text{ or } c
+\end{equation*}
+
+\paragraph{NOT operator}
+
+% The NOT operator truth table
+\textbf{Truth table:}
+
+\begin{tabular}{c c}
+x & \text{not } x \\
+\hline
+0 & 1 \\
+1 & 0 \\
+\end{tabular}
+
+% Example assignment using NOT operator
+\textbf{Example assignment:}
+
+\begin{equation*}
+w := \text{ not } a
+\end{equation*}
+
+\paragraph{AND operator}
+
+% The AND operator truth table
+\textbf{Truth table:}
+
+\begin{tabular}{c c c}
+x & y & x \text{ and } y \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\end{tabular}
+
+% Example assignment using AND operator
+\textbf{Example assignment:}
+
+\begin{equation*}
+z := a \text{ and } (\text{not } b)
+\end{equation*}
+
+
+Please note that in LaTeX, normally we don't use `:=` for assignment in mathematics; usually, we just use `=`. Here I used `:=` as per the slide content. Furthermore, since the logic gate diagrams are part of the non-textual content, they are replaced with `[TBD]` tokens as per your request.
+
+
+
+\paragraph{OR operator}
+
+Truth table:
+
+\begin{tabular}{cc|c}
+$x$ & $y$ & $x \text{ or } y$ \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 1 \\
+\end{tabular}
+
+\vspace{1em}
+Example assignment:
+
+$$ z := (\text{not } a) \text{ or } (b \text{ and } c) $$
+
+\paragraph{More operators!}
+
+% Graphic representations for XOR, NAND and NOR are not included as they are non-textual elements.
+% They should be replaced with the placeholder [TBD] if needed in the document.
+
+% XOR Operator
+\begin{minipage}{0.3\textwidth}
+\centering
+Truth table for XOR:
+
+\begin{tabular}{cc|c}
+$x$ & $y$ & $x \text{ xor } y$ \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+\end{tabular}
+\end{minipage}
+\hfill
+% NAND Operator
+\begin{minipage}{0.3\textwidth}
+\centering
+Truth table for NAND:
+
+\begin{tabular}{cc|c}
+$x$ & $y$ & $x \text{ nand } y$ \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+\end{tabular}
+\end{minipage}
+\hfill
+% NOR Operator
+\begin{minipage}{0.3\textwidth}
+\centering
+Truth table for NOR:
+
+\begin{tabular}{cc|c}
+$x$ & $y$ & $x \text{ nor } y$ \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 0 \\
+\end{tabular}
+\end{minipage}
+
+\vspace{1em}
+\textbf{Q: How many distinct unary Boolean operators?}
+
+\textbf{A:} one? (NOT)
+
+% Explanation about unary Boolean operators
+Actually, we have 4 deterministic unary operators in total (counting 3 trivial unary operators):
+
+\begin{minipage}[t]{0.25\textwidth}
+\centering
+always false
+
+\begin{tabular}{c|c}
+$x$ & $\emptyset$ \\ % The empty set symbol is used here to denote "always false".
+\hline
+0 & 0 \\
+1 & 0 \\
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.25\textwidth}
+\centering
+always true
+
+\begin{tabular}{c|c}
+$x$ & $1$ \\
+\hline
+0 & 1 \\
+1 & 1 \\
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.25\textwidth}
+\centering
+identity
+
+\begin{tabular}{c|c}
+$x$ & $x$ \\
+\hline
+0 & 0 \\
+1 & 1 \\
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.25\textwidth}
+\centering
+NOT
+
+\begin{tabular}{c|c}
+$x$ & $\text{not } x$ \\
+\hline
+0 & 1 \\
+1 & 0 \\
+\end{tabular}
+\end{minipage}
+
+
+
+
+% This LaTeX transcription contains only the text content from the lecture material
+% Non-textual elements such as images are replaced with [TBD]
+% Since no document structure was specified, we assume the content is contained within a 'article' class
+
+
+% Question and answer about distinct binary operators
+Q: How many distinct binary operators? \\
+A: As many as there are corresponding truth tables. 
+
+% Question and answer about distinct truth tables
+Q: How many distinct truth tables for two Boolean inputs and one Boolean output? \\
+\begin{tabular}{c c c}
+x & y & op(x, y) \\
+\hline
+0 & 0 & ? \\
+0 & 1 & ? \\
+1 & 0 & ? \\
+1 & 1 & ? \\
+\end{tabular}
+
+% The question of why NOT, AND, and OR are commonly used
+Q: Why do we usually use NOT, AND, OR only? \\
+A: Because
+\begin{itemize}
+    \item they are the most intuitive
+    \item all nontrivial operators can be represented with NOT, AND and OR
+\end{itemize}
+
+% Examples of how nontrivial operators can be represented
+Examples: \\
+$x \text{ nand } y = \text{not } (x \text{ and } y)$ \\
+$x \text{ xor } y = (x \text{ or } y) \text{ and } (\text{not } (x \text{ and } y))$ 
+
+% Note about NAND and NOR being universal logic gates
+Note: \\
+NAND and NOR are called \textit{universal logic gates}: \\
+every nontrivial operator can be represented with each \textit{alone}
+
+% Question and answer about proving the identity with truth tables
+Q: How do we prove this? \\
+$x \text{ xor } y = (x \text{ or } y) \text{ and } (\text{not } (x \text{ and } y))$ \\
+A: \\
+\begin{tabular}{c | c | c | c}
+x & y & $x \text{ xor } y$ & $(x \text{ or } y) \text{ and } (\text{not } (x \text{ and } y))$ \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 \\
+1 & 1 & 1 & 1 \\
+\end{tabular} \\
+The identity is correct iff the truth tables match.
+
+
+
+This transcription represents the textual content intended for compilation in LaTeX. The tabular environments are used to replicate the content layout of the truth tables. Note that in the LaTeX code the 'tabular' environments need correct column alignment specification; the symbol '|' is used in the second table to reflect the separation lines between columns. Adjustments might be needed depending on the desired aesthetics when actually typesetting the document.
+
+
+
+\subsubsection{Boolean identities I}
+
+\begin{itemize}
+    \item \( x \text{ and } 0 = 0 \)
+    \item \( x \text{ or } 1 = 1 \)
+    \item \( x \text{ and } 1 = x \)
+    \item \( x \text{ or } 0 = x \)
+    \item \( x \text{ or } x = x \)
+    \item \( x \text{ and } x = x \)
+\end{itemize}
+
+\subsubsection{Boolean identities II}
+
+\begin{itemize}
+    \item AND is commutative:
+    \[ x \text{ and } y = y \text{ and } x \]
+
+    \item AND is associative:
+    \[ x \text{ and } (y \text{ and } z) = (x \text{ and } y) \text{ and } z \]
+
+    \item OR is commutative:
+    \[ x \text{ or } y = y \text{ or } x \]
+
+    \item OR is associative:
+    \[ x \text{ or } (y \text{ or } z) = (x \text{ or } y) \text{ or } z \]
+\end{itemize}
+
+\subsubsection{Boolean identities III}
+
+\begin{itemize}
+    \item Distributivity (AND over OR):
+    \[ x \text{ and } (y \text{ or } z) = (x \text{ and } y) \text{ or } (x \text{ and } z) \]
+    
+    \item Distributivity (OR over AND):
+    \[ x \text{ or } (y \text{ and } z) = (x \text{ or } y) \text{ and } (x \text{ or } z) \]
+    
+    \item De Morgan's law (1):
+    \[ (\text{not } x) \text{ and } (\text{not } y) = \text{not } (x \text{ or } y) \]
+
+    \item De Morgan's law (2):
+    \[ (\text{not } x) \text{ or } (\text{not } y) = \text{not } (x \text{ and } y) \]
+\end{itemize}
+
+
+% Note for user: This transcription assumes a LaTeX document with a suitable class already in place that supports sectioning and itemize environments.
+% The "\text{}" command is used here to maintain the "and", "or", and "not" as text within the mathematical expressions for clarity, as per the image content.
+
+
+\subsubsection{Satisfiability problem}
+
+Given a Boolean expression, find a value for each variable such that the expression is true. 
+
+Equivalently: Find a 1 in the truth table.
+
+Example: \( x1 \land ( (\lnot x2) \lor x3) \land (\lnot x3) \)
+
+\begin{center}
+\begin{tabular}{ccc|c}
+$x1$ & $x2$ & $x3$ & \( x1 \land ((\lnot x2) \lor x3) \land (\lnot x3) \) \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 1 & 0 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 1 & 0 \\
+\end{tabular}
+\end{center}
+
+Solution: \( x1 = 1 \), \( x2 = 0 \), \( x3 = 0 \)
+
+\subsubsection{Definitions}
+
+\begin{itemize}
+  \item Variable: \( x_j \), for some \( j \in J \subseteq \mathbb{N} \) \\
+  Ex.: \( x_1 \quad x_5 \)
+  
+  \item Literal: either \( x_j \) or \( \lnot x_j \), for some \( j \in J \) \\
+  Ex.: \( x_3 \quad (\lnot x_8) \)
+
+  \item Disjunctive clause: \( \bigvee_{j \in J_0} \lnot x_j \lor \bigvee_{j \in J_1} x_j \), for some \( J_0, J_1 \subseteq J \) \\
+  Ex.: \( x_2 \lor (\lnot x_4) \lor (\lnot x_6) \quad (\lnot x_1) \lor x_5 \lor x_6 \lor x_7 \lor x_9 \)
+  
+  \item Conjunctive clause: \( \bigwedge_{j \in J_0} \lnot x_j \land \bigwedge_{j \in J_1} x_j \), for some \( J_0, J_1 \subseteq J \) \\
+  Ex.: \( x_2 \land (\lnot x_4) \land (\lnot x_6) \quad (\lnot x_1) \land x_5 \land x_6 \land x_7 \land x_9 \)
+\end{itemize}
+
+\subsubsection{Conjunctive normal form}
+
+The conjunctive normal form (CNF) is a conjunction of disjunctive clauses:
+
+\[
+\bigwedge_{i \in I} \left( \bigvee_{j \in J_i^0} \lnot x_j \lor \bigvee_{j \in J_i^1} x_j \right), \text{ where } J_i^0, J_i^1 \subseteq J \text{, } \forall i \in I \subseteq \mathbb{N}
+\]
+
+Examples:
+
+\begin{itemize}
+  \item \( (x1 \lor x2) \land (x3 \lor x4) \land (x5 \lor x6) \)
+
+  \item \( (x1 \lor (\lnot x2)) \land (x3 \lor (\lnot x4)) \)
+
+  \item \( (x2 \lor (\lnot x4) \lor (\lnot x6)) \land ((\lnot x1) \lor x5 \lor x6 \lor x7 \lor x9) \)
+  
+  \item \( (\lnot x1 \lor (\lnot x2) \lor (\lnot x3)) \land (x4 \lor x5 \lor x6) \)
+\end{itemize}
+
+
+
+\subsubsection{Disjunctive normal form}
+
+The disjunctive normal form (DNF) is a disjunction of conjunctive clauses:
+\[
+\bigvee_{i \in I} \left( \bigwedge_{j \in J_i^0} \neg x_j \land \bigwedge_{j \in J_i^1} x_j \right),
+\]
+where $J_i^0, J_i^1 \subseteq J \subseteq \mathbb{N}, \forall i \in I \subseteq \mathbb{N}$
+
+\paragraph{Examples:}
+\begin{itemize}
+    \item $(x1 \land x2) \lor (x3 \land x4) \lor (x5 \land x6)$
+    \item $(x1 \land (\neg x2)) \lor (x3 \land (\neg x4))$
+    \item $(x2 \land (\neg x4) \land (\neg x6))
+            \lor \\
+            (\neg x1 \land x5 \land x6 \land x7 \land x9)
+            \lor \\
+            ((\neg x1) \land (\neg x2) \land (\neg x3))
+            \lor \\
+            (x4 \land x5 \land x6)$
+\end{itemize}
+
+\subsubsection{Theorems}
+
+\begin{itemize}
+    \item Every Boolean expression can be put into CNF
+    \begin{itemize}
+        \item For every Boolean expression with $n$ variables and $k$ literals using operators \{NOT, AND, OR\}, there exists an equivalent CNF with $n + k$ variables $3k$ clauses and $7k$ literals at most.
+        \item Satisfiability for a CNF (``SAT'') is hard.
+    \end{itemize}
+    \item Every Boolean expression can be put in DNF
+    \begin{itemize}
+        \item For every Boolean expression with $n$ variables and $k$ literals using operators \{NOT, AND, OR\}, there exists an equivalent DNF with $n$ variables and $n \times 2^n$ literals at most.
+        \item Satisfiability for a DNF is trivial.
+    \end{itemize}
+\end{itemize}
+
+\paragraph{Example:}
+$(x2 \land (\neg x4) \land (\neg x6)) 
+\lor \\
+(\neg x1 \land x5 \land x6 \land x7 \land x9)
+\lor \\
+((\neg x1) \land (\neg x2) \land (\neg x3))
+\lor \\
+(x4 \land x5 \land x6)$
+
+\begin{enumerate}
+    \item Take any clause, e.g. $(x2 \land (\neg x4) \land (\neg x6))$.
+    \item Set $x2 = 1, x4 = 0, x6 = 0$.
+    \item Done.
+\end{enumerate}
+
+
+
+
+% The following LaTeX code is meant to transcribe the text content of the provided image.
+% Since LaTeX doesn't handle images within code, [TBD] is used to represent them.
+
+\subsection{INTEGER ARITHMETIC}
+
+\begin{itemize}
+    \item Computers are made out of Boolean gates
+    \item But we want to represent numbers other than 0 and 1
+    \item How do we proceed?
+\end{itemize}
+
+\begin{itemize}
+    \item Consider Booleans as binary digits (\textit{bits})
+    \item Group them together to form numbers in base 2
+\end{itemize}
+
+\subsubsection{Base-10 numbers}
+
+In base 10 (decimal), we have 10 digits: \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}
+
+Using one digit, we can count to 9:
+
+\begin{center}
+    0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9
+\end{center}
+
+Then we need more digits:
+
+\begin{center}
+    10 \quad 11 \quad 12 \quad 13 \quad 14 \quad 15 \quad 16 \quad 17 \quad 18 \quad 19 \\
+    20 \quad 21 \quad 22 \quad 23 \quad \ldots
+\end{center}
+
+If we wanted to count from 0 to 9999 (say, to represent a date), we may decide to use 4 digits:
+
+\begin{center}
+    0000 \quad 0001 \quad 0002 \quad 0003 \quad 0004 \quad 0005 \quad 0006 \quad 0007 \quad 0008 \quad 0009 \\
+    0010 \quad 0011 \quad 0012 \quad 0013 \quad \ldots
+\end{center}
+
+\paragraph{Example}
+1984 = ?\\
+
+\begin{tabular}{r c l}
+$=$ & $1 \times 1000$ & $+$ \\
+& $9 \times 100$ & $+$ \\
+& $8 \times 10$ & $+$ \\
+& $4$ & \\
+\end{tabular}\\
+
+\begin{tabular}{r c l}
+$=$ & $1 \times 10^3$ & $+$ \\
+& $9 \times 10^2$ & $+$ \\
+& $8 \times 10^1$ & $+$ \\
+& $4 \times 10^0$ & \\
+\end{tabular}\\
+
+\subsubsection{Base-2 numbers}
+
+In base 2 (binary), we have 2 digits: \{0, 1\}\\
+Using one digit, we can count to 1: \\
+0 \quad 1\\
+Then we need more digits: \\
+10 \quad 11 \quad 100 \quad 101 \quad 110 \quad 111 \quad 1000 \quad 1001 \ldots\\
+If we wanted to count from 0 to 15, we may decide to use 4 digits:\\
+0000 \quad 0001 \quad 0010 \quad 0011 \quad 0100 \quad 0101 \quad 0110 \quad 0111\\
+1000 \quad 1001 \quad 1010 \quad 1011 \quad 1100 \quad 1101 \quad 1110 \quad 1111\\
+
+\paragraph{Example}
+
+1001$_2$ = ?\\
+
+\begin{tabular}{r c l}
+$=$ & $1 \times 8$ & $+$ \\
+& $0 \times 4$ & $+$ \\
+& $0 \times 2$ & $+$ \\
+& $1$ & \\
+\end{tabular}\\
+
+\begin{tabular}{r c l}
+$=$ & $1 \times 2^3$ & $+$ \\
+& $0 \times 2^2$ & $+$ \\
+& $0 \times 2^1$ & $+$ \\
+& $1 \times 2^0$ & \\
+\end{tabular}\\
+
+= 9\\
+
+Note:
+\begin{itemize}
+\item rightmost / least-significant bit is called bit 0
+\item leftmost / most-significant bit is called bit $n - 1$
+\end{itemize}
+
+
+Please note that LaTeX might require additional packages or setup configurations depending on your specific LaTeX compiler or editor settings to properly render this document. Also, LaTeX math environments can be set up differently to improve alignment and typesetting if desired.
+
+
+\subsubsection{Fixed bit width}
+
+\begin{itemize}
+  \item For any integer, we must always know how many digits (bits) it has.
+  \item Typically, this number of bits is fixed in our code.
+\end{itemize}
+
+\begin{tabular}{lll}
+\textbf{bits} & \textbf{a.k.a.} & \textbf{C type} \\
+\hline
+8  & byte & \texttt{uint8\_t} \\
+   &      & \texttt{unsigned char} \\
+32 &      & \texttt{uint32\_t} \\
+   &      & \texttt{unsigned int} (Windows, Linux, BSD, macOS) \\
+64 &      & \texttt{uint64\_t} \\
+   &      & \texttt{unsigned long} (Linux, BSD, macOS) \\
+   &      & \texttt{unsigned long long} (Windows) \\
+\end{tabular}
+
+% Note: In the original image, there was an additional statement below the table:
+%       "= on almost all contemporary platforms as of 2023"
+
+\subsubsection{Integers in hardware and in programming languages}
+
+\begin{itemize}
+  \item Most computers$\dagger$ support 8, 16, 32 and 64-bit arithmetic natively (i.e., operations are fast)
+  \item Arithmetic can be performed with arbitrary-sized integers by implementing the operations in software (hence much slower).
+  \item In C, every integer type has a specific size.
+  \item In C, arbitrary-sized integers are not supported by the language (they require using specific libraries).
+  \item In Python, all integers can have arbitrary sizes (with a large performance penalty, especially when exceeding 32 bits)
+\end{itemize}
+
+% Note: In the original image, there was a dagger symbol next to "computers".
+%       This indicates there might be a corresponding footnote which is not visible in the given image part.
+
+\begin{comment}
+\begin{tabular}{lr}
+\textbf{bits} & \textbf{largest integer = $2^{\text{bits}} - 1$ (approx.)} \\
+\hline
+8  & 255 \\
+16 & 65,535 \\
+32 & 4,294,967,295 & \textit{4 billions} \\
+64 & 18,446,744,073,709,551,615 & \textit{$2.10^{19}$} \\
+128 & 340,282,366,920,938,463,463,374,607,431,768,211,455 & \textit{$3.10^{38}$} \\
+\end{tabular}    
+\end{comment}
+
+\begin{tabular}{lr}
+\textbf{bits} & \textbf{largest integer = $2^{\text{bits}} - 1$} \\
+\hline
+8  & 255 \\
+16 & 65,535 \\
+32 & 4,294,967,295 \\
+64 & 18,446,744,073,709,551,615 \\
+128 & 340,282,366,920,938,463,463,374,607,431,768,211,455 \\
+\end{tabular}
+
+
+
+\[
+\text{1 decimal digit} = \log_{2}{10} \text{ bits} \approx 3.3219 \text{ bits}
+\]
+
+
+% This LaTeX code is structured as per the image provided. There is no class preamble or package inclusions other than `amsmath`, as you requested to avoid adding document creation commands. Replace [TBD] with appropriate images or additional content in a practical use case.
+% Ensure to use the appropriate document class and packages when compiling this code in a LaTeX editor.
+
+
+
+\subsubsection{Operations with integers}
+
+Essentially the same a schoolbook operations:
+\begin{verbatim}
+  0 1 0 1 0 0 1 1
++ 0 1 1 0 0 0 0 1
+-----------------
+  1 0 1 1 0 1 0 0
+\end{verbatim}
+
+Just like in school:
+\begin{itemize}
+  \item addition and subtraction are straightforward
+  \item multiplication is more complex
+  \item division is much more complex
+\end{itemize}
+
+\subsubsection{Signed integers}
+
+\begin{itemize}
+  \item How do we represent negative numbers?
+  \item Impossible with previous approach.
+  \item Solution 1:
+  \begin{itemize}
+    \item ``sign-magnitude'': sacrifice one bit, which we reserve to store the sign.
+    \item Drawback: zero has two representations (+0 and -0)
+    \item Drawback: Boolean logic for $+$ and $-$ must handle many cases
+  \end{itemize}
+  \item Solution 2:
+  \begin{itemize}
+    \item ``one's complement'': reserve top bit for the sign, must be zero for a positive number
+    \item when a number is negative, takes its (positive) opposite and flip all bits
+    \item Drawback: zero has two representations (+0 and -0)
+    \item Drawback: Boolean logic for $+$ and $-$ is simpler but still affected
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Signed integers: two's complement}
+
+\begin{itemize}
+  \item Solution 3 (all current computers\textbf{!}):
+  \begin{itemize}
+    \item ``two's complement'': when an $n$-bit number $x$ is negative, represent it the same as the unsigned number $2^n - x$.
+    \item The top bit is 1 for negative numbers.
+    \item Drawback: Flipping sign slightly more complex (flip all non-sign bits then add one).
+    \item Advantage: zero has a single representation
+    \item Advantage: Boolean logic for $+$ and $-$ is the same as for unsigned integers
+  \end{itemize}
+\end{itemize}
+
+
+
+
+% Start of the LaTeX content
+\subsubsection{4-bit signed integers (two's complement)}
+
+\begin{tabular}{cccccc}
+b3 & b2 & b1 & b0 & unsigned & signed \\
+\hline
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 1 \\
+0 & 0 & 1 & 0 & 2 & 2 \\
+0 & 0 & 1 & 1 & 3 & 3 \\
+0 & 1 & 0 & 0 & 4 & 4 \\
+0 & 1 & 0 & 1 & 5 & 5 \\
+0 & 1 & 1 & 0 & 6 & 6 \\
+0 & 1 & 1 & 1 & 7 & 7 \\
+1 & 0 & 0 & 0 & 8 & -8 \\
+1 & 0 & 0 & 1 & 9 & -7 \\
+1 & 0 & 1 & 0 & 10 & -6 \\
+1 & 0 & 1 & 1 & 11 & -5 \\
+1 & 1 & 0 & 0 & 12 & -4 \\
+1 & 1 & 0 & 1 & 13 & -3 \\
+1 & 1 & 1 & 0 & 14 & -2 \\
+1 & 1 & 1 & 1 & 15 & -1 \\
+\end{tabular}
+
+\subsection{Example:}
+
+\begin{tabular}{lcl}
+signedness & decimal & binary \\
+\hline
+unsigned & $2 + 11 = 13$ & $0010_b + 1011_b = 1101_b$ \\
+signed & $2 + (-5) = -3$ & $0010_b + 1011_b = 1101_b$ 
+\end{tabular}
+
+\subsection{Range of values for different bit sizes:}
+
+\begin{tabular}{cccc}
+bits & $-2^{bits-1}$ (min) & $2^{bits-1} - 1$ (max) \\
+\hline
+8  & -128 & 127 \\
+16 & -32768 & 32767 \\
+32 & -2,147,483,648 & 2,147,483,647 \\
+64 & $\approx -9.10^{18}$ & $\approx 9.10^{18}$ \\
+128 & $\approx -2.10^{38}$ & $\approx 2.10^{38}$ \\
+\end{tabular}
+
+\subsection{Q: What happens if we run this?}
+
+\begin{verbatim}
+unsigned char a = 255;            signed char a = 127;
+unsigned char b = 1;              signed char b = 1;
+unsigned char x = a + b;          signed char x = a + b;
+
+unsigned char a = 1;              signed char a = -128;
+unsigned char b = 2;              signed char b = 1;
+unsigned char x = a - b;          signed char x = a - b;
+\end{verbatim}
+
+\textbf{A: It’s complicated!}
+
+We will dedicate an entire chapter to this.
+
+% End of the LaTeX content

@@ -1,5 +1,5 @@
 # SoftEngNotes
-This repository contains the file with the lecture notes for the course "20875 - Software Engineering" at Bocconi University.\
+This repository contains the file with the lecture notes for the course "20875 - Software Engineering" taught in the MSc in Artificial Intelligence at Bocconi University.\
 The notes have been adapted from the material provided by Professor [Laurent Poirrier](https://www.poirrier.ca/courses/softeng/). This repo contains the transcription of the notes at the link, with some small changes and with more material and text.
 
 ## Contributing
