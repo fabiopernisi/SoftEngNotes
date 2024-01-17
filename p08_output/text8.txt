@@ -5,11 +5,11 @@
 
 % No need for special packages as the text is straightforward
 
-\section*{LECTURE 8}
+\section{Lecture 8}
 
-\subsection*{REGULAR EXPRESSIONS}
+\subsection{Regular Expressions}
 
-\subsection*{Definition}
+\subsection{Definition}
 Regular expressions are a mini-language for text pattern matching.
 
 % [TBD] is a placeholder for the part of the image that cannot be represented in text (images or non-textual elements)
@@ -17,7 +17,7 @@ Regular expressions are a mini-language for text pattern matching.
 
 
 % Slide 1: Example
-\subsection*{Example}
+\subsection{Example}
 
 \textbf{Q}: Find all occurrences of the word ``memory'' in the files in this directory.
 
@@ -26,32 +26,32 @@ grep 'memory' *
 \end{verbatim}
 
 % Slide 2: MATCHING
-\subsection*{MATCHING}
+\subsection{Matching}
 
 % Slide 3: The grep command
-\subsection*{The grep command}
+\subsection{The grep command}
 
 \begin{verbatim}
 grep [OPTION...] PATTERNS [FILE...]
 \end{verbatim}
 
-\subsubsection*{Options:}
+\subsubsection{Options:}
 \begin{itemize}
     \item \texttt{-E}: ``extended'' regular expressions (we will use this syntax)
     \item \texttt{-R}: recursive (if a directory is given, look all files in it, incl. subdirectories)
     \item \texttt{-i}: case insensitive (a same as A)
 \end{itemize}
 
-\subsubsection*{Patterns:}
+\subsubsection{Patterns:}
 Use single-quotes (\texttt{' '}) to avoid shell interference
 
-\subsubsection*{Files:}
+\subsubsection{Files:}
 if no file provided, grep reads its (piped) input
 
 
 % LaTeX transcription of the lecture material
 
-\subsection*{Piping to grep}
+\subsection{Piping to grep}
 
 Q: Find all files in the current directory whose name contains the letter L
 
@@ -59,7 +59,7 @@ Q: Find all files in the current directory whose name contains the letter L
 ls | grep -E -i 'L'
 \end{verbatim}
 
-\subsection*{Introduction to regular expressions}
+\subsection{Introduction to regular expressions}
 
 \begin{itemize}
   \item by default, patterns are looked for line-by-line
@@ -70,7 +70,7 @@ ls | grep -E -i 'L'
 grep -E 'memory' *
 \end{verbatim}
 
-\subsection*{Anchors}
+\subsection{Anchors}
 
 \begin{itemize}
   \item the \^{} character at the beginning of a regex matches the beginning of a line
@@ -94,7 +94,7 @@ grep -E 's$' *
 % Preamble or specific document class commands are omitted as requested.
 % Begin the main content here:
 
-\subsection*{Repetitions}
+\subsection{Repetitions}
 
 \begin{itemize}
     \item \texttt{?} indicates that the previous character may or may not occur (once)
@@ -114,7 +114,7 @@ grep -E '0b+0' *
 grep -E 'e{2,}' *
 \end{verbatim}
 
-\subsection*{Grouping}
+\subsection{Grouping}
 
 Any part of a regex can be grouped using parentheses.
 Repetitions then apply to the group instead of a single character.
@@ -125,7 +125,7 @@ Repetitions then apply to the group instead of a single character.
 grep -E '(Abc)+'    # matches 'Abc', 'AbcAbc', 'AbcAbcAbc', ...
 \end{verbatim}
 
-\subsection*{Match any character}
+\subsection{Match any character}
 
 The dot (\texttt{.}) matches any character:
 
@@ -143,7 +143,7 @@ grep -E 'X.*y'  # matches 'XabcY', 'X-*-y', ...
 % Since this is a content transcription into LaTeX, we do not include document preamble, begin, or end commands.
 % The content is transcribed as is, and can be inserted into a LaTeX document as needed.
 
-\subsection*{Bracket expressions}
+\subsection{Bracket expressions}
 
 \begin{itemize}
     \item One character can be matched to multiple options using square brackets:
@@ -166,7 +166,7 @@ grep -E 'X.*y'  # matches 'XabcY', 'X-*-y', ...
     \end{verbatim}
 \end{itemize}
 
-\subsection*{Disjunctions}
+\subsection{Disjunctions}
 
 Multiple options can be given using the ``|'' character:
 
@@ -174,7 +174,7 @@ Multiple options can be given using the ``|'' character:
 grep -E 'system_(startup|shutdown)'  # matches "system_startup" or "system_shutdown"
 \end{verbatim}
 
-\subsection*{Special characters}
+\subsection{Special characters}
 
 Special characters can be “escaped” using a backslash (“\textbackslash”):
 
@@ -189,13 +189,13 @@ grep -E 'printf\(.*\)'  # matches "printf("Hello %s", name)"
 % Since the LaTeX content requested does not require preamble or document start commands,
 % we will directly start with the transcription of the provided slide content.
 
-\subsection*{Using regular expressions in less}
+\subsection{Using regular expressions in less}
 
 Searching for patterns in the \texttt{less} pager is performed by typing ``/''. 
 
 Patterns are specified using regular expressions
 
-\subsection*{SEARCH AND REPLACE: \texttt{sed}}
+\subsection{Search and Replace: \texttt{sed}}
 
 \texttt{sed [OPTION...] SCRIPT [FILE...]}
 
@@ -214,7 +214,7 @@ Patterns are specified using regular expressions
 % The command \texttt is used for displaying text in teletype (monospace) font.
 
 
-\subsection*{Basic search and replace}
+\subsection{Basic search and replace}
 
 \begin{verbatim}
 sed -E 's/REGEX/REPLACEMENT/'
@@ -239,7 +239,7 @@ sed -E 's/REGEX/REPLACEMENT/'
   \end{verbatim}
 \end{itemize}
 
-\subsection*{Advanced search and replace}
+\subsection{Advanced search and replace}
 
 \begin{itemize}
   \item In the replacement string, \textbackslash1 indicate the first parenthesized group, \textbackslash2 the second, etc.:
@@ -267,7 +267,7 @@ sed -E 's/REGEX/REPLACEMENT/'
 % but it does not include preamble, document environment, or specific packages required for formatting code.
 % Use the `listings` package or other appropriate packages to properly format and highlight the code.
 
-\subsection*{Using regular expressions in C}
+\subsection{Using regular expressions in C}
 
 % Starts a code block. Adjust based on the LaTeX packages you are using, for example, listings.
 \begin{verbatim}
@@ -300,7 +300,7 @@ int main()
 \end{verbatim}
 See: \texttt{man regex}
 
-\subsection*{Using regular expressions in Python}
+\subsection{Using regular expressions in Python}
 
 % Starts a code block. Adjust based on the LaTeX packages you are using, for example, listings.
 \begin{verbatim}

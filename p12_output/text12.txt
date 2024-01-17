@@ -4,11 +4,11 @@
 % Since there is no instruction for a specific document class, I'm not including document class commands,
 % preamble, or begin/end document commands. This LaTeX code can be inserted within any standard LaTeX document.
 
-\section*{LECTURE 12}
+\section{Lecture 12}
 
-\subsection*{UNDEFINED BEHAVIOR}
+\subsection{Undefined Behavior}
 
-\subsection*{Recap}
+\subsection{Recap}
 The C standard use a few key words that have precise definitions.
 
 Examples:
@@ -21,7 +21,7 @@ Examples:
 
 % [TBD] token is used to indicate where the non-textual elements (images) are present in the original content
 
-\subsection*{Recap}
+\subsection{Recap}
 
 \begin{itemize}
   \item Locale-specific behavior: Behavior that depends on local conventions [...] that each implementation documents. (e.g., \texttt{isspace()})
@@ -35,7 +35,7 @@ Examples:
   \item Undefined behavior
 \end{itemize}
 
-\subsubsection*{Undefined behavior}
+\subsubsection{Undefined behavior}
 
 \textit{``Behavior, upon use of a nonportable or erroneous program construct or of erroneous data, for which this document'' imposes no requirements.''}
 
@@ -52,7 +52,7 @@ Possible consequences:
   \item anything else
 \end{itemize}
 
-\subsection*{We have already seen}
+\subsection{We have already seen}
 
 All of the following trigger undefined behavior:
 \begin{itemize}
@@ -222,7 +222,7 @@ Segmentation fault (core dumped)
 
 % Transcription of the textual content from the lecture slides into LaTeX format.
 
-\subsection*{Undefined behavior can time-travel}
+\subsection{Undefined behavior can time-travel}
 
 ``[...] However, if any such execution contains an undefined operation,
 this document places no requirement on the implementation executing
@@ -248,7 +248,7 @@ We could get a crash now:
 Floating point exception (core dumped)
 \end{verbatim}
 
-\subsection*{Undefined behavior can time-travel (really)}
+\subsection{Undefined behavior can time-travel (really)}
 
 \begin{verbatim}
 #include <stdio.h>
@@ -329,7 +329,7 @@ int f(int a, int b)
 % Transcription of the lecture material in LaTeX format
 % Note that [TBD] replaces images or non-textual elements
 
-\subsection*{But why?!??}
+\subsection{But why?!??}
 
 \begin{itemize}
   \item Performance!
@@ -339,7 +339,7 @@ int f(int a, int b)
   \end{itemize}
 \end{itemize}
 
-\subsection*{POINTER ALIASING RULES}
+\subsection{Pointer aliasing rules}
 
 \textit{``Aliasing''} means accessing a single object (area of memory) through distinct pointers.
 
@@ -361,7 +361,7 @@ that has one of the following types:
   \item a character type.'' (p71)
 \end{itemize}
 
-\subsection*{a type compatible with the effective type of the object}
+\subsection{a type compatible with the effective type of the object}
 
 Valid:
 
@@ -385,7 +385,7 @@ int f(long *pointer)
 }
 \end{verbatim}
 
-\subsection*{a qualified version of a type compatible with the effective type of the object}
+\subsection{a qualified version of a type compatible with the effective type of the object}
 
 Valid:
 
@@ -507,7 +507,7 @@ uint32_t build_u32(uint16_t a, uint16_t b)
 
 
 % Start of the LaTeX code
-\subsection*{Strict aliasing violations (2)}
+\subsection{Strict aliasing violations (2)}
 
 \begin{verbatim}
 struct my_data_0 {
@@ -537,7 +537,7 @@ int get_first(struct my_data_0 *data)
 }
 \end{verbatim}
 
-\subsection*{Strict aliasing violations (3)}
+\subsection{Strict aliasing violations (3)}
 
 \begin{verbatim}
 union mux {
@@ -560,7 +560,7 @@ int main()
 
 \textbf{Note:} Some compilers promise to yield the intended operations here.
 
-\subsection*{How do I do type-punning then?}
+\subsection{How do I do type-punning then?}
 
 \textit{``Type punning''} is reading the bits of an object as an object of a different type.
 
@@ -586,9 +586,9 @@ int main()
 
 
 % LaTeX representation of text content in the provided image
-\subsection*{Why is strict aliasing good for code optimization?}
+\subsection{Why is strict aliasing good for code optimization?}
 
-\subsubsection*{Fast:}
+\subsubsection{Fast:}
 \begin{verbatim}
 struct vec {
     short size;
@@ -620,7 +620,7 @@ increment:
     ret
 \end{verbatim}
 
-\subsubsection*{Slow:}
+\subsubsection{Slow:}
 \begin{verbatim}
 struct vec {
     int size;
@@ -650,7 +650,7 @@ increment:
     ret
 \end{verbatim}
 
-\subsubsection*{Fast:}
+\subsubsection{Fast:}
 \begin{verbatim}
 void add_constant(int *dst, short *src, short *constant, int n) {
     for (int i = 0; i < n; i++) {
@@ -680,7 +680,7 @@ add_constant:
 % [TBD] tokens are used to replace images or non-textual elements that cannot be represented in LaTeX
 
 
-\subsubsection*{Slow:}
+\subsubsection{Slow:}
 
 \begin{lstlisting}[language=C]
 void add_constant(int *dst, int *src, int *constant, int n)
@@ -709,9 +709,9 @@ add_constant:
     ret
 \end{verbatim}
 
-\subsection*{And when strict aliasing is not enough?}
+\subsection{And when strict aliasing is not enough?}
 
-\subsubsection*{Fast:}
+\subsubsection{Fast:}
 
 \begin{lstlisting}[language=C]
 void add_constant(int *restrict dst,
@@ -741,7 +741,7 @@ add_constant:
     ret
 \end{verbatim}
 
-\subsection*{MORE TYPES OF UNDEFINED BEHAVIOR}
+\subsection{More types of undefined behavior}
 
 % Note: The LaTeX transcription is intended for compilation in a LaTeX editor.
 % [TBD] placeholders represent non-text content that cannot be rendered in LaTeX.
@@ -752,7 +752,7 @@ add_constant:
 
 % Transcription of the lecture material into LaTeX format.
 
-\subsection*{Unaligned pointers}
+\subsection{Unaligned pointers}
 
 Every type has a required alignment (which we can query with \texttt{alignof(type)}). (see p44)
 
@@ -768,7 +768,7 @@ int *alloc_5_bytes()
 }
 \end{verbatim}
 
-\subsection*{Out-of-bounds pointer arithmetic}
+\subsection{Out-of-bounds pointer arithmetic}
 
 “When two pointers are (added or) subtracted, 
 both shall point to elements of the same array object, 
@@ -784,7 +784,7 @@ size_t eight()
 }
 \end{verbatim}
 
-\subsection*{Infinite loops}
+\subsection{Infinite loops}
 
 An infinite loop with no side effects is undefined behavior.
 
@@ -811,7 +811,7 @@ while (1)
 % The content provided is a combination of source code examples and text,
 % which is transcribed into LaTeX format as accurately as possible.
 
-\subsection*{Shift beyond integer size}
+\subsection{Shift beyond integer size}
 
 Undefined behavior:
 
@@ -834,11 +834,11 @@ Undefined behavior:
     \end{verbatim}
 \end{itemize}
 
-\subsection*{ISO/IEC 9899:2023 (E)}
+\subsection{Convention: ISO/IEC 9899:2023 (E)}
 
 \textit{working draft — April 1, 2023} \hfill N3096
 
-\subsubsection*{J.2 Undefined behavior}
+\subsubsection{J.2 Undefined behavior}
 
 The behavior is undefined in the following circumstances:
 
@@ -911,7 +911,7 @@ The behavior is undefined in the following circumstances:
 
 % The transcribed content starts here.
 
-\subsubsection*{ISO/IEC JTC1/SC22/WG14 N2310}
+\subsubsection{Old convention: ISO/IEC JTC1/SC22/WG14 N2310}
 
 \textbf{working draft} -- April 1, 2015\\
 \textbf{ISO/IEC DIS 9899}
@@ -936,7 +936,7 @@ C17 is subject to WG14 work throughout the cycle. Diligent delibration over acce
 
 The Transition Timeline for adopting additional AMENT IEC syntax from the core in text form are the Inspirations behind writing a comprehensive coverage.
 
-\subsubsection*{3 Implementation-defined behavior}
+\subsubsection{3 Implementation-defined behavior}
 
 Each program defines the behavior and characteristics of the behavior it exhibits for each of the items in the following list.
 
