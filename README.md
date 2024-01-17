@@ -12,13 +12,13 @@ Please adopt the following convention when contributing to the latex notes:
 - every minor title or example is a `paragraph` (i.e. `\paragraph{minor_title}`)
 
 Sections should be numbered, i.e. no `*` after any Heading keywords (`section`, `subsection`, and so on). \
-✅ `\section{my_section}`, `\subsection{my_subsection}`
+✅ `\section{my_section}`, `\subsection{my_subsection}`\
 ❌ `\section*{my_section}`, `\subsection*{my_subsection}`
 
 This will allow to have a table of contents.
 
-Every Section Should __not__ be entirely in Uppercase:
-✅ `\section{Code portability}`
+Every Section Should __not__ be entirely in Uppercase:\
+✅ `\section{Code portability}`\
 ❌ `\section{CODE PORTABILITY}`
 
 ### Cleaning and Postprocessing
