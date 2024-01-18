@@ -1,0 +1,2324 @@
+
+
+
+% Since the instruction is for direct transcription without document preamble or begin statement,
+% we start directly with the content, presuming a document class and preamble is already in place.
+\section{Lecture 20}
+
+\subsection{Abstract Data Types and Data Structures}
+
+\begin{itemize}
+    \item An abstract data type
+    \begin{itemize}
+        \item Specifies supported operations
+    \end{itemize}
+    \item A data structure is an implementation of an abstract data type
+    \begin{itemize}
+        \item Specifies data layout in memory
+        \item Specifies algorithms for operations
+    \end{itemize}
+\end{itemize}
+
+% The [TBD] token replaces non-text content that cannot be expressed in LaTeX 
+
+
+% Transcription of the lecture material into LaTeX format
+
+
+\subsection{Lists}
+
+\begin{itemize}
+    \item support storing multiple elements together
+    \item and optionally append, insert, delete, random access, \ldots
+    \item implementations:
+    \begin{itemize}
+        \item dynamic arrays
+        \begin{itemize}
+            \item everything \(O(1)\) in practice except insert/delete \(O(n)\)
+        \end{itemize}
+        \item linked lists
+        \begin{itemize}
+            \item everything \(O(1)\) (but slower than arrays) except random access \(O(n)\)
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Stacks / LIFO}
+
+\begin{itemize}
+    \item A stack is an ordered collection of elements
+    \item supports two operations:
+    \begin{itemize}
+        \item ``push'': add an element
+        \item ``pop'': retrieve-and-remove the last-added element
+        \begin{itemize}
+            \item $\Rightarrow$ last in, first out (LIFO)
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+
+
+% Since LaTeX document preamble is not requested by the user, it is omitted from the transcription.
+% The LaTeX content starts directly with the relevant lecture content below.
+
+\subsection{Static array implementation of a stack}
+
+\begin{itemize}
+    \item Useful only when there is a hard limit on the number of elements
+    \item We maintain a static array
+    \item and a stack pointer (or top index)
+    \item this is how ``the'' stack is implemented \\
+    (for storing function arguments, local variables and return addresses)
+\end{itemize}
+
+% The image illustrating the stack and the operations cannot be transcribed into LaTeX. Replaced by [TBD].
+[TBD]
+
+% Description of stack operations based on the presentation
+\begin{verbatim}
+-> push A
+push B
+push C
+pop
+pop
+push E
+push F
+push G
+pop
+pop
+pop
+.
+.
+\end{verbatim}
+
+% Repeating the [TBD] token for the second image that cannot be displayed in the LaTeX document.
+[TBD]
+
+% Repeating the description of stack operations because it is present in the image twice.
+\begin{verbatim}
+push A
+push B
+push C
+pop
+pop
+push E
+push F
+push G
+pop
+pop
+pop
+.
+.
+\end{verbatim}
+
+
+% Since we cannot include images, we represent the stack graphically using text diagram
+% Stack before operations
+% A B x x x x x x x x x x
+% ^ stack pointer
+
+% Operations sequence
+push A \\
+push B \\
+$\rightarrow$ push C \\
+pop \\
+pop \\
+push E \\
+push F \\
+push G \\
+pop \\
+pop \\
+pop \\
+
+% Stack after operations (first image)
+% A B x x x x x x x x x x
+% ^ stack pointer
+
+% Stack after operations (second image)
+% A B C x x x x x x x x x
+% ^ stack pointer
+
+% Stack after operations (third image, please note the comment inside)
+% A B C x x x x x x x x x
+% ^ stack pointer
+% Comment in third image specifies that the 'C' element is popped off
+
+% Operations sequence for third image, notice the additional comment
+push A \\
+push B \\
+push C \\
+pop $\rightarrow$ C \\
+push E \\
+push F \\
+push G \\
+pop \\
+pop \\
+pop \\
+
+
+% We will represent the content as simple text inside a LaTeX document
+% Since there is no request for specific formatting, we will use the article class
+% and the verbatim environment to replicate the content as is. 
+
+% Preamble and document class declaration
+
+% Begin the document environment
+
+% Stack configuration before operations
+\begin{verbatim}
+A B C x x x x x x x x x
+^ stack pointer
+\end{verbatim}
+
+% Stack operations for the first part
+\begin{verbatim}
+push A
+push B
+push C
+pop    -> C
+pop    -> B
+push E
+push F
+push G
+pop
+pop
+pop
+.
+\end{verbatim}
+
+% Stack configuration after some operations
+\begin{verbatim}
+A E C x x x x x x x x x
+^ stack pointer
+\end{verbatim}
+
+% Stack operations for the second part (continuing the previous operations)
+\begin{verbatim}
+push A
+push B
+push C
+pop    -> C
+pop    -> B
+push E
+push F
+push G
+pop
+pop
+pop
+.
+\end{verbatim}
+
+% Stack configuration after all operations
+\begin{verbatim}
+A E F x x x x x x x x x
+^ stack pointer
+\end{verbatim}
+
+% End the document environment
+
+
+% Since LaTeX doesn't support graphical stack representations inherently,
+% the stack content is instead depicted using a tabular environment.
+
+% Begin the document with a tabular representation of stack content
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+A & E & F & G & X & X & X & X & X \\
+\hline
+\end{tabular}\\
+$\uparrow$ stack pointer
+
+% Following is the sequence of stack operations with comments
+\begin{verbatim}
+push A
+push B
+push C
+pop    -> C
+pop    -> B
+push E
+push F
+push G
+pop    -> G
+pop
+pop
+pop
+.
+\end{verbatim}
+
+% Another tabular representation for the next part of the lecture
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+A & E & F & G & X & X & X & X & X \\
+\hline
+\end{tabular}\\
+$\uparrow$ stack pointer
+
+% More stack operations
+\begin{verbatim}
+push A
+push B
+push C
+pop    -> C
+pop    -> B
+push E
+push F
+push G
+pop    -> G
+pop    -> F
+pop
+pop
+.
+\end{verbatim}
+
+% Repeat for the third part
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+A & E & F & G & X & X & X & X & X \\
+\hline
+\end{tabular}\\
+$\uparrow$ stack pointer
+
+% And the final stack operations
+\begin{verbatim}
+push A
+push B
+push C
+pop    -> C
+pop    -> B
+push E
+push F
+push G
+pop    -> G
+pop    -> F
+pop
+pop
+.
+\end{verbatim}
+
+% End of the LaTeX transcription of the lecture content.
+
+
+% Since LaTeX does not support visual content representation in the style of presentation slides directly
+% in standard document classes, I will transcribe the text content and structure it appropriately.
+
+
+
+% Transcription of the first block with stack operations
+\textbf{\textasciicircum stack pointer}
+
+\begin{verbatim}
+push A
+push B
+push C
+pop    -> C
+pop    -> B
+push E
+push F
+push G
+pop    -> G
+pop    -> F
+pop    -> E
+pop 
+.
+\end{verbatim}
+
+% A visual representation of the stack after operations would be here but is replaced with [TBD] token
+[TBD]
+
+% Transcription of the second block with stack operations after some additional actions
+\textbf{\textasciicircum stack pointer}
+
+\begin{verbatim}
+push A
+push B
+push C
+pop    -> C
+pop    -> B
+push E
+push F
+push G
+pop    -> G
+pop    -> F
+pop    -> E
+pop    -> A
+pop 
+.
+\end{verbatim}
+
+% A visual representation of the stack after additional pop operations would be here but is replaced with [TBD] token
+[TBD]
+
+% Transcription of the text about linked list implementation of a stack
+\subsection{Linked list implementation of a stack}
+\begin{itemize}
+    \item \textbf{Pro:} No hard limit on number of elements
+    \item \textbf{Con:}
+    \begin{itemize}
+        \item Memory allocation for every \texttt{push}
+        \item Memory freed for every \texttt{pop}
+    \end{itemize}
+\end{itemize}
+
+% The content of the lecture is transcribed below. Images and non-textual elements are replaced with [TBD].
+
+\subsection{Dynamic array implementation of a stack}
+
+\begin{itemize}
+    \item \textbf{Pros:}
+    \begin{itemize}
+        \item No hard limit on number of elements
+        \item Memory management overhead is small
+    \end{itemize}
+    \item \textbf{Con:}
+    \begin{itemize}
+        \item No pointer stability
+    \end{itemize}
+\end{itemize}
+
+% Representation of the stack with an array and a stack pointer (visual representation to be replaced with [TBD])
+
+[TBD]
+
+\begin{itemize}
+    \item push A
+    \item push B
+    \item push C
+    \item \texttt{p} = address of C
+    \item push D
+    \item push E
+    \item change C into 'C' using \texttt{p}
+    \item \dots
+\end{itemize}
+
+% Second part showing another state of the stack (visual representation to be replaced with [TBD])
+
+[TBD]
+
+\begin{itemize}
+    \item push A
+    \item push B
+    \item push C
+    \item \texttt{p} = address of C
+    \item push D
+    \item push E
+    \item change C into 'C' using \texttt{p}
+    \item \dots
+\end{itemize}
+
+% Note that the actual visual stack representations are not transcribable in LaTeX without custom commands or packages for drawing.
+% The [TBD] token stands for "To Be Determined", indicating where a visual or non-textual element would be placed.
+
+
+% Since the images within the content cannot be transcribed to LaTeX, they are replaced by the [TBD] token.
+% The textual content from the image is transcribed below as is, without any additional LaTeX document structure commands.
+
+push A \\
+push B \\
+\textcolor{red}{push C} \\
+p = address of C \\
+push D \\
+push E \\
+change C into C' using p \\
+
+% The sequence above is repeated three times, with the color red highlighting different lines.
+% It is understood that in a LaTeX document, the "\\textcolor{red}{...}" command will change the specified text to the color red.
+% Ensure that you have defined the color red in the preamble of your LaTeX document, or include the xcolor package.
+
+
+% This LaTeX code block represents the transcribed content of the lecture slide images
+% Since LaTeX does not support visual content, the stack representations in the slides are represented with [TBD]
+% For actual LaTeX documents, consider using tikz or a table for creating visual stack diagrams
+
+
+
+% Transcription of the content from the first image
+\begin{itemize}
+  \item[] push A
+  \item[] push B
+  \item[] push C
+  \item[] p = address of C
+  \item[] push D
+  \item[] push E
+  \item[] change C into C' using p
+  \item[] .
+\end{itemize}
+% The [TBD] token replaces the actual content that is visual (the stack diagram)
+
+% Transcription of the content from the second image
+\begin{itemize}
+  \item[] push A
+  \item[] push B
+  \item[] push C
+  \item[] p = address of C
+  \item[] push D
+  \item[] push E
+  \item[] change C into C' using p
+  \item[] .
+\end{itemize}
+% The [TBD] token replaces the actual content that is visual (the stack diagram)
+
+% Transcription of the content from the third image
+\begin{itemize}
+  \item[] push A
+  \item[] push B
+  \item[] push C
+  \item[] p = address of C
+  \item[] push D
+  \item[] push E
+  \item[] change C into C' using p
+  \item[] .
+\end{itemize}
+% The [TBD] token replaces the actual content that is visual (the stack diagram)
+
+
+
+% The LaTeX content of the slide is transcribed as is. For better structuring, you might want to use sections or other organizing commands depending on the class you're using.
+
+\subsection{Stack implementations} % Use of sectioning commands depends on the document class
+
+% Table for implementation comparison
+\begin{tabular}{lccc}
+\hline
+\textbf{Implementation} & \textbf{Size} & \textbf{Requires allocations} & \textbf{Pointer stability} \\
+\hline
+static array  & constant    & no     & yes \\
+dynamic array & can grow    & when growing & no \\
+linked list   & can grow    & every push   & yes \\
+\hline
+\end{tabular}
+
+\vspace{2em} % Provide some vertical space between the table and the next section
+
+\subsection{Arena}
+
+\begin{itemize}
+  \item Known as arena allocator, region-based allocator, zone-based allocator, obstack
+  \item Implemented as a list of static array stacks
+\end{itemize}
+
+\vspace{2em} % Provide some vertical space between the itemize and the next section
+
+% The actual representation of the stack and the block 0 with Xs and Os is replaced by [TBD]
+% since LaTeX cannot directly represent images or drawings. Depending on the context,
+% you might want to add a description or use actual LaTeX drawing packages to recreate it.
+
+% The 'stack pointer' and 'block 0' indicators are part of a diagram which is replaced by [TBD]
+% The list of actions is transcribed below
+
+% The series of steps with push/pop are transcribed as is.
+\begin{flushleft} % Use flushleft to align the pseudocode to the left
+\texttt{\textgreater{} push A} \\
+\texttt{push B} \\
+\texttt{push C} \\
+\texttt{p = address of C} \\
+\texttt{push D} \\
+\texttt{push E} \\
+\texttt{change C into `C' using p} \\
+\texttt{push F} \\
+\texttt{pop} \\
+\texttt{pop} \\
+\texttt{pop} \\
+\texttt{pop} \\
+\texttt{.} \\
+\texttt{.}
+\end{flushleft}
+
+% The 'list of regions: block 0' is a caption-like text that could be associated with the [TBD] diagram.
+
+
+% Since LaTeX doesn't handle image-specific annotations directly in the text, the following is transcribed as plain text. 
+% [TBD] tokens replace the actual image content which cannot be represented in text.
+
+% Image representation:
+% A | x | x | x | O | O | O | O | x | x | x | x | x | x | x
+% block 0
+% stack pointer
+
+push A
+push B
+push C
+% p = address of C
+push D
+push E
+% change C into C' using p
+push F
+pop
+pop
+pop
+pop
+.
+
+% Image representation:
+% A | B | x | x | O | O | O | O | x | x | x | x | x | x | x
+% block 0
+% stack pointer
+
+push A
+push B
+push C
+% p = address of C
+push D
+push E
+% change C into C' using p
+push F
+pop
+pop
+pop
+pop
+.
+
+% Image representation:
+% A | B | C | x | O | O | O | O | x | x | x | x | x | x | x
+% block 0
+% stack pointer
+
+push A
+push B
+push C
+% p = address of C
+push D
+push E
+% change C into C' using p
+push F
+pop
+pop
+pop
+pop
+.
+
+
+% LaTeX content transcribed from the image
+
+% Comment: Since the image shows content that would resemble a lecture slide with stack operations, we write it as a list.
+
+% Comment: Representing the first part of the lecture content with stack operations.
+Block 0
+\begin{verbatim}
+push A
+push B
+push C
+p = address of C
+push D
+push E
+change C into C' using p
+push F
+pop
+pop
+pop
+pop
+.
+.
+.
+\end{verbatim}
+% Comment: Adding the text "list of regions:  block 0" next to the operations as a simple list item.
+List of regions: block 0
+
+% Comment: The image content indicates there are three separate stages, each includes a pictorial representation of the stack.
+% Here we continue with the second part.
+
+Block 0 Continued
+\begin{verbatim}
+push A
+push B
+push C
+p = address of C
+push D
+push E
+change C into C' using p
+push F
+pop
+pop
+pop
+pop
+.
+.
+.
+\end{verbatim}
+List of regions: block 0
+
+% Comment: Now, transcribing the last part of the lecture content based on stack operations.
+
+Block 0 and Block 1
+\begin{verbatim}
+push A
+push B
+push C
+p = address of C
+push D
+push E
+change C into C' using p
+push F
+pop
+pop
+pop
+pop
+.
+.
+.
+\end{verbatim}
+List of regions: block 0, block 1
+
+% Comment: Note that coloring and visual stack pointer indications are not transcribed in LaTeX, as the instructions are to focus on the textual content only.
+% The images and non-textual elements have been replaced with the token [TBD] as instructed, actually, since no direct image content transcription was requested, this comment suffices.
+
+
+
+% Since the image primarily consists of a graphical representation of a stack and some text labels, 
+% the LaTeX transcription will reflect the stack operations as text.
+
+
+
+% Transcribing content from the image into LaTeX format 
+\textbf{list of regions:}
+\begin{itemize}
+    \item block 0
+    \item block 1
+\end{itemize}
+
+% Operations for block 0 and block 1 (from the top image)
+\begin{verbatim}
+push A
+push B
+push C
+p = address of C
+push D
+push E
+change C into C' using p
+push F
+pop
+pop
+pop
+pop
+\end{verbatim}
+
+% Operations for block 0 and block 1 (from the middle image)
+% Same as the top image content, for simplification, it will not be repeated.
+
+% Operations for block 0 and block 1 (from the bottom image)
+\begin{verbatim}
+push A
+push B
+push C
+p = address of C
+push D
+push E
+change C into C' using p
+push F
+pop -> F 
+pop
+pop
+pop
+\end{verbatim}
+
+% The [TBD] tokens represent the image sections that cannot be transcribed directly into LaTeX.
+% These would usually be handled by using packages like TikZ for graphical stack representation, 
+% but are left out as per the user instructions.
+
+
+
+% Transcription of the image content into LaTeX
+% The [TBD] token is used to represent the non-textual elements, which in this case are visual stack diagrams.
+
+% Start of the transcribed content
+
+% This appears to be a sequence of stack operations with associated diagrams. 
+% Since LaTeX does not have a default representation for stack diagrams, they are omitted.
+% Only the text is transcribed. Diagrams are indicated with the [TBD] token.
+
+
+% First stack operation set
+[TBD] % Representation of the stack diagram is omitted
+
+\begin{flushleft}
+\textbf{\textup{block 0}} \\
+\textbf{\textup{stack pointer}} $\rightarrow$ \textbf{\textup{block 1}}
+\end{flushleft}
+
+\begin{itemize}
+\item push A
+\item push B
+\item push C
+\item $p = \text{address of C}$
+\item push D
+\item push E
+\item $\text{change } C \text{ to } C' \text{ using } p$
+\item push F
+\item pop $\rightarrow$ F
+\item pop $\rightarrow$ E
+\item pop
+\item pop
+\end{itemize}
+
+% Second stack operation set
+[TBD] % Representation of the stack diagram is omitted
+
+\begin{flushleft}
+\textbf{\textup{list of regions:}} \quad block 0 \\
+\hspace*{4.2cm} block 1
+\end{flushleft}
+
+\begin{itemize}
+\item push A
+\item push B
+\item push C
+\item $p = \text{address of C}$
+\item push D
+\item push E
+\item $\text{change } C \text{ to } C' \text{ using } p$
+\item push F
+\item pop $\rightarrow$ F
+\item pop $\rightarrow$ D
+\item pop
+\item pop
+\end{itemize}
+
+% Third stack operation set
+[TBD] % Representation of the stack diagram is omitted
+
+\begin{flushleft}
+\textbf{\textup{list of regions:}} \quad block 0
+\end{flushleft}
+
+\begin{itemize}
+\item push A
+\item push B
+\item push C
+\item $p = \text{address of C}$
+\item push D
+\item push E
+\item $\text{change } C \text{ to } C' \text{ using } p$
+\item push F
+\item pop $\rightarrow$ F
+\item pop $\rightarrow$ E
+\item pop $\rightarrow$ D
+\item pop $\rightarrow$ C'
+\item pop
+\end{itemize}
+
+\definecolor{purple}{RGB}{128,0,128}
+
+
+% Replicating the title of the slide
+\subsection{\color{purple}Stack implementations}
+
+% Replicating the table found in the slide
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Implementation} & \textbf{Size} & \textbf{Requires allocations} & \textbf{Pointer stability} \\
+\hline
+static array & constant & no & yes \\
+\hline
+dynamic array & can grow & when growing & no \\
+\hline
+linked list & can grow & every push & yes \\
+\hline
+arena & can grow & when growing & yes \\
+\hline
+\end{tabular}
+
+\vspace{1cm} % Adding some vertical space between the table and the next section
+
+% Replicating the 'More options' section
+\subsection{More options}
+
+% Transcribing the content below 'More options'
+Combination of other data structures and indirection can be used, depending on desired properties.
+
+\vspace{2cm} % Adding more vertical space before the final section
+
+% Replicating the 'QUEUES / FIFO' title at the bottom of the slide
+\subsection{\color{purple}queues / FIFO}
+
+
+
+% Start of the LaTeX document
+
+
+A queue is an ordered collection of elements
+\begin{itemize}
+    \item supports two operations:
+    \begin{itemize}
+        \item \texttt{enqueue}: add an element
+        \item \texttt{dequeue}: retrieve-and-remove the earliest-added element
+    \end{itemize}
+    \item $\Rightarrow$ first in, first out (FIFO)
+\end{itemize}
+
+\subsection{Ring buffer implementation of a queue}
+\begin{itemize}
+    \item Useful only when there is a hard limit on the number of elements
+    \item We maintain a static array
+    \item and two pointers/indices: head and tail
+\end{itemize}
+
+% Representation of the static array with head and tail pointers
+% As it's a visual representation, it's replaced by [TBD]
+[TBD]
+
+\begin{itemize}
+    \item[] \texttt{enqueue A}
+    \item[] \texttt{enqueue B}
+    \item[] \texttt{dequeue}
+    \item[] \texttt{enqueue C}
+    \item[] \texttt{enqueue D}
+    \item[] \texttt{enqueue E}
+    \item[] \texttt{enqueue F}
+    \item[] \texttt{dequeue}
+    \item[] \texttt{dequeue}
+    \item[] \texttt{dequeue}
+    \item[] \texttt{enqueue G}
+    \item[] \texttt{dequeue}
+    \item[] \texttt{dequeue}
+    \item[] \texttt{...}
+\end{itemize}
+
+% End of the LaTeX document
+
+
+% Preamble with document class would usually be here, but is omitted as per instructions
+
+% Begin the document content
+
+% Visual representations as [TBD] since they cannot be transcribed into LaTeX
+% Image content could be achieved with TikZ in LaTeX, but not requested here
+[TBD]
+
+% Transcribing the series of enqueue and dequeue operations
+\begin{itemize}
+    \item enqueue A
+    \item enqueue B
+    \item $\rightarrow$ dequeue
+    \item dequeue % Depicted as crossed out in the image
+    \item enqueue C
+    \item enqueue D
+    \item enqueue E
+    \item enqueue F
+    \item $\rightarrow$ dequeue
+    \item dequeue % Depicted as crossed out in the image
+    \item dequeue % Depicted as crossed out in the image
+    \item dequeue % Depicted as crossed out in the image
+    \item enqueue G
+    \item $\rightarrow$ dequeue
+    \item dequeue % Depicted as crossed out in the image
+    \item .
+\end{itemize}
+
+% The sequence above is repeated for the three different visual stages
+% However, the steps will be identical in the LaTeX transcription
+% The additional spaces and the green color in the image are for visual representation but do not affect the textual content
+
+% End of the document content
+
+
+% Since the LaTeX code is meant for compilation without any modifications, we will structure the content into a standard article document with the necessary elements. The lecture content is transcribed below, with the images replaced by the token [TBD] since LaTeX cannot represent them directly. The queue operations are depicted as if in an algorithmic environment package like algorithmicx/algpseudocode, since this will give a clean representation of the steps described in the images.
+
+
+
+% First image content
+\begin{algorithm}
+\caption{Queue Operations Example 1}
+\begin{algorithmic}
+\State enqueue A
+\State enqueue B
+\State dequeue \Comment{A}
+\State dequeue \Comment{B}
+\State enqueue C
+\State enqueue D
+\State enqueue E
+\State enqueue F
+\State dequeue
+\State dequeue
+\State dequeue
+\State enqueue G
+\State dequeue
+\State dequeue
+\end{algorithmic}
+\end{algorithm}
+
+% Placeholder for the first image
+[TBD] % Replace this token with the actual figure or an appropriate replacement command in LaTeX
+
+% Second image content
+\begin{algorithm}
+\caption{Queue Operations Example 2}
+\begin{algorithmic}
+\State enqueue A
+\State enqueue B
+\State dequeue \Comment{A}
+\State dequeue \Comment{B}
+\State enqueue C
+\State enqueue D
+\State enqueue E
+\State enqueue F
+\State dequeue
+\State dequeue
+\State dequeue
+\State enqueue G
+\State dequeue
+\State dequeue
+\end{algorithmic}
+\end{algorithm}
+
+% Placeholder for the second image
+[TBD] % Replace this token with the actual figure or an appropriate replacement command in LaTeX
+
+% Third image content
+\begin{algorithm}
+\caption{Queue Operations Example 3}
+\begin{algorithmic}
+\State enqueue A
+\State enqueue B
+\State dequeue \Comment{A}
+\State dequeue \Comment{B}
+\State enqueue C
+\State enqueue D
+\State enqueue E
+\State enqueue F
+\State dequeue
+\State dequeue
+\State dequeue
+\State enqueue G
+\State dequeue
+\State dequeue
+\end{algorithmic}
+\end{algorithm}
+
+% Placeholder for the third image
+[TBD] % Replace this token with the actual figure or an appropriate replacement command in LaTeX
+
+
+
+% The LaTeX code presented here corresponds to a sequential series of queue operations.
+% Please note that the rectangles representing the queue states and the operations are not visual elements,
+% and thus are transcribed as textual content.
+\textbf{Initial Queue State:}
+
+\begin{verbatim}
+  E   B   C   D
+  ^         ^
+head       tail
+\end{verbatim}
+
+\textbf{Operations:}
+
+\begin{itemize}
+    \item enqueue A
+    \item enqueue B
+    \item dequeue $\rightarrow$ A
+    \item dequeue $\rightarrow$ B
+    \item enqueue C
+    \item enqueue D
+    \item enqueue E
+    \item enqueue F
+    \item dequeue
+    \item dequeue
+    \item dequeue
+    \item enqueue G
+    \item dequeue
+\end{itemize}
+
+% First modification of the queue after some operations.
+\textbf{Modified Queue State 1:}
+
+\begin{verbatim}
+  E   F   C   D
+  ^         ^
+head       tail
+\end{verbatim}
+
+\textbf{Operations:} % Repeating the same operations list for clarity
+\begin{itemize}
+    \item enqueue A
+    \item enqueue B
+    \item dequeue $\rightarrow$ A
+    \item dequeue $\rightarrow$ B
+    \item enqueue C
+    \item enqueue D
+    \item enqueue E
+    \item enqueue F
+    \item dequeue
+    \item dequeue
+    \item dequeue
+    \item enqueue G
+    \item dequeue
+\end{itemize}
+
+% Second modification of the queue after some operations.
+\textbf{Modified Queue State 2:}
+
+\begin{verbatim}
+  E   F   C   D
+  ^         ^
+head       tail
+\end{verbatim}
+
+\textbf{Operations:} % Repeating the same operations list for clarity
+\begin{itemize}
+    \item enqueue A
+    \item enqueue B
+    \item dequeue $\rightarrow$ A
+    \item dequeue $\rightarrow$ B
+    \item enqueue C
+    \item enqueue D
+    \item enqueue E
+    \item enqueue F
+    \item dequeue $\rightarrow$ C
+    \item dequeue
+    \item dequeue
+    \item enqueue G
+    \item dequeue
+\end{itemize}
+
+
+
+% The LaTeX transcription of the content. Any non-textual elements such as images have been replaced with [TBD].
+
+% Queue representation with enqueue and dequeue operations
+\begin{tabular}{l}
+E F C D \quad $\uparrow$ tail \quad $\uparrow$ head \\
+\\
+enqueue A \\
+enqueue B \\
+dequeue \quad $\to$ A \\
+dequeue \quad $\to$ B \\
+enqueue C \\
+enqueue D \\
+enqueue E \\
+enqueue F \\
+dequeue \quad $\to$ C \\
+dequeue \quad $\to$ D \\
+% Several dequeue operations without corresponding comments are represented by dots
+% as there is no indication of what is being dequeued.
+dequeue \\
+dequeue \\
+dequeue \\
+. \\
+\end{tabular}
+
+% The [TBD] token is a placeholder for the image that can't be represented in LaTeX.
+[TBD]
+
+\begin{tabular}{l}
+E F C D \quad $\uparrow$ head \quad $\uparrow$ tail \\
+\\
+enqueue A \\
+enqueue B \\
+dequeue \quad $\to$ A \\
+dequeue \quad $\to$ B \\
+enqueue C \\
+enqueue D \\
+enqueue E \\
+enqueue F \\
+dequeue \quad $\to$ C \\
+dequeue \quad $\to$ D \\
+dequeue \quad $\to$ E \\
+% 'enqueue G' and remaining operations are performed after previous dequeues.
+\textbf{enqueue G} \\
+dequeue \\
+dequeue \\
+. \\
+\end{tabular}
+
+% The [TBD] token is a placeholder for the image that can't be represented in LaTeX.
+[TBD]
+
+\begin{tabular}{l}
+E F G D \quad $\uparrow$ head \quad $\uparrow$ tail \\
+\\
+enqueue A \\
+enqueue B \\
+dequeue \quad $\to$ A \\
+dequeue \quad $\to$ B \\
+enqueue C \\
+enqueue D \\
+enqueue E \\
+enqueue F \\
+dequeue \quad $\to$ C \\
+dequeue \quad $\to$ D \\
+dequeue \quad $\to$ E \\
+enqueue G \\
+dequeue \\
+dequeue \\
+. \\
+\end{tabular}
+
+% The [TBD] token is a placeholder for the image that can't be represented in LaTeX.
+[TBD]
+
+
+% Queue Operations
+
+
+% Queue Example with enqueue and dequeue operations
+\begin{align*}
+    & \text{{\color{green}E F G D}} & & \text{head} \\
+    & & & \text{tail}
+\end{align*}
+
+\begin{itemize}
+    \item enqueue A
+    \item enqueue B
+    \item dequeue \rightarrow A
+    \item dequeue \rightarrow B
+    \item enqueue C
+    \item enqueue D
+    \item enqueue E
+    \item enqueue F
+    \item dequeue \rightarrow C
+    \item dequeue \rightarrow D
+    \item dequeue \rightarrow E
+    \item enqueue G
+    \item dequeue \rightarrow F
+    \item dequeue $\rightarrow$
+\end{itemize}
+
+% Queue Example after operations
+\begin{align*}
+    & \text{{\color{green}E F G D}} & & \text{head} \\
+    & & & \text{tail}
+\end{align*}
+
+\begin{itemize}
+    \item enqueue A
+    \item enqueue B
+    \item dequeue \rightarrow A
+    \item dequeue \rightarrow B
+    \item enqueue C
+    \item enqueue D
+    \item enqueue E
+    \item enqueue F
+    \item dequeue \rightarrow C
+    \item dequeue \rightarrow D
+    \item dequeue \rightarrow E
+    \item enqueue G
+    \item dequeue \rightarrow F
+    \item dequeue \rightarrow G
+    \item dequeue $\rightarrow$
+\end{itemize}
+
+% Implementation detail
+\subsection{Implementation detail}
+
+\noindent When head == tail:
+
+% Two possibilities: Empty or Full Queue indicated by head and tail pointers
+\noindent\begin{tabular}{ll}
+    \text{the queue is empty?} & \text{or the queue is full?} \\
+\end{tabular}
+
+% Queue images replaced by placeholders
+\begin{align*}
+    & \text{{\color{green}E F G D}} & & \text{head} \\
+    & & & \text{tail}
+\end{align*}
+
+\noindent\begin{itemize}
+    \item maintain a variable with the number of elements currently in the queue
+    \item or keep incrementing head and tail, and index the static array as
+        \begin{align*}
+            \text{array[head \% size]} && \text{and} \\
+            \text{array[tail \% size]}
+        \end{align*}
+\end{itemize}
+
+% End of LaTeX transcription of queue operation lecture content
+% The color package could be included to enable colored text
+% The [TBD] token is omitted since the context did not call for an actual placeholder, but rather a reflection of the operations taking place
+
+
+% Start of the LaTeX content for the slide transcription, ready for direct use in a LaTeX editor
+
+\subsection{Applications of ring buffers}
+
+\begin{itemize}
+	\item Audio playback/recording devices
+	\item Video capture devices
+	\item Special case (double-buffering, i.e. size = 2) for computer graphics
+	\item Network devices (routers, switches)
+\end{itemize}
+
+\subsection{More options}
+
+\begin{itemize}
+	\item use dynamic arrays
+	\item use linked lists
+	\item use indirection
+	\item \ldots
+	\item depending on specific needs
+\end{itemize}
+
+\subsection{Priority queues}
+
+% Note: The token [TBD] replaces non-textual content such as images or other elements that cannot be represented in LaTeX.
+
+% End of the LaTeX content for the slide transcription
+
+
+\begin{itemize}
+    \item A priority queue is a collection of elements, each with an associated priority
+    \item supports two operations:
+    \begin{itemize}
+        \item ``push'': add an element-priority tuple
+        \item ``pop'': retrieve-and-remove the highest-priority element
+    \end{itemize}
+\end{itemize}
+
+\subsection{Implementation of a priority queue}
+
+\begin{itemize}
+    \item Store element-priority tuples in an array or in a linked list
+    \item ``push'': \(O(1)\) of the underlying data structure
+    \item ``pop'': scan all elements, find max priority, \(O(n)\)
+\end{itemize}
+
+\subsection{Binary heap implementation of a priority queue}
+
+% [TBD] replaces the tree diagram from the image
+[TBD]
+
+\begin{itemize}
+    \item Binary heaps represent a priority queue as
+    \begin{itemize}
+        \item a binary tree (every node has at most two children)
+        \item that is complete (every level full, except possibly the deepest)
+    \end{itemize}
+    \item Every node is labeled by the corresponding element’s priority
+    \item Tree has the heap property:
+    \begin{itemize}
+        \item Priority of any node \( \geq \) priority of its children
+        \item \( \Leftrightarrow \) Priority of any node \( \geq \) priority of all its descendants
+    \end{itemize}
+\end{itemize}
+
+
+
+% Binary heap push process transcription to LaTeX
+
+\subsection{Binary heap push}
+% [TBD] is used to indicate the position where the graphic content (binary trees) should be present.
+
+% The first binary heap tree diagram in LaTeX representation: [TBD]
+
+\begin{itemize}
+  \item Step 0: Add new element at the first free slot on the deepest level
+  \item Step 1:
+  \begin{itemize}
+    \item If its priority is \textit{not higher} than its parent's,
+    \begin{itemize}
+      \item the heap property is \textit{satisfied}, we are done
+    \end{itemize}
+    \item If its priority is \textit{higher} than its parent's,
+    \begin{itemize}
+      \item swap them,
+      \item go back to Step 1, looking at the pushed element's new position
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+% The second binary heap tree diagram in LaTeX representation: [TBD]
+
+\subsection{Binary heap push: 14}
+
+% Since we cannot include images, replacing the first diagram with [TBD]
+[TBD] % Diagram with the binary heap after pushing 14
+
+\begin{itemize}
+    \item Add new element at the first free slot on the deepest level
+    \item If it is not higher than its parent's,
+    \begin{itemize}
+        \item the heap property is \textbf{satisfied}, we are done
+    \end{itemize}
+\end{itemize}
+
+\subsection{Binary heap push: 28}
+
+% Replacing the second diagram with [TBD]
+[TBD] % Diagram with the binary heap after initially pushing 28
+
+\begin{itemize}
+    \item Add new element at the first free slot on the deepest level
+    \item If its priority is \textbf{higher} than its parent's,
+    \begin{itemize}
+        \item swap them
+    \end{itemize}
+\end{itemize}
+
+% Replacing the third diagram with [TBD]
+[TBD] % Diagram with the binary heap after swapping 28 with its parent
+
+\begin{itemize}
+    \item Heap property \textbf{satisfied} below the pushed element's new position
+    \item If its priority is \textbf{not higher} than its new parent's,
+    \begin{itemize}
+        \item the heap property is \textbf{satisfied}, we are done
+    \end{itemize}
+\end{itemize}
+
+\subsection{Binary heap push: 35}
+
+% Replace the binary tree diagrams with [TBD] since they cannot be represented in LaTeX directly
+[TBD]
+
+\begin{itemize}
+  \item Add new element at the first free slot on the deepest level
+  \item If its priority is higher than its parent’s,
+  \begin{itemize}
+    \item swap them
+  \end{itemize}
+\end{itemize}
+
+% Replicate the text content from the second part of the slide
+[TBD]
+
+\begin{itemize}
+  \item Heap property \textbf{satisfied} below the pushed element’s new position
+  \item If its priority is \textbf{still higher} than its new parent’s,
+  \begin{itemize}
+    \item swap them
+  \end{itemize}
+\end{itemize}
+
+% Replicate the text content from the third part of the slide
+[TBD]
+
+\begin{itemize}
+  \item Heap property \textbf{satisfied} below the pushed element’s new position
+  \begin{itemize}
+    \item new child was an ancestor of its direct children
+  \end{itemize}
+  \item Continue until heap property is \textbf{satisfied}
+\end{itemize}
+
+% End the LaTeX document
+
+
+\subsection{Binary heap pop}
+
+% The tree is not transcribed as it requires specific drawing packages.
+% Tree representation: 
+%       30
+%     /    \
+%    25    15
+%   /  \
+%  5   18 
+%         \
+%         9
+[TBD]
+
+\begin{itemize}
+    \item Step 0: Replace root with last element (on deepest level)
+    \item Step 1:
+    \begin{itemize}
+        \item If its priority is \textbf{not lower} than its children’s,
+        \begin{itemize}
+            \item the heap property is \textbf{satisfied}, we are done
+        \end{itemize}
+        \item If its priority is \textbf{lower} than one of its children’s,
+        \begin{itemize}
+            \item swap with the highest-priority child,
+            \item go back to Step 1, looking at the pushed element’s new position
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+% Section for binary heap operations
+\subsection{Binary heap operations}
+\begin{itemize}
+    \item Push: \(O(\log_2(n))\)
+    \item Find max: \(O(1)\)
+    \item Pop: \(O(\log_2(n))\)
+\end{itemize}
+
+% Section for complete binary data structure
+\subsection{Complete binary data structure}
+\begin{itemize}
+    \item Binary heaps are complete binary trees
+    \item We can avoid allocation for every ``push'' by storing nodes in an array
+    \item Depth \(\ell\) of the tree has at most \(2^\ell\) nodes, \(\forall \ell\)
+    \item Depth \(\ell\) of the tree has exactly \(2^\ell\) nodes, except for the deepest level
+    % The depth/index table will be represented as tabular data in LaTeX.
+    \begin{center}
+        \begin{tabular}{|c|cccccccccccccc|}
+        \hline
+        depth & 0 & 1 & 1 & 2 & 2 & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 3 & 3 \\
+        index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+        \hline
+        \end{tabular}
+    \end{center}
+    \item There are exactly \( (2^\ell - 1) \) nodes of with depth \( < \ell \)
+\end{itemize}
+
+
+% Since the LaTeX document preamble and the type of document (article, report, etc.)
+% are not specified, and no specific formatting instructions have been given,
+% I'm transcribing the textual content suitable for inclusion in a typical LaTeX document.
+
+\subsection{Storage scheme}
+
+% The hierarchical tree structure diagrams from the image are replaced with [TBD] as they cannot be directly transcribed into LaTeX
+[TBD]
+
+% Tabular representation of depth and index. Requires the `array` package or similar.
+\begin{tabular}{ccccccccccccccc}
+depth & 0 & 1 & 1 & 2 & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 \\
+index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\end{tabular}
+
+% Textual content following the tabular representation
+\begin{itemize}
+  \item If a node has index \( j \)
+  \item its children are stored at indices \( 2j + 1 \) and \( 2j + 2 \)
+  \item its parent is stored at index \( \left\lfloor (j - 1) / 2 \right\rfloor \)
+\end{itemize}
+
+% There are multiple instances of the same content in the provided image,
+% but only one instance is transcribed as they are identical.
+
+% Replace actual images or diagrams with the placeholder [TBD]. 
+% The placeholder indicates that an image or figure should be here.
+[TBD]
+
+\begin{itemize}
+    \item If a node has index $j$
+    \item its \textbf{children} are stored at indices $2j + 1$ and $2j + 2$
+    \item its \textbf{parent} is stored at index $\lfloor (j - 1) / 2 \rfloor$
+\end{itemize}
+
+\subsection{Binary heap with array storage}
+
+\begin{itemize}
+    \item Superior to in-memory tree (with pointers)
+    \begin{itemize}
+        \item We avoid allocation for every ``push''
+        \item We avoid data dependencies (load node data to get pointer to parent/children)
+    \end{itemize}
+    \item Still,
+    \begin{itemize}
+        \item Push and pop operations are tough for branch predictor
+        \item Jumps to indices $(2j + 1)$, $(2j + 2)$ or $\lfloor (j - 1) / 2 \rfloor$ are not cache-friendly for large $j$
+    \end{itemize}
+\end{itemize}
+
+% Uncomment the end document commands if this is the standalone document 
+
+
+% Transcription of the presentation slide into LaTeX format
+% Replacing non-textual elements with [TBD] as placeholder
+
+\subsection{Priority queue: special case}
+
+\begin{itemize}
+    \item Assume that
+    \begin{itemize}
+        \item priorities are distinct integers $p \in \{0, \ldots, P - 1\}$
+        \item we always push at a priority $\leq$ current max priority
+    \end{itemize}
+    \item Then,
+    \begin{itemize}
+        \item we allocate a static array of size $P$
+        \item Push: store in array at index $p$ \quad $O(1)$
+        \item Pop: sweep array backwards \quad $O(P / n)$ amortized
+    \end{itemize}
+\end{itemize}
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{priority} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+\textbf{element} & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] \\
+\hline
+\textbf{max} & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] \\
+\hline
+\end{tabular}
+
+\begin{itemize}
+    \item $\rightarrow$ push A, 12
+    \item push B, 5
+    \item push C, 9
+    \item pop
+    \item push E, 3
+    \item push F, 10
+    \item pop
+    \item push G, 4
+    \item pop
+    \item pop
+    \item pop
+    \item push H, 1
+    \item pop
+    \item pop
+    \item .
+\end{itemize}
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{priority} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+\textbf{element} & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & A & [TBD] & [TBD] \\
+\hline
+\textbf{max} & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] & A & [TBD] & [TBD] \\
+\hline
+\end{tabular}
+
+\begin{itemize}
+    \item $\rightarrow$ push A, 12
+    \item push B, 5
+    \item push C, 9
+    \item pop
+    \item push E, 3
+    \item push F, 10
+    \item pop
+    \item push G, 4
+    \item pop
+    \item pop
+    \item pop
+    \item push H, 1
+    \item pop
+    \item pop
+    \item .
+\end{itemize}
+
+
+% Preamble or document class declaration would go here if needed.
+% Since the task requires directly transcribing content, we are not including preamble commands.
+% Ensure you have appropriate packages installed to compile tables and math symbols if needed.
+
+% Begin of the document content
+% Table representation for the priority queue operation simulation.
+
+\begin{tabular}{ccccccccccccccc}
+\textbf{priority} & 0 & 1 & 2 & 3 & \textcolor{blue}{4} & 5 & 6 & 7 & 8 & 9 & 10 & \textcolor{red}{11} & 12 & 13 & 14 \\
+\textbf{element} & & & & & B & & & & & & & A & & & \\
+\textbf{max} & & & & & & & & & & & & & & & \\
+\end{tabular}
+
+\begin{itemize}
+\item push A, 12
+\item push B, 5
+\item push C, 9
+\item $\rightarrow$ pop
+\item push E, 3
+\item push F, 10
+\item pop
+\item push G, 4
+\item pop
+\item pop
+\item pop
+\item push H, 1
+\item pop
+\item pop
+\item \ldots
+\end{itemize}
+
+% Repeat the two parts above to represent the subsequent states of the priority queue.
+\begin{tabular}{ccccccccccccccc}
+\textbf{priority} & 0 & 1 & 2 & 3 & \textcolor{blue}{4} & 5 & 6 & 7 & 8 & 9 & 10 & \textcolor{green}{11} & 12 & 13 & 14 \\
+\textbf{element} & & & & & B & & & & & & & A & & & \\
+\textbf{max} & & & & & & & & & & & & & & & \\
+\end{tabular}
+
+\begin{itemize}
+\item push A, 12
+\item push B, 5
+\item push C, 9
+\item $\rightarrow$ pop
+\item push E, 3
+\item push F, 10
+\item pop
+\item push G, 4
+\item pop
+\item pop
+\item pop
+\item push H, 1
+\item pop
+\item pop
+\item \ldots
+\end{itemize}
+
+% Note for the item '\rightarrow pop' with red arrow
+% You can use \textcolor for the arrow or custom commands from a package like tikz for better arrow representation.
+
+% End of the document content
+
+
+% Since LaTeX does not support rendering of images directly, we will represent them with [TBD].
+
+% Priority Queue Operation Demonstrations
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+priority & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+element & \textcolor{blue}{E} & \textcolor{blue}{B} & \textcolor{blue}{C} & & & & & & & & & & \textcolor{green}{A} & & \\
+\hline
+max & & & & & & & & & & & & & \textcolor{green}{$\uparrow$} & & \\
+\hline
+\end{tabular}
+
+\begin{itemize}
+    \item push A, 12
+    \item push B, 5
+    \item push C, 9
+    \item pop $\rightarrow$ A
+    \item push E, 3
+    \item push F, 10
+    \item pop
+    \item push G, 4
+    \item pop
+    \item pop
+    \item push H, 1
+    \item pop
+    \item \dots
+\end{itemize}
+
+% The next state of the priority queue after further operations
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+priority & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+element & \textcolor{blue}{E} & \textcolor{blue}{B} & \textcolor{blue}{C} & \textcolor{blue}{F} & & & & & & & & & \textcolor{green}{A} & & \\
+\hline
+max & & & & & & & & & & & & & \textcolor{green}{$\uparrow$} & & \\
+\hline
+\end{tabular}
+
+% The final state shown in the image with F having been popped
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+priority & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+element & \textcolor{blue}{E} & \textcolor{blue}{B} & \textcolor{blue}{C} & & & & & & & & & & \textcolor{green}{A} & & \\
+\hline
+max & & & & & & & & & & & \textcolor{green}{$\uparrow$} & & & & \\
+\hline
+\end{tabular}
+
+\begin{itemize}
+    \item push A, 12
+    \item push B, 5
+    \item push C, 9
+    \item pop $\rightarrow$ A
+    \item push E, 3
+    \item push F, 10
+    \item pop $\rightarrow$ F
+    \item push G, 4
+    \item pop
+    \item pop
+    \item push H, 1
+    \item pop
+    \item \dots
+\end{itemize}
+
+% In LaTeX tables, coloring of individual cells is achieved using the \textcolor command.
+% The arrow indicating 'max' is created using an $\uparrow$ inside a \textcolor environment.
+% The queue operations are listed as in an itemize environment for clarity.
+% The content shown in the image as highlighted (e.g., E, B, C, A, F) is used as shown, with colors indicated by textcolor.
+% The placeholder [TBD] is used to represent non-text elements such as images which are not transcribed here.
+
+
+% Since LaTeX is not designed to handle images within code naturally, we replace the image content that cannot be represented by LaTeX with a placeholder [TBD]. 
+% Only the text content is transcribed below as requested.
+
+
+\begin{verbatim}
+priority  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+element       E  G  B                 C  F        A
+max
+
+push A, 12
+push B, 5
+push C, 9
+pop            ->A
+push E, 3
+push F, 10
+pop                 ->F
+push G, 4
+pop
+pop
+pop
+push H, 1
+pop
+pop
+.
+.
+.
+\end{verbatim}
+
+\begin{verbatim}
+priority  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+element       E  G  B                 C  F        A
+max
+
+push A, 12
+push B, 5
+push C, 9
+pop            ->A
+push E, 3
+push F, 10
+pop                 ->F
+push G, 4
+pop                 ->C
+pop
+pop
+push H, 1
+pop
+pop
+.
+.
+.
+\end{verbatim}
+
+\begin{verbatim}
+priority  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
+element       E  G  B                 C  F        A
+max
+
+push A, 12
+push B, 5
+push C, 9
+pop            ->A
+push E, 3
+push F, 10
+pop                 ->F
+push G, 4
+pop                 ->C
+pop                 ->B
+pop
+push H, 1
+pop
+pop
+.
+.
+.
+\end{verbatim}
+
+
+\textbf{priority} \hspace{10pt} 0 \hspace{10pt} 1 \hspace{10pt} 2 \hspace{10pt} 3 \hspace{10pt} 4 \hspace{10pt} 5 \hspace{10pt} 6 \hspace{10pt} 7 \hspace{10pt} 8 \hspace{10pt} 9 \hspace{10pt} 10 \hspace{10pt} 11 \hspace{10pt} 12 \hspace{10pt} 13 \hspace{10pt} 14
+
+\textbf{element} \hspace{10pt} E \hspace{10pt} G \hspace{10pt} B \hspace{10pt} [TBD] \hspace{10pt} [TBD] \hspace{10pt} C \hspace{10pt} F \hspace{10pt} A
+
+\textbf{max} [TBD]
+
+\begin{verbatim}
+push A,12
+push B,5
+push C,9
+pop -> A
+push E,3
+push F,10
+pop -> F
+push G,4
+pop -> C
+pop -> B
+pop -> G
+push H,1
+pop
+pop
+.
+.
+.
+\end{verbatim}
+
+% Repeat the same structure for additional stages
+% I will include only the commands for the first block.
+% The representation should be duplicated and modified as necessary
+% for the blocks that follow.
+
+
+
+% The following LaTeX code is organized to reflect the lecture content as shown in the image
+% The code does not include preamble and document start/end commands
+% It assumes that the necessary packages for tabular environments are included in the preamble
+% Replace [TBD] with the corresponding LaTeX code for non-textual elements that cannot be represented here
+
+\begin{tabular}{ccccccccccccccc}
+\textbf{priority} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\textbf{element} & H & & & E & G & B & & & & C & F & & A & & \\
+\textbf{max} & & $\uparrow$ & & & & & & & & & & & & & \\
+\end{tabular}
+
+\begin{tabular}{ll}
+push A, 12 & \\
+push B, 5 & \\
+push C, 9 & \\
+pop & $\rightarrow$ A \\
+push E, 3 & \\
+push F, 10 & \\
+pop & $\rightarrow$ F \\
+push G, 4 & \\
+pop & $\rightarrow$ C \\
+pop & $\rightarrow$ B \\
+pop & $\rightarrow$ G \\
+push H, 1 & \\
+pop & $\rightarrow$ E \\
+pop & $\rightarrow$ H \\
+\end{tabular}
+
+\subsection{Implementation details}
+
+\begin{itemize}
+  \item good for branch predictor
+  \item great for caches
+  \item we can store, additionally, an array of $P$ bits (``bitmap'')
+  \begin{itemize}
+    \item bit $p$ set to one if there is an element with priority $p$
+    \item makes ``pop'' operations essentially 64x faster
+  \end{itemize}
+\end{itemize}
+
+\\subsection{Applications of bitmap priority queues}
+
+\begin{itemize}
+  \item Linux kernel: scheduling parallel tasks
+  \item Linear algebra: sparse matrices
+\end{itemize}
+
+
+
+% The following LaTeX code is for the transcription of the provided image content detailing sort operations and comparison sort methods.
+
+
+
+\subsection{Sort Operations}
+
+\subsection{Heap sort}
+\begin{itemize}
+    \item Push $n$ elements to heap: $O(n \log n)$
+    \item Pop $n$ elements one by one: $O(n \log n)$
+\end{itemize}
+
+\[
+\Rightarrow O(n \log n) \text{ worst case}
+\]
+
+\subsection{Comparison sort methods}
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccc}
+\hline
+\textbf{Method} & \textbf{Average} & \textbf{Worst case} & \textbf{Additional storage} \\
+\hline
+Quicksort & $O(n \log(n))$ & $O(n^2)$ & none \\
+Merge sort & $O(n \log(n))$ & $O(n \log(n))$ & $n$ \\
+Heap sort & $O(n \log(n))$ & $O(n \log(n))$ & none \\
+\hline
+\end{tabular}
+\end{table}
+
+% [TBD] is used for the column "Combines with insert. sort" as LaTeX tabular environment does not support direct content that is not text. 
+% The checks and crosses should be incorporated using a suitable LaTeX package or custom commands which are not provided in this transcription.
+
+
+
+% Transcription of the lecture material in LaTeX format
+
+\subsection{Special case 1}
+\begin{itemize}
+    \item Assume that
+    \begin{itemize}
+        \item we sort $n$ elements with priorities $S \subseteq \{0, \ldots, P - 1\}$
+        \item no two elements have the same priority (hence $P \geq n$)
+    \end{itemize}
+    \item Then,
+    \begin{itemize}
+        \item we represent the elements as a bitmap priority queue
+        \item Push: $O(n)$
+        \item Pop: $O(P)$
+    \end{itemize}
+    \item[] $\Rightarrow O(n + P)$
+\end{itemize}
+
+\subsection{Special case 2: counting sort}
+\begin{itemize}
+    \item Assume that
+    \begin{itemize}
+        \item we sort $n$ elements with priorities $S \subseteq \{0, \ldots, P - 1\}$
+        \item $P \leq n$ (we may have duplicates)
+    \end{itemize}
+    \item Then,
+    \begin{itemize}
+        \item we allocate a static array \texttt{count} of size $P$
+        \item we allocate a static array \texttt{result} of size $n$
+        \item we count the number of occurences of each priority: $O(n)$
+        \item we sweep \texttt{count} backwards to determine offsets: $O(P) = O(n)$
+        \item we construct the sorted \texttt{result} list: $O(n)$
+    \end{itemize}
+    \item[] $\Rightarrow O(n)$
+\end{itemize}
+
+\subsection{Count}
+\begin{tabular}{ll}
+    priority & 3 6 1 3 3 7 5 6 1 6 \\ 
+    $\downarrow$ & \\
+    count index & 0 1 2 3 4 5 6 7 \\
+    count value & 0 0 0 0 0 0 0 0 \\
+    $\downarrow$ & \\
+    result index & 0 1 2 3 4 5 6 7 8 9 \\
+    result & \\
+    $\downarrow$ & \\
+\end{tabular}
+
+% The actual values for count value and result rows are not included in the LaTeX transcription as they are represented by the placeholder [TBD].
+
+
+% The priority line with values
+priority \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\quad \quad \textasciicircum \\
+\quad \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+
+% The count index and value lines
+count index \\
+count value \quad 0 \quad 0 \quad 0 \quad 1 \quad 0 \quad 0 \quad 0 \quad 0 \\
+\quad \quad \quad \quad \quad \textasciicircum \\
+\quad \quad \quad \quad \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+
+% The result index and the result placeholder
+result index \\
+result \\
+\quad \quad \textasciicircum \\
+
+
+% The priority line with values (continued)
+priority \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\quad \quad \textasciicircum \\
+\quad \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+
+% The count index and value lines (continued)
+count index \\
+count value \quad 0 \quad 0 \quad 0 \quad 1 \quad 0 \quad 0 \quad 0 \quad 1 \quad 0 \\
+\quad \quad \quad \quad \quad \textasciicircum \\
+\quad \quad \quad \quad \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+
+% The result index and the result placeholder (continued)
+result index \\
+result \\
+\quad \quad \textasciicircum \\
+
+
+% The priority line with values (final slide)
+priority \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\quad \quad \textasciicircum \\
+\quad \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+
+% The count index and value lines (final slide)
+count index \\
+count value \quad 0 \quad 1 \quad 0 \quad 1 \quad 0 \quad 0 \quad 1 \quad 0 \quad 0 \\
+\quad \quad \quad \quad \quad \textasciicircum \\
+\quad \quad \quad \quad \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+
+% The result index and the result placeholder (final slide)
+result index \\
+result \\
+\quad \quad \textasciicircum \\
+
+
+\begin{align*}
+    \text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+    \text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+    \text{count value} & \quad 0 \quad 1 \quad 0 \quad 2 \quad 0 \quad 0 \quad 1 \quad 0 \\
+    \text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+    \text{result} & \quad \\
+\end{align*}
+
+% Second image content transcription (Continuation of Count section, no need to repeat the section title)
+\begin{align*}
+    \text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+    \text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+    \text{count value} & \quad 0 \quad 1 \quad 0 \quad 3 \quad 0 \quad 0 \quad 1 \quad 0 \\
+    \text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+    \text{result} & \quad \\
+\end{align*}
+
+% Third image content transcription (Continuation of Count section, no need to repeat the section title)
+\begin{align*}
+    \text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+    \text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+    \text{count value} & \quad 0 \quad 1 \quad 0 \quad 3 \quad 0 \quad 0 \quad 1 \quad 1 \\
+    \text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+    \text{result} & \quad \\
+\end{align*}
+
+
+priority\hspace{10pt}3\hspace{10pt}6\hspace{10pt}1\hspace{10pt}3\hspace{10pt}3\hspace{10pt}7\hspace{10pt}5\hspace{10pt}6\hspace{10pt}1\hspace{10pt}6\\
+\^{}\\
+count index\hspace{35pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}3\hspace{10pt}4\hspace{10pt}5\hspace{10pt}6\hspace{10pt}7\\
+count value\hspace{10pt}0\hspace{10pt}1\hspace{10pt}0\hspace{10pt}3\hspace{10pt}0\hspace{10pt}1\hspace{10pt}1\hspace{10pt}1\\
+\^{}\\
+result index\hspace{27pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}3\hspace{10pt}4\hspace{10pt}5\hspace{10pt}6\hspace{10pt}7\hspace{10pt}8\hspace{10pt}9\\
+result\\
+\^{}\\
+
+priority\hspace{10pt}3\hspace{10pt}6\hspace{10pt}1\hspace{10pt}3\hspace{10pt}3\hspace{10pt}7\hspace{10pt}5\hspace{10pt}6\hspace{10pt}1\hspace{10pt}6\\
+\^{}\\
+count index\hspace{35pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}3\hspace{10pt}4\hspace{10pt}5\hspace{10pt}6\hspace{10pt}7\\
+count value\hspace{10pt}0\hspace{10pt}1\hspace{10pt}0\hspace{10pt}3\hspace{10pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}1\\
+\^{}\\
+result index\hspace{27pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}3\hspace{10pt}4\hspace{10pt}5\hspace{10pt}6\hspace{10pt}7\hspace{10pt}8\hspace{10pt}9\\
+result\\
+\^{}\\
+
+priority\hspace{10pt}3\hspace{10pt}6\hspace{10pt}1\hspace{10pt}3\hspace{10pt}3\hspace{10pt}7\hspace{10pt}5\hspace{10pt}6\hspace{10pt}1\hspace{10pt}6\\
+\^{}\\
+count index\hspace{35pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}3\hspace{10pt}4\hspace{10pt}5\hspace{10pt}6\hspace{10pt}7\\
+count value\hspace{10pt}0\hspace{10pt}2\hspace{10pt}0\hspace{10pt}3\hspace{10pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}1\\
+\^{}\\
+result index\hspace{27pt}0\hspace{10pt}1\hspace{10pt}2\hspace{10pt}3\hspace{10pt}4\hspace{10pt}5\hspace{10pt}6\hspace{10pt}7\hspace{10pt}8\hspace{10pt}9\\
+result\\
+\^{}
+
+% [TBD] tokens are used where images or non-textual elements are present in the original image content
+% The carets (^) are not mathematical symbols in this context; they represent markers or annotations in the image, hence in-text carets are used (\^{}) instead of the superscript mode in math
+% Adjustments to spacing between numbers and text are made using \hspace, which may need fine-tuning based on the actual LaTeX document class and font settings
+
+
+\begin{tabular}{llllllllllll}
+priority & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+count index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & & & \\
+count value & 0 & 2 & 0 & 3 & 0 & 1 & 3 & 1 & & & \\
+result index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \\
+result & & & & & & & & & & & \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between the sections
+
+\section{Determine offsets}
+
+\begin{tabular}{llllllllllll}
+priority & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+count index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & & & \\
+count value & 0 & 2 & 0 & 3 & 0 & 1 & 3 & 1 & & & \\
+result index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \\
+result & & & & & & & & & & & \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between the sections
+
+\section{Determine offsets}
+
+\begin{tabular}{llllllllllll}
+priority & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+count index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & & & \\
+count value & 0 & 2 & 0 & 3 & 0 & 1 & 4 & 1 & & & \\
+result index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \\
+result & & & & & & & & & & & \\
+\end{tabular}
+
+
+\subsection{Determine offsets}
+
+% First table
+\begin{tabular}{cccccccccccc}
+\textbf{priority} & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+\textbf{count index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+\textbf{count value} & 0 & 2 & 0 & 3 & 0 & 5 & 4 & 1 \\
+\textbf{result index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\textbf{result} & & & & & \textuparrow & & & & & \\
+\end{tabular}
+
+\vspace{10pt} % Adds vertical space between the tables
+
+% Second table (repeated material in the image is replicated here)
+\begin{tabular}{cccccccccccc}
+\textbf{priority} & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+\textbf{count index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+\textbf{count value} & 0 & 2 & 0 & 3 & 5 & 5 & 4 & 1 \\
+\textbf{result index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\textbf{result} & & & & & \textuparrow & & & & & \\
+\end{tabular}
+
+\vspace{10pt} % Adds vertical space between the tables
+
+% Third table
+\begin{tabular}{cccccccccccc}
+\textbf{priority} & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+\textbf{count index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+\textbf{count value} & 0 & 2 & 0 & 8 & 5 & 5 & 4 & 1 \\
+\textbf{result index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\textbf{result} & & & & & \textuparrow & & & & & \\
+\end{tabular}
+
+
+% First slide content
+\begin{align*}
+\text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+\text{count value} & \quad 0 \quad 2 \quad 8 \quad 5 \quad 5 \quad 4 \quad 1 \quad \uparrow \\
+\text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+\text{result} & \quad 
+\end{align*}
+
+% Second slide content
+\begin{align*}
+\text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+\text{count value} & \quad 0 \quad 10 \quad 8 \quad 8 \quad 5 \quad 5 \quad 4 \quad 1 \quad \uparrow \\
+\text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+\text{result} & \quad 
+\end{align*}
+
+% Third slide content
+\begin{align*}
+\text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+\text{count value} & \quad 10 \quad 10 \quad 8 \quad 8 \quad 5 \quad 5 \quad 4 \quad 1 \quad \uparrow \\
+\text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+\text{result} & \quad 
+\end{align*}
+
+% Non-textual elements (arrows) are represented by \uparrow.
+% In the LaTeX code above, [TBD] has been replaced with an empty space in the 'result' line to represent the absence of result values.
+
+
+
+% Since LaTeX doesn't support images directly without the \includegraphics command,
+% the screenshots or any pictorial representations are replaced by [TBD].
+
+
+\subsection{Construct result}
+
+\subsection{Slide 1}
+\begin{align*}
+\text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+\text{count value} & \quad 10 \quad 10 \quad 8 \quad 8 \quad 5 \quad 5 \quad 4 \quad 1 \\
+\text{result index} & \\
+\text{result} & \\
+\end{align*}
+
+\subsection{Slide 2}
+\begin{align*}
+\text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+\text{count value} & \quad 10 \quad 10 \quad 8 \quad 7 \quad 5 \quad 5 \quad 4 \quad 1 \\
+\text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+\text{result} & \quad \quad \quad \quad \quad \quad \quad \quad \quad \quad 3 \\
+\end{align*}
+
+\subsection{Slide 3}
+\begin{align*}
+\text{priority} & \quad 3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6 \\
+\text{count index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \\
+\text{count value} & \quad 10 \quad 10 \quad 8 \quad 7 \quad 5 \quad 3 \quad 1 \\
+\text{result index} & \quad 0 \quad 1 \quad 2 \quad 3 \quad 4 \quad 5 \quad 6 \quad 7 \quad 8 \quad 9 \\
+\text{result} & \quad \quad \quad \quad \quad \quad 6 \quad \quad \quad 3 \\
+\end{align*}
+
+
+\begin{tabular}{cccccccc}
+\textbf{priority} & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+\end{tabular}
+
+\vspace{5mm} % Provide some vertical space between the tables
+
+\begin{tabular}{cccccccc}
+& \multicolumn{1}{r}{$\uparrow$} \\
+\textbf{count index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+\textbf{count value} & 10 & 9 & 8 & 7 & 5 & 5 & 3 & 1 \\
+\end{tabular}
+
+\vspace{5mm} % Provide some vertical space between the tables
+
+\begin{tabular}{cccccccccc}
+\textbf{result index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\textbf{result} & & & 6 & & & 3 & & & 1 & \\
+& & & $\uparrow$ & & & $\uparrow$ & & & $\uparrow$ & \\
+\end{tabular}
+
+\newpage % Assuming each 'Construct result' section is to start on a new page
+
+
+\begin{tabular}{*{8}{c}}
+\textbf{priority} & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+\textbf{count index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 &  & \\
+\textbf{count value} & 10 & 9 & 8 & 5 & 5 & 5 & 3 & 0 &  & \textsuperscript{v} \\
+\textbf{result index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\textbf{result} &  &  &  &  &  & 7 & 6 & 3 & 3 & 3 & 1 \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between the tables
+
+% Second table starts here
+\textbf{Construct result}
+
+\begin{tabular}{*{10}{c}}
+\textbf{priority} & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+\textbf{count index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 &  & \\
+\textbf{count value} & 10 & 9 & 8 & 5 & 5 & 4 & 3 & 0 &  & \textsuperscript{v} \\
+\textbf{result index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\textbf{result} &  &  &  &  & 7 & 6 & 5 & 3 & 3 & 3 & 1 \\
+\end{tabular}
+
+\vspace{2em} % Add some vertical space between the tables
+
+% Third table starts here
+\textbf{Construct result}
+
+\begin{tabular}{*{10}{c}}
+\textbf{priority} & 3 & 6 & 1 & 3 & 3 & 7 & 5 & 6 & 1 & 6 \\
+\textbf{count index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 &  & \\
+\textbf{count value} & 10 & 9 & 8 & 5 & 4 & 2 & 0 &  &  & \textsuperscript{v} \\
+\textbf{result index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+\textbf{result} &  &  & 7 & 6 & 6 & 5 & 3 & 3 & 3 & 1 \\
+\end{tabular}
+
+
+
+\textbf{priority}\\
+3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6\\
+$\uparrow$\\
+
+% Using tabular to align the numbers under 'count index' and 'count value'
+\begin{tabular}{ccccccccc}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\
+10 & 8 & 8 & 5 & 5 & 4 & 2 & 0\\
+$\uparrow$
+\end{tabular}
+
+% Using tabular to align the numbers under 'result index' and 'result'
+\begin{tabular}{cccccccccc}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\\
+7 & 6 & 6 & 5 & 3 & 3 & 3 & 1 & 1\\
+$\uparrow$
+\end{tabular}
+
+\vspace{2em} % adding extra vertical space to separate the content blocks
+
+
+\textbf{priority}\\
+3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6\\
+$\uparrow$\\
+
+% Using tabular to align the numbers under 'count index' and 'count value'
+\begin{tabular}{ccccccccc}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\
+10 & 8 & 8 & 5 & 5 & 4 & 1 & 0\\
+$\uparrow$
+\end{tabular}
+
+% Using tabular to align the numbers under 'result index' and 'result'
+\begin{tabular}{cccccccccc}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\\
+7 & 6 & 6 & 6 & 5 & 3 & 3 & 3 & 1 & 1\\
+$\uparrow$
+\end{tabular}
+
+\vspace{2em} % adding extra vertical space to separate the content blocks
+
+\subsection{Result}
+
+\textbf{priority}\\
+3 \quad 6 \quad 1 \quad 3 \quad 3 \quad 7 \quad 5 \quad 6 \quad 1 \quad 6\\
+$\uparrow$\\
+
+% Using tabular to align the numbers under 'count index' and 'count value'
+\begin{tabular}{ccccccccc}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\
+10 & 8 & 8 & 5 & 5 & 4 & 1 & 0\\
+$\uparrow$
+\end{tabular}
+
+% Using tabular to align the numbers under 'result index' and 'result'
+\begin{tabular}{cccccccccc}
+0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9\\
+7 & 6 & 6 & 6 & 5 & 3 & 3 & 3 & 1 & 1\\
+$\uparrow$
+\end{tabular}

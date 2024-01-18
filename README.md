@@ -55,13 +55,13 @@ Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the r
 | Lecture 13  |   ✅     |         ❌         |
 | Lecture 14  |   ✅     |         ❌         |
 | Lecture 15  |   ✅     |         ❌         |
-| Lecture 16  |   ⚙️     |         ❌         |
-| Lecture 17  |   ⚙️     |         ❌         |
-| Lecture 18  |   ⚙️     |         ❌         |
-| Lecture 19  |   ⚙️     |         ❌         |
-| Lecture 20  |   ⚙️     |         ❌         |
-| Lecture 21  |   ⚙️     |         ❌         |
-| Lecture 22  |   ⚙️     |         ❌         |
+| Lecture 16  |   ✅     |         ❌         |
+| Lecture 17  |   ✅     |         ❌         |
+| Lecture 18  |   ✅     |         ❌         |
+| Lecture 19  |   ✅     |         ❌         |
+| Lecture 20  |   ✅     |         ❌         |
+| Lecture 21  |   ✅     |         ❌         |
+| Lecture 22  |   ✅     |         ❌         |
 
 
 Here:

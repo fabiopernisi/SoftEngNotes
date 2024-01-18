@@ -1,0 +1,618 @@
+
+
+
+% Since the content is intended for lecture slides, it's common to use the beamer class for presentations
+% However, as per the instruction, no document class or preamble settings are included here
+% This LaTeX code should be embedded within a proper LaTeX document with the beamer class or another suitable class for rendering
+
+\section{Lecture 17}
+
+\subsection{More caches and pipelines}
+
+\begin{itemize}
+    \item recall that memory is \textit{virtualized}
+    \item a virtual address $\rightarrow$ hardware address translation is necessary for \textit{every memory access}
+    \item the translation uses a \textit{page table}
+    \item the page table is stored in \textit{memory}
+    \item hence two effective memory accesses per memory fetch instruction?
+\end{itemize}
+
+\textbf{Solution:} part of the \textit{page table} is \textbf{cached} in the CPU
+
+the ``Translation Lookaside Buffer'' (TLB)
+
+% [TBD] token is used to replace non-textual elements that cannot be represented in LaTeX
+
+% End of transcription
+
+
+% Transcription of the lecture content into LaTeX format
+
+Caches are used at various levels to hide access latency
+
+\begin{tabular}{lcc}
+\textbf{typical latency} & & \\
+instruction & $\sim0.25$ ns & $0.25$ ns \\
+RAM & $\sim100$ ns & $100$ ns \\
+solid state drive (SSD) & $\sim0.2$ ms & $200,000$ ns \\
+hard disk drive (HDD) & $\sim2$ ms & $2,000,000$ ns \\
+wired ethernet (round-trip) & $\sim1$ ms & $1,000,000$ ns \\
+wifi latency (round-trip) & $\sim10$ ms & $10,000,000$ ns \\
+same-city internet (round-trip) & $\sim5$ ms & $5,000,000$ ns \\
+same-continent internet (round-trip) & $\sim25$ ms & $25,000,000$ ns \\
+transatlantic internet (round-trip) & $\sim100$ ms & $100,000,000$ ns \\
+\end{tabular}
+
+\subsection{Examples of caches}
+\begin{itemize}
+\item SSDs have internal RAM caches (typically 0-4 GB)
+\item the operating system caches files in memory
+\item large content provides (Google, Amazon, Netflix, Cloudflare) have caches all over the world
+\end{itemize}
+
+% The following 'ping' command outputs are provided as verbatim text since LaTeX does not 
+% typically support code/output verbatim in formatted text without additional packages.
+\begin{verbatim}
+PING canada.ca (205.193.117.159) 56(84) bytes of data.
+64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=1 ttl=228 time=200 ms
+64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=2 ttl=228 time=172 ms
+64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=3 ttl=228 time=148 ms
+64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=4 ttl=228 time=181 ms
+
+PING google.com.au (142.251.209.3) 56(84) bytes of data.
+64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=1 ttl=115 time=12.2 ms
+64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=2 ttl=115 time=14.6 ms
+64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=3 ttl=115 time=14.9 ms
+64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=4 ttl=115 time=11.8 ms
+\end{verbatim}
+
+\subsection{Examples of pipelines}
+\begin{itemize}
+\item Storage devices:
+\begin{itemize}
+    \item SSDs typically access data in “pages” of 4096 bytes
+    \item 0.2ms SSD latency would imply a max speed of 20 MB/s
+    \item instead SSDs routinely read and write 500 MB/s
+\end{itemize}
+\item Networks:
+\begin{itemize}
+    \item Network packets are typically 1500 bytes
+    \item 10ms WiFi latency would imply 150 KB/s
+    \item instead most WiFi networks do at least 10 MB/s
+\end{itemize}
+\item Browsers:
+\begin{itemize}
+    \item Google Chrome maintains up to 6 connections per domain
+\end{itemize}
+\end{itemize}
+
+
+% We begin with a basic structure for a LaTeX document, such as article class.
+% Since the instructions specify not to add document creation commands, they are omitted here.
+% We will instead focus solely on the body content.
+
+% The slide title "BENCHMARKING" is formatted as a section.
+\subsection{Benchmarking}
+
+% The following is a verbatim reproduction of the command line input and its output.
+\begin{verbatim}
+time ./application
+\end{verbatim}
+% Below are the results of the command, formatted as it would appear in a terminal.
+\begin{verbatim}
+real    0m2.581s
+user    0m2.498s
+sys     0m0.081s
+\end{verbatim}
+
+% Now we list the points about real, user, and sys as bullet points
+\begin{itemize}
+    \item real: elapsed “real” (wall-clock) time
+    \item user: time spent in user mode (running ./application code)
+    \item sys: time spent in system mode (running OS kernel code)
+    \item user + sys $\leq$ real (there may be other applications running)
+\end{itemize}
+
+% Next, we have another command and its output, again in a verbatim environment.
+\begin{verbatim}
+time head -n 1000000 /dev/random > /dev/null
+\end{verbatim}
+
+% The results from the second command.
+\begin{verbatim}
+real    0m0.777s
+user    0m0.109s
+sys     0m0.668s
+\end{verbatim}
+
+% Any additional explanatory text or notes can be added as comments.
+% For example, explaining that the [TBD] placeholders are where non-textual elements would be included.
+
+% Title of the section
+\subsection{Variance}
+
+% Presenting three separate instances of the 'time' command with its output
+\begin{verbatim}
+time head -n 1000000 /dev/random > /dev/null
+real    0m2.525s
+user    0m2.497s
+sys     0m0.023s
+
+time head -n 1000000 /dev/random > /dev/null
+real    0m2.505s
+user    0m2.500s
+sys     0m0.002s
+
+time head -n 1000000 /dev/random > /dev/null
+real    0m2.581s
+user    0m2.496s
+sys     0m0.001s
+\end{verbatim}
+
+% Subsection for reasons of variance
+\subsection{Reasons for variance}
+\begin{itemize}
+  \item power and temperature throttling \\
+  (CPU adapts speed to avoid overheating)
+  
+  \item interactions with devices \\
+  (OS has in-memory caches for files, storage devices have internal memory caches)
+  
+  \item other processes \\
+  (must share resources)
+\end{itemize}
+
+% System monitoring tools output (replaced by [TBD] since actual content is non-textual and cannot be represented in LaTeX)
+\begin{verbatim}
+top             htop            ps aux
+[TBD]
+\end{verbatim}
+
+% Placeholder for image content
+% The image content showing the system tools output has been replaced with [TBD]
+% as the actual terminal output cannot be translated directly into LaTeX.
+% For compilation, replace [TBD] with appropriate non-textual content if necessary.
+(271 processes)
+
+% End of the document environment
+
+
+% Effect of file caches section
+\subsection{Effect of file caches}
+
+\begin{verbatim}
+time md5sum 2GB_file
+
+86b0a02a913d13fd34b6a8d8bfbdd2c2  2GB_file
+real    0m5.904s
+user    0m0.962s
+sys     0m4.560s
+
+time md5sum 2GB_file
+
+86b0a02a913d13fd34b6a8d8bfbdd2c2  2GB_file
+real    0m4.029s
+user    0m3.674s
+sys     0m0.331s
+\end{verbatim}
+
+% Inaccuracies section
+\subsection{Inaccuracies}
+\begin{itemize}
+    \item executable startup is slow
+    \item initialization adds overhead
+    \item input and output are slow
+\end{itemize}
+
+% Executable startup is slow section
+\subsection{Executable startup is slow}
+
+\begin{verbatim}
+int main() { return 0; }
+
+clang -O3 -o main main.c
+time ./main
+
+real    0m0.003s
+user    0m0.000s
+sys     0m0.002s
+
+time python -c 'exit()'
+
+real    0m0.030s
+user    0m0.023s
+sys     0m0.008s
+\end{verbatim}
+
+% Note on benchmarking applications with millisecond runtimes
+\textit{$\rightarrow$ We cannot accurately benchmark application that only take a few milliseconds.}
+
+
+\subsection{Initialization adds overhead}
+\begin{verbatim}
+time glpsol LP_57x6138380.mps
+
+real    0m0.256s
+user    0m0.246s
+sys     0m0.010s
+\end{verbatim}
+
+\begin{verbatim}
+time glpsol --check LP_57x6138380.mps
+
+real    0m0.168s
+user    0m0.161s
+sys     0m0.008s
+\end{verbatim}
+
+% What are we really measuring?
+What are we really measuring?
+
+The speed of the MPS file parser, not the simplex algorithm.
+
+\subsection{Input and output are slow}
+\begin{verbatim}
+def riemann_zeta(s):
+    r = 0.0
+    for i in range(1, 1000000):
+        r += 1 / (i ** s)
+    return r
+
+# π^2 / 6
+print('pi = ', (riemann_zeta(2) * 6) ** 0.5)
+\end{verbatim}
+
+\begin{verbatim}
+time python zeta.py
+
+pi = 3.141592653589554
+\end{verbatim}
+
+\begin{verbatim}
+real    0m0.124s
+user    0m0.118s
+sys     0m0.006s
+\end{verbatim}
+
+\begin{verbatim}
+def riemann_zeta(s):
+    r = 0.0
+    for i in range(1, 1000000):
+        r += 1 / (i ** s)
+        print('r = ', r)
+    return r
+
+# π^2 / 6
+print('pi = ', (riemann_zeta(2) * 6) ** 0.5)
+\end{verbatim}
+
+\begin{verbatim}
+time python zeta.py
+
+[TBD]  % An ellipsis to stand in for omitted consecutive outputs
+
+pi = 3.141592653589554
+\end{verbatim}
+
+\begin{verbatim}
+real    0m3.168s
+user    0m2.916s
+sys     0m0.199s
+\end{verbatim}
+
+\usepackage{booktabs} % For formal tables
+
+
+\subsection{Aggregate measures}
+
+\begin{itemize}
+    \item if we benchmark our code on different inputs, we may want to use
+    \begin{itemize}
+        \item total time / average time
+        \item geometric mean
+        \item or other aggregate measures
+        \item or some visualization (bar graphs, performance profiles, etc.)
+    \end{itemize}
+    \item but beware: all aggregate measures are biased
+\end{itemize}
+
+\medskip
+\begin{tabular}{lcccc}
+    \toprule
+    & Input 1 & Input 2 & Input 3 & Average \\
+    \midrule
+    Version A & 2530s & 2300s & 12s & 1614s \\
+    Version B & 2535s & 1.002x & 2304s & 1.002x & 6s & 0.5x & 1615s \\
+    \bottomrule
+\end{tabular}
+
+\subsection{Static instrumentation}
+
+\begin{itemize}
+    \item we may want to benchmark \textbf{specific parts} of our code
+    \begin{itemize}
+        \item to circumvent executable startup, initialization, and input/output
+        \item to benchmark parts of the code that run quickly
+        \item to find \textbf{bottlenecks}
+    \end{itemize}
+    \item for that, we need to add timing instrumentation to our code
+\end{itemize}
+
+\subsection{About bottlenecks}
+
+\begin{quote}
+    ``Premature optimization is the root of all evil'' \\
+    --- Donald Knuth \\
+    ``Structured Programming With GoTo Statements'' \\
+    1974
+\end{quote}
+
+% Replace [TBD] with specific instructions or includegraphics commands to insert relevant figures, images, etc.
+% [TBD]
+
+\begin{itemize}
+    \item function\_A() \hfill 12\% time \hfill 500 lines of code
+    \item function\_B() \hfill 60\% time \hfill 20 lines of code
+    \item function\_C() \hfill 18\% time \hfill 80 lines of code
+    \item all the rest \hfill 10\% time \hfill 2000 lines of code
+\end{itemize}
+
+\subsection{time.time()}
+\begin{verbatim}
+import time
+
+t0 = time.time()
+initialize()
+t1 = time.time()
+function_A()
+t2 = time.time()
+function_B()
+t3 = time.time()
+function_C()
+t4 = time.time()
+cleanup()
+t5 = time.time()
+
+print(f'total time: {t5 - t0:16.6f}')
+print(f'function_A: {t2 - t1:16.6f}')
+print(f'function_B: {t3 - t2:16.6f}')
+print(f'function_C: {t4 - t3:16.6f}')
+print(f'     rest: {(t5 - t4) + (t1 - t0):16.6f}')
+\end{verbatim}
+
+\subsection{clock\_gettime()}
+\begin{verbatim}
+int main()
+{
+    initialize();
+    function_A();
+    function_B();
+    function_C();
+    cleanup();
+    return 0;
+}
+\end{verbatim}
+
+\begin{verbatim}
+int main()
+{
+    struct timespec t0, t1, t2, t3, t4, t5;
+
+    clock_gettime(CLOCK_MONOTONIC, &t0);
+    initialize();
+    clock_gettime(CLOCK_MONOTONIC, &t1);
+    function_A();
+    clock_gettime(CLOCK_MONOTONIC, &t2);
+    function_B();
+    clock_gettime(CLOCK_MONOTONIC, &t3);
+    function_C();
+    clock_gettime(CLOCK_MONOTONIC, &t4);
+    cleanup();
+    clock_gettime(CLOCK_MONOTONIC, &t5);
+
+    print_all_clocks(&t0, &t1, &t2, &t3, &t4, &t5);
+    return 0;
+}
+\end{verbatim}
+
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Define colors for code listing
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{lightgray},   
+    commentstyle=\color{green},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+\subsection{Cumulative time}
+
+\begin{lstlisting}[language=Python]
+import time.time
+
+initialize()
+tA, tB, tC = 0
+
+for i in range(1000000):
+    t0 = time.time()
+    function_A()
+    t1 = time.time()
+    function_B()
+    t2 = time.time()
+    function_C()
+    t3 = time.time()
+    
+    tA = tA + (t1 - t0)
+    tB = tB + (t2 - t1)
+    tC = tC + (t3 - t2)
+
+cleanup()
+
+\end{lstlisting}
+
+\textbf{Caveat:} measuring time takes time!
+
+\texttt{time.time()} \~{} 40 ns (and the actual time fluctuates)
+
+\subsection{Microbenchmarks}
+
+What do we do if \texttt{function\_A()} takes much less time than \texttt{time.time()}?
+
+Microbenchmark for function\_A():
+
+\begin{lstlisting}[language=Python]
+import time.time
+
+initialize()
+
+t0 = time.time()
+
+for i in range(50000000):
+    function_A()
+
+t1 = time.time()
+
+cleanup()
+
+\end{lstlisting}
+
+\subsection{Microbenchmarks limitations}
+
+\begin{itemize}
+    \item It may not make sense to call \texttt{function\_A()} in isolation
+    \begin{itemize}
+        \item Take \texttt{sin(x)} for example: which value of x do we choose?
+        \item Always the same?
+        \begin{itemize}
+            \item Are we sure \texttt{sin(0)} takes as much time as \texttt{sin(0.1)}?
+        \end{itemize}
+        \item A random value for x?
+        \begin{itemize}
+            \item What if generating pseudo-random values takes more time than \texttt{sin()}?
+        \end{itemize}
+    \end{itemize}
+    \item What about caches?
+    \begin{itemize}
+        \item Caches will be "hot" (already filled with relevant data)
+        \item Microbenchmarking presents an over-optimistic picture of memory access times
+    \end{itemize}
+\end{itemize}
+
+
+% Notes:
+% The original image included two code snippets, one at the top and one at the middle of the page.
+% Both code snippets have been transcribed verbatim into LaTeX using the 'listings' package.
+% The text outside of the code snippets, including the section headers and bullet points, has been transcribed using regular LaTeX commands.
+% The caution about the time measurement and the approximation for time.time() are written in text mode, with appropriate formatting for the 'time.time()' reference within text.
+% Specific formatting or styling information (e.g., fonts, alignment) that has not been explicitly conveyed in the image will not be reflected in this transcript.
+
+\usepackage{verbatim}
+
+
+\subsection{Automated instrumentation: profilers}
+
+\subsection{gprof}
+
+Add ``-pg'' to gcc/clang parameters
+\begin{verbatim}
+gcc -O3 -o app app.c -pg
+\end{verbatim}
+
+Run the application
+\begin{verbatim}
+./app
+\end{verbatim}
+
+Generate report
+\begin{verbatim}
+gprof app 
+\end{verbatim}
+
+[TBD] % Placeholder for the portion of the image containing report data
+
+% Below is the representation of the text in the Flat profile section
+\begin{verbatim}
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+ %   cumulative   self              self     total           
+time   seconds   seconds    calls  Ts/call  Ts/call  name    
+63.77    3.82     3.82        1     3.82     4.24  tree_fds
+48.18    5.85     2.03    25737     0.00     0.00  tixu_build
+2.84     5.90     0.17    10331     0.00     0.00  aux_d_sort_swapper
+0.33     5.99     0.02     6735     0.00     0.00  tree_sprnt
+0.00     5.99     0.00      706     0.00     0.00  tree_gc
+0.00     5.99     0.00        6     0.00     0.00  dict_spfind_file
+0.00     5.99     0.00        1     0.00     0.00  dict_filter_dupes
+0.00     5.99     0.00        1     0.00     0.00  lct_hash_word
+0.00     5.99     0.00        1     0.00     0.00  solver_connected
+0.00     5.99     0.00        1     0.00     5.97  tree_build
+\end{verbatim}
+
+
+
+% Start of the LaTeX document for the lecture content transcription
+
+% First code-like block
+\begin{verbatim}
+index % time    self  children    called     name
+                s/call  s/call
+
+[1]    99.7    0.00    5.97       1/1       main [2]
+                0.00    5.97       1/1       tree_build [1]
+                3.82    0.42       1/1       tree_dfs [3]
+                1.73    0.00       1/1       lut_build [4]
+                0.00    0.00       1/10331   aux_d_sort_wrapper [5]
+                0.00    0.00       1/1       lut_hashword [12]
+                0.00    0.00       1/6       dict_append_file [10]
+---------------------------------------------------------
+[2]    99.7    0.00    5.97                 <spontaneous>
+                0.00    5.97       1/1       main [2]
+                0.00    0.00       1/1       tree_build [1]
+                ........................................
+                ........................................
+                0.00    0.00       4174      solver_connected [13]
+                3.82    0.42       1/4174    tree_dfs [3]
+\end{verbatim}
+
+% Second code-like block
+\begin{verbatim}
+[3]    70.8    3.82    0.42       1/4174    tree_build [1]
+                3.82    0.42       1/4174    tree_dfs [3]
+                0.17    0.25       103301/10331 aux_d_sort_swapper [5]
+                0.00    0.00       6715/6715  aux_hg_sort [8]
+                0.00    0.00       0/7616     tree_sum [9]
+                0.00    0.00       4174      tree_dfs [3]
+\end{verbatim}
+
+% Bullet points section
+\begin{itemize}
+  \item Pros
+  \begin{itemize}
+    \item Easy to use
+    \item Exhaustive profile information
+    \item Generally low overhead
+  \end{itemize}
+  \item Cons
+  \begin{itemize}
+    \item Overhead increases when bottlenecks are in small, short functions (up to 2x runtime)
+    \item Limited accuracy
+  \end{itemize}
+\end{itemize}
