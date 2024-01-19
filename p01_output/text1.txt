@@ -682,7 +682,7 @@ b3 & b2 & b1 & b0 & unsigned & signed \\
 1 & 1 & 1 & 1 & 15 & -1 \\
 \end{tabular}
 
-\subsection{Example:}
+\subsubsection{Example:}
 
 \begin{tabular}{lcl}
 signedness & decimal & binary \\
@@ -691,7 +691,7 @@ unsigned & $2 + 11 = 13$ & $0010_b + 1011_b = 1101_b$ \\
 signed & $2 + (-5) = -3$ & $0010_b + 1011_b = 1101_b$ 
 \end{tabular}
 
-\subsection{Range of values for different bit sizes:}
+\subsubsection{Range of values for different bit sizes:}
 
 \begin{tabular}{cccc}
 bits & $-2^{bits-1}$ (min) & $2^{bits-1} - 1$ (max) \\
@@ -703,7 +703,7 @@ bits & $-2^{bits-1}$ (min) & $2^{bits-1} - 1$ (max) \\
 128 & $\approx -2.10^{38}$ & $\approx 2.10^{38}$ \\
 \end{tabular}
 
-\subsection{Q: What happens if we run this?}
+\paragraph{Q: What happens if we run this?}
 
 \begin{verbatim}
 unsigned char a = 255;            signed char a = 127;
