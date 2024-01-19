@@ -1,15 +1,15 @@
 \newpage
 \section{Boolean Logic and Integers}
 
-\subsection{BOOLEAN LOGIC}
+\subsection{Boolean Logic}
 
-\subsubsection*{Boolean values}
+\subsubsection{Boolean values}
 \begin{itemize}
 \item False \( = 0 \)
 \item True \( = 1 \)
 \end{itemize}
 
-\subsubsection*{Boolean variables:}
+\subsubsection{Boolean variables:}
 \[ x \in \{0, 1\} \]
 
 
@@ -29,22 +29,22 @@ negation    & $\neg$    & not        & !      & [TBD]      \\
 conjunction & $\land, \times$  & and         & \&\&, \&     & [TBD]      \\
 disjunction & $\lor, +$ & or          & ||, |      & [TBD]      \\
 \end{tabular}
-
+\vspace{4.5mm}
 % Examples of expressions and function using Boolean operators
+\newline
 \textbf{Example expression:}
 
 \begin{equation*}
 (a \text{ and } b) \text{ or } (\text{not } c)
 \end{equation*}
 
-\textbf{Example function:}
+\noindent \textbf{Example function:}
 
 \begin{equation*}
 f(a, b, c) := (a \text{ and } b) \text{ or } c
 \end{equation*}
 
 \paragraph{NOT operator}
-
 % The NOT operator truth table
 \textbf{Truth table:}
 
@@ -82,9 +82,6 @@ x & y & x \text{ and } y \\
 \begin{equation*}
 z := a \text{ and } (\text{not } b)
 \end{equation*}
-
-
-Please note that in LaTeX, normally we don't use `:=` for assignment in mathematics; usually, we just use `=`. Here I used `:=` as per the slide content. Furthermore, since the logic gate diagrams are part of the non-textual content, they are replaced with `[TBD]` tokens as per your request.
 
 
 
@@ -256,22 +253,8 @@ every nontrivial operator can be represented with each \textit{alone}
 % Question and answer about proving the identity with truth tables
 Q: How do we prove this? \\
 $x \text{ xor } y = (x \text{ or } y) \text{ and } (\text{not } (x \text{ and } y))$ \\
-A: \\
-\begin{tabular}{c | c | c | c}
-x & y & $x \text{ xor } y$ & $(x \text{ or } y) \text{ and } (\text{not } (x \text{ and } y))$ \\
-\hline
-0 & 0 & 0 & 0 \\
-0 & 1 & 1 & 1 \\
-1 & 0 & 0 & 0 \\
-1 & 1 & 1 & 1 \\
-\end{tabular} \\
+
 The identity is correct iff the truth tables match.
-
-
-
-This transcription represents the textual content intended for compilation in LaTeX. The tabular environments are used to replicate the content layout of the truth tables. Note that in the LaTeX code the 'tabular' environments need correct column alignment specification; the symbol '|' is used in the second table to reflect the separation lines between columns. Adjustments might be needed depending on the desired aesthetics when actually typesetting the document.
-
-
 
 \subsubsection{Boolean identities I}
 
@@ -376,10 +359,6 @@ Examples:
   \item \( (x1 \lor x2) \land (x3 \lor x4) \land (x5 \lor x6) \)
 
   \item \( (x1 \lor (\lnot x2)) \land (x3 \lor (\lnot x4)) \)
-
-  \item \( (x2 \lor (\lnot x4) \lor (\lnot x6)) \land ((\lnot x1) \lor x5 \lor x6 \lor x7 \lor x9) \)
-  
-  \item \( (\lnot x1 \lor (\lnot x2) \lor (\lnot x3)) \land (x4 \lor x5 \lor x6) \)
 \end{itemize}
 
 
@@ -396,13 +375,6 @@ where $J_i^0, J_i^1 \subseteq J \subseteq \mathbb{N}, \forall i \in I \subseteq 
 \begin{itemize}
     \item $(x1 \land x2) \lor (x3 \land x4) \lor (x5 \land x6)$
     \item $(x1 \land (\neg x2)) \lor (x3 \land (\neg x4))$
-    \item $(x2 \land (\neg x4) \land (\neg x6))
-            \lor \\
-            (\neg x1 \land x5 \land x6 \land x7 \land x9)
-            \lor \\
-            ((\neg x1) \land (\neg x2) \land (\neg x3))
-            \lor \\
-            (x4 \land x5 \land x6)$
 \end{itemize}
 
 \subsubsection{Theorems}
@@ -422,11 +394,11 @@ where $J_i^0, J_i^1 \subseteq J \subseteq \mathbb{N}, \forall i \in I \subseteq 
 
 \paragraph{Example:}
 $(x2 \land (\neg x4) \land (\neg x6)) 
-\lor \\
+\lor 
 (\neg x1 \land x5 \land x6 \land x7 \land x9)
-\lor \\
+\lor 
 ((\neg x1) \land (\neg x2) \land (\neg x3))
-\lor \\
+\lor 
 (x4 \land x5 \land x6)$
 
 \begin{enumerate}
@@ -441,7 +413,7 @@ $(x2 \land (\neg x4) \land (\neg x6))
 % The following LaTeX code is meant to transcribe the text content of the provided image.
 % Since LaTeX doesn't handle images within code, [TBD] is used to represent them.
 
-\subsection{INTEGER ARITHMETIC}
+\subsection{Integer Arithmetic}
 
 \begin{itemize}
     \item Computers are made out of Boolean gates
@@ -467,39 +439,16 @@ Using one digit, we can count to 9:
 Then we need more digits:
 
 \begin{center}
-    10 \quad 11 \quad 12 \quad 13 \quad 14 \quad 15 \quad 16 \quad 17 \quad 18 \quad 19 \\
+    10 \quad 11 \quad 12 \quad 13 \quad 14 \quad 15 \quad 16 \quad 17 \quad 18 \quad 19
     20 \quad 21 \quad 22 \quad 23 \quad \ldots
 \end{center}
-
-If we wanted to count from 0 to 9999 (say, to represent a date), we may decide to use 4 digits:
-
-\begin{center}
-    0000 \quad 0001 \quad 0002 \quad 0003 \quad 0004 \quad 0005 \quad 0006 \quad 0007 \quad 0008 \quad 0009 \\
-    0010 \quad 0011 \quad 0012 \quad 0013 \quad \ldots
-\end{center}
-
-\paragraph{Example}
-1984 = ?\\
-
-\begin{tabular}{r c l}
-$=$ & $1 \times 1000$ & $+$ \\
-& $9 \times 100$ & $+$ \\
-& $8 \times 10$ & $+$ \\
-& $4$ & \\
-\end{tabular}\\
-
-\begin{tabular}{r c l}
-$=$ & $1 \times 10^3$ & $+$ \\
-& $9 \times 10^2$ & $+$ \\
-& $8 \times 10^1$ & $+$ \\
-& $4 \times 10^0$ & \\
-\end{tabular}\\
 
 \subsubsection{Base-2 numbers}
 
 In base 2 (binary), we have 2 digits: \{0, 1\}\\
 Using one digit, we can count to 1: \\
 0 \quad 1\\
+
 Then we need more digits: \\
 10 \quad 11 \quad 100 \quad 101 \quad 110 \quad 111 \quad 1000 \quad 1001 \ldots\\
 If we wanted to count from 0 to 15, we may decide to use 4 digits:\\
@@ -509,20 +458,14 @@ If we wanted to count from 0 to 15, we may decide to use 4 digits:\\
 \paragraph{Example}
 
 1001$_2$ = ?\\
-
-\begin{tabular}{r c l}
-$=$ & $1 \times 8$ & $+$ \\
-& $0 \times 4$ & $+$ \\
-& $0 \times 2$ & $+$ \\
-& $1$ & \\
-\end{tabular}\\
-
-\begin{tabular}{r c l}
-$=$ & $1 \times 2^3$ & $+$ \\
-& $0 \times 2^2$ & $+$ \\
-& $0 \times 2^1$ & $+$ \\
-& $1 \times 2^0$ & \\
-\end{tabular}\\
+$=$ $1 \times 8$ $+$ 
+$0 \times 4$ $+$ 
+$0 \times 2$ $+$ 
+ $1$ \\
+$=$ $1 \times 2^3$  $+$ 
+$0 \times 2^2$ $+$ 
+$0 \times 2^1$ $+$ 
+ $1 \times 2^0$ 
 
 = 9\\
 
@@ -531,9 +474,6 @@ Note:
 \item rightmost / least-significant bit is called bit 0
 \item leftmost / most-significant bit is called bit $n - 1$
 \end{itemize}
-
-
-Please note that LaTeX might require additional packages or setup configurations depending on your specific LaTeX compiler or editor settings to properly render this document. Also, LaTeX math environments can be set up differently to improve alignment and typesetting if desired.
 
 
 \subsubsection{Fixed bit width}
@@ -702,21 +642,3 @@ bits & $-2^{bits-1}$ (min) & $2^{bits-1} - 1$ (max) \\
 64 & $\approx -9.10^{18}$ & $\approx 9.10^{18}$ \\
 128 & $\approx -2.10^{38}$ & $\approx 2.10^{38}$ \\
 \end{tabular}
-
-\paragraph{Q: What happens if we run this?}
-
-\begin{verbatim}
-unsigned char a = 255;            signed char a = 127;
-unsigned char b = 1;              signed char b = 1;
-unsigned char x = a + b;          signed char x = a + b;
-
-unsigned char a = 1;              signed char a = -128;
-unsigned char b = 2;              signed char b = 1;
-unsigned char x = a - b;          signed char x = a - b;
-\end{verbatim}
-
-\textbf{A: It’s complicated!}
-
-We will dedicate an entire chapter to this.
-
-% End of the LaTeX content

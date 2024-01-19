@@ -38,11 +38,11 @@ Where the `\paragraph{}` command needs to be defined as follows:
 Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the raw outputs of the GPT4 vision model. Please include the cleaned up version of each folder `p<i>_output` with the name `text<i>.txt`.
 
 ## Progress
-| file        | cleaning | additional material |
+| file        | Status | additional material |
 |-------------|----------|---------------------|
 | Lecture 1   |   ✅     |         ❌         |
 | Lecture 2   |   ✅     |         ❌         |
-| Lecture 3   |   ✅     |         ❌         |
+| Lecture 3   |   ✅✅   |         ❌         |
 | Lecture 4   |   ✅     |         ❌         |
 | Lecture 5   |   ✅     |         ❌         |
 | Lecture 6   |   ✅     |         ❌         |
@@ -65,6 +65,7 @@ Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the r
 
 
 Here:
-- ✅ the file has been cleaned/enriched according to the Contributing guidelines
-- ⚙️ work in progress
-- ❌ still require most of the work
+- ✅✅✅ file is finished
+- ✅✅ some content has been added to the file, some examples have been removed. Might still require some additional material.
+- ✅ the file has been cleaned, contains everything present in the notes (except for images that cannot be rendered by GPT4).
+- ❌ still requires most of the work
