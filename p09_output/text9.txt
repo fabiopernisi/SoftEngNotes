@@ -2,75 +2,11 @@
 
 
 % Begin LaTeX code
-
+\newpage
 \section{Lecture 9}
 
 \subsection{Version Control Systems}
 
-Assume you have a project:
-\begin{verbatim}
-myproject.py
-\end{verbatim}
-
-You would like to try a modification, but do not know if it will work.
-
-\begin{verbatim}
-mkdir versions/
-mkdir versions/v1/
-cp myproject.py versions/v1/
-\end{verbatim}
-
-Result:
-
-\begin{verbatim}
-myproject.py
-versions/
-    v1/
-        myproject.py
-\end{verbatim}
-
-% End LaTeX code
-
-
-% Since LaTeX code cannot directly represent directory structures or command lines, those will be represented as verbatim blocks.
-% The structure of the image's content implies separate blocks or sections.
-% Comments and verbatim environments are used to separate and display each distinct part.
-
-You proceed to modify \texttt{myproject.py}:
-
-% Verbatim block to represent the file and directory state
-\begin{verbatim}
-myproject.py <- modified
-versions/
-    v1/
-        myproject.py
-\end{verbatim}
-
-If you like the modification and want to \textit{commit} to it:
-% Verbatim block for shell command to make a new version and copy the file
-\begin{verbatim}
-mkdir versions/v2/
-cp myproject.py versions/v2/
-\end{verbatim}
-
-Otherwise, you \textit{revert} to the old version:
-% Verbatim block for shell command to revert to a previous version
-\begin{verbatim}
-cp versions/v1/myproject.py myproject.py
-\end{verbatim}
-
-If we \textit{committed} to the modification:
-% Verbatim block to represent the new file and directory state after committing
-\begin{verbatim}
-myproject.py <- same as "versions/v2/myproject.py"
-versions/
-    v1/
-        myproject.py
-    v2/
-        myproject.py
-\end{verbatim}
-
-% Section for use cases
 \subsection{Use cases}
 \begin{itemize}
     \item try things
@@ -81,7 +17,7 @@ versions/
 % The [TBD] token is used to represent any non-text elements such as images.
 [TBD]
 
-\subsection{Version control systems (VCS) / source code management (SCM)}
+\subsubsection{Version control systems (VCS) / source code management (SCM)}
 
 \begin{itemize}
   \item Revision control system (RCS), 1982
@@ -107,7 +43,7 @@ versions/
 
 \subsection{Git}
 
-\subsection{Git fundamentals}
+\subsubsection{Git fundamentals}
 
 \begin{itemize}
   \item a repository stores the complete history of a project
@@ -123,7 +59,7 @@ versions/
   \item commits are designated by \texttt{a hash}
 \end{itemize}
 
-\subsection{Hashes}
+\subsubsection{Hashes}
 
 \begin{itemize}
     \item A hash maps any sequence of bits to a fixed-length bit string
@@ -139,7 +75,7 @@ versions/
 % so it is replaced with the placeholder [TBD].
 [TBD]
 
-\subsection{Hashes in Git}
+\subsubsection{Hashes in Git}
 
 \begin{itemize}
     \item Git commits are designated by SHA-1 hashes \\
@@ -148,7 +84,7 @@ versions/
     Example: \texttt{1e6c6ac}
 \end{itemize}
 
-\subsection{Git command-line interface}
+\subsubsection{Git command-line interface}
 
 \begin{itemize}
     \item General usage:
@@ -171,20 +107,7 @@ versions/
     \end{itemize}
 \end{itemize}
 
-
-% The choice of document class is arbitrary and can be changed depending on the desired
-% formatting and appearance of the document.
-% The "article" class is a generic choice suitable for many types of documents.
-
-% The image placeholders "[TBD]" could be replaced with actual graphical content if the 
-% LaTeX user has the image to include or can draw the diagram with LaTeX packages like TikZ.
-
-
-% Since LaTeX does not have a specific document class for presentations that is not a beamer,
-% the text content of the slide is transcribed below without specific formatting for a presentation.
-% A document class like 'article' can be used with sections to delineate the slides.
-
-\subsection{Configuration} % Slide title
+\subsubsection{Configuration} % Slide title
 
 % Slide content starts here
 \begin{itemize}
@@ -230,7 +153,7 @@ versions/
 
 \subsection{Building a commit}
 
-\subsection{Working tree, staging, commit}
+\subsubsection{Working tree, staging, commit}
 \begin{itemize}
     \item We never access the content of \texttt{.git/} directly
     \item Instead, we modify files in the \textbf{working tree} (everything not in \texttt{.git/})
@@ -243,7 +166,7 @@ versions/
     \item Once ready, we create the new commit, along with a commit message
 \end{itemize}
 
-\subsection{Staging and committing example}
+\subsubsection{Staging and committing example}
 \begin{itemize}
     \item We create or modify
     \begin{itemize}
@@ -268,7 +191,7 @@ versions/
 % Since this is supposed to be a plain transcription without preamble, document class, 
 % or begin/end document commands, it will exclusively consist of the content of the slides.
 
-\subsection{Listing past commits}
+\subsubsection{Listing past commits}
 
 \begin{verbatim}
 git log
@@ -281,7 +204,7 @@ Date:   Fri Feb 29 02:44:18 2023 +0200
 \end{verbatim}
 
 
-\subsection{Automatic adding}
+\subsubsection{Automatic adding}
 
 \begin{itemize}
   \item Add multiple files at once using a pattern (including in subdirectories):
@@ -304,7 +227,7 @@ Date:   Fri Feb 29 02:44:18 2023 +0200
 \end{itemize}
 
 
-\subsection{Observing the state of the working tree and staging area}
+\subsubsection{Observing the state of the working tree and staging area}
 
 \begin{verbatim}
 git status
@@ -343,7 +266,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 % The content as shown in the image, structured for LaTeX format
 
-\subsection{Showing differences}
+\subsubsection{Showing differences}
 
 \begin{verbatim}
 git diff
@@ -356,7 +279,7 @@ index 69ed929..ce7780c 100644
 +print('Hello, world!')
 \end{verbatim}
 
-\subsection{Staging again}
+\subsubsection{Staging again}
 
 \begin{verbatim}
 git add -A
@@ -384,7 +307,7 @@ new file mode 100644
 index 0000000..69ed929
 \end{verbatim}
 
-\subsection{Committing again}
+\subsubsection{Committing again}
 
 \begin{verbatim}
 git commit -m "My second commit."
@@ -404,15 +327,8 @@ Date:   Fri Sep 29 02:04:18 2023 +0200
     My first commit.
 \end{verbatim}
 
-% [TBD] after the "Committing again" section there is a page fold which might contain more text that is not visible. If that text needed to be included, more information would be necessary to transcribe it accurately.
 
-
-% LaTeX transcription of lecture material.
-% Since this is a text transcription of displayed content,
-% common text formatting is used without any special document structure such as sections.
-
-
-\subsection{Checking out specific commits}
+\subsubsection{Checking out specific commits}
 
 \begin{verbatim}
 git checkout 6ea843
@@ -450,14 +366,14 @@ Date:   Fri Sep 29 02:41:18 2023 +0200
     My first commit.
 \end{verbatim}
 
-\subsection{BRANCHES}
+\subsection{Branches}
 
 % Since the following part of the image contains a diagram showing the commit structure
 % which cannot be represented in LaTeX using verbatim or text alone, it is replaced by 
 % [TBD] to indicate that there's a diagram or similar content here.
 [TBD]
 
-\subsection{Commit structure}
+\subsubsection{Commit structure}
 
 % A representation of a commit structure is shown in the original image.
 % This is a text representation of that graph.
@@ -530,7 +446,7 @@ Problem: if we ``git checkout'' back to the first or second commit, we lose ``An
 
 Solution: named branches
 
-\subsection{Creating branches}
+\subsubsection{Creating branches}
 
 \begin{verbatim}
 git branch <branch-name>
@@ -589,7 +505,7 @@ main ->     31a051 ("My second commit.")                   87714c ("Another comm
 
 [TBD] % Placeholder for the commit diagram above
 
-\subsection{Merging}
+\subsubsection{Merging}
 \begin{verbatim}
 git checkout main
 
@@ -619,7 +535,7 @@ HEAD, main ->     81db75de ("Merge remote-tracking branch")       87714c ("Anoth
 
 % Start of LaTeX content for the lecture image transcription
 
-\subsection{Merge conflicts}
+\subsubsection{Merge conflicts}
 
 \begin{verbatim}
 <<<<<<< HEAD:new_file_A.py
@@ -634,7 +550,7 @@ print('Bye, world!')
     \item git add ... ; git commit 
 \end{itemize}
 
-\subsection{Rebase}
+\subsubsection{Rebase}
 
 (just committed to branch my_branch)
 
@@ -703,7 +619,7 @@ HEAD, main -> 3c7c08 ("Another commit.") <-- my_branch
 
 % LaTeX transcription of the lecture slide content
 
-\subsection{Sharing commits}
+\subsubsection{Sharing commits}
 
 \begin{itemize}
   \item Git is distributed: there is no notion of a central server. 
@@ -754,7 +670,7 @@ A: 147
 
 $\Rightarrow$ Use \texttt{git help} / \texttt{man git} !!!
 
-\subsection{Configuration}
+\subsubsection{Configuration}
 
 \begin{itemize}
     \item For anything too long for the CLI, git will make you edit a temporary file:
@@ -769,7 +685,7 @@ $\Rightarrow$ Use \texttt{git help} / \texttt{man git} !!!
     \end{verbatim}
 \end{itemize}
 
-\subsection{Fetch and pull, remotes}
+\subsubsection{Fetch and pull, remotes}
 
 \begin{itemize}
     \item Just fetch repository data, do not affect working tree:

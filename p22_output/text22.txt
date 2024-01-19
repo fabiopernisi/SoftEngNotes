@@ -2,29 +2,23 @@
 \section{Lecture 22}
 \subsection{Parallel Computation}
 
+\subsection{0. Paralleism that does not require programmer intervention}
 
-
-% Since LaTeX is not concerned with slide/page layout as a typical presentation software would be,
-% the following code is a sequence of sections and items representing the lecture's text content.
-% There is no direct representation of visual style (like colors or exact positioning).
-
-\subsection*{0. Paralleism that does not require programmer intervention}
-
-\subsection*{Pipelines}
+\subsubsection{Pipelines}
 \begin{itemize}
     \item CPU pipelines can be viewed as implementing some form of parallelism in the sense that multiple executions are being executed simultaneously.
     \item For example, one instruction’s arithmetic is performed (in an ALU) while the next is being decoded.
     \item However, from the programmer’s perspective, everything must happen as if there was no parallelism at all.
 \end{itemize}
 
-\subsection*{Multitasking}
+\subsubsection{Multitasking}
 
 \begin{itemize}
     \item Multitasking allows multiple executables to run “simultaneously” (even on a single processor)
     \item Regularly, the \textbf{scheduler} (part of the OS kernel) decides which task gets to run on a processor.
 \end{itemize}
 
-\section*{Multitasking on a single-core processor}
+\section{Multitasking on a single-core processor}
 
 % The images are represented by [TBD] as they cannot be transcribed into LaTeX.
 [TBD]
@@ -44,7 +38,7 @@
 
 
 
-\subsection*{Multitasking on a single-core processor}
+\subsubsection{Multitasking on a single-core processor}
 
 % There are three diagrams in the displayed image.
 % No specific commands are required to recreate the diagrams
@@ -81,7 +75,7 @@
 
 
 % Start of LaTeX content
-\subsection{Multitasking on a single-core processor}
+\subsubsection{Multitasking on a single-core processor}
 
 % Since we cannot include images, we represent the diagrams with [TBD]
 % Diagram representation - First image
@@ -114,7 +108,7 @@
 
 
 % Preemptive multitasking section
-\subsection*{Preemptive multitasking}
+\subsubsection{Preemptive multitasking}
 \begin{itemize}
   \item When the scheduler decides to interrupt a running process (e.g. to run another)
   \begin{itemize}
@@ -151,7 +145,7 @@
   \end{itemize}
 \end{itemize}
 
-\subsection*{Multitasking on a multi-core processor}
+\subsubsection{Multitasking on a multi-core processor}
 
 % First diagram description
 % Four tasks (task 0 to task 3) are available to run, and each task is placed on a separate
@@ -281,7 +275,7 @@ CPU 0 & CPU 1 & CPU 2 & CPU 3 & \\
     \end{itemize}
 \end{itemize}
 
-\subsection{SIMD}
+\subsection{1. SIMD}
 \begin{itemize}
     \item SIMD stands for Single Instruction Multiple Data
     \item new, larger registers (in addition to the general purpose ones): ``vector registers''
@@ -298,7 +292,7 @@ CPU 0 & CPU 1 & CPU 2 & CPU 3 & \\
     \end{itemize}
 \end{itemize}
 
-\subsection*{SIMD registers}
+\subsection{SIMD registers}
 \begin{itemize}
     \item On Intel (and AMD) ISAs:
     \begin{itemize}
@@ -316,7 +310,7 @@ CPU 0 & CPU 1 & CPU 2 & CPU 3 & \\
 
 
 % Start of the LaTeX code
-\subsection*{Example}
+\subsection{Example}
 
 \begin{verbatim}
 void add_one(float v[4])
@@ -333,7 +327,7 @@ add_one:  vbroadcastss xmm0, DWORD PTR .LC1[rip]   # xmm0 <- ( 1.0, 1.0, 1.0, 1.
           ret
 \end{verbatim}
 
-\subsection*{Counter-example}
+\subsection{Counter-example}
 
 \begin{verbatim}
 void many_ops(float v[4])
@@ -361,7 +355,7 @@ many_ops:  vmovss xmm1, DWORD PTR .LC0[rip]
            ret
 \end{verbatim}
 
-\subsection*{How to use SIMD}
+\subsection{How to use SIMD}
 \begin{itemize}
     \item Rely on compilers (\textit{``autovectorization''})
     \item Write assembly code
@@ -386,9 +380,9 @@ many_ops:  vmovss xmm1, DWORD PTR .LC0[rip]
 % request.
 
 % Slide title
-\subsection*{Thread-level concurrency}
+\subsection{2. Thread-level concurrency}
 
-\subsection*{Processes and threads}
+\subsection{Processes and threads}
 \begin{itemize}
     \item When the OS runs an executable, it gets its own \textit{process}
     \item A single executable (if run multiple times) can have multiple independent processes
@@ -442,7 +436,7 @@ for (int x = 0; x < nx; x++) {
 
 \bigskip % Adding some vertical space for separation
 
-\subsection{Wrong code (1)}
+\subsubsection{Wrong code (1)}
 
 \begin{verbatim}
 int ready = 0; // one if there is some data in the buffer, zero otherwise
@@ -517,7 +511,7 @@ while (ready == 1) {
 \textit{thus remove the loop!}
 
 % Title for the first code block
-\subsection*{Wrong code (2)}
+\subsubsection{Wrong code (2)}
 
 % Declaring variables with comments
 volatile int ready = 0; % one if there is some data in the buffer, zero otherwise
@@ -547,7 +541,7 @@ int pop()
 % Text represented within the visual representation is excluded as [TBD] replaces non-textual elements
 
 % Title for the second code block
-\subsection*{Wrong code (3)}
+\subsubsection{Wrong code (3)}
 
 % Declaring variables with comments
 volatile int ready = 0; % one if there is some data in the buffer, zero otherwise
@@ -623,7 +617,7 @@ void push(int value) // push('B')
 % Diagrammatic state changes cannot be transcribed into LaTeX verbatim
 % and are thus denoted as [TBD].
 
-\subsection*{Solution}
+\subsubsection{Solution}
 
 % Points under the "Solution" section
 \begin{itemize}
@@ -639,7 +633,7 @@ void push(int value) // push('B')
     \end{itemize}
 \end{itemize}
 
-\subsection*{3. Distributed Computing}
+\subsection{3. Distributed Computing}
 
 
 \begin{itemize}
@@ -666,14 +660,14 @@ void push(int value) // push('B')
   \end{itemize}
 \end{itemize}
 
-\subsection*{4. Hardware Acceleration}
+\subsection{4. Hardware Acceleration}
 
 % The section for Hardware Acceleration is left blank because there is no information about it in the supplied image
 
 
 % The document content begins here. No preamble or document class commands are included as the instruction specifies to exclude them.
 
-\subsection*{Graphics processing units (GPUs)}
+\subsubsection{Graphics processing units (GPUs)}
 
 \begin{itemize}
   \item GPUs were designed to perform the same simple, repetitive operations
@@ -683,7 +677,7 @@ void push(int value) // push('B')
   \end{itemize}
 \end{itemize}
 
-\subsection*{Examples (GLSL)}
+\subsubsection{Examples (GLSL)}
 
 \begin{verbatim}
 float box(in vec2 st, in vec2 size){
@@ -716,7 +710,7 @@ vec3 rgb2hsb( in vec3 c ){
 }
 \end{verbatim}
 
-\subsection*{Examples (CUDA)}
+\subsubsection{Examples (CUDA)}
 
 \begin{verbatim}
 inline __device__ float3 roundAndExpand(float3 v, ushort *w) {
@@ -746,7 +740,7 @@ inline __device__ float3 roundAndExpand(float3 v, ushort *w) {
 \textbf{\textbullet\ good fit for long loops performing repetitive operations}\\
 \textbf{\textbullet\ bad fit for if/then/else}
 
-\subsection*{How do we use GPUs?}
+\subsubsection{How do we use GPUs?}
 
 \textbf{\textbullet\ GPUs are programmed in special-purpose languages}
 
@@ -769,10 +763,10 @@ inline __device__ float3 roundAndExpand(float3 v, ushort *w) {
 % Images or non-textual elements that cannot be represented in LaTeX have been replaced with [TBD].
 % End of the document content
 
-\subsection*{Matrix Multiplication}
+\subsubsection{Matrix Multiplication}
 
 % Define N=8192 section with its content and table
-\subsection*{N = 8192}
+\paragraph{N = 8192}
 8192 $\times$ 8192 matrix multiplication \\
 precision: fp64 (``double") \\
 CPU: AMD Ryzen 7900 x3d
@@ -787,7 +781,7 @@ matmul\_6 & OpenBLAS, 24 threads & 1.962 s \quad 1494x 8x \\
 \end{tabular}
 
 % Define N=32768 section with its content and table
-\subsection*{N = 32768}
+\paragraph{N = 32768}
 32768 $\times$ 32768 matrix multiplication \\
 precision: fp32 (``float") - total 4 GB per matrix \\
 CPU Ryzen 7900 x3d (released Feb 2023)

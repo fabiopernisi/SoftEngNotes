@@ -1,10 +1,4 @@
-
-
-
-% Since the content is intended for lecture slides, it's common to use the beamer class for presentations
-% However, as per the instruction, no document class or preamble settings are included here
-% This LaTeX code should be embedded within a proper LaTeX document with the beamer class or another suitable class for rendering
-
+\newpage
 \section{Lecture 17}
 
 \subsection{More caches and pipelines}
@@ -21,13 +15,6 @@
 
 the ``Translation Lookaside Buffer'' (TLB)
 
-% [TBD] token is used to replace non-textual elements that cannot be represented in LaTeX
-
-% End of transcription
-
-
-% Transcription of the lecture content into LaTeX format
-
 Caches are used at various levels to hide access latency
 
 \begin{tabular}{lcc}
@@ -43,7 +30,7 @@ same-continent internet (round-trip) & $\sim25$ ms & $25,000,000$ ns \\
 transatlantic internet (round-trip) & $\sim100$ ms & $100,000,000$ ns \\
 \end{tabular}
 
-\subsection{Examples of caches}
+\subsubsection{Examples of caches}
 \begin{itemize}
 \item SSDs have internal RAM caches (typically 0-4 GB)
 \item the operating system caches files in memory
@@ -66,7 +53,7 @@ PING google.com.au (142.251.209.3) 56(84) bytes of data.
 64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=4 ttl=115 time=11.8 ms
 \end{verbatim}
 
-\subsection{Examples of pipelines}
+\subsubsection{Examples of pipelines}
 \begin{itemize}
 \item Storage devices:
 \begin{itemize}
@@ -129,7 +116,7 @@ sys     0m0.668s
 % For example, explaining that the [TBD] placeholders are where non-textual elements would be included.
 
 % Title of the section
-\subsection{Variance}
+\subsubsection{Variance}
 
 % Presenting three separate instances of the 'time' command with its output
 \begin{verbatim}
@@ -149,8 +136,8 @@ user    0m2.496s
 sys     0m0.001s
 \end{verbatim}
 
-% Subsection for reasons of variance
-\subsection{Reasons for variance}
+% subsubsection for reasons of variance
+\subsubsection{Reasons for variance}
 \begin{itemize}
   \item power and temperature throttling \\
   (CPU adapts speed to avoid overheating)
@@ -178,7 +165,7 @@ top             htop            ps aux
 
 
 % Effect of file caches section
-\subsection{Effect of file caches}
+\subsubsection{Effect of file caches}
 
 \begin{verbatim}
 time md5sum 2GB_file
@@ -197,7 +184,7 @@ sys     0m0.331s
 \end{verbatim}
 
 % Inaccuracies section
-\subsection{Inaccuracies}
+\subsubsection{Inaccuracies}
 \begin{itemize}
     \item executable startup is slow
     \item initialization adds overhead
@@ -205,7 +192,7 @@ sys     0m0.331s
 \end{itemize}
 
 % Executable startup is slow section
-\subsection{Executable startup is slow}
+\subsubsection{Executable startup is slow}
 
 \begin{verbatim}
 int main() { return 0; }
@@ -228,7 +215,7 @@ sys     0m0.008s
 \textit{$\rightarrow$ We cannot accurately benchmark application that only take a few milliseconds.}
 
 
-\subsection{Initialization adds overhead}
+\subsubsection{Initialization adds overhead}
 \begin{verbatim}
 time glpsol LP_57x6138380.mps
 
@@ -250,7 +237,7 @@ What are we really measuring?
 
 The speed of the MPS file parser, not the simplex algorithm.
 
-\subsection{Input and output are slow}
+\subsubsection{Input and output are slow}
 \begin{verbatim}
 def riemann_zeta(s):
     r = 0.0
@@ -303,7 +290,7 @@ sys     0m0.199s
 \usepackage{booktabs} % For formal tables
 
 
-\subsection{Aggregate measures}
+\subsubsection{Aggregate measures}
 
 \begin{itemize}
     \item if we benchmark our code on different inputs, we may want to use
@@ -338,7 +325,7 @@ sys     0m0.199s
     \item for that, we need to add timing instrumentation to our code
 \end{itemize}
 
-\subsection{About bottlenecks}
+\subsubsection{About bottlenecks}
 
 \begin{quote}
     ``Premature optimization is the root of all evil'' \\
@@ -357,7 +344,7 @@ sys     0m0.199s
     \item all the rest \hfill 10\% time \hfill 2000 lines of code
 \end{itemize}
 
-\subsection{time.time()}
+\subsubsection{time.time()}
 \begin{verbatim}
 import time
 
@@ -380,7 +367,7 @@ print(f'function_C: {t4 - t3:16.6f}')
 print(f'     rest: {(t5 - t4) + (t1 - t0):16.6f}')
 \end{verbatim}
 
-\subsection{clock\_gettime()}
+\subsubsection{clock\_gettime()}
 \begin{verbatim}
 int main()
 {
@@ -442,7 +429,7 @@ int main()
 \lstset{style=mystyle}
 
 
-\subsection{Cumulative time}
+\subsubsection{Cumulative time}
 
 \begin{lstlisting}[language=Python]
 import time.time
@@ -471,7 +458,7 @@ cleanup()
 
 \texttt{time.time()} \~{} 40 ns (and the actual time fluctuates)
 
-\subsection{Microbenchmarks}
+\subsubsection{Microbenchmarks}
 
 What do we do if \texttt{function\_A()} takes much less time than \texttt{time.time()}?
 
@@ -493,7 +480,7 @@ cleanup()
 
 \end{lstlisting}
 
-\subsection{Microbenchmarks limitations}
+\subsubsection{Microbenchmarks limitations}
 
 \begin{itemize}
     \item It may not make sense to call \texttt{function\_A()} in isolation
@@ -528,7 +515,7 @@ cleanup()
 
 \subsection{Automated instrumentation: profilers}
 
-\subsection{gprof}
+\subsubsection{gprof}
 
 Add ``-pg'' to gcc/clang parameters
 \begin{verbatim}

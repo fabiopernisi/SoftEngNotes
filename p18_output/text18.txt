@@ -1,7 +1,4 @@
-
-
-
-% Title: LECTURE 18
+\newpage
 \section{Lecture 18}
 
 % Title: HARDWARE PERFORMANCE COUNTERS
@@ -26,7 +23,7 @@ the \textbf{time stamp counter (TSC)}
 
 % LaTeX content transcribed from the image
 
-\subsection{More complex performance counters}
+\subsubsection{More complex performance counters}
 
 Since then, Intel and ARM have added many more performance counters:
 
@@ -61,7 +58,7 @@ Since then, Intel and ARM have added many more performance counters:
   \end{itemize}
 \end{itemize}
 
-\subsection{Linux perf}
+\subsubsection{Linux perf}
 
 \texttt{perf stat ./application}
 
@@ -91,9 +88,9 @@ Performance counter stats for './application':
    0.022723000 seconds sys
 \end{verbatim}
 
-\subsection{STOCHASTIC INSTRUMENTATION}
+\subsection{Stochastic Instrumentation}
 
-\subsection{Limitations of performance counters}
+\subsubsection{Limitations of performance counters}
 
 \begin{itemize}
     \item How could we find \textbf{hot spots}\\
@@ -106,7 +103,7 @@ Performance counter stats for './application':
 \end{itemize}
 
 % Slide title: Solution: stochastic instrumentation
-\subsubsection{Solution: stochastic instrumentation}
+\paragraph{Solution: stochastic instrumentation}
 
 \begin{itemize}
     \item every N cycles (e.g., every 1,000,000th cycle / every 0.1ms), a \textbf{sample} is taken
@@ -120,7 +117,7 @@ Performance counter stats for './application':
 \end{itemize}
 
 % Slide title: Stochastic instrumentation
-\subsection{Stochastic instrumentation}
+\subsubsection{Stochastic instrumentation}
 \begin{itemize}
     \item Pros
     \begin{itemize}
@@ -134,7 +131,7 @@ Performance counter stats for './application':
     \end{itemize}
 \end{itemize}
 
-\subsection{Analysis applications}
+\subsubsection{Analysis applications}
 
 \begin{itemize}
   \item Linux
@@ -148,8 +145,8 @@ Performance counter stats for './application':
   \item AMD-specific: uProf
 \end{itemize}
 
-\subsection{Bottom-up analysis}
+\subsubsection{Bottom-up analysis}
 % [TBD] - Placeholder for the bottom-up analysis image from the Intel VTune Profiler
 
-\subsection{Flame graphs}
+\subsubsection{Flame graphs}
 % [TBD] - Placeholder for the flame graphs image

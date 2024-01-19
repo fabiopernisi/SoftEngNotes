@@ -2,12 +2,12 @@
 
 
 % LaTeX content for Lecture 10 slide transcription
-
+\newpage
 \section{Lecture 10}
 
 \subsection{Software Licenses}
 
-\subsection{Closed-source software}
+\subsubsection{Closed-source software}
 Most end-user software is closed-source (proprietary).
 
 \begin{itemize}
@@ -24,8 +24,7 @@ Most end-user software is closed-source (proprietary).
 
 % Packages and document configuration commands are omitted since the instruction specifies to avoid them.
 
-% Example of closed-source software section
-\subsection{Example of closed-source software}
+\subsubsection{Example of closed-source software}
 
 \begin{itemize}
     \item Operating systems: Microsoft Windows; Android, iOS, MacOS (except kernel)
@@ -39,7 +38,7 @@ Most end-user software is closed-source (proprietary).
 \end{itemize}
 
 % Free software section
-\subsection{Free software}
+\subsubsection{Free software}
 \begin{itemize}
     \item ``free'' as in freedom (not ``free lunch'')
     \item defined by the Free Software Foundation (FSF, est. 1985)
@@ -55,7 +54,7 @@ Most end-user software is closed-source (proprietary).
 \end{itemize}
 
 % Open-source software section
-\subsection{Open-source software}
+\subsubsection{Open-source software}
 \begin{itemize}
     \item defined by the Open Source Initiative (OSI, est. 1998)
     \item software attached with a \textit{license} (uses copyright law)
@@ -75,20 +74,20 @@ Most end-user software is closed-source (proprietary).
 
 
 % Using itemize to create bullet points
-\subsection{FSF vs. OSI}
+\subsubsection{FSF vs. OSI}
 \begin{itemize}
   \item \textbf{FSF:} for the user's sake, all software \textit{should be free} on ethical grounds -- free software licenses are a means to that end
   \item \textbf{OSI:} help businesses and developers publish and disseminate their open-source software -- pragmatically, we do not want to add hurdles if they impair practical use
 \end{itemize}
 
-\subsection{In practice?}
+\subsubsection{In practice?}
 The FSF and OSI each maintain a list of ``approved'' license.
 
 Most FSF-approved \textit{free software} licenses are also OSI-approved \textit{open-source} licenses. And vice-versa.
 
 The difference lies in the licenses each organization \textit{promotes}.
 
-\subsection{The ``baseline'' FSF license}
+\subsubsection{The ``baseline'' FSF license}
 The GNU General Public License (GPL):
 \begin{itemize}
   \item any user who receives the executable must be provided the source code as well upon request
@@ -97,7 +96,7 @@ The GNU General Public License (GPL):
 \end{itemize}
 
 
-\subsection{Amended FSF licenses}
+\subsubsection{Amended FSF licenses}
 
 \begin{itemize}
   \item The ``more permissive'' \textbf{GNU Lesser General Public License (LGPL)}:
@@ -111,7 +110,7 @@ The GNU General Public License (GPL):
   \end{itemize}
 \end{itemize}
 
-\subsection{Typical open-source licenses}
+\subsubsection{Typical open-source licenses}
 
 \begin{itemize}
   \item Most popular: Apache License, BSD License, MIT License
@@ -124,7 +123,7 @@ The GNU General Public License (GPL):
   \item differences among permissive licenses are minor (but important to lawyers)
 \end{itemize}
 
-\subsection{Example projects}
+\subsubsection{Example projects}
 
 \begin{itemize}
   \item ``free software'' (GPL-type licenses)
@@ -154,7 +153,7 @@ The GNU General Public License (GPL):
 % The "TBD" tokens found in this comment are included to acknowledge
 % that images or other non-text elements could not be represented in this LaTeX code.
 
-\subsection{End-user cost}
+\subsubsection{End-user cost}
 
 Whether or not customers pay for software is orthogonal to source availability.
 
@@ -166,7 +165,7 @@ cost & closed-source & free / open-source \\
 \end{tabular}
 
 \vspace{5mm} % Adjust vertical spacing as necessary
-\subsection{Commercial, non-commercial}
+\subsubsection{Commercial, non-commercial}
 
 Whether or not developers are commercial entities is orthogonal to source availability.
 
@@ -181,7 +180,7 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
 *the distinction between commercial and non-commercial is often blurry
 
 \vspace{5mm} % Adjust vertical spacing as necessary
-\subsection{How can commercial software be free / open-source?}
+\subsubsection{How can commercial software be free / open-source?}
 \begin{itemize}
     \item software has zero price, sell support and services (Ubuntu, Red Hat, NGINX)
     \item software costs money, convince customers not to redistribute it (Red Hat)
@@ -190,7 +189,7 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
     \item open-sourced software is not core business (LLVM)
 \end{itemize}
 
-\subsection{Use cases}
+\subsubsection{Use cases}
 
 \begin{itemize}
   \item Closed-source:
@@ -214,7 +213,7 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
   \item Share source code, but do not give any right to modify (limited usefulness)
 \end{itemize}
 
-\subsection{Patents}
+\subsubsection{Patents}
 
 \noindent In most countries:
 \begin{itemize}
@@ -228,7 +227,7 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
   \end{itemize}
 \end{itemize}
 
-\subsection{Patents and software innovation}
+\subsubsection{Patents and software innovation}
 
 \begin{itemize}
   \item Software innovation is quicker: N years is like centuries
@@ -237,18 +236,10 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
   \item Patent disclosures do not include code! They don't actually help anyone.
 \end{itemize}
 
-% Title Section
-\subsection{Stuff that has been patented}
+\subsubsection{Stuff that has been patented}
 
-% List of patented items
 \begin{itemize}
     \item Buy with a single click (Amazon)
     \item Automatically make email addresses clickable (Apple)
     \item Fourier (1768--1830) series for compression (Fraunhofer Institute)
 \end{itemize}
-
-% Note that the images and specific content of the patents are replaced by [TBD]
-% to indicate that there's content to be determined/added later
-[TBD] % Placeholder for first patent page image
-[TBD] % Placeholder for second patent page image showing a flowchart
-[TBD] % Placeholder for third patent page text content

@@ -1,14 +1,7 @@
-
-
-
-% Since this LaTeX transcription is designed to accurately reflect the lecture material
-% without any modifications, the following LaTeX code represents the content of the 
-% slide shown in the image. LaTeX packages for proper formatting (like itemize and enumerate)
-% will be used, but no specific document structure commands are included as per the instruction.
-
+\newpage
 \section{Lecture 19}
 
-\section{Abstract Data Types and Data Strucutres}
+\subsection{Abstract Data Types and Data Strucutres}
 
 \begin{itemize}
     \item An abstract data type is a data container
@@ -64,7 +57,7 @@
 
 
 % Static arrays section
-\subsection{Static arrays}
+\subsubsection{Static arrays}
 
 \begin{itemize}
   \item Static arrays implement lists of a fixed size \( n \)
@@ -84,7 +77,7 @@
 \end{itemize}
 
 % Dynamic arrays section
-\subsection{Dynamic arrays}
+\subsubsection{Dynamic arrays}
 
 \begin{itemize}
   \item Dynamic arrays implement lists of a variable size \( n \)
@@ -107,7 +100,7 @@
 \end{itemize}
 
 % Size increase section
-\subsection{Size increase}
+\subsubsection{Size increase}
 
 \begin{itemize}
   \item An array occupies the bytes in memory:
@@ -125,7 +118,7 @@
 
 
 
-\subsection{Size decrease}
+\subsubsection{Size decrease}
 
 \begin{itemize}
     \item Conversely, if the memory before and/or after an array is free,
@@ -177,7 +170,7 @@ delete an element & $O(n)$ \\
 \end{tabular}
 \end{center}
 
-\subsection{Over-allocation}
+\subsubsection{Over-allocation}
 
 \begin{itemize}
   \item We have two distinct quantities:
@@ -196,7 +189,7 @@ delete an element & $O(n)$ \\
   \item instead, at small sizes, we increase $a$ exponentially ($a' = 2a$)
 \end{itemize}
 
-\subsection{Exponential allocation (n = 3)}
+\subsubsection{Exponential allocation (n = 3)}
 
 \begin{itemize}
   \item [TBD] % Placeholder for the visual representation of the memory blocks
@@ -204,7 +197,7 @@ delete an element & $O(n)$ \\
   \item $4 = a$
 \end{itemize}
 
-\subsection{Exponential allocation (n = 4)}
+\subsubsection{Exponential allocation (n = 4)}
 
 \begin{itemize}
   \item [TBD] % Placeholder for the visual representation of the memory blocks
@@ -216,7 +209,7 @@ delete an element & $O(n)$ \\
 
 
 % Slide 1: Exponential allocation (n = 5)
-\subsection{Exponential allocation (n = 5)} \\
+\subsubsection{Exponential allocation (n = 5)} \\
 \begin{tabular}{cccccccc}
 $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x & x & x \\
 \end{tabular} \\
@@ -225,7 +218,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x & x & x \\
 8 = a \\
 
 % Slide 2: Exponential allocation (n = 6)
-\subsection{Exponential allocation (n = 6)} \\
+\subsubsection{Exponential allocation (n = 6)} \\
 \begin{tabular}{cccccccc}
 $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x & x \\
 \end{tabular} \\
@@ -234,7 +227,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x & x \\
 8 = a \\
 
 % Slide 3: Exponential allocation (n = 7)
-\subsection{Exponential allocation (n = 7)} \\
+\subsubsection{Exponential allocation (n = 7)} \\
 \begin{tabular}{cccccccc}
 $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 \end{tabular} \\
@@ -242,21 +235,21 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 7 = n \\
 8 = a \\
 
-\subsection{Exponential allocation (n = 8)}
+\subsubsection{Exponential allocation (n = 8)}
 \begin{verbatim}
 . . . . . . . . (used)
 \end{verbatim}
 \[ 8 = n \]
 \[ 8 = a \]
 
-\subsection{Exponential allocation (n = 9)}
+\subsubsection{Exponential allocation (n = 9)}
 \begin{verbatim}
 . . . . . . . . x x x x x x x x (used)
 \end{verbatim}
 \[ 9 = n \]
 \[ 16 = a \]
 
-\subsection{Exponential allocation (n = 10)}
+\subsubsection{Exponential allocation (n = 10)}
 \begin{verbatim}
 . . . . . . . . . x x x x x x x x x x x x x x x x (used)
 \end{verbatim}
@@ -270,7 +263,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 % A proper LaTeX representation would typically use a package like TikZ for graphics, which is not requested here.
 
 
-\subsection{Exponential allocation (n = 11)}
+\subsubsection{Exponential allocation (n = 11)}
 \begin{verbatim}
 . . . . . . . . . . .
 (used)      x x x x x
@@ -278,7 +271,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 \end{verbatim}
 \( 16 = a \)
 
-\subsection{Exponential allocation (n = 12)}
+\subsubsection{Exponential allocation (n = 12)}
 \begin{verbatim}
 . . . . . . . . . . . .
 (used)       x x x x x
@@ -286,7 +279,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 \end{verbatim}
 \( 16 = a \)
 
-\subsection{Exponential allocation (n = 13)}
+\subsubsection{Exponential allocation (n = 13)}
 \begin{verbatim}
 . . . . . . . . . . . . .
 (used)        x x x x x
@@ -299,7 +292,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 % Since the image provided consists of visuals without specific textual content such as sentences, labels, or equations, the LaTeX transcription will be limited to replicating the visible textual annotations associated with each visual.
 
 % First slide
-\subsection{Exponential allocation (n = 14)}
+\subsubsection{Exponential allocation (n = 14)}
 
 \begin{itemize}
     \item[] \textcolor{cyan}{\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet} \textcolor{green}{xx} % Used slots are represented by cyan dots and available slots by green 'x's.
@@ -309,7 +302,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 \end{itemize}
 
 % Second slide
-\subsection{Exponential allocation (n = 15)}
+\subsubsection{Exponential allocation (n = 15)}
 
 \begin{itemize}
     \item[] \textcolor{cyan}{\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet} \textcolor{green}{x} % Used slots are represented by cyan dots and available slots by a green 'x'.
@@ -320,7 +313,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 
 
 % Third slide
-\subsection{Exponential allocation (n = 16)}
+\subsubsection{Exponential allocation (n = 16)}
 
 \begin{itemize}
     \item[] \textcolor{cyan}{\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet} % Used slots are represented by cyan dots.
@@ -334,7 +327,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
 % The slides show graphical representations of the exponential allocation with different numbers of slots used and available.
 % In a standard LaTeX document, these would likely correspond to figures or diagrams rather than itemized lists.
 
-\subsection{Exponential allocation (n = 17)}
+\subsubsection{Exponential allocation (n = 17)}
 \begin{itemize}
     \item[\textbullet] \textcolor{cyan}{(used)}
     \item $\ldots$
@@ -343,7 +336,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
     \item \textcolor{green}{32 = a}
 \end{itemize}
 
-\subsection{Exponential allocation (n = 18)}
+\subsubsection{Exponential allocation (n = 18)}
 \begin{itemize}
     \item[\textbullet] \textcolor{cyan}{(used)}
     \item $\ldots$
@@ -352,7 +345,7 @@ $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
     \item \textcolor{green}{32 = a}
 \end{itemize}
 
-\subsection{Exponential allocation (n = 19,\ldots)}
+\subsubsection{Exponential allocation (n = 19,\ldots)}
 \begin{itemize}
     \item[\textbullet] \textcolor{cyan}{(used)}
     \item[\textbf{x}] $\ldots$
@@ -399,7 +392,7 @@ int grow(struct dynamic_array *d, size_t new_n)
 }
 \end{verbatim}
 
-\subsection{Pros and cons of exponential allocation}
+\subsubsection{Pros and cons of exponential allocation}
 
 \begin{itemize}
     \item we waste memory
@@ -407,7 +400,7 @@ int grow(struct dynamic_array *d, size_t new_n)
     \item specifically, \( a = 2^{\lceil \log_2{n} \rceil} \)
 \end{itemize}
 
-\subsection{Complexity of exponential allocation}
+\subsubsection{Complexity of exponential allocation}
 
 \begin{itemize}
     \item start with an empty array
@@ -449,7 +442,7 @@ delete an element & $O(n)$ \\
 \end{tabular}
 \end{center}
 
-\subsection{Virtual memory}
+\subsubsection{Virtual memory}
 
 In terms of asymptotic complexity, the cost of changing $n$ comes from
 
@@ -467,7 +460,7 @@ memcpy(new_addr, d->address, d->n); // O(n)
     \end{itemize}
 \end{itemize}
 
-\subsection{Remapping virtual memory using the page table}
+\subsubsection{Remapping virtual memory using the page table}
 
 \begin{itemize}
     \item \textbf{Pro:} Memory move becomes essentially $O(1)$ in practice
@@ -498,7 +491,7 @@ For very large \( n \):
     \end{tabular}
 \end{center}
 
-\section{Linked Lists}
+\subsection{Linked Lists}
 
 \begin{itemize}
     \item Linked lists implement lists of a variable size \( n \)
@@ -514,7 +507,7 @@ For very large \( n \):
     \end{itemize}
 \end{itemize}
 
-\subsection{Doubly-linked lists}
+\subsubsection{Doubly-linked lists}
 
 \begin{verbatim}
 struct element {
@@ -556,7 +549,7 @@ delete an element & \(O(n)\) & \(O(1)\) \\
 \end{tabular}
 
 
-\subsection{Memory management considerations}
+\subsubsection{Memory management considerations}
 
 Memory allocation is slow
 
@@ -591,7 +584,7 @@ delete an element & $O(n)$ & $O(1)$ \\
 \bigskip
 
 \begin{center}
-\subsection{Memory caches considerations}
+\subsubsection{Memory caches considerations}
 \end{center}
 
 \noindent\textbf{List traversal}
@@ -635,7 +628,7 @@ However, when they are appropriate, they can be \textit{extremely useful}.
 % Non-textual elements like background and slide design aren't included
 % Code syntax and elements are transcribed as-is, without LaTeX formatting beyond basic structuring
 
-\subsection{More options}
+\subsubsection{More options}
 
 \begin{itemize}
 	\item Indirection (dynamic array of pointers)

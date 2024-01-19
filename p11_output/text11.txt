@@ -1,49 +1,12 @@
 
 
 
-% Slide Title
+\newpage
 \section{Lecture 11}
-
-\subsection{Part 3: Correctness}
-
-% Content Section "We are here"
-\subsection{We are here}
-\begin{itemize}
-    \item Part 1: How computers works
-    \begin{itemize}
-        \item Boolean logic, integers
-        \item Instructions
-        \item Memory
-    \end{itemize}
-
-    \item Part 2: Software development
-    \begin{itemize}
-        \item Compiling, make
-        \item ABIs \& APIs
-        \item git
-    \end{itemize}
-
-    \item Part 3: Correctness
-    \begin{itemize}
-        \item Specifications $\leftarrow$ TODAY
-        \item Documentation, testing
-        \item Static \& dynamic analysis
-    \end{itemize}
-
-    \item Part 4: Performance
-    \begin{itemize}
-        \item CPU pipelines, caches
-        \item Data structures
-        \item Parallel computation
-    \end{itemize}
-\end{itemize}
-
-
-% Here begins the LaTeX transcription of the lecture material
 
 \subsection{A note about C}
 
-\subsection{Why C?}
+\subsubsection{Why C?}
 \begin{itemize}
     \item The C language has deep flaws
     \item but the C ABI is everywhere:
@@ -59,7 +22,7 @@
     \end{itemize}
 \end{itemize}
 
-\subsection{Why the C ABI?}
+\subsubsection{Why the C ABI?}
 The C ABI is simple:
 \begin{itemize}
     \item just functions and simple types: integer, pointer, \texttt{struct}
@@ -88,7 +51,7 @@ MyClass_method_OtherClass_ref_myFunction(MyClass *self, OtherClass *c);
 
 % LaTeX transcription of the lecture's text content
 
-\subsection{Other ABIs}
+\subsubsection{Other ABIs}
 
 \begin{itemize}
     \item There are multiple C++ ABI specifications
@@ -99,52 +62,12 @@ MyClass_method_OtherClass_ref_myFunction(MyClass *self, OtherClass *c);
     \item There is no Rust ABI specification
 \end{itemize}
 
-% The slide is separated by page breaks or sections, here's the next section
 \subsection{Specifications}
 
 % And another section break or page break
-\subsection{What is even the C language?}
+\subsubsection{What is even the C language?}
 
-% Notes for each section have been separated by sections, assuming they are on different slides.
-% [TBD] token replaces images or non-textual elements that cannot be represented in LaTeX.
-
-
-% We'll use the 'verbatim' environment for code blocks
-\begin{verbatim}
-bool is_zero(int j)
-{
-    return i == 0;
-}
-\end{verbatim}
-
-\begin{verbatim}
-clang -03 -c -o is_zero.o is_zero.c
-\end{verbatim}
-
-\begin{verbatim}
-is_zero.c:1:1: error: unknown type name 'bool'
-bool is_zero(int j)
-\end{verbatim}
-
-% We represent the Google search result with text, as the image is not to be included
-\texttt{'bool' was added to the C language in 2023.}
-
-\begin{verbatim}
-bool is_zero(int j)
-{
-    return i == 0;
-}
-
-clang -03 -c -std=c2x -o is_zero.o is_zero.c
-\end{verbatim}
-
-% The word "Works!" points out the successful result. This comment should suffice.
-% Works!
-
-
-% LaTeX transcription of the lecture material
-%
-\subsection{Questions}
+\subsubsection{Questions}
 \begin{itemize}
     \item What is (and is not) valid C?
     \item Who defines the C language?
@@ -155,19 +78,12 @@ clang -03 -c -std=c2x -o is_zero.o is_zero.c
 % but the content is continued as a separate section for clarity
 
 % "What is valid C?" slide
-\subsection{What is valid C?}
+\subsubsection{What is valid C?}
 \begin{itemize}
     \item Pragmatically, C code is valid if your compiler produces a valid executable.
     \item However, there are many compilers.
     \item It would be convenient if they agreed on a definition for the C language.
 \end{itemize}
-
-% Image placeholder
-% Since the inclusion of actual images is not allowed and \includegraphics should not be used,
-% a placeholder for the image will be provided with the comment 'TBD'.
-% The image refers to the cover of "The C Programming Language, Second Edition" by Brian W. Kernighan and Dennis M. Ritchie
-
-[TBD] % Replace this token with the proper LaTeX command to include an image, if needed.
 
 \textit{In the beginning, there was K\&R C (1978)}
 
@@ -184,7 +100,7 @@ clang -03 -c -std=c2x -o is_zero.o is_zero.c
 
 Hence \verb|-std=c2x|
 
-\subsection{Who defines the C language nowadays?}
+\subsubsection{Who defines the C language nowadays?}
 
 \begin{itemize}
     \item A ``working group'' within ISO: ``WG14''
@@ -205,7 +121,7 @@ Hence \verb|-std=c2x|
 
 % Note: Package imports and document preamble are not included as they are not part of the lecture content.
 
-\subsection{Locale-Specific Behavior}
+\subsubsection{Locale-Specific Behavior}
 
 Behavior that depends on local conventions (nationality, culture, and language) that each implementation documents.
 
@@ -217,7 +133,7 @@ Whether \texttt{islower()} returns true for characters other than the 26 lowerca
 int a = islower('æ');
 \end{verbatim}
 
-\subsection{Unspecified Behavior}
+\subsubsection{Unspecified Behavior}
 
 \begin{itemize}
   \item Behavior upon which this document provides two or more possibilities and imposes no further requirements on which is chosen in any instance
@@ -239,7 +155,7 @@ struct s {
 };
 \end{verbatim}
 
-\subsection{Implementation-defined Behavior}
+\subsubsection{Implementation-defined Behavior}
 
 Unspecified behavior where each implementation (compiler / platform / OS) documents how the choice is made
 
@@ -280,7 +196,7 @@ int *a = NULL;
 int b = *a;
 \end{verbatim}
 
-\subsection{Easy UB: division by zero}
+\subsubsection{Easy UB: division by zero}
 
 ``The result of the \texttt{/} operator is the quotient from the division of the first operand by the second;
 the result of the \texttt{\%} operator is the remainder.
@@ -302,7 +218,7 @@ Floating point exception (core dumped)
 % The LaTeX transcription presented above should be cleanly compiled in any LaTeX editor.
 % Images and non-textual content are denoted by [TBD] inline with the text.
 % Direct text content is accurately transcribed, with formatting represented by LaTeX commands.
-\subsection{Easy UB? (division by zero)}
+\subsubsection{Easy UB? (division by zero)}
 
 \begin{verbatim}
 #include <stdio.h>
@@ -355,7 +271,7 @@ main.c:3:11: warning: division by zero is undefined [-Wdivision-by-zero]
 401140:   c3                       ret
 \end{verbatim}
 
-\subsection{Easy UB: division overflow}
+\subsubsection{Easy UB: division overflow}
 
 \begin{quote}
 “When integers are divided, the result of the / operator is the algebraic quotient
@@ -432,7 +348,7 @@ a / -1 = -2147483648 is positive
 % Please note that the output displayed in the image has been transcribed as comments for completeness,
 % but in an actual LaTeX document, it would not be displayed as a verbatim section.
 
-\subsection{Integer overflow}
+\subsubsection{Integer overflow}
 
 \begin{verbatim}
 #include <stdio.h>
@@ -455,7 +371,7 @@ Note: 1000 $>$ $2^8$ = 256.
 % The following is a binary representation, which is non-textual and is thus replaced by [TBD]
 [TBD]
 
-\subsection{Unsigned integer overflow}
+\subsubsection{Unsigned integer overflow}
 
 \begin{itemize}
     \item Unsigned overflow is not undefined behavior
@@ -473,18 +389,12 @@ Note: 1000 $>$ $2^8$ = 256.
     \item x86\_64 and AArch64 instruction work in this same way
 \end{itemize}
 
-\subsection{Signed integer overflow}
+\subsubsection{Signed integer overflow}
 
 \begin{itemize}
     \item x86\_64 and AArch64 instruction have wrap-around behavior
     \item But in C, signed overflow is undefined behavior!!!
 \end{itemize}
-
-
-
-% Document content starts here
-
-\subsection{Signed integer overflow}
 
 \begin{verbatim}
 #include <stdio.h>
@@ -512,7 +422,7 @@ a = 2147483647 \\
 a + 1 = -2147483648 \\
 a + 1 = -2147483648 is positive
 
-\subsection{Easy UB: invalid pointers}
+\subsubsection{Easy UB: invalid pointers}
 
 \textit{"If an invalid value has been assigned to the pointer, the behavior of the unary * operator is undefined." (p81)}
 
@@ -534,7 +444,7 @@ int main()
 ./main \\
 Segmentation fault (core dumped)
 
-\subsection{Easy UB!?? (invalid pointers)}
+\subsubsection{Easy UB!?? (invalid pointers)}
 
 \begin{verbatim}
 int int_at(int *pointer)

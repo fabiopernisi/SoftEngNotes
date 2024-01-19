@@ -1,7 +1,4 @@
-
-
-
-% Since the image only contains a title slide, we will replicate this as a section in LaTeX
+\newpage
 \section{Lecture 16} % The asterisk '*' prevents LaTeX from numbering this section
 
 \subsection{Performance} % Similarly, the asterisk prevents numbering of the subsection
@@ -11,38 +8,7 @@
 % they should be described here as well.
 
 
-% We start with the section titles and bullet points, as captions and lists respectively.
-
-\subsection{We are here}
-
-\begin{itemize}
-    \item Part 1: How computers works
-    \begin{itemize}
-        \item Boolean logic, integers
-        \item Instructions
-        \item Memory
-    \end{itemize}
-    \item Part 2: Software development
-    \begin{itemize}
-        \item Compiling, make
-        \item ABIs \& APIs
-        \item git
-    \end{itemize}
-    \item Part 3: Correctness
-    \begin{itemize}
-        \item Specifications
-        \item Documentation, testing
-        \item Static \& dynamic analysis, debugging
-    \end{itemize}
-    \item Part 4: Performance $\leftarrow$ \textbf{TODAY}
-    \begin{itemize}
-        \item CPU pipelines, caches
-        \item Data structures
-        \item Parallel computation
-    \end{itemize}
-\end{itemize}
-
-\subsection{What is performance?}
+\subsubsection{What is performance?}
 
 We want computers to perform required actions while minimizing their use of \textbf{resources}:
 \begin{itemize}
@@ -55,7 +21,7 @@ We want computers to perform required actions while minimizing their use of \tex
 
 We care about those resources in proportion to their cost (financial, emotional, etc.)
 
-\subsection{How do we achieve good performance?}
+\subsubsection{How do we achieve good performance?}
 
 % Representing the high-level and low-level as sub-sections
 % Downwards arrow can be represented with the `\downarrow` command. 
@@ -80,7 +46,7 @@ High level to low level:
 
 % Preamble or document class declarations are not required as per the user's request
 % Begin the document content
-\subsection{What hides inside the big-O?}
+\subsubsection{What hides inside the big-O?}
 
 Let us compare two algorithms:
 \begin{itemize}
@@ -137,7 +103,7 @@ Specifically,
 % add such details as needed by using appropriate LaTeX graphing packages and commands such as pgfplots or tikz.
 
 
-\subsection{Which algorithm do we choose?}
+\subsubsection{Which algorithm do we choose?}
 
 Assume that
 \begin{itemize}
@@ -145,7 +111,7 @@ Assume that
     \item Algorithm B is merge sort
 \end{itemize}
 
-\subsection{Merge sort example}
+\subsubsection{Merge sort example}
 
 % Below, the visualization of the merge sort process is not included as direct LaTeX content.
 % Instead, [TBD] tokens are used as placeholders for the graphical representation.
@@ -275,7 +241,7 @@ From \texttt{48 af af 06}, the CPU needs to understand:
 % Start of the LaTeX content from the lecture slide
 
 % Slide title
-\subsubsection{What happens after instruction decoding?}
+\paragraph{What happens after instruction decoding?}
 
 % Assembly instruction example
 \texttt{mul rax, QWORD PTR [rsi]}
@@ -295,7 +261,7 @@ From \texttt{48 af af 06}, the CPU needs to understand:
 (e.g., at 4 GHz, i.e. 4 billion cycles per second, so in 0.25 ns)
 
 % Description of the cycles needed for different operations
-\subsubsection{Imagine that it takes:}
+\paragraph{Imagine that it takes:}
 \begin{itemize}
     \item one cycle to decode an instruction
     \item one cycle to fetch data from memory
@@ -428,7 +394,7 @@ However, in this model,
 We can exploit this!
 
 % Header for the next section
-\subsection{Pipelined execution}
+\subsubsection{Pipelined execution}
 
 % Table representing the pipeline execution process
 \begin{tabular}{lllll}
@@ -570,7 +536,7 @@ imul rbx, [rsi] & \\
 add rcx, [rbp] & \\
 \end{tabular}
 
-\subsection{Throughput vs. latency}
+\subsubsection{Throughput vs. latency}
 
 \begin{itemize}
     \item Latency:
@@ -583,7 +549,7 @@ add rcx, [rbp] & \\
     \end{itemize}
 \end{itemize}
 
-\subsection{Data dependencies}
+\subsubsection{Data dependencies}
 
 % The following is a tabular representation of data dependencies in the pipeline.
 % Once again, [TBD] is used to replace the actual diagram since LaTeX code can't represent it directly.
@@ -680,7 +646,7 @@ add rdx,    |         |
 [rsi]       |         |
 \end{verbatim}
 
-\subsection{Conditional branching}
+\subsubsection{Conditional branching}
 
 \begin{verbatim}
 if (a < b) {       |     cmp rdi, rsi
@@ -767,7 +733,7 @@ arithmetic \> cmp rdi, rsi \> compare rdi and rsi  \\
 
 \vspace{5mm} % Providing some vertical space between sections
 
-\subsection{Branch prediction}
+\subsubsection{Branch prediction}
 
 \begin{itemize}
 \item in practice, the CPU will try to predict which branch will be taken (based on past choices at that specific instruction)
@@ -817,7 +783,7 @@ cmp rdi, rsi
 
 [TBD] % This is where the illustration from the image would be placed in the document.
 
-\subsection{In practice}
+\subsubsection{In practice}
 \begin{itemize}
     \item When all goes perfect, processors can actually execute more than one instruction per cycle
     \item Modern processor pipelines have between 5 and 40 stages
@@ -827,7 +793,7 @@ cmp rdi, rsi
 \end{itemize}
 
 % The heading and bullet points from the "How do we write good code?" section of the image.
-\subsection{How do we write good code?}
+\subsubsection{How do we write good code?}
 \begin{itemize}
     \item These parameters vary widely from CPU to CPU
     \item Specific characteristics are often not public
@@ -845,7 +811,7 @@ cmp rdi, rsi
 \usepackage{graphicx}
 
 
-\subsection{Out-of-order execution}
+\subsubsection{Out-of-order execution}
 
 % First slide content
 add rdx, rdi \\
@@ -971,7 +937,7 @@ physically centimeters away from the CPU.
 
 Solution: \textbf{caching}
 
-\subsection{Caching}
+\subsubsection{Caching}
 
 Level 1 (``L1'') cache:
 \begin{itemize}
@@ -1031,7 +997,7 @@ CPU & L1             & L2              & L3 \\
 \end{tabular}
 
 % Title of the section
-\subsection{Typical configuration}
+\subsubsection{Typical configuration}
 
 % Bullet points with descriptions
 \begin{itemize}
@@ -1049,14 +1015,7 @@ CPU & L1             & L2              & L3 \\
     \item pipelined CPUs feature a memory prefetcher (speculatively fills caches in advance)
 \end{itemize}
 
-\subsection{Zen 4 Cache}
-
-% Placeholder for the Zen 4 Cache table, as the precise table layout cannot be represented without additional commands
-[TBD: Table summarizing Zen 4 Cache configurations, including the size, associativity, and line size for L1I cache, L1D cache, L2 cache, L3 cache]
-
-% Begin document content
-
-\subsection{How do we write good code?}
+\subsubsection{How do we write good code?}
 
 \begin{itemize}
     \item Again, cache operation varies widely from CPU to CPU
