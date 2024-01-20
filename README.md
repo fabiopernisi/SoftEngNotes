@@ -44,7 +44,7 @@ Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the r
 | Lecture 2   |   ✅     |
 | Lecture 3   |   ✅✅   |
 | Lecture 4   |   ✅     |
-| Lecture 5   |   ✅     |
+| Lecture 5   |   ✅✅     |
 | Lecture 6   |   ✅     |
 | Lecture 7   |   ✅     |
 | Lecture 8   |   ✅     |

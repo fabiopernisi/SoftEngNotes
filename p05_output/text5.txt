@@ -44,116 +44,34 @@ becomes:
   \end{itemize}
 \end{itemize}
 
-\paragraph{Example}
-
-What happens when we write the following Python code?
-
-\begin{verbatim}
-3.5 + 4.5
-\end{verbatim}
-
-The AST is:
-
-% [TBD] - This is where the abstract syntax tree diagram for the Python code expression will be placed if this were to be replaced with a LaTeX-tree representation.
-
-
-
-
-% Since this is a LaTeX transcription, we use the 'verbatim' environment to preserve the formatting of code segments.
-
-\begin{verbatim}
-Python/ast_opt.c:
-
-static int
-fold_binop(expr_ty node, PyArena *arena, _PyASTOptimizeState *state)
-{
-    PyObject *lv = _PyAST_Const(node->v.BinOp.left)->v.Constant.value;
-    PyObject *rv = _PyAST_Const(node->v.BinOp.right)->v.Constant.value;
-    PyObject *newval = NULL;
-
-    switch(node->v.BinOp.op) {
-        case Add:
-            newval = PyNumber_Add(lv, rv);
-            break;
-        case Sub:
-            newval = PyNumber_Subtract(lv, rv);
-            break;
-        case Mult:
-            newval = safe_multiply(lv, rv);
-            break;
-        ...
-    }
-    ...
-}
-
-Objects/abstract.c:
-
-PyObject *
-PyNumber_Add(PyObject *v, PyObject *w)
-{
-    PyObject *result = BINARY_OP1(v, w, NB_SLOT(nb_add), "+");
-    if (result == Py_NotImplemented) {
-        return result;
-    }
-    Py_DECREF(result);
-
-    PySequeceMethods *m = Py_TYPE(v)->tp_as_sequece;
-    if (m && m->sq_concat) {
-        result = (*m->sq_concat) (v, w);
-        assert(_Py_CheckSlotResult(v, w, "+", result != NULL));
-        return result;
-    }
-
-    return binop_type_error(v, w, "+");
-}
-
-Objects/floatobject.c:
-
-static PyObject *
-float_add(PyObject *v, PyObject *w)
-{
-    double a, b;
-    CONVERT_TO_DOUBLE(v, a);
-    CONVERT_TO_DOUBLE(w, b);
-    a = a + b;
-    return PyFloat_FromDouble(a);
-}
-\end{verbatim}
-
-% [TBD] tokens replace the images or non-textual elements that cannot be represented in LaTeX.
-
-
-
-
-% Since LaTeX requires a document structure to compile, we usually start with \documentclass
-% and the \begin{document} and  commands. However, since you asked for a
-% transcription without document commands, we'll focus on the content itself.
-
-% Here is the LaTeX transcription of the provided lecture material
-
 \subsubsection{Pros and cons}
+Programming languages can be implemented either through compilation or interpretation, though this is not an inherent property of the language itself. Below are the advantages and disadvantages of interpreters, along with examples and explanations of how languages compile.
 
 \paragraph{Advantages of interpreters:}
 \begin{itemize}
-  \item No need for a compilation step
-  \item In particular, no need to compile for each different platform (portability)
+    \item Eliminates the compilation step, simplifying the execution process.
+    \item Provides portability across different platforms without the need for recompilation.
 \end{itemize}
+
 
 \paragraph{Disadvantages of interpreters:}
 \begin{itemize}
-  \item Interpreter needs to be present on the user's machine
-  \item An interpreter will run the code slower than native machine code
+    \item Requires the presence of the interpreter on the user's machine.
+    \item Typically executes code slower than compiled native machine code.
 \end{itemize}
 
 Compiled or interpreted is \textit{not an inherent property} of a language.
 
 \paragraph{Example: Python}
-\begin{itemize}
-  \item CPython (the reference and most common Python implementation) is an interpreter
-  \item Cython is a compiler
-\end{itemize}
+Python, often used as a prime example of an interpreted language due to its reference implementation (CPython), showcases the flexibility of language implementations. CPython compiles Python code to an intermediate form known as bytecode, which it then interprets. However, other implementations like PyPy use Just-In-Time compilation techniques to improve performance, reflecting the language's versatility.\\
+Python exemplifies a hybrid approach. While CPython produces bytecode, translating Python code to an intermediate language, it also interprets the bytecode. This intermediate step adds a layer of abstraction that allows Python to be platform-independent while also incurring the typical overhead of interpretation. Moreover, alternative implementations like Cython can compile Python code into optimized C, potentially transforming Python scripts into high-performance executables.
 
-Still, languages usually have a \textbf{default / preferred way}
+\textbf{Preferred Execution Model:}
+Despite the flexibility, languages tend to be associated with a standard execution model based on their common implementations—compiled languages like C and interpreted ones like Python.
+
+
+
+
 
 \paragraph{Compiled languages:}
 \begin{itemize}
@@ -178,39 +96,46 @@ Still, languages usually have a \textbf{default / preferred way}
 
 % Transcription of the image's content into LaTeX format
 
-\subsubsection{Compile... to what?}
+\subsubsection{Compilation Targets and Strategies}
+
+Understanding the compilation process involves knowing not only how source code is transformed but also what it is compiled into.
+
+\paragraph{Compilation Targets}
+
+Different languages choose different compilation targets:
 
 \begin{itemize}
-    \item The Nim compiler produces C code (which is then compiled)
-    \item The Dart compiler produces JavaScript code (then interpreted)
-    \item Java compiles to ``Java Virtual Machine'' (JVM) code
-    \begin{itemize}
-        \item the JVM can be seen as an ISA for a processor that does not exist
-        \item the JVM code is shipped to the user
-        \item the JVM code is then interpreted
-        \item \textbf{advantage}: JVM code is portable
-        \item \textbf{drawback}: user must have the JVM interpreter installed
-    \end{itemize}
-    \item The Python interpreter (CPython) actually produces ``Python bytecode'' and immediately interprets it
+  \item \textbf{Nim:} Compiles to C code, which is then compiled again to machine code, leveraging the efficiency of C compilers.
+  \item \textbf{Dart:} Targets JavaScript, allowing the compiled code to be interpreted by JavaScript engines in web browsers.
+  \item \textbf{Java:} Compiles to bytecode for the Java Virtual Machine (JVM), which serves as an abstract processor architecture. The bytecode is portable but requires users to have the JVM for execution.
+  \item \textbf{Python:} The CPython interpreter compiles Python into bytecode, which is immediately interpreted. This approach grants Python scripts a level of portability across platforms.
 \end{itemize}
 
-\bigskip
+\paragraph{Pros and Cons of JVM}
+
+The JVM introduces both advantages and drawbacks:
 
 \begin{itemize}
-    \item What about shipping the source code to the user...
-    
-    \item ... then the user compiles it and runs it?
-    
-    \item The result would be both \textbf{portable and fast}.
-    
-    \item To avoid long compilation delays, compilation is done section-by-section (file, function or code block)...
-    
-    \item ... just before the corresponding code needs to be run.
-    
-    \item This is \textit{Just-in-time (JIT)} compilation.
+  \item \textbf{Advantage:} JVM bytecode is platform-independent.
+  \item \textbf{Drawback:} It necessitates that the JVM interpreter be installed on the user's machine.
 \end{itemize}
 
-\bigskip
+\subsubsection{Just-in-Time Compilation}
+
+An alternative approach to traditional compilation is Just-in-Time (JIT) compilation:
+
+\begin{itemize}
+  \item JIT avoids long compilation times by compiling code on-the-fly, as it is needed.
+  \item This strategy can result in execution that is both portable and fast.
+  \item By compiling section-by-section—be it a file, function, or block of code—JIT compilers can optimize at runtime, providing speed without sacrificing flexibility.
+\end{itemize}
+
+JIT compilation offers a balance, aiming to combine the best aspects of interpretation (portability) and compilation (speed).
+
+\paragraph{Conclusion}
+
+The choice of a compilation target impacts the distribution, execution, and performance of a programming language. Understanding these concepts is vital for developers to make informed decisions about code deployment and runtime environments.
+
 
 \subsubsection{Languages with JIT compilation}
 
@@ -268,162 +193,127 @@ Speed & fast & slow & in-between & slow at first, then fast \\
 
 \subsection{Types}
 
-% Note: The word "TYPES" at the end is separated by what appears to be a section. 
-% Since this is a single word and the context in which it is used is ambiguous, 
-% it is simply treated here as a section heading.
+\subsubsection{Static vs. Dynamic Type Checking}
 
-% The LaTeX transcription of the lecture slide content
+Type systems in programming languages can be broadly classified into static and dynamic type checking mechanisms, each with its approach to ensuring type correctness.
 
-\begin{lstlisting}[language=C]
-int a;
-// the type of a is int
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python]
->>> a = 5
->>> type(a)
-<class 'int'>
-\end{lstlisting}
-
-\subsubsection{Static or dynamic type checking}
-
+\paragraph{Static Type Checking}
 \begin{itemize}
-    \item Static type checking: type errors are always caught (e.g. at compile time)
-    \item Dynamic type checking: type errors are caught only when (if) the code is run
+    \item In static type checking, the type correctness of variables is verified at compile-time.
+    \item The compiler analyzes the source code and ensures that all type rules are followed before the code is run.
+    \item Any type mismatch or type errors are detected and reported as compile-time errors.
+    \item Example in C:
+    \begin{verbatim}
+    int f() {
+        return "this is a string" / 5; // Compile-time error
+    }
+    \end{verbatim}
+    \item The advantage of static type checking is that many errors can be caught early in the development process.
+    \item It enforces type discipline, as the code must explicitly declare and adhere to type contracts.
 \end{itemize}
 
-\paragraph{Dynamic type checking (Python):}
+\paragraph{Dynamic Type Checking}
+\begin{itemize}
+    \item Dynamic type checking, on the other hand, resolves types at runtime.
+    \item It allows more flexibility in the code, as types are enforced when operations are actually performed.
+    \item Errors due to type mismatches are thrown during the execution of the program, which may lead to runtime exceptions.
+    \item Example in Python:
+    \begin{verbatim}
+    def f():
+        return "this is a string" / 5 # Runtime TypeError
+    \end{verbatim}
+    \item This flexibility can be advantageous for rapid prototyping and for code that requires dynamic type behavior.
+    \item However, it also means that certain types of errors will only surface when the problematic code path is executed.
+\end{itemize}
 
-\begin{lstlisting}[language=Python]
-def f():
-    return "this is a string" / 5
-    
-# ...
-# as long as f() is not used, not problem
-# ...
-
-f()
-
-TypeError: unsupported operand type(s) for /: 'str' and 'int'
-\end{lstlisting}
-
-\paragraph{Static type checking (C):}
-
-\begin{lstlisting}[language=C]
-int f()
-{
-    return "this is a string" / 5;
-    // even though f() is never used, this yields:
-    // error: invalid operands to binary / (have 'char *' and 'int')
-}
-
-// f() is never used
-\end{lstlisting}
+\textbf{Comparative Analysis}\\
+While static type checking adds a layer of safety by catching errors early, it requires more upfront declarations and can be more rigid. Dynamic type checking offers flexibility at the cost of potential runtime errors. The choice between static and dynamic typing depends on the specific needs and context of the software project.
 
 
-% Since the content in the image includes code examples and comments,
-% I'll use verbatim environment and comments in LaTeX.
-% LaTeX does not support syntax highlighting out of the box.
-% You might want to use packages like listings or minted for code highlighting.
+\subsubsection{Strong and Weak Typing in Programming Languages}
 
-\paragraph{Dynamic type checking (JavaScript):}
+The terms "strong" and "weak" typing are used to describe how strictly a programming language adheres to type rules, especially concerning type conversions and type safety.
+
+\paragraph{Weak Typing}
+
+Weak typing indicates a language where types may be implicitly converted and operations may succeed even if they do not make sense from a type-safety perspective. Example from C:
+
+\begin{itemize}
+    \item Implicit type conversion allows assigning a floating-point number to an integer variable without an error, merely truncating the value.
+    \item Pointer type conversions can lead to compiled code that may cause runtime errors or undefined behavior.
+\end{itemize}
+
 \begin{verbatim}
-function f()
-{
-    return "this is a string" / 5;
-    // returns special value NaN
-}
+int a = -1.8; // Implicitly converted to int, truncated to -1
+int *p = (int *)((long int)"abc" + 5); // Compiles, but unsafe
+*p = 3; // Dereferencing p could lead to a crash
 \end{verbatim}
 
-\paragraph{Static type checking (TypeScript):}
-\begin{verbatim}
-function f(): number
-{
-    return "this is a string" / 5;
-    // ERROR: The left-hand side of an arithmetic operation must be of type
-    // 'any', 'number', 'bigint' or an enum type.(2362)
-    // (even if f() is never used)
-}
-\end{verbatim}
+\paragraph{Strong Typing}
 
-\subsubsection{Strong and weak typing}
-\textbf{“Strong”} and \textbf{“weak”} are vague qualifiers to indicate how strict a language is with type conversions.
+Strong typing means the language enforces strict adherence to typing, preventing implicit, potentially unsafe conversions. Example from Python:
 
-\paragraph{Weak typing (C):}
-\begin{verbatim}
-int a = -1.8; // not an error, value silently truncated (towards zero) to -1
-\end{verbatim}
+\begin{itemize}
+    \item Operations on incompatible types are not allowed and result in a clear error message.
+    \item Certain type-related operations are defined within the language, such as multiplying a string by an integer to repeat the string.
+\end{itemize}
 
 \begin{verbatim}
-int *p = (int *)(long int)("abc" + 5) // will compile
-*p = 3; // will probably crash
-\end{verbatim}
-
-\paragraph{Strong typing (Python):}
-\begin{verbatim}
->>> "a" * 4
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: can only concatenate str (not "int") to str
-\end{verbatim}
-\begin{verbatim}
-but
+>>> "a" + 4
+TypeError: Can only concatenate str (not "int") to str
 
 >>> "a" * 4
 'aaaa'
 \end{verbatim}
 
 
+The distinction between strong and weak typing can affect the reliability, safety, and clarity of code. Strongly typed languages may prevent subtle bugs at the cost of less flexibility, while weakly typed languages might allow for a wider range of behaviors at the risk of runtime errors.
+
+
+
+
 \subsection{Memory management}
+\subsubsection{Manual Memory Management in C}
 
-\subsubsection{Manual memory management in C:}
+C programming requires developers to manage memory manually, which includes allocating and freeing memory as needed.
 
-\begin{verbatim}
-int getint()
-{
-    char *buffer = malloc(1024);
-    size_t n = fread(buffer, 1, 1023, stdin);
-    buffer[n] = 0;
-    return strtol(buffer, NULL, 0);
-}
-\end{verbatim}
+\paragraph{Common Mistakes in Memory Management}
+
+When using \texttt{malloc} for dynamic memory allocation, common mistakes include:
 
 \begin{itemize}
-    \item We did not check that \texttt{malloc(1024)} worked
-    \item We forgot \texttt{free(buffer)}!
+    \item Not checking if \texttt{malloc} actually succeeded in allocating memory.
+    \item Forgetting to release memory with \texttt{free}, leading to memory leaks.
 \end{itemize}
 
+\paragraph{Example of Poor Memory Management}
+The following C function \texttt{getint} does not check for allocation failure and forgets to free the allocated memory:
+
 \begin{verbatim}
-int getint()
-{
+int getint() {
     char *buffer = malloc(1024);
-    if (buffer == NULL) {
-        perror("malloc()");
-        abort();
-    }
     size_t n = fread(buffer, 1, 1023, stdin);
-    if (ferror(stdin)) {
-        perror("fread()");
-        abort();
-    }
-    buffer[n] = 0;
-    int r = strtol(buffer, NULL, 0);
-    free(buffer); // <-------- free memory
-    return r;
+    buffer[n] = '\0';
+    return strtol(buffer, NULL, 0);
+    // Missing free(buffer) leads to a memory leak
 }
 \end{verbatim}
 
+\paragraph{Corrected Memory Management}
+A more robust version of the function includes error checking and properly frees the allocated memory.
+
+\paragraph{Key Takeaways}
+
+Proper memory management is crucial in C to avoid errors and resource leaks. Developers must ensure that every \texttt{malloc} call is paired with a corresponding \texttt{free} and that all potential errors are checked and handled appropriately.
 
 
-% Start of the LaTeX document for the lecture slide
 
-% Slide title "Automatic memory management"
 \subsubsection{Automatic memory management}
+Automatic memory management simplifies the developer's job by abstracting the details of allocating and freeing memory. This is commonly seen in higher-level languages like Python.\\
+Here, memory management is handled automatically through mechanisms like \textbf{reference counting} and \textbf{garbage collection}, which track and manage memory usage without direct intervention from the programmer.
 
-% Slide content under the title
-\textbf{in Python:}
 
-% Python code example
+\textbf{Example}
 \begin{verbatim}
 def getint():
     buffer = input()
@@ -433,55 +323,25 @@ def getint():
 % Slide title "How does automatic memory management work?"
 \subsubsection{How does automatic memory management work?}
 
-% Slide content explaining automatic memory management
-We need to keep track of the memory that is in use.
-
 \begin{itemize}
-    \item Reference counting
-    \item Garbage collection
+    \item \textbf{Reference Counting:} It is the process of tracking how many references exist to a particular object in memory.
+    \begin{itemize}
+        \item When an object is created, its reference count is set to one.
+        \item The reference count is incremented each time the object is referenced and decremented when the reference goes out of scope.
+        \item When the reference count drops to zero, the object's memory is deallocated.
+    \end{itemize}
+    \item \textbf{Garbage Collection:} Complements reference counting by handling cyclic references where two or more objects refer to each other, preventing their reference counts from reaching zero.
 \end{itemize}
-
-% Slide title "Reference counting"
-\subsubsection{Reference counting}
-
-% C code example for Reference counting
-\begin{verbatim}
-struct object_t {
-    int refcount;
-    ...
-};
-
-void object_ref(struct object_t *obj)
-{
-    obj->refcount = obj->refcount + 1;
-}
-
-void object_unref(struct object_t *obj)
-{
-    obj->refcount = obj->refcount - 1;
-    if (obj->refcount == 0) {
-        free(obj);
-    }
-}
-\end{verbatim}
 
 
 % The title is not provided in the image, so it is left out in the LaTeX document
 
-\paragraph{Refcount}
-\begin{itemize}
-  \item set to 1 when object created
-  \item incremented whenever object referenced (used)
-  \item decremented whenever object goes out of scope
-  \begin{itemize}
-    \item expression is processed but not assigned or returned
-    \item local variable
-  \end{itemize}
-\end{itemize}
-
+\paragraph{Refcount example} 
+Consider the following pyhton function:
 \begin{lstlisting}
 def f():
     s = ("abc" + "def") + "ghi"
+    t = s
     return t
 \end{lstlisting}
 
@@ -545,70 +405,68 @@ def do_nothing():
 
 \subsection{Other Language Features}
 
+
 \subsubsection{Macros}
+Macros in C are preprocessor directives that allow for automatic generation of source code fragments.
 
-Macros allow us to generate fragments of source code automatically.
+\paragraph{Example and Usage}
+\begin{itemize}
+    \item An example macro in C that repeats arguments:
+    \begin{verbatim}
+    #define THIS_5X(a) a, a, a, a, a
+    int array[10] = { THIS_5X(1), THIS_5X(2) };
+    \end{verbatim}
+    This expands into an array initialization with repeated values.
 
-\paragraph{C macro example:}
+    \item Macros can calculate the number of elements in an array:
+    \begin{verbatim}
+    #define ARRAY_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
+    \end{verbatim}
+\end{itemize}
 
-\begin{verbatim}
-#define THIS_5X(A) A, A, A, A, A
+\paragraph{Cautions with Macros}
+Macros are simple text replacements and can lead to unexpected results without careful use.
+\begin{itemize}
+    \item Incorrect macro that doesn't account for operator precedence:
+    \begin{verbatim}
+    #define PRODUCT_WRONG(a, b) a * b
+    int a = PRODUCT_WRONG(1 + 2, 3 + 4); // Yields 11, not 21
+    \end{verbatim}
+    
+    \item Corrected macro with parentheses ensuring proper precedence:
+    \begin{verbatim}
+    #define PRODUCT_CORRECT(a, b) ((a) * (b))
+    int a = PRODUCT_CORRECT(1 + 2, 3 + 4); // Correctly yields 21
+    \end{verbatim}
+\end{itemize}
 
-int array[10] = { THIS_5X(1), THIS_5X(2) };
-\end{verbatim}
-
-equivalent to:
-
-\begin{verbatim}
-int array[10] = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 2 };
-\end{verbatim}
-
-
-
-
-% Macros section
-Macros can be useful: 
-
-\begin{verbatim}
-#define ARRAY_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
-\end{verbatim}
-
-But beware! They are just text replacement:
-
-\begin{verbatim}
-#define PRODUCT_WRONG(a, b) (a * b)
-int a = PRODUCT_WRONG(1 + 2, 3 + 4); // <-- 1 + 2 * 3 + 4 = 11
-\end{verbatim}
-
-\begin{verbatim}
-#define PRODUCT_CORRECT(a, b) ((a) * (b))
-int a = PRODUCT_CORRECT(1 + 2, 3 + 4); // <-- (1 + 2) * (3 + 4) = 21
-\end{verbatim}
-
-% Generics section
 \subsubsection{Generics}
+Generics provide a way to write functions and data structures that can operate on any data type.
 
-In C, those must be implemented separately:
+\paragraph{Generics in Different Languages}
+\begin{itemize}
+    \item In C, without built-in generics, functions must be written for each data type:
+    \begin{verbatim}
+    void int_array_sort(int *array, int size);
+    void float_array_sort(float *array, int size);
+    \end{verbatim}
 
-\begin{verbatim}
-void int_array_sort(int *array, int size);
-void float_array_sort(float *array, int size);
-\end{verbatim}
+    \item Python's dynamic type checking negates the need for explicit generics:
+    \begin{verbatim}
+    def array_sort(array):
+        # Works for any type that supports comparison and sorting
+    \end{verbatim}
 
-In Python, because of dynamic type checking, there is no need:
+    \item C++ introduces templates, which are its way of implementing generics:
+    \begin{verbatim}
+    template <typename T>
+    void array_sort(T *array);
+    \end{verbatim}
+    Templates allow functions and classes to operate with any type.
+\end{itemize}
 
-\begin{verbatim}
-def array_sort(array):
-    # "C", "<", ">", "=", etc. will work for either int and float
-\end{verbatim}
-
-The type of array will be figured out at runtime
-
-To solve this, C++ adds generics:
-
-\begin{verbatim}
-template <typename T> void array_sort(T *array);
-\end{verbatim}
+\paragraph{Implications}
+Understanding macros and generics is fundamental for writing reusable and efficient code. While macros offer powerful text manipulation at compile-time, generics enable type-agnostic programming, leading to more flexible and maintainable codebases.
 
 % Languages with generics section
 \subsubsection{Languages with generics}
@@ -652,30 +510,6 @@ class Point:
 In object-oriented programming (OOP), compound types (``classes'')
 can have functions attached to them (``methods'').
 
-\begin{itemize}
-    \item In C++:
-\begin{verbatim}
-struct point {
-    float x;
-    float y;
-    
-    void scale(float l) { x *= l; y *= l; }
-};
-\end{verbatim}
-
-    \item In Python:
-\begin{verbatim}
-class Point:
-    def __init__(self):
-        self.x = 0.0
-        self.y = 0.0
-
-    def scale(self, l):
-        self.x *= l
-        self.y *= l
-\end{verbatim}
-\end{itemize}
-
 As a consequence, in OOP, \emph{data} and the \emph{methods} that operate on them are usually defined close together.
 
 We can construct complex type hierarchies:
@@ -700,13 +534,13 @@ We can construct complex type hierarchies:
 
 \subsubsection{Functional programming}
 
-In functional programming, functions are ``first-class'' types:
+Functional programming treats functions as "first-class" citizens of the programming language.
 
 \begin{itemize}
-    \item they can be used in expressions
-    \item they can be assigned to variables
+    \item Functions can be used within expressions.
+    \item Functions can be assigned to variables, passed as arguments, or returned from other functions.
 \end{itemize}
-
+\textbf{A python example}
 \begin{verbatim}
 def map(array, fn):
     r = array.copy()
@@ -723,14 +557,18 @@ map([0, 1, 2, 3, 4], double_it)
 
 \subsubsection{Declarative and logic programming}
 
-We described what we want, not how to get it.
+Declarative programming focuses on describing \textit{what} the program should accomplish rather than specifying \textit{how} to achieve it.
+
+\paragraph{Logic Programming}
+\begin{itemize}
+    \item In logic programming, the programmer defines the desired results by specifying constraints and relationships, not the steps to solve the problem.
+    \item An example is using SAT solvers to determine the satisfiability of logical formulas.
+\end{itemize}
+
 
 \paragraph{Example SAT formulas:}
 
-x1 and (not x2) or x3 and (not x3)
-
-We described the constraints, not how to get a solution.
-
-% Note: The syntax presented in the SAT formulas section is informal and 
-% designed for readability rather than strict formal logic syntax.
-% It may be necessary to adjust it according to the context of use.
+\begin{verbatim}
+x1 and (not x2 or x3) and (not x3)
+\end{verbatim}
+This SAT formula describes a logical constraint. The solver's role is to find a solution that satisfies this constraint, without the programmer detailing the steps to find such a solution.
