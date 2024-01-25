@@ -46,11 +46,11 @@ Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the r
 | Lecture 4   |   ✅     |
 | Lecture 5   |   ✅✅     |
 | Lecture 6   |   ✅     |
-| Lecture 7   |   ✅     |
+| Lecture 7   |   ✅✅     |
 | Lecture 8   |   ✅     |
 | Lecture 9   |   ✅     |
 | Lecture 10  |   ✅     |
-| Lecture 11  |   ✅     |
+| Lecture 11  |   ✅✅     |
 | Lecture 12  |   ✅     |
 | Lecture 13  |   ✅     |
 | Lecture 14  |   ✅     |

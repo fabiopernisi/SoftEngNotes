@@ -3,18 +3,11 @@
 
 \subsection{Python formatted string literals}
 
-% [TBD] is used to denote the place where non-textual elements should be included if present. 
-% In this case, the image can be replaced with a placeholder indicating that content was here.
+Formatted string literals look like string literals, but are prepended with an \texttt{f}:\\
 
+\texttt{f'Hello'}\\
 
-
-% Transcription of the image content into LaTeX
-
-Formatted string literals look like string literals, but are prepended with an \texttt{f}:
-
-\texttt{f'Hello'}
-
-They allow us to:
+They allow  to:
 \begin{itemize}
     \item build a string from python expressions
     \item specify how to format those expressions
@@ -59,12 +52,6 @@ Examples:
 >>> f'pi = {math.pi:<+6.2f}'
 'pi = +3.14 '
 \end{verbatim}
-[TBD] % Replace [TBD] with the appropriate LaTeX command(s) if necessary for non-text content
-
-
-% Since LaTeX does not provide a standard environment for slides or presentations
-% without using a document class like beamer, this transcription will focus on 
-% the content aspect only.
 
 
 \paragraph{Documentation:}
@@ -179,8 +166,11 @@ inf
 
 % Description of list comprehension syntax in itemized list format
 \subsubsection{List comprehension syntax:}
+The general syntax for a list comprehension in Python is:
+\begin{center}
+\texttt{[ expression for variable in iterable ]}
+\end{center}
 \begin{itemize}
-  \item [\texttt{[ expression for variable in iterable ]}]
   \item iterates over the values in \texttt{iterable}
   \item at each iteration, assign value to \texttt{variable}
   \item evaluate \texttt{expression} (may refer to \texttt{variable})
@@ -200,24 +190,24 @@ inf
 
 
 % Example of list comprehension for zero padding numbers
-\verb|>>> [f'{i:02d}' for i in range(8)]|
+\verb|>>> [f'{i:02d}' for i in range(8)]|\\
 \verb|['00', '01', '02', '03', '04', '05', '06', '07']|
 
 % Example of list comprehension for binary representation with padding
-\verb|>>> [f'{i:03b}' for i in range(8)]|
+\verb|>>> [f'{i:03b}' for i in range(8)]|\\
 \verb|['000', '001', '010', '011', '100', '101', '110', '111']|
 
 % Title for the next section
 \subsection{Dictionary Comprehensions}
 
 % Explanation and syntax for dictionary comprehensions
-Dictionary comprehension syntax:
-\verb|{ key_expr : val_expr for variable in iterable }|
+Dictionary comprehension syntax:\\
+\verb|{key_expr : val_expr for variable in iterable}|
 
 Same as list comprehension, but for dict.
 
 % Example of dictionary comprehension
-Example:
+Example:\\
 \verb|>>> { i : f'{i:02b}' for i in range(4) }|
 \verb|{0: '00', 1: '01', 2: '10', 3: '11'}|
 
