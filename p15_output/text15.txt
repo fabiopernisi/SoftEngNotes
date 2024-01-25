@@ -1,315 +1,215 @@
 \newpage
 \section{Debugging}
-
-\subsection{Correctness (continued)}
-
-\subsubsection{We are here}
-
-\begin{itemize}
-    \item Part 1: How computers works
-    \begin{itemize}
-        \item Boolean logic, integers
-        \item Instructions
-        \item Memory
-    \end{itemize}
-
-    \item Part 2: Software development
-    \begin{itemize}
-        \item Compiling, make
-        \item ABIs \& APIs
-        \item git
-    \end{itemize}
-
-    \item Part 3: Correctness
-    \begin{itemize}
-        \item Specifications
-        \item Documentation, testing
-        \item Static \& dynamic analysis, debugging \textleftarrow \textbf{TODAY}
-    \end{itemize}
-
-    \item Part 4: Performance
-    \begin{itemize}
-        \item CPU pipelines, caches
-        \item Data structures
-        \item Parallel computation
-    \end{itemize}
-\end{itemize}
-
-% Additional instructions for proper compilation in LaTeX:
-
-
-% Slide Title
 \subsection{Debugging Techniques}
 
 % Slide content for "Instrumentation"
 \subsubsection{Instrumentation}
-\begin{itemize}
-  \item The basic approach to debugging is: \\
-  Check that what we \textit{think is true is actually true}.
-  
-  \item Narrow down the precise point at which \textit{execution} deviates from our \textit{assumptions}
+Instrumentation is a fundamental technique in debugging. It involves inserting additional code to monitor the execution of a program to ensure that the assumptions about the program's behavior hold true.\\
 
-  \item We can use
-  \begin{itemize}
-    \item assertions: \texttt{assert} / \texttt{assert()}
-    \item debugging messages: \texttt{print()} / \texttt{printf()}
-    \item machine-readable output
-  \end{itemize}
+\textbf{Key concepts}
+\begin{itemize}
+    \item The primary goal is to confirm that what we \textit{think} is true is \textit{actually} true.
+    \item It helps in pinpointing the exact location where execution diverges from our expectations.
+    \item Common instrumentation techniques include:
+    \begin{itemize}
+        \item Assertions: \lstinline|assert| or \lstinline|assert()|
+        \item Debugging messages: \lstinline|print()| or \lstinline|printf()|
+        \item Machine-readable output for automated debugging tools.
+    \end{itemize}
 \end{itemize}
 
 % Slide content for "Crash instrumentation example"
 \subsubsection{Crash instrumentation example}
-\begin{verbatim}
+
+Instrumentation can be used to identify the point of failure in a sequence of actions:
+
+\begin{lstlisting}[language=C]
 void perform_actions(struct state *s)
 {
-  action_a(s);
-  action_b(s);
-  action_c(s);
-  action_d(s);
-  action_e(s);
+    action_a(s);
+    action_b(s);
+    action_c(s);
+    action_d(s);
+    action_e(s);
 }
+\end{lstlisting}
 
+By adding debugging messages, we can observe the execution flow:
+
+\begin{lstlisting}[language=C]
 void perform_actions(struct state *s)
 {
-  printf("Action A...\\n");
-  action_a(s);
-  printf("Action B...\\n");
-  action_b(s);
-  printf("Action C...\\n");
-  action_c(s);
-  printf("Action D...\\n");
-  action_d(s);
-  printf("Action E...\\n");
-  action_e(s);
-  printf("Actions done.\\n");
+    printf("Action A...\n");
+    action_a(s);
+    printf("Action B...\n");
+    action_b(s);
+    printf("Action C...\n");
+    action_c(s);
+    // If the program crashes after "Action C...", we know the issue is in action_c()
+    printf("Action D...\n");
+    action_d(s);
+    printf("Action E...\n");
+    action_e(s);
+    printf("Actions done.\n");
 }
-
-Action A...
-Action B...
-Action C...
-Segmentation fault
-\end{verbatim}
-
-% Comment about the crash
-% crash in action_c() assuming no time-traveling UB.
-
-
-% Since LaTeX does not support source code highlighting out of the box,
-% we will use verbatim for the code sections and math environments for the rest.
-% The use of packages like listings or minted could provide better formatting for code.
+\end{lstlisting}
 
 \subsubsection{Machine-readable output example}
+Machine-readable output is particularly useful for automated testing and debugging frameworks:
 
-\begin{verbatim}
+\begin{lstlisting}[language=Python]
 def matrix_inverse(mtx):
-    ...
+    # ...
     return result
+\end{lstlisting}
 
+To verify the correctness of the output, we can add checks that output errors in a machine-readable format:
+
+\begin{lstlisting}[language=Python]
 def matrix_inverse(mtx):
-    ...
+    # ...
     error_matrix = mtx * result - matrix_identity()
     matrix_write(mtx, "mtx.m")
     matrix_write(result, "result.m")
-    assert max(max(error_matrix)) < 1e-5
+    assert matrix_norm(error_matrix) < 1e-5
     return result
-\end{verbatim}
+\end{lstlisting}
+
+\textit{Note:} The example assumes that there are no undefined behaviors, such as accessing invalid memory, that could cause the program to crash before reaching the problematic code.
+
 
 \subsubsection{How to handle large test cases?}
-
 \begin{itemize}
-    \item assume our \texttt{matrix\_inverse()} code has a bug
-    \item we find a wrong result for a specific 2000x2000 matrix
-    \item how do we proceed?
+    \item Suppose the \texttt{matrix\_inverse()} function has a bug.
+    \item The issue is observed with a specific \(2000 \times 2000\) matrix.
+    \item Directly visualizing such a large matrix to debug is impractical.
 \end{itemize}
 
+\paragraph{Strategies for Instrumentation}
 \begin{itemize}
-    \item we would like to instrument \texttt{matrix\_inverse()} by printing the matrix at each step,
-    \item but a 2000x2000 matrix is too large to visualize
+    \item Instrumenting \texttt{matrix\_inverse()} by printing the matrix at each step can be overwhelming due to the matrix's size.
+    \item An effective approach is needed to handle the large size of the test case.
 \end{itemize}
 
-\subsubsection{Testcase reduction}
+\subsubsection{Test Case Reduction}
+Test case reduction is a technique to reduce the complexity of the test case while preserving the bug.\\
 
+\textbf{Steps for Reduction}\\
+Given a matrix \( A \in \mathbb{R}^{n \times n} \):
+\begin{enumerate}
+    \item Construct a smaller matrix \( B \in \mathbb{R}^{m \times m} \) by selecting a square submatrix of \( A \).
+    \item Test \texttt{matrix\_inverse()} on \( B \).
+    \item If \texttt{matrix\_inverse(B)} fails, replace \( A \) with \( B \) and repeat the process.
+    \item Continue iteratively until a sufficiently small matrix that reproduces the bug is found.
+\end{enumerate}
+
+\textbf{Example Approach}
 \begin{itemize}
-    \item Input: $A \in \mathbb{R}^{n \times n}$
-    \item Step 1: construct $B \in \mathbb{R}^{m \times m}$ by selecting an arbitrary square submatrix of $A$
-    \item Step 2: test \texttt{matrix\_inverse()} on $B$
-    \item Step 3: if \texttt{matrix\_inverse($B$)} fails again, then $A \coloneqq B$
-    \item Step 4: go back to Step 1
+    \item Initially, try removing a random half of the rows and columns of \( A \).
+    \item If the problem persists, reduce the number of rows and columns incrementally.
+    \item If necessary, narrow down to removing a single row and column.
 \end{itemize}
 
-\paragraph{Example approach:}
-\begin{itemize}
-    \item at first we can try removing a random half of the rows and columns of $A$
-    \item if it fails repeatedly, we try to remove fewer rows and columns of $A$
-    \item if it fails again, we remove a single row and column of $A$
-\end{itemize}
-
-% a placeholder for an element that cannot be represented in LaTeX
-% since we were asked to avoid adding document creation commands or \includegraphics
-[TBD] 
-
-% Note for the user: This placeholder should be replaced with a proper figure or table
-% depending on the actual content that is meant to be in its place.
-
-This process can be automated!
+\textit{Note:} This process can be automated, allowing for systematic and efficient debugging of large test cases.
 
 
-% Start of LaTeX content
 
+\subsubsection{Code Bisection}
 
-\subsubsection{Code bisection}
+Code bisection is a systematic method for identifying the location of a bug in the code by repeatedly dividing the range of code under suspicion and verifying at each division point.\\
 
-% Code block 1
-\begin{verbatim}
+\textbf{Applying Code Bisection}
+\begin{enumerate}
+    \item Begin with a range of code where the bug is suspected.
+    \item Insert debugging statements at the midpoint to determine if the first half is executed without error.
+    \item Based on the outcome, narrow down the range to the half where the bug occurs.
+    \item Repeat the process with the narrowed range until the exact location of the bug is identified.
+\end{enumerate}
+
+\textbf{Example of Code Bisection}\\
+Consider a function \texttt{perform\_actions} which executes a series of actions:
+
+\begin{lstlisting}[language=C]
 void perform_actions(struct state *s)
 {
     action_000(s);
-    action_001(s);
-    action_002(s);
     ...
-    action_998(s);
     action_999(s);
 }
-\end{verbatim}
+\end{lstlisting}
 
-% Code block 2 with print statements
-\begin{verbatim}
-void perform_actions(struct state *s)
-{
-    printf("First action...\n");
-    action_000(s);
-    action_001(s);
-    action_002(s);
-    printf("Action 500...\n");
-    action_500(s);
-    ...
-    action_998(s);
-    action_999(s);
-    printf("Actions done.\n");
-}
-
-First action...
-Action 500...
-Segmentation fault
-\end{verbatim}
-
-% Arrow and text indicating crash range
-$\rightarrow$ crash between 500 and 999 (assuming no time-traveling UB).
-
-% Code block 3 with refined print statements
-\begin{verbatim}
-void perform_actions(struct state *s)
-{
-    printf("First action...\n");
-    action_000(s);
-    printf("Action 500...\n");
-    action_500(s);
-    printf("Action 750...\n");
-    action_750(s);
-    ...
-    action_998(s);
-    action_999(s);
-    printf("Actions done.\n");
-}
-
-First action...
-Action 500...
-Action 750...
-Segmentation fault
-\end{verbatim}
-
-% Arrow and text indicating refined crash range
-$\rightarrow$ crash between 750 and 999.
-
-% Code block 4 with more refined print statements
-\begin{verbatim}
-void perform_actions(struct state *s)
-{
-    printf("First action...\n");
-    action_000(s);
-    printf("Action 500...\n");
-    action_500(s);
-    printf("Action 750...\n");
-    action_750(s);
-    printf("Action 875...\n");
-    action_875(s);
-    ...
-    action_998(s);
-    action_999(s);
-    printf("Actions done.\n");
-}
-
-First action...
-Action 500...
-Action 750...
-Segmentation fault
-\end{verbatim}
-
-% Arrow and text indicating more refined crash range
-$\rightarrow$ crash between 750 and 875.
-
-% End of LaTeX content
-
-
-% The following LaTeX code is a transcription of the textual content from 
-% the lecture material presented in the image.
-
+To locate the bug, we instrument the code with print statements:
 
 \begin{lstlisting}[language=C]
 void perform_actions(struct state *s)
 {
     printf("First action...\n");
     action_000(s);
+    ...
     printf("Action 500...\n");
     action_500(s);
-    printf("Action 750...\n");
-    action_750(s);
-    printf("Action 812...\n");
-    action_812(s);
-    printf("Action 875...\n");
-    action_875(s);
+    // If a crash occurs after this print statement, the bug is between action 500 and 999.
+    ...
     action_999(s);
     printf("Actions done.\n");
 }
 \end{lstlisting}
 
-% Output and comments are represented as regular text.
-First action...
-Action 500...
-Action 750...
-Action 812...
-Segmentation fault
+\textbf{Narrowing Down the Range}\\
+Through iterative bisection, we can narrow the range further:
 
-% Comment indicating the issue diagnosed from the output
---\ensuremath{\rightarrow} crash between 812 and 875.
+\begin{lstlisting}[language=C]
+void perform_actions(struct state *s)
+{
+    // Inserting additional print statements between the narrowed range
+    printf("Action 750...\n");
+    action_750(s);
+    // The crash between 750 and 999 indicates the half where the bug resides.
+    ...
+}
+\end{lstlisting}
 
-% Heading for the next section
+Continuing this process will eventually isolate the action causing the crash, allowing for a targeted investigation and resolution of the bug.
+
+
+
 \subsubsection{Version bisection}
+Version bisection is used to identify a change in the codebase that introduced a bug by checking out different commits and testing them.\\
+
+\textbf{Using Git for Bisection}\\
+The `git log` command is used to list commits in a concise format, and `git bisect` can automate the bisection process:
+
+\begin{lstlisting}[language=bash]
+git log --oneline
+\end{lstlisting}
+
+A list of commit messages may look like this:
 
 \begin{lstlisting}
-git log --oneline
 9e9e6fc (HEAD -> main, origin/main) Added perf version check.
 ff3c21b Changed branch mispredict ratio displayed.
 fd49f78 Silently ignore branch events.
 85afe03 Support new perf-script brstack format with added spaces.
-77f8359 Made perf script output parsing more lenient.
+77f8759 Made perf script output parsing more lenient.
 637f374 Version bump.
 47b578b Fixed erroneous use of atime, should have been mtime.
-1dad0df Moved objdump cache to /tmp.
+1dadd0f Moved objdump cache to /tmp.
 60a534a Added caching of objdump output.
 6f3c377 Some debugging code.
 b2daa9b Updated version.
 \end{lstlisting}
 
-% The following text indicates the direction of testing between versions
-% It can be placed in the margins or as inline comments.
-%-- test this
+To find the commit that introduced a bug, we can use `git bisect` to mark the current version as bad and an earlier version that is known to be good. Git will then checkout a commit halfway between the two, and we can compile and test that version:
+
+\begin{lstlisting}[language=bash]
+git bisect start
+git bisect bad # mark the current version as bad
+git bisect good b2daa9b # mark commit b2daa9b as good
+\end{lstlisting}
+
+\textit{Note:} You would continue this process, marking each tested commit as `good` or `bad`, until `git bisect` identifies the commit that introduced the bug.
 
 
-
-% Since the instructions specified not to include document creation commands, 
-% the following LaTeX code does not include preamble or begin/end document tags.
-% It is assumed the user will add this code into an existing LaTeX document.
 \subsection{Debuggers}
 
 \begin{itemize}
@@ -321,5 +221,3 @@ b2daa9b Updated version.
     \end{itemize}
     \item Debuggers for interpreted languages are language-specific
     \item Debuggers for compiled languages work at the assembly level
-\end{itemize}
-% [TBD] is used to denote the slide number or any other non-textual element that can't be represented in LaTeX
