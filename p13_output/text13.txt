@@ -25,13 +25,6 @@ Keeping in mind:
     \end{itemize}
 \end{itemize}
 
-% The [TBD] token is used to represent the image or non-textual elements that cannot be transcribed into LaTeX.
-[TBD]
-
-
-% The LaTeX code provided below is meant to reflect the content of the provided lecture slides, 
-% including the text and list formats. LaTeX math mode is used where appropriate to typeset mathematical expressions.
-
 \subsubsection{Practical limitations}
 
 \begin{itemize}
@@ -119,61 +112,40 @@ If $+, -, \times, /$ are the elementary integer operations:
 \end{itemize}
 
 \paragraph{Binary example}
-
-% The binary example section includes colored boxes which will be represented as comments in LaTeX
-
-% Yellow box representing "64-bit integer"
-% Green box (left) representing "32-bit integer part"
-% Green box (right) representing "32-bit fractional part"
-
 \begin{itemize}
-	\item $i64\_to\_fix(e) \mathrel{::=} e \times 2^{32}$
-	\item $fix\_to\_i64(a) \mathrel{::=} a / 2^{32}$
-	\item $fix\_add(a, b) \mathrel{::=} a + b$
-	\item $fix\_sub(a, b) \mathrel{::=} a - b$
-	\item $fix\_mul(a, b) \mathrel{::=} (a \times b) / 2^{32}$
-	\item $fix\_div(a, b) \mathrel{::=} (a \times 2^{32}) / b$
+    \item A 64-bit integer can be used for fixed-point arithmetic by dividing it into two parts: a 32-bit integer part and a 32-bit fractional part.
+    \item The conversion and arithmetic operations are defined as follows:
 \end{itemize}
 
-% The actual currency symbols used in the image, such as euro sign and cent sign, need to be replaced or defined in LaTeX for exact representation. The LaTeX default does not support them directly without specific packages or commands.
 
-
-% Fixed-point arithmetic code in C
 \begin{verbatim}
-typedef int64_t fix;
-
-static inline fix to_fix(int64_t e)
-{
-    return e << 32;
-}
-
-static inline int64_t from_fix(fix a)
-{
-    return a >> 32;
-}
-
-static inline fix fix_add(fix a, fix b)
-{
-    return a + b;
-}
-
-static inline fix fix_sub(fix a, fix b)
-{
-    return a - b;
-}
-
-static inline fix fix_mul(fix a, fix b)
-{
-    return ((int128_t)a * b) >> 32;
-}
-
-static inline fix fix_div(fix a, fix b)
-{
-    return ((int128_t)a << 32) / b;
-}
+i64_to_fix(e) := e × 2^32
+fix_to_i64(a) := a / 2^32
+fix_add(a, b) := a + b
+fix_sub(a, b) := a - b
+fix_mul(a, b) := (a × b) / 2^32
+fix_div(a, b) := (a × 2^32) / b
 \end{verbatim}
 
-% The following is an enumeration list for "Pros" of fixed-point arithmetic
+The function $i64_to_fix()$ is taking an integer $e$ of type $i64$ (which is a 64-bit integer) and converting it into a fixed-point representation of type \textit{fix}. The multiplication by $2^32$ effectively shifts the integer value $e$ into the higher 32 bits of the 64-bit representation, leaving the lower 32 bits for the fractional part. This way,  it is possible to perform fixed-point arithmetic with fix types while maintaining precision for the fractional component of the values.\\
+
+These operations are implemented using integer arithmetic, providing precise control over the scaling and range of the values.
+
+\paragraph{Implementation in C}
+
+Fixed-point arithmetic operations can be implemented in C using a typedef for a 64-bit integer to represent fixed-point numbers. The integer part occupies the upper 32 bits and the fractional part occupies the lower 32 bits. 
+
+\begin{itemize}
+    \item \textbf{Conversion to Fixed-Point:} An integer is converted to fixed-point format by shifting it left by 32 bits, moving the integer part to the upper 32 bits.
+    \item \textbf{Conversion from Fixed-Point:} A fixed-point number is converted back to an integer by shifting it right by 32 bits, discarding the fractional part.
+    \item \textbf{Addition and Subtraction:} These operations are performed directly on the fixed-point representations, with the result being in fixed-point format.
+    \item \textbf{Multiplication:} Multiplication requires casting to a wider integer (128-bit) to accommodate the intermediate result before shifting right by 32 bits to maintain the correct scale.
+    \item \textbf{Division:} Division is handled by first shifting the dividend left by 32 bits (to align the integer part correctly) before performing the division.
+\end{itemize}
+
+Each operation maintains the scale of fixed-point representation and ensures that the integer and fractional parts are processed correctly. Care is taken during multiplication and division to avoid overflow and to maintain precision.
+
+
 \paragraph{Fixed-point arithmetic, Pros}
 \begin{itemize}
     \item fast, no need for extra hardware
@@ -184,7 +156,7 @@ static inline fix fix_div(fix a, fix b)
 \end{itemize}
 
 % The following is an enumeration list for "Cons" of fixed-point arithmetic
-\paragraph{Fixed-point arithmetic, Pros}
+\paragraph{Fixed-point arithmetic, Cons}
 \begin{itemize}
     \item limited range (e.g. $[-2147483648.999, 2147483647.999]$)
     \item limited precision (e.g. $2^{-32} \approx 0.000000002328$)
@@ -219,53 +191,45 @@ Similarly, take the number $0.0000000002328$:
 &= 2.328e-10
 \end{align*}
 
-\subsubsection{Scientific notation (definition)}
-
-\[
--2.147483648999 \times 10^{9}
-\]
-\[
-\pm d.mmmmmm \ldots \times 10^{\pm xxxx \ldots}
-\]
+\subsubsection{Scientific Notation}
+Scientific notation is a way to express numbers that are too large or too small to be conveniently written in decimal form. It is commonly used in calculations and by scientists, mathematicians, and engineers.
 
 \begin{itemize}
-\item $\pm$ or -
-\item $d$ single digit between 1 and 9
-\item $mmmmmm\ldots$ predetermined number of digits between 0 and 9
-\item $xxxx\ldots$ $\pm$ or -, predetermined number of digits between 0 and 9
+    \item In scientific notation, numbers are written as a product of two numbers: a coefficient and \(10\) raised to a power, for example, \(-2.147483648999 \times 10^9\).
+    \item The coefficient must be a number between \(1\) and \(9\), followed by a decimal point and the rest of the significant digits.
+    \item The exponent is written as a power of \(10\), indicating how many places the decimal point should be moved to convert the number into a standard decimal number.
 \end{itemize}
 
-\subsubsection{Binary floating-point numbers}
-
-\[
-\pm d.mmmmmm \ldots \times 2^{\pm xxxx \ldots}
-\]
+\subsubsection{Binary Floating-Point Numbers}
+In computing, binary floating-point numbers are a way to represent real numbers in a binary system, typically using three components: the sign, exponent, and mantissa.
 
 \begin{itemize}
-\item $\pm$ sign bit + or -
-\item $d$ single bit 1 and 1
+    \item The sign determines if the number is positive or negative.
+    \item The mantissa, or significand, is composed of the significant digits of the number.
+    \item The exponent indicates where the decimal (or binary) point is placed relative to the beginning of the mantissa.
 \end{itemize}
 
-% Note that any non-textual elements in the original image, such as page layout and formatting or non-textual graphics, have been omitted from this LaTeX transcription.
-% [TBD] tokens are placeholders for any such elements which cannot be represented textually in LaTeX.
+Binary floating-point numbers allow for a wide range of values to be represented in a standardized way, which is why they are commonly used in computer systems.
 
 
-% LaTeX content transcribed from the provided image.
-
-\[
-\pm 1.mmmmm... \times 2^{xxxx...}
-\]
+\subsubsection{Pros and Cons of Binary Floating-Point Numbers}
+\textbf{Pros:}
 \begin{itemize}
-    \item $\pm$ sign bit + or -
-    \item $mmmmm...$ ``mantissa'' bits
-    \item $xxxx...$ ``exponent'' bits
+    \item Efficient to process with modern hardware.
+    \item Predictable precision and representation across different systems.
 \end{itemize}
 
-Now we just need to all agree on how many bits for each...
+\textbf{Cons:}
+\begin{itemize}
+    \item Limited precision, which can lead to rounding errors in calculations.
+    \item Limited range, meaning extremely large or small numbers may not be representable.
+\end{itemize}
+
 
 \subsubsection{Floating-point standard}
 \begin{itemize}
     \item In 1985, the Institute of Electrical and Electronics Engineers publishes standard \#754 about floating-point arithmetic (IEEE-754)
+    \item The standard \#754 defines the number of bits used for the sign, exponent, and mantissa. This standard ensures that floating-point operations behave consistently across different computing systems.
     \item Most hardware makers adopt the standard very quickly thereafter (Intel 80387, launched in 1987, is fully compliant)
     \item x86\_64 natively supports binary32 and binary64 formats
     \item AArch64 natively supports binary16, binary32 and binary64 formats
@@ -280,14 +244,9 @@ Now we just need to all agree on how many bits for each...
     exponent range & -14..15 & -126...127 & -1022...1023 \\
 \end{tabular}
 
-% In the tabular environment, the Hyphen MINUS (-) is used to denote ranges. 
-% LaTeX typically treats these as hyphens, not as a range indicator, so they are left as is.
-
-
-% Begin transcription of lecture content
-
 \subsubsection{Precision}
-Let \(fl(x)\) be the floating-point representation of the real number \(x \in \mathbb{R}\).
+
+\textbf{Absolute and Relative Precision}
 \begin{itemize}
     \item \textbf{Absolute precision:} For a given \(x\), the smallest \( \varepsilon \) such that
     \[
@@ -300,9 +259,24 @@ Let \(fl(x)\) be the floating-point representation of the real number \(x \in \m
     \]
 \end{itemize}
 
-\subsubsection{binary64 vs. fixed-point 32+32}
+\subsubsection{Binary64 vs. Fixed-Point 32+32 Comparison}
+
+\textbf{Precision at Different Scales}
+\begin{itemize}
+    \item The fixed-point 32+32 format provides a consistent absolute precision across different magnitudes, beneficial for values around 1 or below.
+    \item Floating-point binary64 format, based on IEEE-754, offers varying precision, with relative precision being consistent but absolute precision varying with the value's magnitude.
+\end{itemize}
+
+\textbf{Range}
+\begin{itemize}
+    \item Fixed-point 32+32 has a limited range up to \(|x| \leq 2.15 \times 10^9\), making it unsuitable for very large values.
+    \item Binary64 supports a significantly larger range up to \(|x| \leq 1.80 \times 10^{308}\), accommodating both very large and very small values.
+\end{itemize}
+
 \begin{tabular}{l|cc|cc}
+    \hline
      & \multicolumn{2}{c|}{fixed-point 32+32} & \multicolumn{2}{c}{floating-point binary64} \\
+     \hline
      & absolute & relative & absolute & relative \\
     \hline
     precision at \(10^{-9}\) & \(2.33 \times 10^{-10}\) & \(0.0233\) & \(2.07 \times 10^{-25}\) & \(2.22 \times 10^{-16}\) \\
@@ -315,19 +289,24 @@ Let \(fl(x)\) be the floating-point representation of the real number \(x \in \m
     precision at \(10^{16}\) & \textcolor{red}{\textbf{X}} &  & \(2.00\) & \(2.22 \times 10^{-16}\) \\
     \hline
     range & \(|x| \leq 2.15 \times 10^{9}\) &  & \(|x| \leq 1.80 \times 10^{308}\) &  \\
+    \hline
 \end{tabular}
 
-\subsubsection{The floating-point number line}
-% The number line images below are not transcribed, as LaTeX doesn't support this kind of complex image native rendering.
-% Replace it with [TBD]
-[TBD]
+\subsubsection{The Floating-Point Number Line}
 
-% End transcription of lecture content
+\begin{itemize}
+    \item The floating-point number line is non-linear, with denser representation of numbers near zero and sparser as the magnitude increases.
+    \item This reflects the constant relative precision of floating-point numbers.
+\end{itemize}
 
+\subsubsection{Programming Languages and IEEE-754 Standard}
 
-% Since the document should be suitable for direct compilation, we're only including the content of the lecture material, not the preamble or document commands.
+\begin{itemize}
+    \item Several programming languages mandate compliance with the IEEE-754 standard for floating-point arithmetic, ensuring consistency across computing platforms.
+    \item Languages like C (since C99) and C++ (since C++03) offer types like \texttt{float} for binary32 and \texttt{double} for binary64.
+    \item Modern languages such as Python and JavaScript also adhere to this standard, with Python using binary64 precision by default.
+\end{itemize}
 
-\subsubsection{Languages that mandate IEEE-754 for floating-point}
 
 \begin{tabular}{lccc}
 \textbf{language} & \textbf{since} & \textbf{binary32} & \textbf{binary64} \\
@@ -339,52 +318,23 @@ Python & & & \checkmark \\
 JavaScript & & & \checkmark \\
 \end{tabular}
 
-% [TBD] is used to denote that there was an image or non-text content here.
-% In this case, the images are checkboxes and they are replaced with \checkmark in LaTeX.
-
-\subsubsection{Inaccuracy}
-
-In base 10,
-\begin{itemize}
-\item $1/3 \approx 0.3333$
-\item $2/3 \approx 0.6666$
-\item $1/3 + 2/3 \approx 0.9999$
-\end{itemize}
-
-In base 2,
-
-\begin{verbatim}
->>> a = 0.1
->>> f'{a:.50f}'
-'0.1000000000000000055511151231257827021181583404541016'
-\end{verbatim}
-
-% The verbatim environment is used to display the Python REPL content exactly as it appears in the image
-
-\subsubsection{Numerical instability}
-
-Consider the following approximation of the derivative of $f$:
-
-\[
-\frac{d}{dx} f(x) \approx \frac{f(x + \delta) - f(x)}{\delta}
-\]
-
-Let us consider the function $f$:
-
-\[
-f(x) = x \quad \text{so} \quad \frac{d}{dx} f(x) = 1
-\]
-
-and compute its derivative with $\delta = 10^{-6}$.
-
-% The rest of the page in the image seems to contain either non-text content or text that is not readable. If this text is actually visible and readable in the original image, additional LaTeX content would be necessary here.
 
 
-% Use the 'article' class for simple documents
 
-% Begin your document content here
+\subsubsection{Inaccuracy in Base 10 and Base 2}
+In floating-point arithmetic, inaccuracy can arise due to the way numbers are represented in base 10 and base 2. For example, fractions like \( \frac{1}{3} \) and \( \frac{2}{3} \) do not have exact representations in base 10 and result in repeating decimals. This inaccuracy is also present in binary (base 2), where numbers like 0.1 cannot be precisely represented.
 
-% Since we are replicating a presentation style, we'll use sections and subsections
+\subsubsection{Numerical Instability}
+Numerical instability refers to errors that can grow when applying mathematical operations, especially in iterative calculations or when dealing with very large or small numbers.\\
+
+\textbf{Derivative Approximation}\\
+A common operation in numerical analysis is the approximation of derivatives using finite differences:
+\[ \frac{df(x)}{dx} \approx \frac{f(x + \delta) - f(x)}{\delta} \]
+However, choosing a very small \( \delta \) can lead to significant inaccuracies due to the limited precision of floating-point numbers.
+
+\subsubsection{Example of Numerical Instability}
+Consider computing the derivative of \( f(x) = x \) at large values of \( x \) using a small \( \delta \). When \( x \) is much larger than \( \delta \), the subtraction \( (f(x + \delta) - f(x)) \) can result in loss of precision, and the computed derivative will deviate from the expected value of 1.
+
 \subsubsection{What is happening?}
 \begin{itemize}
     \item At $x = 10^{+5}$, we first compute $(10^{+5} + 10^{-6})$
@@ -406,6 +356,7 @@ and compute its derivative with $\delta = 10^{-6}$.
         \item and get a number in $[1 - 1.91, 1 + 1.91]$
     \end{itemize}
 \end{itemize}
+The deviations we just discussed arise because floating-point numbers have more relative precision near zero, and less absolute precision as their magnitude increases.
 
 Therefore,
 \begin{itemize}
@@ -416,9 +367,8 @@ Therefore,
 
 
 
-% Transcription of the lecture content into LaTeX
 
-\subsubsection{Never do exact comparisons} % Lecture slide heading
+\subsubsection{Never do exact comparisons}
 
 \begin{verbatim}
 >>> 0.1 + 0.2 == 0.3
@@ -463,65 +413,41 @@ becomes
 \end{verbatim}
 
 
-% The LaTeX code below is formatted to reflect the content of the slide in the image.
-% Due to the nature of this request, the LaTeX code is presented without preamble or document tags.
-% It may be placed within a 'frame' in a beamer document or used within other LaTeX document classes.
 
-\subsection{Floating-point rounding}
-
-Given a floating point number $a$, we want to compute $x = a / 3$.
-
-\medskip
-\noindent Q: If $a / 3$ cannot be represented exactly by a floating-point number, what value do we give $x$?
-
-\medskip
-\noindent A: We ``round'' $x$ to the floating-point number ``closest'' to the real value $a / 3$.
-
-\subsubsection{Rounding modes}
+\subsection{Rounding Floating-Point Numbers}
+When a real number cannot be represented exactly by a floating-point number, we approximate it by "rounding" to the nearest floating-point number. The IEEE-754 standard outlines several rounding modes to handle such cases:
 
 \begin{itemize}
-    \item Round to nearest, ties to even (default)
-    \begin{itemize}
-        \item nearest value
-        \item in case of ties, set last mantissa bit to zero
-    \end{itemize}
-    \item Round to nearest, ties away from zero
-    \begin{itemize}
-        \item nearest value
-        \item in case of ties, set last mantissa bit to one
-    \end{itemize}
-    \item Round toward zero
-    \begin{itemize}
-        \item if between two numbers, choose the one nearest to zero
-        \item even if it is not the nearest to the real value
-    \end{itemize}
-    \item Round toward $+\infty$: always round up
-    \item Round toward $-\infty$: always round down
+    \item \textbf{Round to Nearest, Ties to Even:} The default rounding mode which rounds to the nearest value; if equidistant, it rounds to the nearest even number in the floating-point representation.
+    \item \textbf{Round to Nearest, Ties Away from Zero:} Rounds to the nearest value; if equidistant, it rounds away from zero.
+    \item \textbf{Round Toward Zero:} Always rounds towards zero, truncating the extra digits.
+    \item \textbf{Round Toward \(+\infty\):} Always rounds up.
+    \item \textbf{Round Toward \(-\infty\):} Always rounds down.
+\end{itemize}
+
+\subsubsection{Determinism in Floating-Point Arithmetic}
+While floating-point arithmetic may be inaccurate due to rounding, it is deterministic:
+
+\begin{itemize}
+    \item The result of most operations is precisely defined by the standard.
+    \item We can predict the result of operations bit-for-bit, ensuring reproducible calculations.
+\end{itemize}
+
+\subsubsection{IEEE-754 Rounding Rules}
+Let us denote by \(fl(x)\) the floating-point representation of the real number $x \in \mathbb{R}$.\\
+The IEEE-754 standard mandates correct rounding as per the selected rounding mode for various operations:
+
+\begin{itemize}
+    \item \textbf{Addition, Subtraction:} \( x + y \) results in \( fl(x + y) \).
+    \item \textbf{Multiplication, Division:} \( x / y \) results in \( fl(x / y) \).
+    \item \textbf{Square Root:} \( \sqrt{x} \) results in \( fl(\sqrt{x}) \).
+    \item \textbf{Fused Multiply-Add:} \( fma(x, y, z) \) results in \( fl(x \times y + z) \).
 \end{itemize}
 
 
-% Start of LaTeX code
 
-\subsubsection{Determinism}
 
-\begin{itemize}
-  \item Floating-point arithmetic is sometimes \textbf{inaccurate}
-  \item but it is \textbf{deterministic}:
-  \begin{itemize}
-    \item the result of most operations is \textbf{precisely defined}
-    \item we can predict the result of such operations \textbf{bit-for-bit}
-  \end{itemize}
-\end{itemize}
 
-Let us denote by fl($x$) the floating-point representation of the real number $x \in \mathbb{R}$.
-
-The IEEE-754 standard mandates correct rounding as specified by the currently-selected \textbf{rounding mode} for:
-\begin{itemize}
-  \item addition, negation, subtraction: $x + y$ gives fl($x + y$)
-  \item multiplication, division: $x / y$ gives fl($x / y$)
-  \item square root: $\sqrt{x}$ gives fl($\sqrt{x}$)
-  \item fused multiply-add: $fma(x, y, z)$ = fl($x \times y + z$)
-\end{itemize}
 
 \subsubsection{Division example}
 
@@ -544,51 +470,40 @@ When executing
 % you may need to include packages such as amsmath for math typesetting.
 
 \subsubsection{Expression example}
-
+Consider the expression:
 \[
-(y \ast (x + 4.0)) / (z - 3.0)
+\frac{y \times (x + 4.0)}{z - 3.0}
 \]
-
-gives:
-
+In a floating-point computation, due to rounding errors, this expression gives:
 \[
-fl( fl(y \ast fl(x + 4)) / fl(z - 3) )
+fl\left( fl(y \times fl(x + 4)) \div fl(z - 3) \right)
 \]
+where \( fl \) denotes the floating-point representation of a number, highlighting the sequential rounding that occurs at each step.
 
 \subsubsection{About fused multiply-add}
+The fused multiply-add operation is a common computation in many numerical algorithms. It combines multiplication and addition but must be treated with caution:
 
-Beware:
-\[
-\text{fma}(x, y, z) \neq x \ast y + z
-\]
+\textbf{Beware:} The fused multiply-add function \( fma(x, y, z) \) does not simply equate to \( x \times y + z \).
 
-Indeed:
+\textbf{Indeed:}
 \begin{itemize}
-    \item $\text{fma}(x, y, z) = fl(fl(x \ast y) + z)$
-    \item but $x \ast y + z$ gives $fl( fl(x \ast y) + z )$
+    \item \( fma(x, y, z) \) computes \( fl(x \times y + z) \), providing a more accurate result by combining the operations into a single step to minimize rounding errors.
+    \item However, separately computing \( x \times y + z \) results in \( fl(fl(x \times y) + z) \), where each operation introduces potential rounding errors.
 \end{itemize}
 
 \subsubsection{More floating-point non-identities}
+Certain algebraic identities do not hold for floating-point numbers due to rounding errors and finite precision:
 \begin{itemize}
-    \item associativity does not hold: $x + (y + z) \neq (x + y) + z$
-    \item distributivity does not hold: $x \ast (y + z) \neq x \ast y + x \ast z$
+    \item Associativity does not hold: \( x + (y + z) \neq (x + y) + z \).
+    \item Distributivity does not hold: \( x \times (y + z) \neq x \times y + x \times z \).
 \end{itemize}
 
 
-% Use the 'article' class for this document, or adjust as necessary based on
-% the document type for which this content is intended.
+The IEEE-754 standard defines the representation and behavior of floating-point numbers:
 
-The IEEE-754 standard mandates correct rounding for:
-\[
-+, -, \times, \div, \sqrt{()}, \text{fma}()
-\]
-
-The IEEE-754 standard does not mandate correct rounding for most other functions, in particular:
 \begin{itemize}
-  \item sin, cos, tan
-  \item asin, acos, atan
-  \item sinh, cosh, tanh
-  \item pow, log, log2, log10, exp, exp2, exp10
+    \item It mandates correct rounding for basic operations such as \( + \), \( - \), \( \times \), \( \div \), \( \sqrt{} \), and \( fma() \).
+    \item However, it does not mandate correct rounding for more complex functions like trigonometric, hyperbolic, exponential, and logarithmic functions. This can lead to discrepancies in different implementations and requires careful handling.
 \end{itemize}
 
 \subsubsection{Floating-point and compilers}
@@ -644,159 +559,131 @@ whenever we change the version of the standard C library
 \subsection{Beyond floating-point Arithmetic} % Section title with greater emphasis
 
 \subsubsection{Interval arithmetic} % Subsection title
+Interval arithmetic is an approach to encompass the uncertainty and rounding errors in numerical computations.
 
-We represent every real number $x \in \mathbb{R}$ 
-by a pair of floating-point number $(l, u)$ 
-with $x \in [l, u]$.
-
-We exploit the \textit{Round toward $+\infty$} and \textit{Round toward $-\infty$} modes 
-to compute the appropriate interval for every operation.
-
-% Pros list
-\textbf{Pros}
 \begin{itemize}
-    \item fast
-    \item we always know how accurate a result is
+    \item Every real number \( x \in \mathbb{R} \) is represented by an interval \([l, u]\) using a pair of floating-point numbers, ensuring that \( x \) lies within this interval.
+    \item This method employs rounding modes, specifically \textit{Round toward \( +\infty \)} and \textit{Round toward \( -\infty \)}, to compute the accurate interval for each operation.
 \end{itemize}
 
-% Cons list
-\textbf{Cons}
+\textbf{Advantages:}
 \begin{itemize}
-    \item the interval $[l, u]$ often becomes large very quickly (the bounds are usually too pessimistic)
+    \item It is a fast method.
+    \item It provides knowledge of how accurate a result is.
 \end{itemize}
 
-% Unum section
+\textbf{Disadvantages:}
+\begin{itemize}
+    \item The interval \([l, u]\) can become excessively large quickly, often yielding overly pessimistic bounds.
+\end{itemize}
+
 \subsubsection{Unum}
+Unum arithmetic is a relatively new system, introduced to improve the precision and reliability of computations:
 \begin{itemize}
-    \item introduced in 2015, latest revision 2017
-    \item For a given fixed bit width, claims better allocation of available precision
-    \item optional interval arithmetic
-    \item very limited adoption (no hardware support on any mainstream platforms)
+    \item It was introduced in 2015, with the latest revision in 2017.
+    \item Unum claims to allocate precision better within a given fixed bit width and offers optional interval arithmetic.
+    \item However, it has seen very limited adoption, mainly because there is no hardware support on mainstream platforms as of the last update.
 \end{itemize}
 
-% The GNU multi-precision library section
-\subsubsection{The GNU multi-precision library}
+\subsubsection{The GNU Multi-Precision Library (GMP)}
+The GNU Multi-Precision Library is an important tool for computations requiring high precision:
+
 \begin{itemize}
-    \item GMP is a C library that provides support for:
-    \begin{itemize}
-        \item variable-width (a.k.a. arbitrary-size) integers
-        \item arbitrary-size rational numbers (i.e., fractions):
-    \end{itemize}
+    \item GMP is a C library designed to provide support for variable-width integers and arbitrary-size rational numbers.
+    \item A rational number is expressed as a fraction \( \frac{\text{numerator}}{\text{denominator}} \), where the greatest common divisor (gcd) of the numerator and denominator is 1, ensuring the fraction is in its simplest form.
+    \item More information about GMP can be found at \url{http://gmplib.org}.
 \end{itemize}
 
-\[
-\text{fraction} = \frac{\text{numerator}}{\text{denominator}},
-\]
-
-where $\gcd(\text{numerator}, \text{denominator}) = 1$
-
-\textgreater{} \texttt{gmplib.org}
-
-
-
-% The LaTeX transcription of the lecture material as shown in the provided image 
 
 \subsubsection{The GNU MPFR library}
-
-MPFR builds on top of GMP to add arbitrary-size floating-point numbers
+The GNU MPFR library enhances the GNU Multi-Precision Library (GMP) by providing a facility for arbitrary-precision floating-point computation.
 
 \begin{verbatim}
 double x = 22.0 / 7.0;
 printf("%.20f\n", x);
 
 mpfr_t x;
-mpfr_init2(x, 512);           // initialize x with 512-bit mantissa
-mpfr_set_ui(x, 22, MPFR_RNDN); // set x to value 22, round-to-nearest
-mpfr_div_ui(x, 7, MPFR_RNDN);  // divide x to 7, round-to-nearest
-mpfr_printf("%.20Rf\n", x);    // print x
-mpfr_clear(x);                 // free memory
+mpfr_init2(x, 512);             // initialize x with 512-bit mantissa
+mpfr_set_ui(x, 22, MPFR_RNDN);  // set x to value 22, round-to-nearest
+mpfr_div_ui(x, x, 7, MPFR_RNDN); // divide x to 7, round-to-nearest
+mpfr_printf("%.20Rf\n", x);     // print x
+mpfr_clear(x);                  // free memory
 \end{verbatim}
 
-\textgreater{} mpfr.org
+For more details, visit \url{http://mpfr.org}.
 
 \subsubsection{Python fractions}
-
-Python integers are already variable-width by default:
+Python supports arbitrary-precision integers and provides a module for exact rational number arithmetic.
 
 \begin{verbatim}
 >>> -2 ** 65
--36893488147419103232 # <-- correct result, no overflow
+-36893488147419103232   # correct result, no overflow
+
+import fractions
+a = fractions.Fraction(numerator, denominator)
 \end{verbatim}
 
-Python fractions add support for (variable-width) rationals in top of them:
-
-\texttt{import fractions}
-
-\texttt{a = fractions.Fraction(numerator, denominator)}
 
 \subsubsection{Why don't we always use exact rational numbers?}
+While exact rational numbers provide precision, their use is not always practical in computing due to several factors:
+
+\textbf{Convenience:}
 \begin{itemize}
-    \item convenience (unfortunately)
-    \begin{itemize}
-        \item need to use GMP in C
-        \item need ``import fractions'' in Python
-    \end{itemize}
-    \item memory
-    \begin{itemize}
-        \item the size of the numerator and denominator can explode in iterative algorithms (despite gcd reductions)
-    \end{itemize}
-    \item speed
-    \begin{itemize}
-        \item since arbitrary-sized integers don't come with native hardware support, operations are much slower (typically 10x for small numbers, then it grows with size)
-    \end{itemize}
+    \item Using GMP in C or importing fractions in Python may not always be straightforward.
 \end{itemize}
 
-% [TBD] indicates a placeholder for non-textual content in the original image
-
-
-% Use the 'article' class for this LaTeX transcription
-
-
-\subsubsection{Should we use exact rational numbers more often?}
-
+\textbf{Memory:}
 \begin{itemize}
-    \item (in particular when exactness matters)
-    
-    \item (or when and speed does not matter)
+    \item The size of the numerator and denominator can become very large, especially in iterative algorithms, even after gcd reductions.
 \end{itemize}
 
-\noindent YES
+\textbf{Speed:}
+\begin{itemize}
+    \item Operations on arbitrary-sized integers or exact rationals are slower (often by an order of magnitude) compared to fixed-size native types, due to lack of native hardware support.
+\end{itemize}
+
+\subsubsection{The Case for Exact Rational Numbers}
+Should we use exact rational numbers more often in computations? Yes, particularly when:
+\begin{itemize}
+    \item Exactness is crucial to the application.
+    \item Computational speed is not a limiting factor.
+\end{itemize}
+
+Exact rational numbers provide unparalleled precision and are essential in applications where accuracy cannot be compromised, such as in cryptography or symbolic mathematics.
 
 \subsubsection{Symbolic computations}
+Symbolic computation systems are powerful tools that allow for manipulation and solving of algebraic expressions symbolically rather than numerically. This means that the expressions are kept in their algebraic form, allowing for exact solutions and manipulations.\\
 
 In a symbolic algebra system:
-
 \begin{itemize}
-    \item $\sqrt{2}$ is never evaluated to $\sim 1.4142$:
-          \begin{verbatim}
-          sage: sqrt(8)
-          2*sqrt(2)
-          \end{verbatim}
+    \item The square root of 2, denoted as \(\sqrt{2}\), is never approximated to a decimal such as 1.4142. It is kept in the root form for exact calculations. For instance, in SageMath:
+    \begin{verbatim}
+    sage: sqrt(8)
+    2*sqrt(2)
+    \end{verbatim}
 
-    \item We can also carry variables that have no specific value:
-          \begin{verbatim}
-          sage: x, y, z = var('x y z')
-          sage: sqrt(8) * x
-          2*sqrt(2)*x
-          \end{verbatim}
+    \item Variables can be defined without assigning them specific values, which is useful for carrying out algebraic manipulations. For example:
+    \begin{verbatim}
+    sage: x, y, z = var('x y z')
+    sage: sqrt(8) * x
+    2*sqrt(2)*x
+    \end{verbatim}
 
-    \item This allows us to solve problems symbolically:
-          \begin{verbatim}
-          sage: x, b, c = var('x b c')
-          sage: solve([x^2 + b*x + c == 0], x)
-          [x == -1/2*b - 1/2*sqrt(b^2 - 4*c), x == -1/2*b + 1/2*sqrt(b^2 - 4*c)]
-          \end{verbatim}
+    \item Symbolic computations allow solving algebraic problems, such as equations, symbolically. For instance:
+    \begin{verbatim}
+    sage: x, b, c = var('x b c')
+    sage: solve([x^2 + b*x + c == 0], x)
+    [x == -1/2*b - 1/2*sqrt(b^2 - 4*c), x == -1/2*b + 1/2*sqrt(b^2 - 4*c)]
+    \end{verbatim}
 \end{itemize}
 
-\subsubsection{Symbolic algebra systems}
+\subsubsection{Symbolic Algebra Systems}
+Several systems are available for performing symbolic computations:
 
 \begin{itemize}
-    \item SageMath (free software, syntax similar to Python)
-    
-    \item Maple
-    
-    \item Wolfram Mathematica
+    \item SageMath is an open-source mathematical software system with a syntax similar to Python.
+    \item Maple is a commercial computer algebra system.
+    \item Wolfram Mathematica is a widely used system that offers powerful symbolic computation capabilities.
 \end{itemize}
 
-% Since images are not handled by LaTeX directly in this transcript, 
-% I'm using the [TBD] token to mark the place of the WolframAlpha logo and example.
+WolframAlpha, a web application based on Mathematica, provides step-by-step solutions and is accessible at \href{http://www.wolframalpha.com}{WolframAlpha}.
