@@ -40,7 +40,7 @@ Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the r
 ## Progress
 | file        | Status | 
 |-------------|----------|
-| Lecture 1   |   ✅     |
+| Lecture 1   |   ✅✅     |
 | Lecture 2   |   ✅     |
 | Lecture 3   |   ✅✅   |
 | Lecture 4   |   ✅     |
@@ -48,7 +48,7 @@ Every folder `p01_output, ..., p22_output` contains a `text.txt` file with the r
 | Lecture 6   |   ✅     |
 | Lecture 7   |   ✅✅     |
 | Lecture 8   |   ✅     |
-| Lecture 9   |   ✅     |
+| Lecture 9   |   ✅✅     |
 | Lecture 10  |   ✅     |
 | Lecture 11  |   ✅✅     |
 | Lecture 12  |   ✅     |

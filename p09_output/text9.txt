@@ -1,702 +1,288 @@
-
-
-
-% Begin LaTeX code
 \newpage
-\section{Lecture 9}
+\section{Version Control Systems}
 
-\subsection{Version Control Systems}
+\subsection{Basic Version Control Commands}
+\begin{verbatim}
+    Assume you have a project:
+    myproject.py
+    
+    To try a modification, but unsure of its success:
+    mkdir versions/
+    mkdir versions/v1/
+    cp myproject.py versions/v1/
+    
+    After modifications:
+    - If the modification is good:
+      mkdir versions/v2/
+      cp myproject.py versions/v2/
+    
+    - To revert to the old version:
+      cp versions/v1/myproject.py myproject.py
+\end{verbatim}
 
-\subsection{Use cases}
+\subsubsection{Use Cases for Version Control}
 \begin{itemize}
-    \item try things
-    \item determine when a bug was introduced
-    \item multiple people working on a project
+    \item Experiment with changes (try things).
+    \item Determine when and how bugs were introduced.
+    \item Coordinate work among multiple collaborators on a project.
 \end{itemize}
 
-% The [TBD] token is used to represent any non-text elements such as images.
-[TBD]
-
-\subsubsection{Version control systems (VCS) / source code management (SCM)}
-
+\subsubsection{Version Control Systems (VCS) / Source Code Management (SCM)}
 \begin{itemize}
-  \item Revision control system (RCS), 1982
-  \item Concurrent versions system (CVS), 1986
-  \item Apache Subversion (``SVN''), 2000
-  \item Mercurial (``Hg''), 2005
-  \begin{itemize}
-    \item Used internally at Facebook/Meta
-  \end{itemize}
-  \item Git, 2005
-  \begin{itemize}
-    \item Spawned large hosting industry
+    \item \textbf{Revision Control System (RCS), 1982}: Early system, operated on single files.
+    \item \textbf{Concurrent Versions System (CVS), 1986}: Introduced the concept of repositories.
+    \item \textbf{Apache Subversion ("SVN"), 2000}: Centralized VCS, allowed versioning of directories.
+    \item \textbf{Mercurial ("Hg"), 2005} and \textbf{Git, 2005}:
     \begin{itemize}
-      \item GitHub USD 7.5bn 2018, GitLab market cap USD 6.81bn
+        \item Distributed VCS, enabling workflows with local repositories.
+        \item Git has spawned a large hosting industry (e.g., GitHub, GitLab).
+        \item Both are used internally at major tech companies.
     \end{itemize}
-    \item Used internally at Microsoft, Amazon
-  \end{itemize}
-  \item Piper (not public)
-  \begin{itemize}
-    \item Used for internal monorepo at Google
-  \end{itemize}
+    \item \textbf{Piper}: Google's internal monorepo VCS, not publicly available.
 \end{itemize}
 
-\subsection{Git}
 
 \subsubsection{Git fundamentals}
-
+A \textbf{repository} stores the complete history of a project.
 \begin{itemize}
-  \item a repository stores the complete history of a project
-  \begin{itemize}
-    \item \texttt{versions/} $\rightarrow$ \texttt{.git/}
-  \end{itemize}
-  \item a commit is a unit of change; it captures:
-  \begin{itemize}
-    \item a snapshot of all the project files
-    \item an author, a date, \ldots
-    \item an indication of the ``parent commit'' (the one it is based on)
-  \end{itemize}
-  \item commits are designated by \texttt{a hash}
+    \item It is typically contained in the \texttt{.git/} directory at the root of the project.
 \end{itemize}
+
+\paragraph{Commit}
+A \textbf{commit} is a unit of change capturing:
+\begin{itemize}
+    \item A snapshot of all the project files.
+    \item Metadata such as author, date, and the \textbf{parent commit}.
+\end{itemize}
+Commits are uniquely identified by a \textbf{hash}.
 
 \subsubsection{Hashes}
-
 \begin{itemize}
-    \item A hash maps any sequence of bits to a fixed-length bit string
-    \item The map is surjective
-    \item ``SHA-1'': 160 bits / 20 bytes / 40 hex digits \\
-    Example: \texttt{1e6c6ac37c5c8c5ee99ec104954d09b07e96116ba}
-    \item Git assumes SHA-1 is bijective
-    \item ...and is currently migrating to SHA-256 (256 bits / 32 bytes / 64 hex digits)
+    \item A \textbf{hash} function maps any sequence of bits to a fixed-length bit string.
+    \item The map is \textit{surjective} but Git assumes it to be \textit{bijective} for practical purposes.
+    \item Git uses \textbf{SHA-1} for hashing: 160 bits / 20 bytes / 40 hexadecimal digits.
+    \begin{itemize}
+        \item Example hash: \texttt{1e6cac37c5c8c5ee99ec104954d09b07e96116ba}
+    \end{itemize}
+    \item Git is migrating to \textbf{SHA-256}: 256 bits / 32 bytes / 64 hexadecimal digits.
 \end{itemize}
-
-% In the original image, there is a graphical representation next to the item about surjectivity.
-% This cannot be represented in LaTeX without additional packages or commands for graphics, 
-% so it is replaced with the placeholder [TBD].
-[TBD]
 
 \subsubsection{Hashes in Git}
-
 \begin{itemize}
-    \item Git commits are designated by SHA-1 hashes \\
-    Example: \texttt{1e6c6ac37c5c8c5ee99ec104954d09b07e96116ba}
-    \item When referring to a commit, a hash prefix can be used if unambiguous \\
-    Example: \texttt{1e6c6ac}
+    \item Commits are designated by SHA-1 hashes.
+    \item A short hash prefix can be used to refer to commits if it is unambiguous.
 \end{itemize}
 
-\subsubsection{Git command-line interface}
-
+\subsection{Building a Commit}
+\subsubsection{Working Tree}
 \begin{itemize}
-    \item General usage:
-    \begin{itemize}
-        \item \texttt{git \textless{}command\textgreater{} [\textit{arguments...}]}
-        \begin{itemize}
-            \item Example: \texttt{git status}
-        \end{itemize}
-    \end{itemize}
-    \item Getting help:
-    \begin{itemize}
-        \item \texttt{git help \textless{}command\textgreater{}}
-        \begin{itemize}
-            \item Example: \texttt{git help status}
-        \end{itemize}
-        \item \texttt{man git-\textless{}command\textgreater{}}
-        \begin{itemize}
-            \item Example: \texttt{man git-status}
-        \end{itemize}
-    \end{itemize}
+    \item The \textbf{working tree} consists of files that are currently being worked on.
+    \item We never interact with the \texttt{.git/} directory contents directly.
+    \item The working tree reflects the current state of files, excluding the \texttt{.git/} directory.
+    \item We can use the \texttt{git checkout} command to update the working tree to match a specific commit.
 \end{itemize}
 
-\subsubsection{Configuration} % Slide title
-
-% Slide content starts here
+\subsubsection{Staging Area}
 \begin{itemize}
-    \item For anything too long for the CLI, git will make you edit a temporary file:
-    \begin{verbatim}
-        git config --global core.editor "code --wait"
-    \end{verbatim}
-
-    \item Commits capture the author’s name and email address:
-    \begin{verbatim}
-        git config --global user.name "John Doe"
-        git config --global user.email johndoe@example.com
-    \end{verbatim}
+    \item Before committing, we \textbf{stage} changes, specifying which modifications should be included in the next commit.
+    \item The staging area is a snapshot of what our next commit will look like.
 \end{itemize}
 
-\subsection{Creating a repository} % Slide title (all caps as in original slide)
-
-% Slide content starts here
+\subsubsection{Commit}
 \begin{itemize}
-    \item Creating a new project:
-    \begin{verbatim}
-        mkdir my_new_project/
-        cd my_new_project/
-        git init
-    \end{verbatim}
-    % Visual file structure is not included in the LaTeX transcription.
-    % Use [TBD] as a placeholder for non-text elements (such as file structure diagram in this case).
-    [TBD]
+    \item After staging, we \textbf{commit} the changes to the repository's history.
+    \item A commit includes a snapshot of the staged changes and a commit message describing the changes.
+\end{itemize}
+
+\paragraph{Staging and Committing Example}
+\begin{lstlisting}[language=bash]
+# Creating or modifying files
+new_file_A.py
+new_file_B.py
+new_file_C.py
+
+# Staging files
+git add new_file_A.py new_file_B.py
+
+# Committing to the repository
+git commit -m "My first commit."
+\end{lstlisting}
+
+\subsection*{Listing Past Commits}
+\begin{lstlisting}[language=bash]
+git log
+\end{lstlisting}
+\begin{verbatim}
+commit 6ea8433f89c78588190435c877b1d3e7c708 (HEAD -> main)
+Author: Laurent Perriraz <lperriraz@dev>
+Date:   Fri Sep 29 02:44:18 2023 +0200
+
+    My first commit.
+\end{verbatim}
+
+\subsubsection{Automatic Adding}
+Add multiple files at once using a pattern:
+\begin{lstlisting}
+git add *.py
+\end{lstlisting}
     
-    \item ``Cloning'' an existing project:
-    \begin{verbatim}
-        git clone https://github.com/ggerganov/llama.cpp.git
-        cd llama.cpp/
-    \end{verbatim}
-    % Visual file structure is not included in the LaTeX transcription,
-    % and hence represented as [TBD].
-    [TBD]
-\end{itemize}
-
-
-% BUILDING A COMMIT content transcribed into LaTeX.
-% There are no preamble or document class commands as per the instruction to exclude them.
-
-\subsection{Building a commit}
-
-\subsubsection{Working tree, staging, commit}
-\begin{itemize}
-    \item We never access the content of \texttt{.git/} directly
-    \item Instead, we modify files in the \textbf{working tree} (everything not in \texttt{.git/})
-    \begin{itemize}
-        \item We can ask git to ``checkout'' any past commit into the working tree \\
-        (i.e., make the working tree reflect that commit)
-    \end{itemize}
-    \item In order to prepare a new commit, we ``stage'' the relevant modifications \\
-    (i.e., we tell git which files we want part of the new commit)
-    \item Once ready, we create the new commit, along with a commit message
-\end{itemize}
-
-\subsubsection{Staging and committing example}
-\begin{itemize}
-    \item We create or modify
-    \begin{itemize}
-        \item \texttt{new\_file\_A.py}
-        \item \texttt{new\_file\_B.py}
-        \item \texttt{new\_file\_C.py}
-    \end{itemize}
-    \item We stage \texttt{new\_file\_A.py} and \texttt{new\_file\_B.py}:
-    \begin{verbatim}
-        git add new_file_A.py new_file_B.py
-    \end{verbatim}
-    \item We commit them to the repository
-    \begin{verbatim}
-        git commit -m "My first commit."
-    \end{verbatim}
-\end{itemize}
-
-% Replace [TBD] tokens where images or non-textual elements were supposed to be included.
-
-
-% The LaTeX transcription for the lecture slides on git. 
-% Since this is supposed to be a plain transcription without preamble, document class, 
-% or begin/end document commands, it will exclusively consist of the content of the slides.
-
-\subsubsection{Listing past commits}
-
-\begin{verbatim}
-git log
-
-commit 6ea8433c1f989c7c858b190435c7871b7e3d7c08 (HEAD -> main)
-Author: Laurent Potirrier <potirrierdev>
-Date:   Fri Feb 29 02:44:18 2023 +0200
-
-    My first commit.
-\end{verbatim}
-
-
-\subsubsection{Automatic adding}
-
-\begin{itemize}
-  \item Add multiple files at once using a pattern (including in subdirectories):
-    \begin{verbatim}
-    git add "*.py"
-    \end{verbatim}
-
-  \item Add all the files in the working tree:
-    \begin{verbatim}
-    git add -A
-    \end{verbatim}
-
-  \item Exclude some files from ``git add -A'': \\
-    Put corresponding patterns in ``.gitignore'':
-    \begin{verbatim}
-    *.o
-    /build/
-    /my_executable
-    \end{verbatim}
-\end{itemize}
-
-
-\subsubsection{Observing the state of the working tree and staging area}
-
-\begin{verbatim}
-git status
-
-On branch main
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        new_file_C.py
-
-nothing added to commit but untracked files present (use "git add" to track)
-\end{verbatim}
-
-Let us modify new\_file\_A.py:
-
-\begin{verbatim}
-git status
-
-On branch main
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   new_file_A.py
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        new_file_C.py
-
-no changes added to commit (use "git add" and/or "git commit -a")
-\end{verbatim}
-
-% [TBD] is placed here to denote the areas where slide content could not be
-% transcribed into LaTeX, such as the progress bar or slide number indicators.
-[TBD]
-
-
-
-% The content as shown in the image, structured for LaTeX format
-
-\subsubsection{Showing differences}
-
-\begin{verbatim}
-git diff
-
-diff --git a/new_file_A.py b/new_file_A.py
-index 69ed929..ce7780c 100644
---- a/new_file_A.py
-+++ b/new_file_A.py
-@@ -0,0 +1 @@
-+print('Hello, world!')
-\end{verbatim}
-
-\subsubsection{Staging again}
-
-\begin{verbatim}
+Add all files in the working tree:
+\begin{lstlisting}
 git add -A
+\end{lstlisting}
+    
+Exclude files from automatic adding using \texttt{.gitignore}.
 
+\subsubsection{Observing the State}
+\begin{lstlisting}
 git status
+\end{lstlisting}
 
-On branch main
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        modified:   new_file_A.py
-        new file:   new_file_C.py
-
+\subsubsection{Showing Differences}
+\begin{lstlisting}
 git diff
+\end{lstlisting}
 
+\subsubsection{Staging Changes}
+\begin{lstlisting}
+git add -A
+git status
+git diff
 git diff --staged
+\end{lstlisting}
 
-diff --git a/new_file_A.py b/new_file_A.py
-index 69ed929..ce7780c 100644
---- a/new_file_A.py
-+++ b/new_file_A.py
-@@ -0,0 +1 @@
-+print('Hello, world!')
-diff --git a/new_file_C.py b/new_file_C.py
-new file mode 100644
-index 0000000..69ed929
-\end{verbatim}
-
-\subsubsection{Committing again}
-
-\begin{verbatim}
+\subsubsection{Committing Changes}
+\begin{lstlisting}
 git commit -m "My second commit."
-
 git log
+\end{lstlisting}
 
-commit 31a05126a56b8156d4ee7530b299667d5a0c8c8c (HEAD -> main)
-Author: Laurent Potirrier <potirrier@dev>
-Date:   Fri Sep 29 02:15:19 2023 +0200
-
-    My second commit.
-
-commit 6c84833bf399fc7858f01943035c7871b7ed3c708
-Author: Laurent Potirrier <potirrier@dev>
-Date:   Fri Sep 29 02:04:18 2023 +0200
-
-    My first commit.
-\end{verbatim}
-
-
-\subsubsection{Checking out specific commits}
-
-\begin{verbatim}
-git checkout 6ea843
-\end{verbatim}
-
-\begin{verbatim}
+\subsubsection{Checking Out Commits}
+\begin{lstlisting}
+git checkout <commit-hash>
 git log
-\end{verbatim}
-
-\begin{verbatim}
-commit 6ea8433f998c7c858194035c7871b7de37c708 (HEAD)
-Author: Laurent Potirrier <lpotirrier@dev>
-Date:   Fri Sep 29 02:41:18 2023 +0200
-
-    My first commit.
-\end{verbatim}
-
-\begin{verbatim}
 git log --all
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
-commit 31a0516a56b8156ded7ee530b2996d975a0c8c (main)
-Author: Laurent Potirrier <lpotirrier@dev>
-Date:   Fri Sep 29 02:15:19 2023 +0200
+\subsubsection{Working with Commits}
+\begin{itemize}
+    \item Modify files in the working tree and stage the changes.
+    \item Commit the staged changes with a descriptive message.
+    \item Use \texttt{git log} to see the history of commits.
+    \item Check out a specific commit to view or revert to that snapshot.
+\end{itemize}
 
-    My second commit.
-\end{verbatim}
-
-\begin{verbatim}
-commit 6ea8433f998c7c858194035c7871b7de37c708 (HEAD)
-Author: Laurent Potirrier <lpotirrier@dev>
-Date:   Fri Sep 29 02:41:18 2023 +0200
-
-    My first commit.
-\end{verbatim}
 
 \subsection{Branches}
 
-% Since the following part of the image contains a diagram showing the commit structure
-% which cannot be represented in LaTeX using verbatim or text alone, it is replaced by 
-% [TBD] to indicate that there's a diagram or similar content here.
-[TBD]
+\subsubsection{Commit Structure}
+Commits in Git form a linked list structure, with each commit pointing back to its parent.
 
-\subsubsection{Commit structure}
+\subsubsection{Checking Out Commits}
+You can switch between commits using:
+\begin{lstlisting}
+git checkout <commit-hash>
+\end{lstlisting}
 
-% A representation of a commit structure is shown in the original image.
-% This is a text representation of that graph.
-31a051 ("My second commit.")
-   |
-6ea843 ("My first commit.")
+\subsubsection{Problem with Detached HEAD}
+If you check out a commit directly, you enter a 'detached HEAD' state where changes are not on any branch.
 
-
-
-% Since the image contains a sequence of command-line inputs and outputs, we'll represent them using the verbatim environment.
-
-\begin{verbatim}
-git checkout 31a051  # "My second commit"
-
-31a051 ("My second commit.")     <-- HEAD
-|
-6ea843 ("My first commit.")
-\end{verbatim}
-
-\begin{verbatim}
-git checkout 6ea843  # "My first commit"
-
-31a051 ("My second commit.")
-|
-6ea843 ("My first commit.")     <-- HEAD
-\end{verbatim}
-
-\begin{verbatim}
-# modify some files
-git add -A
-git commit -m "Another commit."
-
-31a051 ("My second commit.")     |
-                                  |  07714c ("Another commit.")     <-- HEAD
-                                  |
-6ea843 ("My first commit.")
-\end{verbatim}
-
-\begin{verbatim}
-git log --all --graph
-
-* commit 07714cbadcf8139930c07ac4b636d8b9b92506 (HEAD)
-| Author: Laurent Poirrier <poirrier@dey>
-| Date:   Fri Sep 29 03:06:02 +0200 2020
-| 
-|     Another commit.
-|  
-* commit 31a0516256b651d6e47e53092b6996d75a0c8c (main)
-| Author: Laurent Poirrier <poirrier@dey>
-| Date:   Fri Sep 29 02:15:19 +0200 2020
-| 
-|     My second commit.
-| 
-* commit 6ea84339f90c757e8194035c787b17de3c7c08
-  Author: Laurent Poirrier <poirrier@dey>
-  Date:   Fri Sep 29 02:04:18 +0200 2020
-
-      My first commit.
-\end{verbatim}
-
-% The output of `git log --all --graph` includes a graphical representation of the commit tree not easily representable in plain LaTeX.
-% The hashes, user info, and dates are part of the output here but are synthesized for the purposes of illustration.
-
-
-% Since LaTeX doesn't have a direct way to represent the flowchart-like structure shown in the image,
-% the logical structure is typed out in a plain format.
-
-
-Problem: if we ``git checkout'' back to the first or second commit, we lose ``Another commit.''
-
-Solution: named branches
-
-\subsubsection{Creating branches}
-
-\begin{verbatim}
+\subsubsection{Creating Branches}
+To avoid a detached HEAD, create a new branch:
+\begin{lstlisting}
 git branch <branch-name>
-\end{verbatim}
+\end{lstlisting}
+Branches allow to work on features or bug fixes while keeping the main branch stable.
 
-initial state after two commits:
+\subsubsection{Switching Branches}
+To switch to a different branch:
+\begin{lstlisting}
+git checkout <branch-name>
+\end{lstlisting}
 
-\begin{verbatim}
-HEAD, main -> 31a051 ("My second commit.")
-               ^
-               |
-               A
-               |
-               6e8438 ("My first commit.")
-\end{verbatim}
+\subsubsection{Visualizing Branches}
+You can visualize the commit history and branches using:
+\begin{lstlisting}
+git log --all --graph
+\end{lstlisting}
 
-
-% Slide 1
-\begin{verbatim}
-git checkout 6e84a3
-\end{verbatim}
-
-% The diagram from Slide 1 is to be replaced with [TBD].
-% main -> 31a051 ("My second commit.")
-%      A
-% HEAD -> 6e84a3 ("My first commit.")
-
-% Slide 2
-\begin{verbatim}
-git branch my_branch
-\end{verbatim}
-
-% The diagram from Slide 2 is to be replaced with [TBD].
-% main -> 31a051 ("My second commit.")
-%      |
-% HEAD -> 6e84a3 ("My first commit.") <-- my_branch
-
-% Slide 3
-\begin{verbatim}
-git checkout my_branch
-\end{verbatim}
-
-% The diagram from Slide 3 is to be replaced with [TBD].
-% main -> 31a051 ("My second commit.")
-%      A
-%      6e84a3 ("My first commit.") <-- HEAD, my_branch
-% Transcription of the textual content in the image
-\begin{verbatim}
-git add ...; git commit
-
-main ->     31a051 ("My second commit.")                   87714c ("Another commit.") <-- HEAD, my_branch
-            ^                                               ^
-            |                                               |
-          6ea843 ("My first commit.")
-\end{verbatim}
-
-[TBD] % Placeholder for the commit diagram above
-
-\subsubsection{Merging}
-\begin{verbatim}
-git checkout main
-
-HEAD, main ->     31a051 ("My second commit.")                   87714c ("Another commit.") <-- my_branch
-                  ^                                               ^
-                  |                                               |
-                6ea843 ("My first commit.")
-\end{verbatim}
-
-[TBD] % Placeholder for the commit diagram in the 'Merging' section
-
-\begin{verbatim}
-git merge my_branch
-
-HEAD, main ->     81db75de ("Merge remote-tracking branch")       87714c ("Another commit.") <-- my_branch
-                  ^                                               ^
-                  |                                               |
-                31a051 ("My second commit.")                     |
-                  ^                                             |
-                  |                                             |
-                6ea843 ("My first commit.")
-\end{verbatim}
-
-[TBD] % Placeholder for the commit diagram after the merge command
-
-
-
-% Start of LaTeX content for the lecture image transcription
-
-\subsubsection{Merge conflicts}
-
-\begin{verbatim}
-<<<<<<< HEAD:new_file_A.py
-print('Hello, world!')
-=======
-print('Bye, world!')
->>>>>>> my_branch:new_file_A.py
-\end{verbatim}
-
+\paragraph{Branching Example}
 \begin{itemize}
-    \item resolve merge conflicts by editing files
-    \item git add ... ; git commit 
+    \item Initial state after two commits:
+    \begin{lstlisting}
+    commit 31a051 (HEAD -> main)
+    commit 6ea843
+    \end{lstlisting}
+
+    \item Create a new branch and switch to it:
+    \begin{lstlisting}
+    git branch my_branch
+    git checkout my_branch
+    \end{lstlisting}
+    
+    \item The branch points to the current commit.
 \end{itemize}
 
-\subsubsection{Rebase}
+\subsubsection{Merging}
+Merging incorporates changes from one branch into another.
+\begin{lstlisting}
+git merge <branch-name>
+\end{lstlisting}
 
-(just committed to branch my_branch)
+\subsubsection{Merge Conflicts}
+Conflicts occur when the same lines are changed in both branches. They need to be resolved manually.
 
-\begin{verbatim}
-main -> 31a051 ("My second commit.")     87714c ("Another commit.")
-       |                                  ^- HEAD, my_branch
-       |
-       6e8a43 ("My first commit.")
-\end{verbatim}
+\subsubsection{Rebasing}
+Rebasing is an alternative to merging, replaying commits from one branch onto another.
+\begin{lstlisting}
+git rebase <base-branch-name>
+\end{lstlisting}
 
-\texttt{git rebase main}
-
-\begin{verbatim}
-                                      3c7c08 ("Another commit.") <- HEAD, my_branch
-                                         ^
-                                         |
-main -> 31a051 ("My second commit.")    A
-                                         |
-                                         A
-                                         6e8a43 ("My first commit.")
-\end{verbatim}
-
-% End of LaTeX content for the lecture image transcription
+\subsubsection{Handling Merge Conflicts}
+Resolve conflicts by editing files, then stage and commit the resolution.
+\begin{lstlisting}
+# Edit files to resolve conflicts
+git add <file>
+git commit
+\end{lstlisting}
 
 
-% Since the LaTeX document is requested without any specific document setup or preamble,
-% the following LaTeX code represents the content of the lecture notes as provided in the image.
-% Please note that compiling this LaTeX code as-is won't produce a document because it lacks
-% necessary preamble and document environment commands. This code is intended to be included within
-% an appropriate LaTeX document structure by the user.
-
-\begin{verbatim}
-git checkout main
-\end{verbatim}
-
-% ASCII art-like commit tree with labels
-3c7c08 ("Another commit.") <-- my_branch
-     A
-HEAD, main ->  31a051 ("My second commit.")
-                |
-                B
-             6ea843 ("My first commit.")
-
-\begin{verbatim}
-git merge my_branch
-\end{verbatim}
-
-% ASCII art-like commit tree with labels after merging
-HEAD, main -> 3c7c08 ("Another commit.") <-- my_branch
-                          A
-                     31a051 ("My second commit.")
-                          |
-                          B
-                     6ea843 ("My first commit.")
-
-% The term 'REMOTES' is presented at the bottom of the image, centered and in a blue font.
-% As LaTeX generally does not involve color in the basic commands, the following is a plain text representation. 
-% To add color, one might use the package 'xcolor' and the command \textcolor{}, but that would go beyond the scope of the provided instructions.
+\paragraph{Important Points}
+\begin{itemize}
+    \item Always commit changes before switching branches.
+    \item Use merging or rebasing as per the team's workflow conventions.
+    \item Resolve conflicts carefully to maintain code integrity.
+\end{itemize}
 
 \subsection{Remotes}
 
-% The [TBD] token is used to replace the non-textual elements that cannot be represented in LaTeX.
-[TBD] % This represents the blue color of 'REMOTES' and potential other visual styling such as font size or type.
+\subsubsection{Sharing Commits}
+Git is distributed and allows multiple remotes. There's no central server.
 
-
-
-% LaTeX transcription of the lecture slide content
-
-\subsubsection{Sharing commits}
-
-\begin{itemize}
-  \item Git is distributed: there is no notion of a central server. 
-  To download commits from a remote repository:
-  
-\begin{verbatim}
+\paragraph{Fetching Commits}
+To download commits from a remote repository:
+\begin{lstlisting}
 git fetch <URL>
-\end{verbatim}
-  
-  Note: \texttt{<URL>} must be public, or we must have appropriate credentials
-  
-  \item If the repository was created using 
-  
-\begin{verbatim}
+\end{lstlisting}
+The URL must be accessible, either public or with appropriate credentials.
+
+\paragraph{Cloning Repositories}
+If the repository was initially cloned:
+\begin{lstlisting}
 git clone <URL>
-\end{verbatim}
-  
-  then
-  
-\begin{verbatim}
-git fetch
-\end{verbatim}
-  
-  checks for new commits from the same \texttt{<URL>} origin
-  
-  \item as an alternative, 
-  
-\begin{verbatim}
+\end{lstlisting}
+Use `git fetch` without a URL to fetch from the original source.
+
+\paragraph{Format Patch}
+To save commits as files for email, use:
+\begin{lstlisting}
 git format-patch
-\end{verbatim}
-  
-  saves commits in files that can be sent by email.
-\end{itemize}
+\end{lstlisting}
 
-\subsection{Tutorial}
-
-% [TBD] token is used to represent non-textual elements that cannot be transcribed into LaTeX
-% In the actual LaTeX document, this would need to be replaced with the appropriate content or omitted.
-
-
-% Transcription of the image content in LaTeX format.
-
-\paragraph{Q: How many git subcommands are there?}
-
-\texttt{man git | grep -E \textasciicircum`\textasciigrave{}git-.\textbackslash{}(1\textbackslash{})\$\textasciigrave{}}
-
-A: 147
-
-$\Rightarrow$ Use \texttt{git help} / \texttt{man git} !!!
-
-\subsubsection{Configuration}
-
+\subsubsection{Best Practices}
 \begin{itemize}
-    \item For anything too long for the CLI, git will make you edit a temporary file:
-    
-    \texttt{git config --global core.editor vscode}
-    
-    \item Commits capture the author's name and email address:
-    
-    \begin{verbatim}
-    git config --global user.name "John Doe"
-    git config --global user.email johndoe@example.com
-    \end{verbatim}
-\end{itemize}
-
-\subsubsection{Fetch and pull, remotes}
-
-\begin{itemize}
-    \item Just fetch repository data, do not affect working tree:
-    
-    \texttt{git fetch \textless{}repository\textgreater{} \textless{}remote\_branch:local\_branch\textgreater{}}
-    
-    \item Fetch data and attempt merge (or rebase):
-    
-    \texttt{git pull \textless{}repository\textgreater{}}
-    
-    \item Setup a remote:
-    
-    \texttt{git remote add \textless{}options\textgreater{} \textless{}name\textgreater{} \textless{}URL\textgreater{}}
+    \item Regularly push to and pull from remotes to keep local and remote repositories synchronized.
+    \item Use `git fetch` to update local references with remote repository.
+    \item Use `git pull` to fetch and merge changes from the remote server to your working directory.
+    \item Use `git push` to update the remote repository with your local changes.
 \end{itemize}

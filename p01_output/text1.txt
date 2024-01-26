@@ -13,11 +13,6 @@
 \[ x \in \{0, 1\} \]
 
 
-% The content in the lecture slides is transcribed below as plain LaTeX code.
-% Each section of the slide has been annotated with comments for clarity,
-% and the [TBD] token is used to indicate places where non-textual content,
-% like logic gate diagrams, would be located.
-
 \subsubsection{Boolean expressions}
 
 % The table for Boolean operators
@@ -30,7 +25,7 @@ conjunction & $\land, \times$  & and         & \&\&, \&     & [TBD]      \\
 disjunction & $\lor, +$ & or          & ||, |      & [TBD]      \\
 \end{tabular}
 \vspace{4.5mm}
-% Examples of expressions and function using Boolean operators
+
 \newline
 \textbf{Example expression:}
 
@@ -44,71 +39,60 @@ disjunction & $\lor, +$ & or          & ||, |      & [TBD]      \\
 f(a, b, c) := (a \text{ and } b) \text{ or } c
 \end{equation*}
 
-\paragraph{NOT operator}
-% The NOT operator truth table
-\textbf{Truth table:}
+\subsubsection{Truth Tables}
 
-\begin{tabular}{c c}
-x & \text{not } x \\
-\hline
-0 & 1 \\
-1 & 0 \\
-\end{tabular}
+\begin{itemize}
+    \item The truth table for the NOT operator is as follows:
 
-% Example assignment using NOT operator
-\textbf{Example assignment:}
+    \begin{center}
+    \begin{tabular}{c|c}
+    \hline
+    $x$ & $\lnot x$ \\
+    \hline
+    0 & 1 \\
+    1 & 0 \\
+    \hline
+    \end{tabular}
+    \end{center}
 
-\begin{equation*}
-w := \text{ not } a
-\end{equation*}
+    \item The truth table for the AND operator is as follows:
 
-\paragraph{AND operator}
+    \begin{center}
+    \begin{tabular}{cc|c}
+    \hline
+    $x$ & $y$ & $x \land y$ \\
+    \hline
+    0 & 0 & 0 \\
+    0 & 1 & 0 \\
+    1 & 0 & 0 \\
+    1 & 1 & 1 \\
+    \hline
+    \end{tabular}
+    \end{center}
 
-% The AND operator truth table
-\textbf{Truth table:}
+    \item The truth table for the OR operator is as follows:
 
-\begin{tabular}{c c c}
-x & y & x \text{ and } y \\
-\hline
-0 & 0 & 0 \\
-0 & 1 & 0 \\
-1 & 0 & 0 \\
-1 & 1 & 1 \\
-\end{tabular}
+    \begin{center}
+    \begin{tabular}{cc|c}
+    \hline
+    $x$ & $y$ & $x \lor y$ \\
+    \hline
+    0 & 0 & 0 \\
+    0 & 1 & 1 \\
+    1 & 0 & 1 \\
+    1 & 1 & 1 \\
+    \hline
+    \end{tabular}
+    \end{center}
+\end{itemize}
 
-% Example assignment using AND operator
-\textbf{Example assignment:}
-
-\begin{equation*}
-z := a \text{ and } (\text{not } b)
-\end{equation*}
-
-
-
-\paragraph{OR operator}
-
-Truth table:
-
-\begin{tabular}{cc|c}
-$x$ & $y$ & $x \text{ or } y$ \\
-\hline
-0 & 0 & 0 \\
-0 & 1 & 1 \\
-1 & 0 & 1 \\
-1 & 1 & 1 \\
-\end{tabular}
-
-\vspace{1em}
-Example assignment:
-
-$$ z := (\text{not } a) \text{ or } (b \text{ and } c) $$
 
 \paragraph{More operators!}
+\begin{itemize}
+    \item Exclusive OR (XOR), NAND, and NOR are additional binary Boolean operators with their respective truth tables.
+    \item Unary Boolean operators include constants (always true, always false), identity, and NOT.
+\end{itemize}
 
-% Graphic representations for XOR, NAND and NOR are not included as they are non-textual elements.
-% They should be replaced with the placeholder [TBD] if needed in the document.
-
-% XOR Operator
 \begin{minipage}{0.3\textwidth}
 \centering
 Truth table for XOR:
@@ -154,14 +138,23 @@ $x$ & $y$ & $x \text{ nor } y$ \\
 \end{minipage}
 
 \vspace{1em}
-\textbf{Q: How many distinct unary Boolean operators?}
 
-\textbf{A:} one? (NOT)
+\textbf{Example of expressions}
+\begin{itemize}
+    \item $(a \land b) \lor (\lnot c)$
+    \item $f(a, b, c) := (a \land b) \lor c$
+    \item $w := \lnot a$
+    \item $z := a \land (\lnot b)$
+    \item $z := (\lnot a) \lor (b \land c)$
+\end{itemize}
 
-% Explanation about unary Boolean operators
-Actually, we have 4 deterministic unary operators in total (counting 3 trivial unary operators):
+\paragraph{Questions}
+\textbf{Q: How many distinct unary Boolean operators?}\\
+\textbf{A:} one? (NOT)\\
 
-\begin{minipage}[t]{0.25\textwidth}
+Actually, we have 4 deterministic unary operators in total (counting 3 trivial unary operators):\\
+
+\begin{minipage}[t]{0.15\textwidth}
 \centering
 always false
 
@@ -210,19 +203,11 @@ $x$ & $\text{not } x$ \\
 \end{minipage}
 
 
+\vspace{1em}
 
+\subsubsection{Binary Operators}
+The number of distinct binary operators corresponds to the number of different truth tables that can be constructed with two Boolean inputs. There are $2^{2^2} = 16$ possible truth tables for binary operators.
 
-% This LaTeX transcription contains only the text content from the lecture material
-% Non-textual elements such as images are replaced with [TBD]
-% Since no document structure was specified, we assume the content is contained within a 'article' class
-
-
-% Question and answer about distinct binary operators
-Q: How many distinct binary operators? \\
-A: As many as there are corresponding truth tables. 
-
-% Question and answer about distinct truth tables
-Q: How many distinct truth tables for two Boolean inputs and one Boolean output? \\
 \begin{tabular}{c c c}
 x & y & op(x, y) \\
 \hline
@@ -232,29 +217,30 @@ x & y & op(x, y) \\
 1 & 1 & ? \\
 \end{tabular}
 
-% The question of why NOT, AND, and OR are commonly used
-Q: Why do we usually use NOT, AND, OR only? \\
-A: Because
-\begin{itemize}
-    \item they are the most intuitive
-    \item all nontrivial operators can be represented with NOT, AND and OR
-\end{itemize}
+\paragraph{Representing binary operators}
+Common binary Boolean operators include AND, OR, and NOT. These are sufficient to represent all possible binary operations.\\
+NAND and NOR are known as \textit{universal gates} because they can be used to represent any Boolean operation.\\
 
-% Examples of how nontrivial operators can be represented
-Examples: \\
+\textbf{Examples}\\
 $x \text{ nand } y = \text{not } (x \text{ and } y)$ \\
 $x \text{ xor } y = (x \text{ or } y) \text{ and } (\text{not } (x \text{ and } y))$ 
 
-% Note about NAND and NOR being universal logic gates
-Note: \\
-NAND and NOR are called \textit{universal logic gates}: \\
-every nontrivial operator can be represented with each \textit{alone}
+\paragraph{Proof via truth table}
+To prove that two expressions are equivalent, we can show that their truth tables are identical.
 
-% Question and answer about proving the identity with truth tables
-Q: How do we prove this? \\
-$x \text{ xor } y = (x \text{ or } y) \text{ and } (\text{not } (x \text{ and } y))$ \\
+\begin{center}
+\begin{tabular}{cc|c|c}
+$x$ & $y$ & $x \text{ XOR } y$ & $(x \lor y) \land \lnot(x \land y)$ \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 \\
+1 & 1 & 1 & 1 \\
+\end{tabular}
+\end{center}
 
-The identity is correct iff the truth tables match.
+The expressions are equivalent because their truth tables match.
+
 
 \subsubsection{Boolean identities I}
 
@@ -305,16 +291,17 @@ The identity is correct iff the truth tables match.
 
 
 \subsubsection{Satisfiability problem}
+The satisfiability problem, often referred to as SAT, is a problem of determining if there exists an interpretation that satisfies a given Boolean formula. In other words, it is about finding an assignment to variables that makes the entire expression true.
 
-Given a Boolean expression, find a value for each variable such that the expression is true. 
 
-Equivalently: Find a 1 in the truth table.
+\paragraph{Example Problem}
+Given a Boolean expression, our goal is to find a value for each variable such that the expression evaluates to true.
 
-Example: \( x1 \land ( (\lnot x2) \lor x3) \land (\lnot x3) \)
+For the expression \(x1 \land ((\neg x2 \lor x3) \land (\neg x3))\), the truth table is:
 
 \begin{center}
 \begin{tabular}{ccc|c}
-$x1$ & $x2$ & $x3$ & \( x1 \land ((\lnot x2) \lor x3) \land (\lnot x3) \) \\
+$x1$ & $x2$ & $x3$ & $x1 \land ((\neg x2 \lor x3) \land (\neg x3))$ \\
 \hline
 0 & 0 & 0 & 0 \\
 0 & 0 & 1 & 0 \\
@@ -327,41 +314,31 @@ $x1$ & $x2$ & $x3$ & \( x1 \land ((\lnot x2) \lor x3) \land (\lnot x3) \) \\
 \end{tabular}
 \end{center}
 
-Solution: \( x1 = 1 \), \( x2 = 0 \), \( x3 = 0 \)
+A solution to the SAT problem for this expression is \(x1 = 1\), \(x2 = 0\), \(x3 = 0\).
 
-\subsubsection{Definitions}
-
+\subsection*{Definitions}
 \begin{itemize}
-  \item Variable: \( x_j \), for some \( j \in J \subseteq \mathbb{N} \) \\
-  Ex.: \( x_1 \quad x_5 \)
-  
-  \item Literal: either \( x_j \) or \( \lnot x_j \), for some \( j \in J \) \\
-  Ex.: \( x_3 \quad (\lnot x_8) \)
-
-  \item Disjunctive clause: \( \bigvee_{j \in J_0} \lnot x_j \lor \bigvee_{j \in J_1} x_j \), for some \( J_0, J_1 \subseteq J \) \\
-  Ex.: \( x_2 \lor (\lnot x_4) \lor (\lnot x_6) \quad (\lnot x_1) \lor x_5 \lor x_6 \lor x_7 \lor x_9 \)
-  
-  \item Conjunctive clause: \( \bigwedge_{j \in J_0} \lnot x_j \land \bigwedge_{j \in J_1} x_j \), for some \( J_0, J_1 \subseteq J \) \\
-  Ex.: \( x_2 \land (\lnot x_4) \land (\lnot x_6) \quad (\lnot x_1) \land x_5 \land x_6 \land x_7 \land x_9 \)
+\item \textbf{Variable:} \(x_j\) for some \(j \in J \subseteq \mathbb{N}\).
+\item \textbf{Literal:} Either \(x_j\) or \(\neg x_j\) for some \(j \in J\).
+\item \textbf{Disjunctive clause:} A disjunction of literals, e.g., \(\bigvee_{j \in J^0} \neg x_j \lor \bigvee_{j \in J^1} x_j\) for some \(J^0, J^1 \subseteq J\).
+\item \textbf{Conjunctive clause:} A conjunction of literals, e.g., \(\bigwedge_{j \in J^0} \neg x_j \land \bigwedge_{j \in J^1} x_j\) for some \(J^0, J^1 \subseteq J\).
 \end{itemize}
 
 \subsubsection{Conjunctive normal form}
 
-The conjunctive normal form (CNF) is a conjunction of disjunctive clauses:
+Conjunctive Normal Form is a way of structuring logical expressions as a conjunction (AND) of disjunctive clauses (ORs of literals).
 
 \[
-\bigwedge_{i \in I} \left( \bigvee_{j \in J_i^0} \lnot x_j \lor \bigvee_{j \in J_i^1} x_j \right), \text{ where } J_i^0, J_i^1 \subseteq J \text{, } \forall i \in I \subseteq \mathbb{N}
+\bigwedge_{i \in I} \left( \bigvee_{j \in J_i^0} \neg x_j \vee \bigvee_{j \in J_i^1} x_j \right)
 \]
 
-Examples:
+where \( J_i^0, J_i^1 \subseteq J \) and \( I \subseteq \mathbb{N} \).
 
+\paragraph{Examples of CNF}
 \begin{itemize}
-  \item \( (x1 \lor x2) \land (x3 \lor x4) \land (x5 \lor x6) \)
-
-  \item \( (x1 \lor (\lnot x2)) \land (x3 \lor (\lnot x4)) \)
+\item \((x1 \lor x2) \land (x3 \lor x4) \land (x5 \lor x6)\)
+\item \((\neg x2 \lor \neg x4 \lor \neg x6) \land (x1 \lor x5 \lor x6 \lor x7 \lor x9) \land (\neg x1 \lor \neg x2 \lor \neg x3)\)
 \end{itemize}
-
-
 
 \subsubsection{Disjunctive normal form}
 
@@ -477,12 +454,9 @@ Note:
 
 
 \subsubsection{Fixed bit width}
+In computer systems, integers have a fixed number of bits, determining their size and the range of values they can represent.
 
-\begin{itemize}
-  \item For any integer, we must always know how many digits (bits) it has.
-  \item Typically, this number of bits is fixed in our code.
-\end{itemize}
-
+\paragraph{Commonly Used Integer Types and Their Bit Widths}
 \begin{tabular}{lll}
 \textbf{bits} & \textbf{a.k.a.} & \textbf{C type} \\
 \hline
@@ -495,33 +469,14 @@ Note:
    &      & \texttt{unsigned long long} (Windows) \\
 \end{tabular}
 
-% Note: In the original image, there was an additional statement below the table:
-%       "= on almost all contemporary platforms as of 2023"
 
 \subsubsection{Integers in hardware and in programming languages}
-
 \begin{itemize}
-  \item Most computers$\dagger$ support 8, 16, 32 and 64-bit arithmetic natively (i.e., operations are fast)
-  \item Arithmetic can be performed with arbitrary-sized integers by implementing the operations in software (hence much slower).
-  \item In C, every integer type has a specific size.
-  \item In C, arbitrary-sized integers are not supported by the language (they require using specific libraries).
-  \item In Python, all integers can have arbitrary sizes (with a large performance penalty, especially when exceeding 32 bits)
+    \item Most computers support 8, 16, 32, and 64-bit arithmetic natively.
+    \item Arithmetic on integers larger than native size can be done in software, which is slower.
+    \item In C, integer types are fixed-size, and arbitrary-sized integers require specific libraries.
+    \item Python supports integers of arbitrary size, though with a performance penalty for very large numbers.
 \end{itemize}
-
-% Note: In the original image, there was a dagger symbol next to "computers".
-%       This indicates there might be a corresponding footnote which is not visible in the given image part.
-
-\begin{comment}
-\begin{tabular}{lr}
-\textbf{bits} & \textbf{largest integer = $2^{\text{bits}} - 1$ (approx.)} \\
-\hline
-8  & 255 \\
-16 & 65,535 \\
-32 & 4,294,967,295 & \textit{4 billions} \\
-64 & 18,446,744,073,709,551,615 & \textit{$2.10^{19}$} \\
-128 & 340,282,366,920,938,463,463,374,607,431,768,211,455 & \textit{$3.10^{38}$} \\
-\end{tabular}    
-\end{comment}
 
 \begin{tabular}{lr}
 \textbf{bits} & \textbf{largest integer = $2^{\text{bits}} - 1$} \\
@@ -540,14 +495,10 @@ Note:
 \]
 
 
-% This LaTeX code is structured as per the image provided. There is no class preamble or package inclusions other than `amsmath`, as you requested to avoid adding document creation commands. Replace [TBD] with appropriate images or additional content in a practical use case.
-% Ensure to use the appropriate document class and packages when compiling this code in a LaTeX editor.
-
-
-
 \subsubsection{Operations with integers}
+Integer operations in binary are analogous to the decimal operations learned in school.
 
-Essentially the same a schoolbook operations:
+\subsection*{Binary Addition Example}
 \begin{verbatim}
   0 1 0 1 0 0 1 1
 + 0 1 1 0 0 0 0 1
@@ -555,45 +506,41 @@ Essentially the same a schoolbook operations:
   1 0 1 1 0 1 0 0
 \end{verbatim}
 
-Just like in school:
+\paragraph{Operation complexity}
 \begin{itemize}
-  \item addition and subtraction are straightforward
-  \item multiplication is more complex
-  \item division is much more complex
+    \item Addition and subtraction are straightforward, like their decimal counterparts.
+    \item Multiplication is more complex, involving shifting and adding.
+    \item Division is the most complex, requiring iterative subtraction and shifting.
 \end{itemize}
 
 \subsubsection{Signed integers}
-
+Representing negative numbers in binary requires special encoding:
+\subsubsection{Sign-Magnitude Representation}
 \begin{itemize}
-  \item How do we represent negative numbers?
-  \item Impossible with previous approach.
-  \item Solution 1:
-  \begin{itemize}
-    \item ``sign-magnitude'': sacrifice one bit, which we reserve to store the sign.
-    \item Drawback: zero has two representations (+0 and -0)
-    \item Drawback: Boolean logic for $+$ and $-$ must handle many cases
-  \end{itemize}
-  \item Solution 2:
-  \begin{itemize}
-    \item ``one's complement'': reserve top bit for the sign, must be zero for a positive number
-    \item when a number is negative, takes its (positive) opposite and flip all bits
-    \item Drawback: zero has two representations (+0 and -0)
-    \item Drawback: Boolean logic for $+$ and $-$ is simpler but still affected
-  \end{itemize}
+    \item One bit is reserved for the sign (most significant bit).
+    \item Zero has two representations: $+0$ and $-0$.
+    \item Arithmetic with sign-magnitude is not straightforward.
 \end{itemize}
+
+\subsubsection{One's Complement Representation}
+\begin{itemize}
+    \item The sign bit is also the most significant bit.
+    \item Negative numbers are represented by flipping all bits of the positive value.
+    \item Zero still has two representations: $+0$ and $-0$.
+    \item Arithmetic is simpler than sign-magnitude but still not straightforward.
+\end{itemize}
+
 
 \subsubsection{Signed integers: two's complement}
-
+It is the approach adopted by most current computers.
 \begin{itemize}
-  \item Solution 3 (all current computers\textbf{!}):
-  \begin{itemize}
-    \item ``two's complement'': when an $n$-bit number $x$ is negative, represent it the same as the unsigned number $2^n - x$.
-    \item The top bit is 1 for negative numbers.
-    \item Drawback: Flipping sign slightly more complex (flip all non-sign bits then add one).
-    \item Advantage: zero has a single representation
-    \item Advantage: Boolean logic for $+$ and $-$ is the same as for unsigned integers
-  \end{itemize}
+    \item In two's complement representation, a negative number \( x \) is represented by \( 2^n - x \) for an \( n \)-bit number.
+    \item The most significant bit (MSB) is the sign bit, where \( 1 \) indicates a negative number.
+    \item Flipping the sign requires inverting all bits and adding \( 1 \).
+    \item This representation gives zero a single unique representation.
+    \item Arithmetic operations for addition and subtraction are the same as for unsigned integers.
 \end{itemize}
+
 
 
 
