@@ -19,43 +19,19 @@
         \item $s := u - 2^n$
     \end{itemize}
 \end{itemize}
-
-% The table below is formatted using the tabular environment
-% column alignments have been chosen to reflect the data structure
-
-
 \paragraph{4-bit example:}
-\begin{center}
-\resizebox{\textwidth}{!}{% Resize table to fit within the text width
-\begin{tabular}{ c c c c c c c c c c c c c c c c c }
-    \hline
-    bit pattern & 0000 & 0001 & 0010 & 0011 & 0100 & 0101 & 0110 & 0111 & 1000 & 1001 & 1010 & 1011 & 1100 & 1101 & 1110 & 1111 \\
-    \hline
-    unsigned \textit{u} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
-    signed \textit{s} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & -1 \\
-    \hline
-\end{tabular}
-}
-\end{center}
-
-% Note that the table above may need to be split across multiple lines 
-% or the font size adjusted depending on the document class and page width.
-
-
-% Since this is a transcription of lecture notes, there are no document class or package use statements.
-% Begin the transcription directly with the lecture content.
 
 \begin{itemize}
     \item bit $(n - 1) = 0 \Rightarrow s = u$
     \item bit $(n - 1) = 1 \Rightarrow s = u - 2^n$
 \end{itemize}
 
-In general:
+\paragraph{In general:}
 
 \begin{tabular}{c|c|c|c|c}
     \textbf{bit pattern} & \textbf{00 \ldots 0} & \textbf{01 \ldots 1} & \textbf{10 \ldots 0} & \textbf{11 \ldots 1} \\
     \hline
-    \textbf{unsigned $u$} & 0 & \ldots & $(2^{n-1}) - 1$ & $(2^{n}) - 1$ \\
+    \textbf{unsigned $u$} & 0 & $(2^{n-1}) - 1$ & $(2^{n-1})$ & $(2^{n}) - 1$ \\
     \textbf{signed $s$} & 0 & $(2^{n-1}) - 1$ & $-(2^{n-1})$ & $-1$
 \end{tabular}
 
@@ -63,18 +39,7 @@ In general:
     \item Unsigned: $u \in \{0, \ldots, (2^n) - 1\}$
     \item Signed: $s \in \{-(2^{n-1}), \ldots, -1, 0, \ldots (2^{n-1}) - 1\}$
 \end{itemize}
-
-\begin{tabular}{c|c|c}
-    $n$ \textbf{bits} & $-2^{bits-1}$ (\textbf{min}) & $2^{bits-1} - 1$ (\textbf{max}) \\
-    \hline
-    8  & -128 & 127 \\
-    16 & -32,768 & 32,767 \\
-    32 & -2,147,483,648 & 2,147,483,647 \\
-    64 & $\approx -9.10^{18}$ & $\approx 9.10^{18}$ \\
-    128 & $\approx -2.10^{38}$ & $\approx 2.10^{38}$
-\end{tabular}
-
-Conversely:
+\paragraph{Conversely:}
 
 \begin{itemize}
     \item if $s \geq 0$
@@ -90,9 +55,6 @@ Conversely:
         \item cannot represent, need larger $n$
     \end{itemize}
 \end{itemize}
-
-
-% Sign extension table and explanations
 
 \subsubsection{Sign extension}
 
@@ -130,34 +92,9 @@ To convert an n-bit number to an \( (n + k) \)-bit number (\( k \geq 0 \)):
 \item Additional high-order (leftmost) bits are set to the value of bit \( (n - 1) \)
 \end{itemize}
 \end{itemize}
-
-% Base 16 table
-
 \subsubsection{Base 16}
 
 Hexadecimal digits: \( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f \)
-
-\begin{center}
-\textbf{4-bit example:} \\
-\begin{tabular}{|*{16}{c|}}
-\hline
-\multicolumn{16}{|c|}{bit pattern} \\
-\hline
-0000 & 0001 & 0010 & 0011 & 0100 & 0101 & 0110 & 0111 & 1000 & 1001 & 1010 & 1011 & 1100 & 1101 & 1110 & 1111 \\
-\hline
-\multicolumn{16}{|c|}{unsigned $u$} \\
-\hline
-0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 \\
-\hline
-\multicolumn{16}{|c|}{signed $s$} \\
-\hline
-0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & -1 \\
-\hline
-\end{tabular}
-\end{center}
-
-
-% Since there are no document creation commands provided, we assume that the document class and packages needed are already set.
 
 \begin{itemize}
     \item Pros:
@@ -177,10 +114,6 @@ Hexadecimal digits: \( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, f \)
         \item Not human-friendly (esp. for arithmetic)
     \end{itemize}
 \end{itemize}
-
-\vspace{2em} % Adding vertical space for visual separation
-
-% The following line seems like a slide title, but without the proper context, it is formatted as plaintext.
 \subsection{Characters and Text}
 
 How do we map bit patterns to characters in order to form text?
@@ -191,12 +124,6 @@ How do we map bit patterns to characters in order to form text?
     \item Some incompatibilities
 \end{itemize}
 
-% [TBD] token is used as a placeholder for an element that cannot be represented in LaTeX.
-% For example, this could replace images or other non-textual content in the document.
-[TBD]
-
-
-% Start of the document content
 \subsubsection{ASCII (1963-)}
 \begin{itemize}
     \item American Standard Code for Information Interchange
@@ -204,8 +131,6 @@ How do we map bit patterns to characters in order to form text?
     \item 128 standardized characters
     \item Many derivatives specify the remaining 128
 \end{itemize}
-
-% ASCII table representation is omitted and replaced by [TBD]
 [TBD] % This is a placeholder for the ASCII table image
 
 \subsubsection{Unicode (1988-)}
@@ -243,11 +168,6 @@ How do we map bit patterns to characters in order to form text?
     \item Unicode is extremely complicated
     \item Latest version (v15.0.0, 2022) specification is 1,060 pages
 \end{itemize}
-% End of the document content
-
-
-% Replication of lecture content as a plain LaTeX document.
-
 \subsection{Hardware}
 
 Logic gates allow us to compute Boolean functions ``instantly'' (subject to physical limits).
@@ -263,13 +183,6 @@ $\rightarrow$ We break down complex algorithms into simple steps.
     \item Memory
     \item Input and output devices
 \end{itemize}
-
-% [TBD] token is used to represent the image or non-textual elements that cannot be rendered in a LaTeX document.
-% Images that are present in the source are not represented in the LaTeX code above.
-
-
-% A LaTeX transcription of the lecture material, as requested.
-
 \subsubsection{A first abstraction}
 
 \begin{itemize}
@@ -304,18 +217,7 @@ $\rightarrow$ We break down complex algorithms into simple steps.
   \end{itemize}
 \end{itemize}
 
-% The title "INSTRUCTION SET ARCHITECTURES (ISA)" is formatted in a way that is 
-% visually distinctive. Since this is a LaTeX transcription, semantic meaning is 
-% conveyed without the need for visual styling. Therefore, the text is simply 
-% transcribed as plain text without any special formatting commands.
-
 \subsection{Instruction Set Architectures (ISA)}
-
-% [TBD] tokens are placeholders for non-text content such as images or diagrams.
-
-
-% LaTeX content of the lecture slides regarding ISA and Assembly
-
 \subsubsection{An ISA specifies:}
 \begin{itemize}
     \item How the machine is organized (memory, etc.)
@@ -335,7 +237,6 @@ Many older and less prominent ISAs:
 \end{itemize}
 
 \paragraph{Code Example and Assembly Representation}
-% It's important to note that source code and assembly representations typically require verbatim environments like listings or verbatim, but they will not be used here for simplicity
 \texttt{ int f(int a, int b, int c)}
 \begin{verbatim}
 {
@@ -343,9 +244,6 @@ Many older and less prominent ISAs:
 }
 \end{verbatim}
 
-% The actual machine code bytes and corresponding assembly representation are provided in two columns for x86_64 and AArch64.
-
-% For x86_64:
 \subsubsection*{x86\_64:}
 \begin{minipage}[t]{0.5\textwidth}
 \begin{verbatim}
@@ -361,9 +259,6 @@ f:
     ret              # c3
 \end{verbatim}
 \end{minipage}
-% The comment "#" is typically used in actual assembly to represent comments but is presented here for illustrative purposes.
-
-% For AArch64:
 \hspace{0.5cm}
 \subsubsection*{AArch64:}
 \begin{minipage}[t]{0.5\textwidth}
@@ -377,19 +272,12 @@ f:
     ret             # d6 5f 03 c0
 \end{verbatim}
 \end{minipage}
-
-% Arrows indicating the correspondence between the binary and the assembly code might be visual, replace with [TBD] for LaTeX transcription
-% [TBD] % Placeholder for assembly arrows in LaTeX
-
 \subsubsection{Assembly}
 \begin{itemize}
     \item Assembly is the lowest-level programming language
     \item Assembly is in 1:1 correspondence with binary encoding of instructions
     \item Typically, one line per instruction
 \end{itemize}
-
-
-% Transcription of the lecture material into LaTeX format
 \subsubsection{Instructions (x86\_64)}
 
 \begin{verbatim}
@@ -438,12 +326,6 @@ f:
  ret                # c3
 \end{verbatim}
 
-\begin{itemize}
-  \item small, fixed set of variables that can be accessed instantly
-  \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
-  \item special registers and flags (not accessible directly)
-  \item larger registers for extended operations (e.g., non-integer numbers)
-\end{itemize}
 
 \paragraph{AArch64:}
 \begin{verbatim}
@@ -453,12 +335,12 @@ f:
  ret                # d6 5f 03 c0
 \end{verbatim}
 
-% Note: Image or non-textual elements are replaced with [TBD].
-
-
-% Preamble or document class commands are excluded as per the requirement. 
-% The following LaTeX code is intended to be placed within a LaTeX document.
-
+\begin{itemize}
+  \item small, fixed set of variables that can be accessed instantly
+  \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
+  \item special registers and flags (not accessible directly)
+  \item larger registers for extended operations (e.g., non-integer numbers)
+\end{itemize}
 \subsubsection{Registers (x86\_64)}
 
 \begin{itemize}
@@ -493,8 +375,6 @@ f:
 \end{itemize}
 
 \paragraph{Example:}
-
-% The following tabular environment represents a table structure for the example.
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
 \textbf{bits} & \textbf{63..56} & \textbf{55..48} & \textbf{47..40} & \textbf{39..32} & \textbf{31..24} & \textbf{23..16} & \textbf{15..8} & \textbf{7..0} \\
@@ -503,15 +383,11 @@ f:
 \hline
 32 & \multicolumn{4}{c|}{} & \multicolumn{4}{c|}{eax} \\
 \hline
-16 &  &  &  &  &  & \multicolumn{2}{c|}{ax} &  \\
+16 &  &  &  &  &  & & \multicolumn{2}{c|}{ax} \\
 \hline
-8 &  &  &  &  &  & ah & \multicolumn{2}{c|}{al} \\
+8 &  &  &  &  &  &  & ah & al \\
 \hline
 \end{tabular}
-
-% Note: [TBD] is used to represent images or non-textual elements that cannot be represented in LaTeX.
-% There is a color-filled cell spanning multiple columns in the table which is not represented here, as LaTeX color definitions are not required.
-
 \subsubsection{Registers (AArch64)}
 
 \begin{itemize}
@@ -528,39 +404,23 @@ f:
     \item register 31 (\texttt{x31}, \texttt{w31}) is read-only (zero in most cases)
 \end{itemize}
 
-% End of lecture material transcription. The LaTeX code should be compiled within a LaTeX document for correct representation.
-
-
-% Preamble or document class commands are not included as the task requests only the lecture's text content.
-% Sections may need to be included within a document class when compiled.
-
-% The image content is not represented in LaTeX as requested.
-% [TBD] tokens in the comments denote the place for images or non-textual components.
-
 \paragraph{Example:}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
 \textbf{bits} & 63...56 & 55...48 & 47...40 & 39...32 & 31...24 & 23...16 & 15...8 & 7...0 \\
 \hline
-64 & [TBD] & [TBD] & \multicolumn{1}{|c|}{\textbf{x0}} & [TBD] & [TBD] & [TBD] & [TBD] & [TBD] \\
+64 &  \multicolumn{8}{|c|}{\textbf{x0}} \\
 \hline
-32 & [TBD] & [TBD] & [TBD] & [TBD] & \multicolumn{1}{|c|}{\textbf{w0}} & [TBD] & [TBD] & [TBD] \\
+32 &  &  &  &  & \multicolumn{4}{|c|}{\textbf{w0}} \\
 \hline
 \end{tabular}
-
-% The word "MEMORY" might be a section title or a caption for the image; it's formatted as a section title.
 \subsection{Memory}
-
-% Assuming the code and the inline assembly are part of the document content, they are transcribed as verbatim.
 \begin{verbatim}
 int g(int *a, int *b)
 {
     return *a + *b;
 }
 \end{verbatim}
-
-% The assembly code for x86_64 and AArch64 architectures is part of the lecture material.
-% They are also transcribed as verbatim.
 
 \paragraph{x86\_64:}
 \begin{verbatim}
@@ -579,13 +439,6 @@ g:
   ret
 \end{verbatim}
 
-% The LaTeX code provided is ready for compilation within a LaTeX editor inside a suitable document class.
-
-
-% Import necessary LaTeX packages first (outside this transcription scope)
-% Note: The actual LaTeX document structure such as \documentclass is omitted
-% as the goal is to directly transcribe the lecture material provided in the image.
-
 \subsubsection{Memory}
 
 \begin{itemize}
@@ -595,8 +448,6 @@ g:
 \end{itemize}
 
 \subsubsection{Byte ordering}
-
-% Tabular representation is used to simulate the address-to-value mapping as shown in the image
 \begin{tabular}{c c c c c c c c c c c c c}
     \hline
     address & 0 & 1 & 2 & ... & 239 & 240 & 241 & 242 & 243 & 244 & ... \\
@@ -617,9 +468,6 @@ Q: What is the value of the 32-bit integer at address 240?
 A: It depends!
 
 \subsubsection{Byte ordering / "Endianness"}
-
-% Tabular representation is used to simulate the address-to-value mapping as shown in the image
-% [TBD] indicates that the visual representation of the dots is omitted.
 \begin{tabular}{c c c c c c c c c c c c c}
 \hline
 address & 0 & 1 & 2 & 3 & ... & \textbf{239} & \textbf{240} & \textbf{241} & \textbf{242} & \textbf{243} & 244 & ... \\
@@ -646,10 +494,6 @@ value (hex) & ef & cd & ab & 89 & ... & ff & \textbf{a0} & \textbf{a1} & \textbf
     \item \texttt{x86\_64} is LE
     \item \texttt{AArch64} is LE by default (LE-only on Windows, MacOS, Linux)
 \end{itemize}
-
-
-% Transcription of the image content into LaTeX
-
 \subsubsection{Bit ordering}
 
 Because we cannot access individual bits on a CPU (smallest chunk is a byte), 

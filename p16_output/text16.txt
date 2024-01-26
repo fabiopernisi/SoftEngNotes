@@ -1,12 +1,7 @@
 \newpage
-\section{Lecture 16} % The asterisk '*' prevents LaTeX from numbering this section
+\section{Lecture 16}
 
-\subsection{Performance} % Similarly, the asterisk prevents numbering of the subsection
-
-% [TBD] is a placeholder for non-textual content that was in the image but not transcribed into LaTeX
-% If there are elements such as graphs or diagrams that are described in the lecture content, 
-% they should be described here as well.
-
+\subsection{Performance}
 
 \subsubsection{What is performance?}
 
@@ -22,10 +17,6 @@ We want computers to perform required actions while minimizing their use of \tex
 We care about those resources in proportion to their cost (financial, emotional, etc.)
 
 \subsubsection{How do we achieve good performance?}
-
-% Representing the high-level and low-level as sub-sections
-% Downwards arrow can be represented with the `\downarrow` command. 
-
 High level to low level:
 \begin{enumerate}
     \item Pick a good algorithm
@@ -42,10 +33,6 @@ High level to low level:
     \end{itemize}
     \item Translate the implementation into efficient instructions (compilers do that well)
 \end{enumerate}
-
-
-% Preamble or document class declarations are not required as per the user's request
-% Begin the document content
 \subsubsection{What hides inside the big-O?}
 
 Let us compare two algorithms:
@@ -54,54 +41,19 @@ Let us compare two algorithms:
     \item Algorithm B has complexity $O(n \log(n))$
 \end{itemize}
 
-% [TBD] is used to replace the graphical content - the chart comparing Algorithm A and B
-[TBD]
-
-% Descriptive text below the graph
-\noindent
-\makebox[\textwidth][c]{ % Center the following two lines with a wider text width
-    \begin{tabular}{cc}
-        Algorithm A & Algorithm B \\
-        $O(n^2)$ & $O(n \log(n))$ \\
-    \end{tabular}
-}
-
-\bigskip % Provide some space before the next section
-
 Specifically,
 \begin{itemize}
     \item Algorithm A performs $2n^2 + 16$ operations
     \item Algorithm B performs $16n \log(n) + 64$ operations
 \end{itemize}
 
-% End of document content
-
-
-% Since the LaTeX transcription should not include \includegraphics or document formatting commands
-% This LaTeX code snippet reflects only the textual lecture material provided in the image.
-
+Graph showing that, for smaller n, $O(n^2)$ is be better even though it has a worse big-O scale.
 \[
 \begin{array}{cc}
 \text{Algorithm A} & \text{Algorithm B} \\
 2n^2 + 16 & 16n \log(n) + 64 
 \end{array}
 \]
-
-% The images in the provided content have been marked as [TBD] to indicate the position of a
-% non-textual element that cannot be represented directly in LaTeX. 
-% The reader or user of this LaTeX should replace [TBD] with the appropriate figure inclusion commands
-% and graphics, if they have the actual figures to include.
-
-% Graph 1 [TBD]
-
-% Graph 2 [TBD]
-
-% Graph 3 [TBD]
-
-% Any captions, axis labels, or markers within the graph images are not transcribed, as LaTeX does not
-% contain the capability to extract text from image content. The user of this LaTeX code should manually
-% add such details as needed by using appropriate LaTeX graphing packages and commands such as pgfplots or tikz.
-
 
 \subsubsection{Which algorithm do we choose?}
 
@@ -112,113 +64,18 @@ Assume that
 \end{itemize}
 
 \subsubsection{Merge sort example}
-
-% Below, the visualization of the merge sort process is not included as direct LaTeX content.
-% Instead, [TBD] tokens are used as placeholders for the graphical representation.
-[TBD]
-
-% The Python code shown in the image will be included here using the verbatim or listings environment.
-\begin{verbatim}
-def merge_sort(a):
-	# single-element list
-	if (len(a) < 1):
-		return [a]
-
-	# two-elements list
-	if (len(a) == 2):
-		if (a[0] <= a[1]):
-			return [a[0], a[1]]
-		else:
-			return [a[1], a[0]]
-
-	# split list, sort each part
-	pivot = len(a) // 2
-	part1 = merge_sort(a[:pivot])
-	part2 = merge_sort(a[pivot:])
-
-	# merge parts
-	r = []
-	i1 = 0
-	i2 = 0
-	while i1 < len(part1) or i2 < len(part2):
-		if (not i1 == len(part1)) and ((i2 == len(part2)) or (part1[i1] < part2[i2])):
-			r.append(part1[i1])
-			i1 = i1 + 1
-		else:
-			r.append(part2[i2])
-			i2 = i2 + 1
-	
-	return r
-\end{verbatim}
-
-% The [TBD] at the end of this document indicates the space for the slide progress indicator
-% which is typically not included in LaTeX documents but can be approximated with custom commands
-% or external package if needed.
-[TBD]
-
-% Since LaTeX does not support direct insertion of source code with syntax highlighting,
-% we will use verbatim environments or listings package for the Python code.
-% Please include the appropriate package in your LaTeX preamble if you choose to use listings.
-% Here we use verbatim for simplicity.
-
-\begin{verbatim}
-def merge_sort(a):
-    # single-element list
-    if (len(a) =< 2):
-        return insertion_sort(a)
-
-    # split list, sort each part
-    pivot = len(a) // 2
-    
-    part1 = merge_sort(a[:pivot])
-    part2 = merge_sort(a[pivot:])
-    
-    # merge parts
-    r = []
-    i1 = 0
-    i2 = 0
-    
-    while i1 < len(part1) or i2 < len(part2):
-        if (not i1 == len(part1) and (i2 == len(part2) or part1[i1] < part2[i2])):
-            r.append(part1[i1])
-            i1 = i1 + 1
-        else:
-            r.append(part2[i2])
-            i2 = i2 + 1
-    
-    return r
-\end{verbatim}
+The given charts illustrate the performance characteristics of two sorting algorithms, Algorithm A (Insertion Sort) and Algorithm B (Merge Sort), across different input sizes.
 
 \begin{itemize}
-    \item[\textbf{Note:}] The function \verb|insertion_sort| is referenced but not defined here.
+    \item In the first chart, we see that for smaller values of \( n \), Algorithm A performs competitively, but as \( n \) increases, its performance degrades significantly compared to Algorithm B.
+    \item The takeaway is that we should choose the right algorithm based on the size of the input: for smaller datasets, Algorithm A may be more efficient, whereas for larger datasets, Algorithm B is preferable.
+    \item The second set of charts emphasizes that we can do even better by combining algorithms. For small datasets, we can use Algorithm A, and as the dataset grows, we can switch to Algorithm B. This combination approach leverages the strengths of both algorithms.
+    \item The right chart in the second image shows that combining algorithms results in a performance that is close to the best of both worlds: the efficiency of Algorithm A for small datasets and the scalability of Algorithm B for larger ones.
 \end{itemize}
 
-% The following is an interpretation of the text in the bottom part of the image which was partly obscured by a graph.
-\emph{We should pick the right algorithm for each value of \( n \):}
+This strategy is often employed in practice, such as in the implementation of sorting functions in standard libraries, which use a hybrid approach (like Timsort in Python and Java) that adapts to the nature of the dataset to provide optimal sorting performance.
 
-% Placeholder for the graph image
-[TBD]
-
-% End of LaTeX content
-
-
-
-% Note: You will need to include the appropriate document class
-% and packages such as `amsmath` for this LaTeX code to compile correctly.
-
-% Slide 1 Content
-But here, we can do even better: we can combine algorithms
-
-% [TBD] - Placeholder for first graph image
-
-This is how sort algorithms are implemented in practice
-
-% [TBD] - Placeholder for second graph image
-
-% Slide 2 Content
 \subsection{CPU Pipelines}
-
-% Slide 3 Content
 \subsection{Back to instructions}
 
 Instruction decoding:
@@ -238,15 +95,8 @@ From \texttt{48 af af 06}, the CPU needs to understand:
 \end{itemize}
 
 
-% Start of the LaTeX content from the lecture slide
-
-% Slide title
 \paragraph{What happens after instruction decoding?}
-
-% Assembly instruction example
-\texttt{mul rax, QWORD PTR [rsi]}
-
-% Bullet points explaining the CPU operations
+\texttt{48 af af 06     imul   rax, QWORD PTR [rdx]]}
 \begin{itemize}
     \item the CPU has Boolean circuitry to compute multiplications
     \item it must ensure that one of the two inputs of the multiplier is \texttt{rax}
@@ -255,12 +105,8 @@ From \texttt{48 af af 06}, the CPU needs to understand:
     \item it sets the second input of the multiplier to the output of the memory circuitry
     \item it stores the output of the multiplier back to \texttt{rax}
 \end{itemize}
-
-% Note about the impossibility of single cycle operations
 \textbf{It is no longer possible to do all this in a single cycle} \\
 (e.g., at 4 GHz, i.e. 4 billion cycles per second, so in 0.25 ns)
-
-% Description of the cycles needed for different operations
 \paragraph{Imagine that it takes:}
 \begin{itemize}
     \item one cycle to decode an instruction
@@ -268,273 +114,46 @@ From \texttt{48 af af 06}, the CPU needs to understand:
     \item one cycle to perform arithmetic
 \end{itemize}
 
-% Assembly instructions and corresponding cycle diagrams, replaced with [TBD] as LaTeX cannot represent the diagrams.
-\texttt{sub rax, [rdi]} \\
-% [TBD] represents the cycle diagram for 'sub rax, [rdi]'
-[TBD]
+\paragraph{Sequential Execution of CPU Instructions}
 
-\texttt{imul rbx, [rsi]} \\
-% [TBD] represents the cycle diagram for 'imul rbx, [rsi]'
-[TBD]
+The provided diagrams illustrate the sequential execution of two assembly instructions in a non-pipelined CPU architecture. Each instruction goes through the decode, memory, and arithmetic stages one at a time without overlap. Considering one cycle for each stage, the execution timeline is as follows:
 
-% Below are placeholders for the cycle diagrams that were visually represented in the image
-decoder - [TBD] \\
-memory - [TBD] \\
-arithmetic - [TBD] \\
-% Additional placeholders if needed
-[TBD] \\
-[TBD]
+\begin{enumerate}
+    \item The first instruction, \texttt{sub rax, [rdi]}, involves subtracting the value at the memory location pointed to by \texttt{rdi} from the \texttt{rax} register. The execution stages are:
+    \begin{itemize}
+        \item Cycle 1: Decoding the \texttt{sub} instruction.
+        \item Cycle 2: Fetching the operand from memory \texttt{[rdi]}.
+        \item Cycle 3: Performing the subtraction and updating the \texttt{rax} register.
+    \end{itemize}
+    \item After the first instruction completes all its stages, the second instruction, \texttt{imul rbx, [rsi]}, which multiplies the \texttt{rbx} register by the value at the memory location pointed to by \texttt{rsi}, begins its execution:
+    \begin{itemize}
+        \item Cycle 4: Decoding the \texttt{imul} instruction.
+        \item Cycle 5: Fetching the operand from memory \texttt{[rsi]}.
+        \item Cycle 6: Performing the multiplication and updating the \texttt{rbx} register.
+    \end{itemize}
+\end{enumerate}
 
-% End of the LaTeX content from the lecture slide
-
-\begin{tabular}{ | l | l | l | l | l | }
-\hline
-- & - & sub rax, [rdi] & - & - \\ \hline
-decoder & - & imul rbx, [rsi] & \color{green}{decode ``imul''} & - \\ \hline
-memory & - & - & - & - \\ \hline
-arithmetic & - & - & - & - \\ \hline
-\end{tabular}
-
-\vspace{5mm} % adds some space between the tables
-
-\begin{tabular}{ | l | l | l | l | l | }
-\hline
-- & - & sub rax, [rdi] & - & - \\ \hline
-decoder & - & - & - & - \\ \hline
-memory & - & imul rbx, [rsi] & \color{green}{fetch [rsi]} & - \\ \hline
-arithmetic & - & - & - & - \\ \hline
-\end{tabular}
-
-\vspace{5mm} % adds some space between the tables
-
-\begin{tabular}{ | l | l | l | l | l | }
-\hline
-- & - & sub rax, [rdi] & - & - \\ \hline
-decoder & - & - & - & - \\ \hline
-memory & - & - & - & - \\ \hline
-arithmetic & - & imul rbx, [rsi] & \color{green}{compute rbx * [rsi]} & - \\ \hline
-\end{tabular}
-
-% We assume the use of 'tabular' environment for alignment.
-% We also assume that 'color' commands are used to indicate the colored text.
-% The exact colors would need to be defined or approximated in the LaTeX preamble,
-% which is not provided here since we focus exclusively on the lecture content.
-
-\begin{tabular}{ll}
-  % First block
-  -                & -                \\
-  \hline
-  decoder          & \textcolor{green}{sub rax, [rdi]} decode \textcolor{green}{"sub"} \\
-                   & -                \\
-  \hline
-  memory           & -                \\
-                   & -                \\
-  \hline
-  arithmetic       & -                \\
-  imul rbx, [rsi] &                  \\
-                   & -                \\
-\end{tabular}
-
-\vspace{1cm} % Adding vertical space to separate the blocks
-
-\begin{tabular}{ll}
-  % Second block
-  -                & -                \\
-  \hline
-  decoder          & -                \\
-                   & -                \\
-  \hline
-  memory           & \textcolor{green}{sub rax, [rdi]} fetch \textcolor{green}{[rdi]}  \\
-                   & -                \\
-  \hline
-  arithmetic       & -                \\
-  imul rbx, [rsi] &                  \\
-                   & -                \\
-\end{tabular}
-
-\vspace{1cm} % Adding vertical space to separate the blocks
-
-\begin{tabular}{ll}
-  % Third block
-  -                & -                \\
-  \hline
-  decoder          & -                \\
-                   & -                \\
-  \hline
-  memory           & -                \\
-                   & -                \\
-  \hline
-  arithmetic       & \textcolor{green}{sub rax, [rdi]} compute \textcolor{green}{rax - [rdi]} \\
-  imul rbx, [rsi] &                  \\
-                   & -                \\
-\end{tabular}
-
-% Table representing the first image where CPU components are listed with dashes for stages of instruction execution
-\begin{tabular}{lllll}
--       & -        & -        & -        & -       \\
-        &          &          &          &         \\
--       & -        & -        & -        & -       \\
-        & decoder  &          & memory   &         \\
--       & -        & -        & -        & -       \\
-        &          & arithmetic &         &         \\
--       & -        & -        & -        & -       \\
-sub     & rax,     & [rdi]    &          &         \\
-imul    & rbx,     & [rsi]    &          &         \\
-\end{tabular}
-
-% Paragraph explaining the instruction cycles
-Each instruction takes 3 cycles
+\textbf{Each instruction takes 3 cycles}
 
 However, in this model,
-\begin{itemize} % Begin list
+\begin{itemize}
   \item while the memory circuitry is busy fetching QWORD PTR {[rsi]}, the multiplier is idle
   \item while the multiplier computes the result, the memory is idle
   \item during instruction decoding, everything else is idle
 \end{itemize}
 We can exploit this!
-
-% Header for the next section
 \subsubsection{Pipelined execution}
 
-% Table representing the pipeline execution process
-\begin{tabular}{lllll}
-sub     & rax,     & {[rdi]}  &          &         \\
-imul    & rbx,     & {[rsi]}  &          &         \\
-add     & rcx,     & {[rbp]}  &          &         \\
-        &          &          &          &         \\
--       & decoder  & (idle)   &          &         \\
--       & memory   & (idle)   &          &         \\
--       & arithmetic& (idle)  &          &         \\
-        &          &          &          &         \\
--       &          & -        &          & -       \\
-        &          &          &          &         \\
--       &          & -        &          & -       \\
-\end{tabular}
+The images demonstrate the pipelined execution of instructions in a modern CPU. This execution model allows multiple instructions to be processed concurrently at different stages of the instruction cycle. Given the scenario where each stage (decode, memory access, arithmetic operation) takes one cycle to complete, the pipeline allows for a new instruction to enter the pipeline before the previous instruction has finished, thus improving the overall throughput of the system.
 
-\begin{tabular}{l l}
-    - \\
-    sub rax, [rdi] \\
-    imul rbx, [rsi] \\
-    add rcx, [rbp] \\
-    - & (idle) \\
-    - & (idle) \\
-    - & (idle) \\
-    - \\
-    - \\
-    - \\
-\end{tabular}
+\begin{itemize}
+    \item Initially, the pipeline is filled with the first instruction \texttt{sub rax, [rdi]} going through the decode, memory, and arithmetic stages.
+    \item As soon as the decode stage is complete for the first instruction, the second instruction \texttt{imul rbx, [rsi]} enters the decode stage while the first instruction is in the memory stage.
+    \item This process continues with the third instruction \texttt{add rcx, [rbp]} entering the pipeline.
+    \item Once the pipeline is full, each cycle will see an instruction at each stage of execution, effectively executing multiple instructions simultaneously.
+\end{itemize}
 
-\bigskip
-
-\begin{tabular}{l l}
-    \textbf{decoder} & \\
-                     & \\
-    - \\
-    - \\
-    sub rax, [rdi] \\
-    imul rbx, [rsi] \\
-    add rcx, [rbp] & decode ``add'' \\
-    - & (idle) \\
-    - & (idle) \\
-    \textbf{memory} & \\
-                     & \\
-    - \\
-    - \\
-    - & (idle) \\
-    \textbf{arithmetic} & \\
-                         & \\
-    - \\
-    - \\
-    - & (idle) \\
-\end{tabular}
-
-\bigskip
-
-\begin{tabular}{l l}
-    \textbf{decoder} & \\
-                     & \\
-    - \\
-    - \\
-    - \\
-    sub rax, [rdi] \\
-    imul rbx, [rsi] & decode ``imul'' \\
-    add rcx, [rbp] & fetch ``rbp'' \\
-    - & (idle) \\
-    \textbf{memory} & \\
-                     & \\
-    - \\
-    \textbf{arithmetic} & \\
-                         & \\
-    - \\
-    - & (idle) \\
-\end{tabular}
-
-\usepackage{color}
-\definecolor{decodeColor}{rgb}{1,0,0} % Custom color for "decode" stage
-\definecolor{fetchColor}{rgb}{0,1,0} % Custom color for "fetch" stage
-\definecolor{computeColor}{rgb}{0,0,1} % Custom color for "compute" stage
-
-
-\section{Pipelined execution}
-
-\begin{verbatim}
-                -
-                -
-                -
-                -
-decoder        sub rax, [rdi]   \textcolor{decodeColor}{decode "sub"}
-memory         imul rbx, [rsi]  \textcolor{fetchColor}{fetch [rsi]}
-arithmetic     add rcx, [rbp]   \textcolor{computeColor}{compute rcx + [rbp]}
-                -
-                -
-                -
-\end{verbatim}
-
-\bigskip
-
-\begin{verbatim}
-                -
-                -
-                -
-                -
-                -            (idle)
-decoder        -
-memory         sub rax, [rdi]   \textcolor{fetchColor}{fetch [rdi]}
-arithmetic     imul rbx, [rsi]  \textcolor{computeColor}{compute rbx + [rsi]}
-                add rcx, [rbp]
-                -
-                -
-\end{verbatim}
-
-\bigskip
-
-\begin{verbatim}
-                -
-                -
-                -
-                -
-                -            (idle)
-                -            (idle)
-decoder        -
-memory         -
-arithmetic     sub rax, [rdi]   \textcolor{computeColor}{compute rax + [rdi]}
-                imul rbx, [rsi]
-                add rcx, [rbp]
-                -
-\end{verbatim}
-
-
-% The following is a tabular representation of the pipeline.
-% The [TBD] token is used to replace non-textual elements such as images or drawings.
-\begin{tabular}{ll}
-\multicolumn{2}{c}{[TBD]} \\ % This [TBD] replaces the actual pipelined execution diagram.
-\multicolumn{1}{c}{decoder} & \multicolumn{1}{c}{(idle)} \\
-\multicolumn{1}{c}{memory} & \multicolumn{1}{c}{(idle)} \\
-\multicolumn{1}{c}{arithmetic} & \multicolumn{1}{c}{(idle)} \\
-sub rax, [rdi] & \\
-imul rbx, [rsi] & \\
-add rcx, [rbp] & \\
-\end{tabular}
+The pipelined execution is visualized in the images, with each horizontal level representing a cycle and each stage of instruction processing moving one step down the pipeline in each subsequent cycle. The advantage of this model is that the CPU does not have to wait for one instruction to complete all its stages before starting the next one, which significantly increases the instruction throughput.
 
 \subsubsection{Throughput vs. latency}
 
@@ -551,187 +170,40 @@ add rcx, [rbp] & \\
 
 \subsubsection{Data dependencies}
 
-% The following is a tabular representation of data dependencies in the pipeline.
-% Once again, [TBD] is used to replace the actual diagram since LaTeX code can't represent it directly.
-\begin{tabular}{ll}
-mul rcx, [rdx] & \\
-add rdx, [rsi] & \\
-\multicolumn{2}{c}{[TBD]} \\ % This [TBD] replaces the data dependencies diagram.
-\multicolumn{1}{c}{decoder} &  \multicolumn{1}{c}{(idle)} \\
-\multicolumn{1}{c}{memory} & \multicolumn{1}{c}{(idle)} \\
-\multicolumn{1}{c}{arithmetic} & \multicolumn{1}{c}{(idle)} \\
-\end{tabular}
+The images depict the execution of two assembly instructions that have a data dependency. Data dependencies occur when an instruction requires the result of a previous instruction.
 
-% All text contents of the slides are transcribed above. Diagrams and graphical elements cannot be represented in LaTeX directly and are indicated by [TBD].
+\begin{enumerate}
+    \item The first instruction, \texttt{mul rcx, [rdx]}, performs a multiplication operation with the value at the memory location pointed to by \texttt{rdx} and stores the result in \texttt{rcx}.
+    \item The second instruction, \texttt{add rdx, [rsi]}, adds the value at the memory location pointed to by \texttt{rsi} to the register \texttt{rdx}.
+\end{enumerate}
 
-
-\bigskip
-
-% First section
+Given the following conditions:
 \begin{itemize}
-  \item \verb|mul rcx, [rdx]|
-  \item \verb|add rdx, [rsi]|
+    \item Each stage (decode, memory, arithmetic) takes one cycle to complete.
+    \item An instruction must wait for the previous instruction to complete its memory and arithmetic stages if there is a data dependency.
 \end{itemize}
-\begin{tabular}{l l l}
-decoder    & -             & (idle) \\
-memory     & -             & (idle) \\
-arithmetic & -             & (idle) \\
-\end{tabular}
 
-% Second section
+The execution proceeds as follows:
 \begin{itemize}
-  \item \verb|mul rcx, [rdx]|
-  \item \verb|add rax, [rsi]| \textbf{decode "add"}
+    \item The \texttt{mul} instruction is decoded first, then the corresponding value is fetched from memory, and finally, the multiplication is performed.
+    \item The \texttt{add} instruction must wait until the \texttt{mul} instruction has completed its arithmetic stage before it can proceed with the memory fetch, as it depends on the updated value of \texttt{rdx}.
+    \item This results in a stall in the pipeline, where the \texttt{add} instruction's decoding is delayed until the \texttt{mul} instruction's result is written back, ensuring the correct value is used for the addition.
 \end{itemize}
-\begin{tabular}{l l l}
-decoder    &               &        \\
-memory     & -             & (idle) \\
-arithmetic & -             & (idle) \\
-\end{tabular}
 
-% Third section
-\begin{itemize}
-  \item \verb|mul rcx, [rdx]| \textbf{decode "mul"}
-  \item \verb|add rdx, [rsi]| \textbf{fetch [rsi]}
-\end{itemize}
-\begin{tabular}{l l l}
-decoder    &               &        \\
-memory     &               &        \\
-arithmetic & -             & (idle) \\
-\end{tabular}
-
-
-\begin{tabular}{l l l}
-\textbf{decoder}    & -             & (idle)           \\
-\textbf{memory}     & mul rcx, [rdx] & (rdx not ready)  \\
-\textbf{arithmetic} & add rdx, [rsi] & add [rsi] to rdx \\
-\end{tabular}
-
-\vspace{2em} % Vertical space to separate the content blocks
-
-\begin{tabular}{l l l}
-\textbf{decoder}    & -             & (idle)          \\
-\textbf{memory}     & mul rcx, [rdx] & fetch [rdx]     \\
-\textbf{arithmetic} & -             & (idle)          \\
-                    & add rdx, [rsi] &                 \\
-\end{tabular}
-
-\vspace{2em} % Vertical space to separate the content blocks
-
-\begin{tabular}{l l l}
-\textbf{decoder}    & -             & (idle)             \\
-\textbf{memory}     & -             & (idle)             \\
-\textbf{arithmetic} & mul rcx, [rdx] & compute rcx * [rdx] \\
-                    & add rdx, [rsi] &                     \\
-\end{tabular}
-
-
-\begin{verbatim}
-            | decoder | memory | arithmetic
-------------|---------|--------|------------
-            |         |        |
-------------|---------|--------|------------
-            | -       | -      | -
-(idle)      |         | (idle) | 
-------------|---------|--------|------------
-            |         |        |
-            |         | (idle) | 
-------------|---------|--------|------------
-            |         |        |
-mul rcx,    |         |        | (idle)
-[rdx]       |         |        |
-------------|---------|--------|------------
-            |         |
-add rdx,    |         |
-[rsi]       |         |
-\end{verbatim}
+The pipelined execution is disrupted by the data dependency, causing delays or stalls, which are illustrated in the sequence of images.
 
 \subsubsection{Conditional branching}
 
-\begin{verbatim}
-if (a < b) {       |     cmp rdi, rsi
-    yyy            |     jge .L1
-}                  |     yyy
-zzz                |     .L1:
-                    |     zzz
-------------|---------
-            |
-YYY         |
-------------|---------
-jge .L1     |
-------------|---------
-cmp rdi, rsi|
-------------|---------|--------
-            | decoder | memory | arithmetic
-------------|---------|--------|------------
-            | -       | -      | -
-(idle)      |         | (idle) | 
-------------|---------|--------|------------
-            |         |        |
-            |         | (idle) | 
-------------|---------|--------|------------
-            |         |        |
-\end{verbatim}
+Conditional branching poses a unique challenge in CPU instruction pipelines. When an \texttt{if} statement is encountered, the CPU must determine which path to follow – the true branch or the false branch. The provided diagrams illustrate the step-by-step decision-making process in a simplified CPU pipeline.
 
-
-\begin{verbatim}
-if (a < b) {       |     cmp rdi, rsi
-    yyy            |     jge .L1
-}                  |     yyy
-zzz                |     .L1:
-                    |     zzz
-------------|---------
-            |
-YYY         |
-------------|---------
-jge .L1     |
-------------|---------
-            | cmp rdi, rsi
-            | decode "cmp"
-\end{verbatim}
-
-
-% Since this LaTeX transcription is primarily focused on the content, 
-
-\begin{verbatim}
-if (a < b) {
-    YYY
-}
-zzz
-\end{verbatim}
-
-\begin{tabbing}
-\hspace*{2.5cm} \= \hspace*{2.5cm} \= \hspace*{2.5cm} \kill
-\> cmp      \> rdi, rsi     \\
-\> jge      \> .L1          \\
-\> YYY      \>              \\ 
-\> .L1:     \> zzz          \\
-\end{tabbing}
-
-\begin{tabbing}
-\hspace*{2.5cm} \= \hspace*{2.5cm} \= \hspace*{2.5cm} \kill
-decoder    \> jge .L1       \> decode "jge"     \\
-memory     \> cmp rdi, rsi  \> (still idle)     \\
-arithmetic \> -             \> (idle)           \\
-\end{tabbing}
-
-\vspace{5mm} % Providing some vertical space between sections
-
-\begin{verbatim}
-if (a < b) {
-    YYY
-}
-zzz
-\end{verbatim}
-
-\begin{tabbing}
-\hspace*{2.5cm} \= \hspace*{2.5cm} \= \hspace*{2.5cm} \kill
-decoder \> YYY or ZZZ ???  \> choose one or wait? \\
-memory  \> jge .L1        \> (still idle)         \\
-arithmetic \> cmp rdi, rsi \> compare rdi and rsi  \\
-\end{tabbing}
-
-\vspace{5mm} % Providing some vertical space between sections
+\begin{enumerate}
+    \item Initially, the CPU decodes the comparison instruction \texttt{cmp rdi, rsi}. This instruction sets up the condition flags based on the comparison of the values in the \texttt{rdi} and \texttt{rsi} registers.
+    
+    \item Once the \texttt{cmp} instruction is decoded, the CPU moves on to decode the subsequent \texttt{jge} (jump if greater or equal) instruction. However, the jump cannot be performed until the result of the \texttt{cmp} instruction is known, which requires waiting for the arithmetic stage to complete.
+    
+    \item If the condition is true, the CPU follows the branch to the instruction labeled \texttt{.L1} (in this case, representing the code block \texttt{YYY}). Otherwise, it continues to the next instruction in sequence (\texttt{zzz}).
+    
+    \item During this decision phase, the pipeline may stall, waiting for the comparison result to decide the next instruction to fetch and decode. This waiting period is where branch prediction can play a significant role in maintaining pipeline efficiency.
 
 \subsubsection{Branch prediction}
 
@@ -741,47 +213,15 @@ arithmetic \> cmp rdi, rsi \> compare rdi and rsi  \\
 \end{itemize}
 
 
-% Since LaTeX does not have a standard format for lecture slides, we represent the content as a simple document with sections for each step.
+\paragraph{Example}
+\begin{itemize}
+    \item Initially, the CPU encounters a conditional branch instruction (\texttt{jge .L1}) and speculatively decodes the subsequent instructions (YYY) assuming the branch will not be taken.
+    \item Meanwhile, the comparison instruction (\texttt{cmp rdi, rsi}) is executed to evaluate the actual condition. Until this condition is evaluated, the CPU continues to decode and execute the speculatively chosen path.
+    \item If the branch prediction is correct, the CPU continues execution without any interruption, leading to higher performance due to reduced waiting time.
+    \item However, if the prediction is incorrect, as depicted in the final images, the CPU must discard or "flush" the speculatively executed instructions (YYY) and redirect execution to the correct path (ZZZ). This action is known as a pipeline flush, which can cause a temporary decrease in performance due to the time taken to correct the path and refill the pipeline with the correct instructions.
+\end{itemize}
 
-% Start of the document content
-
-YYY 3
-
-YYY 2
-
-decoder YYY decoding YYY
-memory jge .L1 (still idle)
-arithmetic cmp rdi, rsi compare rdi and rsi
-
-% Next part of the document content
-
-YYY 3
-
-decoder YYY 2 decoding YYY 2
-memory YYY (still idle)
-arithmetic jge .L1 decide taken branch
-cmp rdi, rsi
-
-% Last part of the document content
-
-ZZZ $\leftarrow$ going here instead
-
-decoder YYY 3 Misprediction!
-memory YYY 2 Misprediction!
-arithmetic YYY Misprediction!
-jge .L1
-cmp rdi, rsi
-
-% End of the document content
-
-% Note to user: any specific formatting such as colors, arrows, and lines representing stages would require further LaTeX packages and is not represented here.
-
-
-% Since the image contains an illustration that cannot be fully expressed in LaTeX, 
-% a placeholder [TBD] is used to indicate where the illustration would be.
-% The actual LaTeX content begins after the placeholder.
-
-[TBD] % This is where the illustration from the image would be placed in the document.
+The diagrams illustrate a scenario where the CPU's branch predictor incorrectly anticipates the direction of a branch, resulting in several cycles of mispredicted instruction execution. Once the correct path is determined (ZZZ), the pipeline is adjusted, but the mispredicted instructions (YYY) must be invalidated, showcasing the cost of a misprediction.
 
 \subsubsection{In practice}
 \begin{itemize}
@@ -791,8 +231,6 @@ cmp rdi, rsi
     \item Branch mispredict penalty is typically $\geq 10$ cycles
     \item Main memory latency is 50--200 cycles
 \end{itemize}
-
-% The heading and bullet points from the "How do we write good code?" section of the image.
 \subsubsection{How do we write good code?}
 \begin{itemize}
     \item These parameters vary widely from CPU to CPU
@@ -802,135 +240,25 @@ cmp rdi, rsi
     \item $\Rightarrow$ Quantitatively: We \textit{measure} at runtime
 \end{itemize}
 
-% End of the LaTeX content from the image.
-
-
-% Start of LaTeX Code
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{graphicx}
-
-
 \subsubsection{Out-of-order execution}
 
-% First slide content
-add rdx, rdi \\
-add rcx, rbx \\
-mov rax, [rsi] \\
+Out-of-order execution is an advanced CPU technique that improves the utilization of execution units by allowing instructions behind a slow-running instruction to be executed in advance if the operands they require are available.
 
-\begin{tabular}{l|c|c}
-memory & ALU 1 & ALU 2 \\ \hline
-&   &  \\
-&   &  \\
-mov rax, [rsi] &   &  \\
-&   &  \\
-&   &  \\
-&   &  \\
-\end{tabular}
+\begin{itemize}
+    \item In the given example, there are three assembly instructions: two addition instructions (\texttt{add rdx, rdi} and \texttt{add rcx, rbx}) and one memory read instruction (\texttt{mov rax, [rsi]}).
+    
+    \item The CPU starts by decoding the first instruction. If the operands are immediately available, it may dispatch this instruction to an Arithmetic Logic Unit (ALU) for execution.
+    
+    \item If the subsequent instruction does not depend on the first one's result and its operands are ready, the CPU may decode and dispatch this instruction to another ALU, even if the first instruction has not completed yet.
+    
+    \item The memory read instruction may be dispatched to the memory unit independently if the memory address is ready, potentially allowing all three instructions to be in various stages of execution simultaneously.
+    
+    \item This results in improved overall throughput as the CPU does not idle waiting for instructions to complete in program order. However, the CPU must ensure that the results are written back in the correct order to preserve the program's logical flow.
+\end{itemize}
 
-
-% Following the document style, "-" represents a blank space or placeholder for future content.
-add rdx, rdi \\
-add rcx, rbx \\
-mov rax, [rsi] -- \\
-
-\begin{tabular}{l|c|c}
-memory & ALU 1 & ALU 2 \\ \hline
-&   &  \\
-add rdx, rdi &   &  \\
-add rcx, rbx &   &  \\
-mov rax, [rsi] -- &   &  \\
-&   &  \\
-&   &  \\
-&   &  \\
-\end{tabular}
-
-
-% Similar to previous slides, with "-" symbolizing placeholders.
-mov rax, [rsi] -- \\
-
-\begin{tabular}{l|c|c}
-memory & ALU 1 & ALU 2 \\ \hline
-&   &  \\
-&   &  \\
-&   &  \\
-mov rax, [rsi] -- &   &  \\
-add rdx, rdi -- & add rcx, rbx -- &  \\
-&   &  \\
-&   &  \\
-&   &  \\
-\end{tabular}
-
-% End of LaTeX Code
-
-
-
-
-% An empty line to emulate the spacing in the image
-\mbox{}\\
-
-% Representation of the content using 'tabular' environments
-% Each row consists of a horizontal line and operation details
-\begin{tabular}{l c l}
-    % Blank rows for visual spacing
-    \hline
-    \\
-    \hline
-    \\
-    \hline
-    \\
-    % Memory operation row
-    \hline
-    memory & mov rax, [rsi] & \\
-    \hline
-    % ALU operations rows
-    ALU 1 & add rcx, rbx & ALU 2\\
-    \hline
-    & add rdx, rdi & \\
-    \hline
-    % Blank row for visual spacing
-    \\
-\end{tabular}
-
-% The title for the second section appears after two clear lines
-\mbox{}\\
-\mbox{}\\
-\section{Out-of-order execution}
-
-% An empty line to emulate the spacing in the image
-\mbox{}\\
-
-% Representation of the content using 'tabular' environments
-% Each row consists of a horizontal line and operation details
-\begin{tabular}{l c l}
-    % Blank rows for visual spacing
-    \hline
-    \\
-    \hline
-    \\
-    \hline
-    \\
-    % Memory operation row
-    \hline
-    memory &  & \\
-    \hline
-    % ALU operations rows
-    ALU 1 & mov rax, [rsi] & ALU 2\\
-    \hline
-    & add rcx, rbx & \\
-    \hline
-    & add rdx, rdi & \\
-    \hline
-    % Blank row for visual spacing
-    \\
-\end{tabular}
-
-% Title for the bottom footer area
 \subsection{Memory}
 
 Access to memory (``random access memory'' or RAM) is slow
-
-% [TBD] Placeholder for image content that cannot be represented in LaTeX
 
 On desktop computers, RAM is typically on distinct integrated circuit (IC) packages,
 physically centimeters away from the CPU.
@@ -960,46 +288,20 @@ Level 3 (``L3'') cache:
     \item but requires fewer logic gates, so we can have more
 \end{itemize}
 
-
-
-% Since the content of the image is a series of diagrams representing CPU cache levels,
-% we can only approximate the textual content in LaTeX using a tabular or similar environment.
-% We will replace the actual diagrams with a description inside a table.
-% The arrows and specific graphical representations are omitted but can be described.
-
-\usepackage{array} % For better columns
-
-
-% The diagrams represent three different CPU cache hierarchy configurations.
-
-% First configuration: Single level cache
-\begin{tabular}{cc}
-CPU & L1 \\
-    & 32 KB \\
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Zen 4 Cache} & \textbf{L1I cache} & \textbf{L1D cache} & \textbf{L2 cache} & \textbf{L3 cache} \\ \hline
+Cache size           & 32kB               & 32kB                & 1MB               & xxx               \\ \hline
+Associativity        & 8 way              & 8 way               & 8 way             & xxx               \\ \hline
+Cache line size      & 64 b               & 64 b                & 64 b              & 64 b              \\ \hline
 \end{tabular}
-
-\vspace{2em} % Add some vertical space between diagrams
-
-% Second configuration: Two-level cache with latency
-\begin{tabular}{ccc}
-CPU & L1             & L2 \\
-    & 32 KB          & 256 KB \\
-    &                & 4 cycles \\
-\end{tabular}
-
-\vspace{2em} % Add some vertical space between diagrams
-
-% Third configuration: Three-level cache with latency for each level
-\begin{tabular}{cccc}
-CPU & L1             & L2              & L3 \\
-    & 32 KB          & 256 KB          & 3 MB \\
-    &                & 4 cycles        & 40 cycles \\
-\end{tabular}
-
-% Title of the section
+\caption{Cache configuration for Zen 4 architecture.}
+\label{table:zen4cache}
+\end{table}
 \subsubsection{Typical configuration}
 
-% Bullet points with descriptions
 \begin{itemize}
     \item memory transits through in units of one cache line
     \begin{itemize}
@@ -1023,5 +325,3 @@ CPU & L1             & L2              & L3 \\
     \item $\Rightarrow$ Qualitatively: we try to \textbf{understand} how caches work
     \item $\Rightarrow$ Quantitatively: We \textbf{measure} at runtime
 \end{itemize}
-
-% End of LaTeX transcription

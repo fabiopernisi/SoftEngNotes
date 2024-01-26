@@ -1,13 +1,7 @@
-
-
-
-% LaTeX content for Lecture 10 slide transcription
 \newpage
-\section{Lecture 10}
+\section{Software Licenses}
 
-\subsection{Software Licenses}
-
-\subsubsection{Closed-source software}
+\subsection{Closed-source software}
 Most end-user software is closed-source (proprietary).
 
 \begin{itemize}
@@ -18,13 +12,7 @@ Most end-user software is closed-source (proprietary).
         \item only made available to select customers (rarely).
     \end{itemize}
 \end{itemize}
-
-% [TBD] Placeholder for the non-textual elements that may exist on the original slide, which can't be represented in LaTeX.
-
-
-% Packages and document configuration commands are omitted since the instruction specifies to avoid them.
-
-\subsubsection{Example of closed-source software}
+\paragraph{Example of closed-source software}
 
 \begin{itemize}
     \item Operating systems: Microsoft Windows; Android, iOS, MacOS (except kernel)
@@ -36,9 +24,7 @@ Most end-user software is closed-source (proprietary).
     \item Almost all videogames
     \item Almost all mobile apps
 \end{itemize}
-
-% Free software section
-\subsubsection{Free software}
+\subsection{Free software}
 \begin{itemize}
     \item ``free'' as in freedom (not ``free lunch'')
     \item defined by the Free Software Foundation (FSF, est. 1985)
@@ -52,9 +38,7 @@ Most end-user software is closed-source (proprietary).
     \item based on the philosophy that all \textit{software should be free} to protect users
     \item the ``GNU'' project is FSF's software collection
 \end{itemize}
-
-% Open-source software section
-\subsubsection{Open-source software}
+\subsection{Open-source software}
 \begin{itemize}
     \item defined by the Open Source Initiative (OSI, est. 1998)
     \item software attached with a \textit{license} (uses copyright law)
@@ -69,25 +53,20 @@ Most end-user software is closed-source (proprietary).
         \item but modifications can be required to be clearly delineated
     \end{itemize}
 \end{itemize}
-
-% [TBD] token is used to replace non-textual elements that cannot be represented in LaTeX.
-
-
-% Using itemize to create bullet points
 \subsubsection{FSF vs. OSI}
 \begin{itemize}
   \item \textbf{FSF:} for the user's sake, all software \textit{should be free} on ethical grounds -- free software licenses are a means to that end
   \item \textbf{OSI:} help businesses and developers publish and disseminate their open-source software -- pragmatically, we do not want to add hurdles if they impair practical use
 \end{itemize}
 
-\subsubsection{In practice?}
+\paragraph{In practice?}
 The FSF and OSI each maintain a list of ``approved'' license.
 
 Most FSF-approved \textit{free software} licenses are also OSI-approved \textit{open-source} licenses. And vice-versa.
 
 The difference lies in the licenses each organization \textit{promotes}.
 
-\subsubsection{The ``baseline'' FSF license}
+\paragraph{The ``baseline'' FSF license}
 The GNU General Public License (GPL):
 \begin{itemize}
   \item any user who receives the executable must be provided the source code as well upon request
@@ -96,7 +75,7 @@ The GNU General Public License (GPL):
 \end{itemize}
 
 
-\subsubsection{Amended FSF licenses}
+\paragraph{Amended FSF licenses}
 
 \begin{itemize}
   \item The ``more permissive'' \textbf{GNU Lesser General Public License (LGPL)}:
@@ -123,7 +102,7 @@ The GNU General Public License (GPL):
   \item differences among permissive licenses are minor (but important to lawyers)
 \end{itemize}
 
-\subsubsection{Example projects}
+\paragraph{Example projects}
 
 \begin{itemize}
   \item ``free software'' (GPL-type licenses)
@@ -146,26 +125,17 @@ The GNU General Public License (GPL):
   \end{itemize}
 \end{itemize}
 
-% Note: This LaTeX code is intended to be a direct transcription of the text
-% located in the provided image without including document preamble or document
-% beginning/end commands. Additionally, no attempt has been made to transcribe
-% non-textual elements other than by using placeholders or descriptions.
-% The "TBD" tokens found in this comment are included to acknowledge
-% that images or other non-text elements could not be represented in this LaTeX code.
-
-\subsubsection{End-user cost}
+\subsection{End-user cost}
 
 Whether or not customers pay for software is orthogonal to source availability.
 
 \begin{tabular}{>{\bfseries}l l l}
-cost & closed-source & free / open-source \\
+Cost & Closed-source & Free / Open-source \\
 \hline
 0 & TikTok, Whatsapp, Discord & Chrome, Gimp, VLC, Blender \\
-> 0 & Photoshop, Maya, Ableton & Red Hat Enterprise Linux \\
+\texttt{>} 0 & Photoshop, Maya, Ableton & Red Hat Enterprise Linux \\
 \end{tabular}
-
-\vspace{5mm} % Adjust vertical spacing as necessary
-\subsubsection{Commercial, non-commercial}
+\subsection{Commercial, non-commercial}
 
 Whether or not developers are commercial entities is orthogonal to source availability.
 
@@ -175,12 +145,9 @@ developers & closed-source & free / open-source \\
 non-commercial & (most amateur code until 2010s, some government software, legacy scientific software) & GNU system (Free software foundation), Blender, Krita, LibreOffice \\
 commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ldots & Chrome, Ubuntu, Red Hat, NGINX, Docker, GitLab, Redis, LLVM \\
 \end{tabular}
-
-% The asterisk is used in text mode, not math mode, to avoid confusion with multiplication symbol
 *the distinction between commercial and non-commercial is often blurry
 
-\vspace{5mm} % Adjust vertical spacing as necessary
-\subsubsection{How can commercial software be free / open-source?}
+\paragraph{How can commercial software be free / open-source?}
 \begin{itemize}
     \item software has zero price, sell support and services (Ubuntu, Red Hat, NGINX)
     \item software costs money, convince customers not to redistribute it (Red Hat)
@@ -189,23 +156,23 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
     \item open-sourced software is not core business (LLVM)
 \end{itemize}
 
-\subsubsection{Use cases}
+\subsection{Use cases}
 
 \begin{itemize}
   \item Closed-source:
-  \begin{itemize}[label={--}]
+  \begin{itemize}
     \item source code is your ``secret sauce''
     \item customers willing to pay
   \end{itemize}
   
   \item Open-source permissive licenses:
-  \begin{itemize}[label={--}]
+  \begin{itemize}
     \item encourage wider adoption
     \item encourage commercial entities to participate
   \end{itemize}
   
   \item Free software GPL-type licenses:
-  \begin{itemize}[label={--}]
+  \begin{itemize}
     \item protect users (ethical grounds)
     \item force downstream developers to reciprocate
   \end{itemize}
@@ -213,7 +180,7 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
   \item Share source code, but do not give any right to modify (limited usefulness)
 \end{itemize}
 
-\subsubsection{Patents}
+\subsection{Patents}
 
 \noindent In most countries:
 \begin{itemize}
@@ -221,7 +188,7 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
   \item Patents are a pragmatic compromise for promoting innovation.
   
   \noindent The bargain is:
-  \begin{itemize}[label={--}]
+  \begin{itemize}
     \item Share your innovation with the patent office (as opposed to keeping it secret)
     \item Get N-year exclusivity on commercialization
   \end{itemize}
