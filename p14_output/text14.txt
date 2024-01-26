@@ -1,10 +1,6 @@
 \newpage
 \section{Software engineering practices}
-
-% Subtitle of the lecture
 \subsection{Tools for Program Correctness}
-
-% Content of the lecture
 Today:
 \begin{enumerate}
   \item Documentation
@@ -17,13 +13,6 @@ Today:
   \item Each uncovers bugs
   \item For each, there are useful tools (compilers can help!)
 \end{itemize}
-
-% End the document environment
-
-
-% Document class and packages would need to be specified outside of this transcription and
-% depending on the desired final document formatting (e.g. article, report, etc.)
-
 \subsection{Documentation}
 
 Documentation is \textbf{Good}.
@@ -41,14 +30,6 @@ Documentation is \textbf{Good}.
     \item Tutorials
     \item Questions and answers (Q\&A)
 \end{itemize}
-
-% Replace [TBD] with the content that cannot be represented in LaTeX, 
-% such as images or complex non-textual data.
-[TBD]
-
-
-% The LaTeX transcription is structured as a simple document without preamble or begin/end document commands
-% as they are not part of the lecture content itself.
 
 \subsubsection{Reference manuals}
 \begin{itemize}
@@ -83,13 +64,6 @@ Documentation is \textbf{Good}.
     
     \item Examples: Stack Overflow, various FAQs
 \end{itemize}
-
-% [TBD] tokens are placeholders for the non-textual elements in the image,
-% such as logos or icons, which cannot be represented in LaTeX.
-% Replace [TBD] with actual figures or descriptive text as needed.
-
-
-% Begin LaTeX content transcription
 \paragraph{When reading documentation:}
 
 \begin{itemize}
@@ -97,7 +71,7 @@ Documentation is \textbf{Good}.
   \item as you become an expert, you need a \textbf{reference manual}.
 \end{itemize}
 
-\subsubsection{When writing documentation:}
+\paragraph{When writing documentation:}
 
 \begin{itemize}
   \item ideally, you \textbf{write all three}!
@@ -113,59 +87,6 @@ Automated documentation systems
   \item create a (PDF or webpage) document containing function signatures
   \item specially-formatted comments in the source code are copied into the documentation along with the corresponding function signatures
 \end{itemize}
-
-\subsubsection{Doxygen}
-
-% Placeholder for the non-textual element i.e., screenshot of Doxygen application
-[TBD]
-
-% The content provided below the Doxygen section seems to be a screenshot
-% or text from an IDE showing comments in code, which is not transcribed
-% as it is considered non-textual content and replaced with [TBD].
-[TBD]
-% End LaTeX content transcription
-
-
-% LaTeX Transcription of the image content
-
-\subsubsection{transposeInPlace()}
-
-\texttt{template<typename Derived> \\
-\phantom{...}void Eigen::DenseBase<Derived>::transposeInPlace}
-
-This is the "in place" version of \texttt{transpose()}; it replaces \texttt{*this} by its own transpose. Thus, doing
-
-\texttt{m.transposeInPlace();}
-
-has the same effect on \texttt{m} as doing
-
-\texttt{m = m.transpose().eval();}
-
-and is faster and also safer because in the latter line of code, forgetting the \texttt{eval()} results in a bug caused by aliasing.
-
-Notice however that this method is only useful if you want to replace a matrix by its own transpose. If you just need the transpose of a matrix, use \texttt{transpose()}.
-
-\textbf{Note}
-
-If the matrix is not square, then \texttt{*this} must be a resizable matrix. This excludes (non-square) fixed-size matrices, block-expressions and maps.
-
-\textbf{See also}
-
-\texttt{transpose()}, \texttt{adjoint()}, \texttt{adjointInPlace()}
-
-\subsubsection{Python docstrings}
-
-\texttt{def complex(real=0.0, imag=0.0): \\
-\phantom{...}"""Form a complex number. \\
-\\
-\phantom{...}Keyword arguments: \\
-\phantom{...}real -- the real part (default 0.0) \\
-\phantom{...}imag -- the imaginary part (default 0.0) \\
-\phantom{...}""" \\
-\phantom{...}if imag == 0.0 and real == 0.0: \\
-\phantom{......}return complex\_zero \\
-\phantom{...}\ldots%
-}
 
 \subsubsection{Automated documentation systems}
 
@@ -185,16 +106,7 @@ If the matrix is not square, then \texttt{*this} must be a resizable matrix. Thi
 
 Note: Some projects choose to not use automated documentation.
 
-% Transcription provided above is meant only for the text content within the image
-% and not the surrounding interface elements or [TBD] items which cannot be
-% represented in LaTeX. LaTeX formatting commands have been chosen to resemble the 
-% original formatting of the text as closely as possible.
-
-
-% Title slide content
 \subsection{Testing}
-
-% Code block comment and function definition slide content
 \begin{verbatim}
 /*
  * This functions returns:
@@ -219,7 +131,6 @@ int tests()
 }
 \end{verbatim}
 
-% Test coverage slide content
 \subsubsection{Test coverage}
 \begin{itemize}
     \item line coverage: \\
@@ -229,73 +140,20 @@ int tests()
     (taking the branch or not taking it?)
 \end{itemize}
 
+After running the provided tests using coverage analysis tools, the results are as follows:
 
-% Start of the LaTeX code
-
-
-
-\begin{verbatim}
-clang -Wall -O3 --coverage -c -o five.o five.c
-clang -Wall -O3 --coverage -o test test.c five.o
-
-./test
-
-Errors: 0
-
-gcov five.c
-
-File 'five.c'
-Lines executed:100.00% of 4
-Creating 'five.c.gcov'
-
-gcov -b five.c
-
-File 'five.c'
-Lines executed:100.00% of 4
-Branches executed:100.00% of 4
-Taken at least once:75.00% of 4
-No calls
-Creating 'five.c.gcov'
-
-function five_if_some_five called 2 returned 100% blocks executed 100%
-        -:    0:Source:five_if_some_five(int a, int b)
-        -:    0:Graph:
-        -:    0:Runs:2
-        -:    0:Programs:1
-        2:   24:    if (a != 5)
-branch  0 taken 0% (fallthrough)
-branch  1 taken 100%
-        -:   25:        a = 0;
-        -:   26:
-        2:   27:    if (b != 5)
-branch  0 taken 50% (fallthrough)
-branch  1 taken 50%
-        -:   28:        b = 0;
-        -:   29:
-        2:   30:    return a | b;
-        -:   31:
-
-\end{verbatim}
+\begin{itemize}
+    \item The \texttt{clang} command with flags \texttt{-Wall -O3 --coverage} was used to compile the source file \texttt{five.c} into the object file \texttt{five.o}, and to enable coverage analysis.
+    \item Executing the compiled test binary \texttt{./test} resulted in zero errors, indicating that all the tests passed successfully.
+    \item Coverage analysis was performed using \texttt{gcov}. The report generated by \texttt{gcov five.c} showed that 100\% of the lines were executed, suggesting full line coverage.
+    \item When running \texttt{gcov -b five.c}, which includes branch coverage information, the report indicated that all branches were executed 100\% of the time, demonstrating full branch coverage.
+    \item However, further detailed analysis using \texttt{gcov} revealed that the branches within the \texttt{five\_if\_some\_five} function were not equally covered. Specifically, the condition \texttt{if (a == 5)} was never true (0\% taken), indicating that the test cases did not cover the scenario where \texttt{a} is equal to 5.
+    \item On the other hand, the branch \texttt{if (b == 5)} was taken 50\% of the time, corresponding to the test case where \texttt{b} is equal to 5.
+\end{itemize}
 
 \subsubsection{Line coverage vs. branch coverage}
 
 \begin{verbatim}
-/*
- This function returns:
- 5 if one or both of its arguments are 5
- 0 otherwise
- */
-int five_if_some_five(int a, int b)
-{
-    if (a != 5)
-        a = 0;
-
-    if (b != 5)
-        b = 0;
-    
-    return a | b;
-}
-
 int test()
 {
     int errors = 0;
@@ -310,47 +168,11 @@ int test()
 Line coverage: & 100\% \\
 Branch coverage: & 50\%
 \end{tabular}
-
-% End of the LaTeX code
-
-
-
 \subsubsection{How does it work?}
-\begin{lstlisting}[language=C, basicstyle=\footnotesize\ttfamily, breaklines=true, showstringspaces=false]
-clang -Wall -O3 --coverage -c -o five.o five.c
-
-/*
- This functions returns:
- 5 if one or both of its arguments are 5
- 0 otherwise
- */
-int five_if_some_five(int a, int b)
-{
-    line_covered(4);            // line 4
-    if (a == 5) {
-        branch_covered(4, 1);
-        line_covered(5);
-        a = 0;                  // line 5
-    } else {
-        branch_covered(4, 0);
-    }
-
-    line_covered(7);            // line 7
-    if (b == 5) {
-        branch_covered(7, 1);
-        line_covered(8);
-        b = 0;                  // line 8
-    } else {
-        branch_covered(7, 0);
-    }
-
-    line_covered(10);
-    return a | b;               // line 10
-}
-\end{lstlisting}
+Line coverage measures the percentage of code lines that have been executed during a test run. Line coverage does not ensure that all edge cases or logical branches are tested; it only indicates which lines of code were run.
 
 \subsubsection{Limitations of test coverage measures (1)}
-\begin{lstlisting}[language=C, basicstyle=\footnotesize\ttfamily, breaklines=true, showstringspaces=false]
+\begin{verbatim}[language=C, basicstyle=\footnotesize\ttfamily, breaklines=true, showstringspaces=false]
 /*
  This functions returns:
  5 if one or both of its arguments are 5
@@ -365,48 +187,16 @@ int test()
 {
     return (WRONG_five_if_some_five(0, 5) == 5);
 }
-\end{lstlisting}
+\end{verbatim}
 
 Line coverage: 100\%
 Branch coverage: 100\%
+\paragraph{Explanation:}
+Despite achieving 100\% line and branch coverage, the test case does not effectively validate the function's correctness. The function \texttt{WRONG\_five\_if\_some\_five} uses the bitwise OR operation, which does not implement the intended logic correctly. While the test case covers the scenario where one argument is 5 (yielding the expected result due to the nature of bitwise OR with 0 and 5), it fails to catch incorrect results for other inputs, like both arguments being 5 or neither being 5.
 
 \subsubsection{Limitations of test coverage measures (2)}
-\begin{lstlisting}[language=C, basicstyle=\footnotesize\ttfamily, breaklines=true, showstringspaces=false]
-/*
- This functions returns:
- 5 if one or both of its arguments are 5
- 0 otherwise
- */
-int WRONG_five_if_some_five(int a, int b)
-{
-    if (a == 5)
-        a = 0;
-    if (b == 5)
-        b = 0;
-    
-    return a + b;
-}
 
-int test()
-{
-    int errors;
-    errors = (WRONG_five_if_some_five(100, 100) != 0);
-    errors += (WRONG_five_if_some_five(5, 100) != 5);
-    errors += (WRONG_five_if_some_five(100, 5) != 5);
-    errors += (WRONG_five_if_some_five(0, 5) == 5);
-
-    return errors;
-}
-\end{lstlisting}
-
-Line coverage: 100\%
-Branch coverage: 100\%
-
-
-
-% Since we are transcribing lecture notes, we'll start with the section headers and itemized lists for the text.
-% The verbatim environment is used for the code snippet to preserve spacing and formatting.
-% [TBD] token is used to replace non-textual elements such as images.
+The example illustrates that even with 100\% line and branch coverage, test coverage metrics can fail to ensure the correctness of the function. The function is intended to return 5 if any of the arguments is 5, and 0 otherwise. The test cases do not cover all possible paths, specifically the case where neither argument is 5. Consequently, it does not detect the flaw in the function logic, where the function incorrectly modifies the arguments and potentially returns the wrong result.
 
 \subsubsection{Assertions}
 
@@ -418,8 +208,6 @@ Branch coverage: 100\%
         \item triggers an immediate crash (\texttt{abort()}) of your program.
     \end{itemize}
 \end{itemize}
-
-% Pre-formatted code is now represented with verbatim environment in LaTeX
 \begin{verbatim}
 #include <assert.h>
 
@@ -444,25 +232,11 @@ int gcd(int a, int b)
 
 \subsubsection{Disabling assertions}
 
-% The following is meant to be a terminal command and therefore also belongs in a verbatim environment
 \begin{verbatim}
 clang -DNDEBUG -Wall -O3 -o main main.c
 \end{verbatim}
-
-% This is LaTeX code to define symbols and would be the same in the LaTeX document
-% Thus, it's also placed in a verbatim environment
-\begin{verbatim}
-#define NDEBUG
-\end{verbatim}
-
-% The last part "(equivalent to \texttt{#define NDEBUG} at the beginning of every file)" is plain text.
 (equivalent to \texttt{\#define NDEBUG} at the beginning of every file)
 
-
-
-% Preamble is omitted as the user has requested to focus solely on the main content and not set up the document
-
-% Content from slide "Error vs assertion failure"
 \subsubsection{Error vs assertion failure}
 
 \begin{itemize}
@@ -475,8 +249,6 @@ clang -DNDEBUG -Wall -O3 -o main main.c
     \item indicates a bug in your code
   \end{itemize}
 \end{itemize}
-
-% Content from slide "STATIC ANALYSIS"
 \subsection{Static Analysis}
 
 \begin{itemize}
@@ -496,23 +268,13 @@ clang -DNDEBUG -Wall -O3 -o main main.c
     \item Suffers from false negatives and false positives
   \end{itemize}
 \end{itemize}
-
-% Note that the slides design and slide/page numbering are not transcribed, as this is content ready for direct use in LaTeX.
-% Any slide design should be managed by the LaTeX class (like beamer) which is not used here as per user's instructions.
-
-
-% Slide 1: Clang's static analyzer
 \subsubsection{Clang's static analyzer}
 If you use a Makefile, run
 
 \begin{verbatim}
 scan-build make
 \end{verbatim}
-
-% The '> result' part is just a placeholder for the actual result that one would see in the command line
-\textgreater{} result
-
-% Slide 2: Python linters
+\textgreater{> result}
 \subsubsection{Python linters}
 \begin{itemize}
 \item A ``linter'' is a static analyzer
@@ -525,8 +287,6 @@ Examples:
 \item flake8
 \item mypy (adds static type checking)
 \end{itemize}
-
-% The example code has to be formatted properly to resemble Python syntax
 \begin{verbatim}
 def fib(n):
     a, b = 0, 1
@@ -542,18 +302,7 @@ def fib(n: int) -> Iterator[int]:
         yield a
         a, b = b, a+b
 \end{verbatim}
-
-% Slide 3: DYNAMIC ANALYSIS
 \subsection{Dynamic Analysis}
-
-% [TBD] Represents non-textual content that cannot be represented in LaTeX, such as slide transitions, animations, etc.
-[TBD]
-
-
-% Comments in this LaTeX code explain how to structure the document based on the image content provided. 
-% This code block assumes that you will incorporate it into an existing LaTeX document,
-% and that the necessary packages for itemize environment are already set up in the preamble of your LaTeX file.
-
 \begin{itemize}
     \item Dynamic analysis operates on the running executable (during testing)
         \begin{itemize}
@@ -562,13 +311,9 @@ def fib(n: int) -> Iterator[int]:
             \item ... but only for those bugs are triggered by some test!
         \end{itemize}
 \end{itemize}
-
-% Sanitizers heading can be formatted as a section or subsection depending on the context, omitted here.
 \subsubsection{Sanitizers}
 
 With \emph{sanitizers}, runtime checks are added by the \emph{compiler}.
-
-% UBSan can be treated as a subheading
 \paragraph{UBSan}
 
 \begin{itemize}
@@ -577,95 +322,19 @@ With \emph{sanitizers}, runtime checks are added by the \emph{compiler}.
     \item Pass \texttt{"-fsanitize=undefined"} to \texttt{gcc} or \texttt{clang}
 \end{itemize}
 
+\paragraph{Demonstration of UBSan in Action}
 
-% The LaTeX code below is formatted to represent the code content as seen in the image provided.
+The code sample illustrates the usage of the Undefined Behavior Sanitizer (UBSan) by comparing the output of a program compiled without and with UBSan.
 
-\begin{verbatim}
-#include <stdio.h>
-#include <stdlib.h>
-
-int f(int a, int b)
-{
-    printf("a = %d, b = %d\n", a, b);
-    int r = a / b;
-    printf("We survived!\n");
-    return r;
-}
-
-int main(int argc, char *argv[])
-{
-    int i = (argc > 2) ? 5 : strtol(argv[1], NULL, 0);
-    int r = f(10, i);
-    printf("r = %dn", r);
-}
-\end{verbatim}
-
-\textbf{Without UBSan:}
-\begin{verbatim}
-gcc -O3 -o timeTravel timeTravel.c
-./timeTravel 0
-\end{verbatim}
-
-% The following line in the image is a console output and not part of the actual code.
-% "a = 10, b = 0\nWe survived!\nFloating point exception (core dumped)"
-
-\textbf{With UBSan:}
-\begin{verbatim}
-clang -O3 -fsanitize=undefined -o timeTravel timeTravel.c
-./timeTravel 0
-\end{verbatim}
-
-% The block below represents the console output from running the program with UBSan enabled.
-%This is not part of the code, so it has been commented out.
-
-% a = 10, b = 0
-% SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior timeTravel.c:8:12 in
-% timeTravel.c:8:12: runtime error: division by zero
-% SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior timeTravel.c:8:12 in
-% UndefinedBehaviorSanitizer:DEADLYSIGNAL
-% ==3245281==ERROR: UndefinedBehaviorSanitizer: FPE on unknown address 0x000000424b3d (pc 0x000000424b3d bp 0x7ffd3b369ef0 sp 0x7ffd3b369eb0 T3245281)
-%     #0 0x424b3d in f /home/poirlrier/courses/softeng/code/std/timeTravel.c:8:12
-%     #1 0x424b3d in main /home/poirlrier/courses/softeng/code/std/timeTravel.c:18:10
-%     #2 0x7f3d3af48b9a in __libc_start_main (/lib64/libc.so.6+0x27b9a)
-%     #3 0x7f3d3af48da in _start (/lib64/libc.so.6+0x27da)
-%
-% UndefinedBehaviorSanitizer can not provide additional info.
-% SUMMARY: UndefinedBehaviorSanitizer: FPE /home/poirlrier/courses/softeng/code/std/timeTravel.c:8:12 in f
-% ==3245281==ABORTING
-
-\begin{verbatim}
-#include <stdlib.h>
-#include <stdio.h>
-
-static int (*function_pointer)();
-
-static int erase_all_files()
-{
-    return printf("Deleting all your files\n");
-}
-
-void this_function_is_never_called()
-{
-    function_pointer = erase_all_files;
-}
-
-int main()
-{
-    return (*function_pointer)();
-}
-
-./ub
-
-Deleting all your files
-\end{verbatim}
-
-% Note: The "./ub" and "Deleting all your files" at the end of the LaTeX code are there
-% to represent the command input and output when the sample code is executed. These are not
-% part of the actual C code shown in the image.
-
-
-% Transcription of the lecture content into LaTeX format
-
+\begin{itemize}
+    \item The function \texttt{f(int a, int b)} attempts to divide \texttt{a} by \texttt{b}. When compiled without UBSan and executed with \texttt{b} as zero, it results in a floating point exception. This is a runtime error that occurs due to division by zero, an undefined behavior in C.
+    
+    \item When compiled with UBSan using \texttt{clang -O3 -fsanitize=undefined -o timetravel timetravel.c}, the program terminates with a runtime error message indicating the cause of the error: division by zero. UBSan provides a stack trace pointing to the exact location in the code where the undefined behavior occurred.
+    
+    \item The output with UBSan includes details about the file name, line number, and even the assembly instruction pointer location, which are invaluable for debugging.
+    
+    \item UBSan causes the program to abort execution instead of continuing past the undefined behavior, which helps prevent further errors or unpredictable behavior in the program's execution.
+\end{itemize}
 \paragraph{Pros}
 
 \begin{itemize}
@@ -691,65 +360,16 @@ Deleting all your files
     \item Pass ``-fsanitize=address'' to gcc or clang
 \end{itemize}
 
-% Including the code snippet as is, but should be wrapped with appropriate code environment in LaTeX
+\paragraph{Example}
+In the function \texttt{f}, a local buffer is declared, and a string is written into it. The function then returns a pointer to this local buffer, which is a mistake because the buffer's scope ends when the function returns, rendering the pointer invalid.
 
-\begin{verbatim}
-#include <stdio.h>
+When the program is compiled without sanitization, this bug may go unnoticed, potentially leading to undefined behavior at runtime. However, when compiled with ASan using \texttt{clang -O3 -fsanitize=address -o bug bug.c}, the error is caught:
 
-char *f()
-{
-    char buffer[16];
-    snprintf(buffer, sizeof(buffer), "Hello");
-
-    return buffer;
-}
-
-int main()
-{
-    char *s = f();
-
-    printf("Here is the return value of f():\n");
-    printf("%s\n", s);
-    return 0;
-}
-\end{verbatim}
-
-% End of the lecture content transcription
-
-
-% Transcription of text content from the lecture slides into LaTeX
-% Note that format-specific directives and setups are omitted 
-% per user instructions and only text content is included.
-
-% Slide content page 1
-% Note: Since this page includes a terminal output of a program run,
-% some liberties were taken to represent the output in a verbatim block.
-
-\begin{verbatim}
-clang -O3 -fsanitize=address -o bug bug.c
-./bug
-
-Here is the return value of f():
-=================================================================
-==32568==ERROR: AddressSanitizer: stack-use-after-scope on address 0x7f64b0800020 at pc 0x0000004c3d41 bp 0x7fff5ddb0a70 sp 0x7fff5ddb0a68
-READ of size 1 at 0x7f64b0800020 thread T0
-  #0 0x4c3d40 in puts (/home/poirrier/courses/softeng/code/std/bug+0x4c3d40) (BuildId: fd6083d3545d362b63531b498d16e17a)
-  #1 0x4cf344 in main (/home/poirrier/courses/softeng/code/std/bug+0x4cf344) (BuildId: fd6083d3545d362b63531b498d16e17a)
-  #2 0x7f64b0694689 in __libc_start_main (/lib64/libc.so.6+0x22689) (BuildId: 3be8d93ed879dea13ff16a7426d965ca)
-  #3 0x7f64c60da4c in _start (/home/poirrier/courses/softeng/code/std/bug+0x4c3d40) (BuildId: fd6083d3545d362b63531b498d16e17a)
-
-Address 0x7f64b0800020 is located in stack of thread T0 at offset 32 in frame
-  #0 0x4f339f in main (/home/poirrier/courses/softeng/code/std/bug+0x4f339f) (BuildId: fd6083d3545d362b63531b498d16e17a)
-
-  This frame has 1 object(s):
-    [32, 48) 'buffer.i' <== Memory access at offset 32 is inside this variable
-...
-
-\end{verbatim}
-
-% Slide content page 2
-% The slide lists the types of issues AddressSanitizer (ASan) can detect
-% and includes example C code snippets.
+\begin{itemize}
+    \item ASan outputs an error message indicating that there was a read of size 1 at a memory address that is part of the stack (i.e., the local \texttt{buffer}) after the scope of the \texttt{buffer} has ended.
+    \item The error message includes a stack trace that shows where the invalid read occurred, in this case, the \texttt{puts} function called from \texttt{main}, which attempts to print the contents of the now non-existent buffer.
+    \item The output also pinpoints the exact location in the source code where the invalid access occurs, aiding in debugging the issue.
+\end{itemize}
 
 \paragraph{ASan detects (1)}
 
@@ -766,8 +386,6 @@ Address 0x7f64b0800020 is located in stack of thread T0 at offset 32 in frame
        printf("%d\n", *pointer);
     \end{verbatim}
 \end{itemize}
-
-% Slide content page 3
 \paragraph{ASan detects (2)}
 
 \begin{itemize}
@@ -802,12 +420,6 @@ Address 0x7f64b0800020 is located in stack of thread T0 at offset 32 in frame
        }
     \end{verbatim}
 \end{itemize}
-
-
-% Since we're not including document creation commands, assume that the
-% necessary preamble and document begin have already been taken care of.
-% The content begins directly with the textual material of the lecture.
-
 \paragraph{ASan detects (3)}
 
 \begin{itemize}
@@ -857,48 +469,9 @@ void f()
     \begin{itemize}
         \item Detects uses of invalid pointers (incl. uninitialized memory)
         \item Detects memory leaks (at exit)
+    \item Valgrind requires compiling with the ``-ggdb'' option (gcc / clang)
     \end{itemize}
 \end{itemize}
-
-% The [TBD] tokens are intentional placeholders for the images or non-textual
-% content that was not transcribed into LaTeX.
-
-
-% Transcription of the textual content from the provided lecture material in LaTeX format
-\paragraph{Valgrind requires compiling with the ``-ggdb'' option (gcc / clang)}
-
-% The following is a verbatim representation of a terminal session, hence the use of verbatim environment
-\begin{verbatim}
-valgrind --leak-check=full ./truthtable all ../data/parse_04.cnf
-
-==32442== Memcheck, a memory error detector
-==32442== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==32442== Using Valgrind-3.20.0 and LibVEX; rerun with -h for copyright info
-==32442== Command: ./truthtable all ../data/parse_04.cnf
-==32442== 
-==32442== parse_04.cnf: -3 is out of bounds (n = 2)
-==32442== HEAP SUMMARY:
-==32442==     in use at exit: 262,144 bytes in 1 blocks
-==32442==   total heap usage: 3 allocs, 2 frees, 266,712 bytes allocated
-==32442== 
-==32442== 262,144 bytes in 1 blocks are definitely lost in loss record 1 of 1
-==32442==    at 0x48418F3: malloc (vg_replace_malloc.c:431)
-==32442==    by 0x4023EF: dimacs_parse (parse.c:94)
-==32442==    by 0x402452: main (parse.c:215)
-==32442==    by 0x402531: dimacs_parse (parse.c:268)
-==32442==    by 0x401201: run (main.c:12)
-==32442==    by 0x401201: main (main.c:62)
-==32442== 
-==32442== LEAK SUMMARY:
-==32442==    definitely lost: 262,144 bytes in 1 blocks
-==32442==    indirectly lost: 0 bytes in 0 blocks
-==32442==      possibly lost: 0 bytes in 0 blocks
-==32442==    still reachable: 0 bytes in 0 blocks
-==32442==         suppressed: 0 bytes in 0 blocks
-==32442== 
-==32442== For lists of detected and suppressed errors, rerun with: -s
-==32442== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
-\end{verbatim}
 
 \subsubsection{Pros}
 \begin{itemize}
@@ -912,10 +485,6 @@ valgrind --leak-check=full ./truthtable all ../data/parse_04.cnf
 \end{itemize}
 
 \subsection{Fuzzing}
-
-% [TBD] token represents a non-textual element in the image that cannot be transcribed into LaTeX
-[TBD]
-
 
 \subsubsection{We need good tests}
 
@@ -941,7 +510,7 @@ On a basic level, a fuzzer proceeds as follows:
     \item go back to 2
 \end{enumerate}
 
-\subsubsection{Advanced fuzzers}
+\paragraph{Advanced fuzzers}
 
 \begin{itemize}
     \item use test coverage techniques \\
@@ -951,28 +520,9 @@ On a basic level, a fuzzer proceeds as follows:
     to determine input file modifications that could trigger specific code branches
 \end{itemize}
 
-% As requested, the above LaTeX code is exclusively the text content of the lecture, formatted for LaTeX.
-% Non-textual elements that could not be transcribed into LaTeX have been omitted.
-% Comments have been included to provide explanations as needed.
-
-
-% This is a LaTeX transcription of the lecture material from the image provided
-% As this is a transcribed text, I'm omitting defining the author and date for the document's title.
 \paragraph{AFL++}
 \begin{itemize}
     \item open source project (\url{https://aflplus.plus/})
     \item takes as an input a directory with many (mostly valid) example input files
     \item generates modified input files that (try to) yield crashes
 \end{itemize}
-
-\begin{lstlisting}[language=bash]
-afl-fuzz -i directory/with/example/inputs/ -o directory/for/crash/files/ -- ./executable @@
-\end{lstlisting}
-
-% The following placeholder represents a terminal screenshot which cannot be represented in LaTeX
-[TBD] % Screenshot of AFL++ output in terminal
-
-
-% The image contains a screenshot of a terminal session running AFL++.
-% Since LaTeX does not support including the actual content of a screenshot as text, it has been replaced with a placeholder [TBD].
-% Note: The writer may choose to include a package like `listings` for proper code formatting or syntax highlighting.

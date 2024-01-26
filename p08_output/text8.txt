@@ -1,19 +1,8 @@
-
-
-
-% Use the 'article' or 'report' class for a simple document format
-
-% No need for special packages as the text is straightforward
 \newpage
-\section{Lecture 8}
-
-\subsection{Regular Expressions}
-
-\subsubsection{Definition}
+\section{Regular Expressions}
+\subsection{Definition}
 Regular expressions are a mini-language for text pattern matching.
-
-% Slide 1: Example
-\subsubsection{Example}
+\paragraph{Example}
 
 \textbf{Q}: Find all occurrences of the word ``memory'' in the files in this directory.
 
@@ -41,10 +30,6 @@ Use single-quotes (\texttt{' '}) to avoid shell interference
 
 \paragraph{Files:}
 if no file provided, grep reads its (piped) input
-
-
-% LaTeX transcription of the lecture material
-
 \subsubsection{Piping to grep}
 
 Q: Find all files in the current directory whose name contains the letter L
@@ -222,8 +207,6 @@ sed -E 's/REGEX/REPLACEMENT/'
 \end{itemize}
 \subsection{Regular Expressions in Programming Languages}
 \subsubsection{Using regular expressions in C}
-
-% Starts a code block. Adjust based on the LaTeX packages you are using, for example, listings.
 \begin{verbatim}
 #include <stdio.h>
 #include <regex.h>
@@ -255,8 +238,6 @@ int main()
 See: \texttt{man regex}
 
 \subsubsection{Using regular expressions in Python}
-
-% Starts a code block. Adjust based on the LaTeX packages you are using, for example, listings.
 \begin{verbatim}
 >>> import re
 >>> m = re.search(r'0[xX][0-9a-fA-F]+', 'Does this contain a hex number, like 0xff ?')
@@ -265,4 +246,3 @@ See: \texttt{man regex}
 \end{verbatim}
 
 \textgreater{} \href{https://docs.python.org/3/library/re.html}{documentation}
-% The URL above should be replaced with the actual link to the Python documentation on regular expressions.
