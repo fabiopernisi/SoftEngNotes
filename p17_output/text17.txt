@@ -1,57 +1,68 @@
 \newpage
-\section{Lecture 17}
+\section{Benchmarking and static instrumentation}
 
 \subsection{More caches and pipelines}
+Virtualization of memory involves translating virtual addresses to hardware addresses, which is essential for every memory access operation. This translation relies on a page table, which is itself stored in memory. This process might suggest the need for two memory accesses per memory fetch instruction, which is inefficient.
 
-\begin{itemize}
-    \item recall that memory is \textit{virtualized}
-    \item a virtual address $\rightarrow$ hardware address translation is necessary for \textit{every memory access}
-    \item the translation uses a \textit{page table}
-    \item the page table is stored in \textit{memory}
-    \item hence two effective memory accesses per memory fetch instruction?
-\end{itemize}
+\textbf{Solution:} To optimize this, a portion of the page table is cached in the CPU in the Translation Lookaside Buffer (TLB), reducing the frequency of memory accesses.
 
-\textbf{Solution:} part of the \textit{page table} is \textbf{cached} in the CPU
+\subsubsection{Cache latency}
+Caches are implemented at various levels to mitigate access latency. Below are some typical latencies for different technologies and operations:
 
-the ``Translation Lookaside Buffer'' (TLB)
 
-Caches are used at various levels to hide access latency
-
-\begin{tabular}{lcc}
-\textbf{typical latency} & & \\
-instruction & $\sim0.25$ ns & $0.25$ ns \\
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{Operation} & \textbf{Typical Latency} & \\
+\midrule
+Instruction & $\sim0.25$ ns & $0.25$ ns \\
 RAM & $\sim100$ ns & $100$ ns \\
-solid state drive (SSD) & $\sim0.2$ ms & $200,000$ ns \\
-hard disk drive (HDD) & $\sim2$ ms & $2,000,000$ ns \\
-wired ethernet (round-trip) & $\sim1$ ms & $1,000,000$ ns \\
-wifi latency (round-trip) & $\sim10$ ms & $10,000,000$ ns \\
-same-city internet (round-trip) & $\sim5$ ms & $5,000,000$ ns \\
-same-continent internet (round-trip) & $\sim25$ ms & $25,000,000$ ns \\
-transatlantic internet (round-trip) & $\sim100$ ms & $100,000,000$ ns \\
+Solid State Drive (SSD) & $\sim0.2$ ms & $200,000$ ns \\
+Hard Disk Drive (HDD) & $\sim2$ ms & $2,000,000$ ns \\
+Wired Ethernet (round-trip) & $\sim1$ ms & $1,000,000$ ns \\
+WiFi Latency (round-trip) & $\sim10$ ms & $10,000,000$ ns \\
+Same-city Internet (round-trip) & $\sim5$ ms & $5,000,000$ ns \\
+Same-continent Internet (round-trip) & $\sim25$ ms & $25,000,000$ ns \\
+Transatlantic Internet (round-trip) & $\sim100$ ms & $100,000,000$ ns \\
+\bottomrule
 \end{tabular}
+\end{table}
 
 \subsubsection{Examples of caches}
+Caches are ubiquitous in computing and networking:
+
 \begin{itemize}
-\item SSDs have internal RAM caches (typically 0-4 GB)
-\item the operating system caches files in memory
-\item large content provides (Google, Amazon, Netflix, Cloudflare) have caches all over the world
+    \item SSDs have internal RAM caches, typically ranging from 0-4 GB.
+    \item Operating systems cache files in memory to speed up access.
+    \item Large content providers, such as Google, Amazon, Netflix, and Cloudflare, implement extensive caching mechanisms globally.
 \end{itemize}
 
-% The following 'ping' command outputs are provided as verbatim text since LaTeX does not 
-% typically support code/output verbatim in formatted text without additional packages.
-\begin{verbatim}
-PING canada.ca (205.193.117.159) 56(84) bytes of data.
-64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=1 ttl=228 time=200 ms
-64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=2 ttl=228 time=172 ms
-64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=3 ttl=228 time=148 ms
-64 bytes from 205.193.117.159 (205.193.117.159): icmp_seq=4 ttl=228 time=181 ms
+\textbf{Real-world Caching Example}\\
+Here is an example showing the output of pinging servers located in different parts of the world:
 
-PING google.com.au (142.251.209.3) 56(84) bytes of data.
-64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=1 ttl=115 time=12.2 ms
-64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=2 ttl=115 time=14.6 ms
-64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=3 ttl=115 time=14.9 ms
-64 bytes from mia05s40-in-f3.1e100.net (142.251.209.3): icmp_seq=4 ttl=115 time=11.8 ms
+\begin{verbatim}
+ping canada.ca
+PING canada.ca (205.193.117.159): 56 data bytes
+64 bytes from 205.193.117.159: icmp_seq=0 ttl=228 time=20 ms
+... (similar lines omitted for brevity) ...
+64 bytes from 205.193.117.159: icmp_seq=4 ttl=228 time=18 ms
+
+ping google.com.au
+PING google.com.au (142.251.209.3): 56 data bytes
+64 bytes from mi104s04-in-f3.1e100.net (142.251.209.3): icmp_seq=0 ttl=115 time=12.2 ms
+... (similar lines omitted for brevity) ...
+64 bytes from mi104s04-in-f3.1e100.net (142.251.209.3): icmp_seq=4 ttl=115 time=11.8 ms
 \end{verbatim}
+
+\textbf{Key points}
+\begin{itemize}
+    \item Understand the role of the Translation Lookaside Buffer (TLB) in reducing memory access latency.
+    \item Be able to compare the latencies of different memory and storage technologies, from CPU instructions to transatlantic internet round-trips.
+    \item Recognize the impact of caching at various system levels, including hardware (like SSDs) and software (like operating system file caches).
+    \item Consider the real-world implications of caching, such as the performance differences observed when accessing local vs. remote resources.
+\end{itemize}
+
 
 \subsubsection{Examples of pipelines}
 \begin{itemize}
@@ -81,107 +92,70 @@ PING google.com.au (142.251.209.3) 56(84) bytes of data.
 % The slide title "BENCHMARKING" is formatted as a section.
 \subsection{Benchmarking}
 
-% The following is a verbatim reproduction of the command line input and its output.
+When profiling applications in Unix-like systems, the `time` command is used to measure the duration of program execution.\\
+
+\textbf{Time Command Output}\\
+Running the `time` command with an application gives us three key pieces of information:
+\begin{itemize}
+    \item \textbf{real}: This is the elapsed "real" time or wall-clock time from start to finish of the call.
+    \item \textbf{user}: This time is spent in user mode, that is, the time the CPU takes to run the application code.
+    \item \textbf{sys}: This is the time spent in system mode, which means the time the CPU takes to run OS kernel operations on behalf of the application.
+\end{itemize}
+
+It's important to note that the sum of user and system times (\(user + sys\)) will typically be less than the real time, as real time also includes time spent waiting for I/O or other applications.
+
+\subsubsection{Variance in Execution Time}
+Execution time can vary between runs due to a variety of factors, such as system load, I/O overhead, or CPU scheduling. Variance is observed when running the same command multiple times:
+
 \begin{verbatim}
 time ./application
 \end{verbatim}
-% Below are the results of the command, formatted as it would appear in a terminal.
-\begin{verbatim}
-real    0m2.581s
-user    0m2.498s
-sys     0m0.081s
-\end{verbatim}
 
-% Now we list the points about real, user, and sys as bullet points
-\begin{itemize}
-    \item real: elapsed “real” (wall-clock) time
-    \item user: time spent in user mode (running ./application code)
-    \item sys: time spent in system mode (running OS kernel code)
-    \item user + sys $\leq$ real (there may be other applications running)
-\end{itemize}
+For example, running a command to read from `/dev/random` may yield different `real`, `user`, and `sys` times upon repeated executions.\\
 
-% Next, we have another command and its output, again in a verbatim environment.
+\textbf{Examining Variance}\\
+To understand the stability and performance of a system or application, examine the variance in execution time over multiple runs. For instance, running the following command multiple times:
+
 \begin{verbatim}
 time head -n 1000000 /dev/random > /dev/null
 \end{verbatim}
 
-% The results from the second command.
-\begin{verbatim}
-real    0m0.777s
-user    0m0.109s
-sys     0m0.668s
-\end{verbatim}
+will provide different execution times, which is an example of the inherent variance in system performance.
 
-% Any additional explanatory text or notes can be added as comments.
-% For example, explaining that the [TBD] placeholders are where non-textual elements would be included.
-
-% Title of the section
-\subsubsection{Variance}
-
-% Presenting three separate instances of the 'time' command with its output
-\begin{verbatim}
-time head -n 1000000 /dev/random > /dev/null
-real    0m2.525s
-user    0m2.497s
-sys     0m0.023s
-
-time head -n 1000000 /dev/random > /dev/null
-real    0m2.505s
-user    0m2.500s
-sys     0m0.002s
-
-time head -n 1000000 /dev/random > /dev/null
-real    0m2.581s
-user    0m2.496s
-sys     0m0.001s
-\end{verbatim}
 
 % subsubsection for reasons of variance
 \subsubsection{Reasons for variance}
+Variability in execution time can often be attributed to several factors, which include but are not limited to:
+
 \begin{itemize}
-  \item power and temperature throttling \\
-  (CPU adapts speed to avoid overheating)
-  
-  \item interactions with devices \\
-  (OS has in-memory caches for files, storage devices have internal memory caches)
-  
-  \item other processes \\
-  (must share resources)
+    \item \textbf{Power and Temperature Throttling:}
+    Modern CPUs can adapt their operating speed to avoid overheating, leading to performance changes.
+    
+    \item \textbf{Interactions with Devices:}
+    The operating system has in-memory caches for files, and storage devices have internal memory caches, which can affect the timing of operations.
+    
+    \item \textbf{Other Processes:}
+    The necessity to share system resources among multiple processes can introduce variability in the execution time of a program.
 \end{itemize}
-
-% System monitoring tools output (replaced by [TBD] since actual content is non-textual and cannot be represented in LaTeX)
-\begin{verbatim}
-top             htop            ps aux
-[TBD]
-\end{verbatim}
-
-% Placeholder for image content
-% The image content showing the system tools output has been replaced with [TBD]
-% as the actual terminal output cannot be translated directly into LaTeX.
-% For compilation, replace [TBD] with appropriate non-textual content if necessary.
-(271 processes)
-
-% End of the document environment
 
 
 % Effect of file caches section
 \subsubsection{Effect of file caches}
+File caching by the operating system can have a significant effect on the performance of file operations. Below is an example showing the execution of the `md5sum` command on a large file, first without file caches and then with the file cached in memory:
 
 \begin{verbatim}
 time md5sum 2GB_file
-
-86b0a02a913d13fd34b6a8d8bfbdd2c2  2GB_file
-real    0m5.904s
-user    0m0.962s
-sys     0m4.560s
-
-time md5sum 2GB_file
-
-86b0a02a913d13fd34b6a8d8bfbdd2c2  2GB_file
-real    0m4.029s
-user    0m3.674s
-sys     0m0.331s
 \end{verbatim}
+
+In this example, the second run of `md5sum` on the same file is faster due to the effect of file caching.\\
+
+\textbf{Key Points}\\
+\begin{itemize}
+    \item Understand how CPU power management can affect execution times.
+    \item Be aware of the role of the OS and hardware in caching data, and how it impacts performance measurements.
+    \item Remember that concurrent processes compete for resources and can cause measurable differences in performance.
+    \item Practice interpreting output from system monitoring tools to diagnose performance issues.
+\end{itemize}
 
 % Inaccuracies section
 \subsubsection{Inaccuracies}
@@ -192,104 +166,39 @@ sys     0m0.331s
 \end{itemize}
 
 % Executable startup is slow section
-\subsubsection{Executable startup is slow}
+\paragraph{Executable startup is slow}
+The process of starting an executable can introduce overhead that affects the accuracy of performance benchmarking, especially for applications that only run for a few milliseconds.
 
-\begin{verbatim}
-int main() { return 0; }
-
-clang -O3 -o main main.c
-time ./main
-
-real    0m0.003s
-user    0m0.000s
-sys     0m0.002s
-
-time python -c 'exit()'
-
-real    0m0.030s
-user    0m0.023s
-sys     0m0.008s
-\end{verbatim}
-
-% Note on benchmarking applications with millisecond runtimes
-\textit{$\rightarrow$ We cannot accurately benchmark application that only take a few milliseconds.}
+\begin{itemize}
+    \item Compiling and running an empty program in C still incurs a measurable startup time.
+    \item Interpreted languages like Python also have a significant startup time even for executing a simple exit command.
+\end{itemize}
 
 
-\subsubsection{Initialization adds overhead}
-\begin{verbatim}
-time glpsol LP_57x6138380.mps
+\paragraph{Initialization adds overhead}
+Initial setup or parsing steps in applications add overhead, which might dominate the execution time for short-running processes.
 
-real    0m0.256s
-user    0m0.246s
-sys     0m0.010s
-\end{verbatim}
+\begin{itemize}
+    \item For example, timing the execution of a simplex algorithm might inadvertently measure the time taken by the file parser rather than the algorithm itself.
+\end{itemize}
 
-\begin{verbatim}
-time glpsol --check LP_57x6138380.mps
+\paragraph{Input and output are slow}
+I/O operations can be a major source of slowdown in applications.
 
-real    0m0.168s
-user    0m0.161s
-sys     0m0.008s
-\end{verbatim}
+\begin{itemize}
+    \item A Python function calculating the Riemann zeta function demonstrates this when its output is printed iteratively.
+    \item The execution time drastically increases when printing results inside the loop compared to a single print at the end.
+\end{itemize}
 
-% What are we really measuring?
-What are we really measuring?
+\textbf{Takeaway}\\
+It is essential to understand that benchmarking should focus on the algorithm or the specific task of interest, avoiding extraneous operations that do not contribute to the performance measurement of the targeted task.
 
-The speed of the MPS file parser, not the simplex algorithm.
-
-\subsubsection{Input and output are slow}
-\begin{verbatim}
-def riemann_zeta(s):
-    r = 0.0
-    for i in range(1, 1000000):
-        r += 1 / (i ** s)
-    return r
-
-# π^2 / 6
-print('pi = ', (riemann_zeta(2) * 6) ** 0.5)
-\end{verbatim}
-
-\begin{verbatim}
-time python zeta.py
-
-pi = 3.141592653589554
-\end{verbatim}
-
-\begin{verbatim}
-real    0m0.124s
-user    0m0.118s
-sys     0m0.006s
-\end{verbatim}
-
-\begin{verbatim}
-def riemann_zeta(s):
-    r = 0.0
-    for i in range(1, 1000000):
-        r += 1 / (i ** s)
-        print('r = ', r)
-    return r
-
-# π^2 / 6
-print('pi = ', (riemann_zeta(2) * 6) ** 0.5)
-\end{verbatim}
-
-\begin{verbatim}
-time python zeta.py
-
-[TBD]  % An ellipsis to stand in for omitted consecutive outputs
-
-pi = 3.141592653589554
-\end{verbatim}
-
-\begin{verbatim}
-real    0m3.168s
-user    0m2.916s
-sys     0m0.199s
-\end{verbatim}
-
-\usepackage{booktabs} % For formal tables
-
-
+\subsubsection{Recommendations for Accurate Benchmarking}
+\begin{itemize}
+    \item Isolate the core functionality from initialization and termination procedures when timing an application.
+    \item Minimize I/O operations during timing, especially when dealing with high-performance code.
+    \item Be aware of the environment and system state, as concurrent processes and system load can impact measured performance.
+\end{itemize}
 \subsubsection{Aggregate measures}
 
 \begin{itemize}
@@ -309,176 +218,120 @@ sys     0m0.199s
     & Input 1 & Input 2 & Input 3 & Average \\
     \midrule
     Version A & 2530s & 2300s & 12s & 1614s \\
-    Version B & 2535s & 1.002x & 2304s & 1.002x & 6s & 0.5x & 1615s \\
+    Version B & \begin{tabular}[c]{@{}c@{}}2535s\\1.002x\end{tabular} & \begin{tabular}[c]{@{}c@{}}2304s\\1.002x\end{tabular} & \begin{tabular}[c]{@{}c@{}}6s\\0.5x\end{tabular} & 1615s \\
     \bottomrule
 \end{tabular}
 
-\subsection{Static instrumentation}
 
+
+
+
+\subsection{Static instrumentation}
+When it comes to performance optimization, it is crucial to focus on specific parts of the code. Static instrumentation is a method for inserting code to measure the execution time of particular segments directly.
+
+\subsubsection{{Why Benchmark Specific Parts of Code?}}
+Benchmarking specific parts of code is important for several reasons:
 \begin{itemize}
-    \item we may want to benchmark \textbf{specific parts} of our code
-    \begin{itemize}
-        \item to circumvent executable startup, initialization, and input/output
-        \item to benchmark parts of the code that run quickly
-        \item to find \textbf{bottlenecks}
-    \end{itemize}
-    \item for that, we need to add timing instrumentation to our code
+    \item To bypass the time consumed by executable startup, initialization, and I/O operations, which can obscure the true performance of the code segments.
+    \item To accurately measure the performance of code sections that execute quickly and might otherwise be overshadowed by the startup overhead.
+    \item To identify bottlenecks, which are the parts of the code that significantly impact the overall performance.
 \end{itemize}
+
+\paragraph{{Adding Timing Instrumentation}}
+To obtain accurate measurements, developers should add timing code around the functions or blocks of interest. This allows for granular analysis of where most of the execution time is being spent.
+
 
 \subsubsection{About bottlenecks}
 
-\begin{quote}
-    ``Premature optimization is the root of all evil'' \\
-    --- Donald Knuth \\
-    ``Structured Programming With GoTo Statements'' \\
-    1974
-\end{quote}
-
-% Replace [TBD] with specific instructions or includegraphics commands to insert relevant figures, images, etc.
-% [TBD]
+Donald Knuth famously said, "Premature optimization is the root of all evil." This highlights the importance of identifying true bottlenecks before optimization:
 
 \begin{itemize}
-    \item function\_A() \hfill 12\% time \hfill 500 lines of code
-    \item function\_B() \hfill 60\% time \hfill 20 lines of code
-    \item function\_C() \hfill 18\% time \hfill 80 lines of code
-    \item all the rest \hfill 10\% time \hfill 2000 lines of code
+    \item A small section of code could be responsible for a disproportionate amount of the execution time, which could be a target for optimization.
+    \item Focusing on optimizing non-critical parts of the code without understanding the actual performance impact can lead to wasted effort and complexity.
 \end{itemize}
 
-\subsubsection{time.time()}
+\paragraph{Identifying Bottlenecks with Static Instrumentation}
+For instance, consider a program with three functions where static instrumentation has revealed the following time consumption:
+
+\begin{itemize}
+    \item \texttt{function\_A()} takes up 12\% of the time, with 500 lines of code.
+    \item \texttt{function\_B()} consumes 60\% of the time, but it only has 20 lines of code.
+    \item \texttt{function\_C()} uses 18\% of the time for its 80 lines of code.
+    \item All other code combined takes up the remaining 10\% of the time.
+\end{itemize}
+
+With this information, it is clear that \texttt{function\_B()} is the primary bottleneck and should be the focus of optimization efforts. Despite its small size, it has the greatest impact on performance.
+
+
+\subsubsection{Using time.time()}
+In Python, `time.time()` is used to get the wall-clock time at various points during execution. Here's an example of how to use it:
+
 \begin{verbatim}
 import time
-
 t0 = time.time()
 initialize()
-t1 = time.time()
-function_A()
-t2 = time.time()
-function_B()
-t3 = time.time()
-function_C()
-t4 = time.time()
+# ... run various functions ...
 cleanup()
 t5 = time.time()
-
-print(f'total time: {t5 - t0:16.6f}')
-print(f'function_A: {t2 - t1:16.6f}')
-print(f'function_B: {t3 - t2:16.6f}')
-print(f'function_C: {t4 - t3:16.6f}')
-print(f'     rest: {(t5 - t4) + (t1 - t0):16.6f}')
+print(f"Total time: {t5 - t0}")
 \end{verbatim}
 
-\subsubsection{clock\_gettime()}
-\begin{verbatim}
-int main()
-{
-    initialize();
-    function_A();
-    function_B();
-    function_C();
-    cleanup();
-    return 0;
-}
-\end{verbatim}
+This method is simple but has limitations due to the granularity and precision of the time measured.
+
+
+\subsubsection{Using clock\_gettime()}
+In C, `clock$\_$gettime()` provides a more precise measurement of execution time. It can be used like this:
 
 \begin{verbatim}
-int main()
-{
-    struct timespec t0, t1, t2, t3, t4, t5;
-
-    clock_gettime(CLOCK_MONOTONIC, &t0);
-    initialize();
-    clock_gettime(CLOCK_MONOTONIC, &t1);
-    function_A();
-    clock_gettime(CLOCK_MONOTONIC, &t2);
-    function_B();
-    clock_gettime(CLOCK_MONOTONIC, &t3);
-    function_C();
-    clock_gettime(CLOCK_MONOTONIC, &t4);
-    cleanup();
-    clock_gettime(CLOCK_MONOTONIC, &t5);
-
-    print_all_clocks(&t0, &t1, &t2, &t3, &t4, &t5);
-    return 0;
-}
+struct timespec t0, t1, t2, t3, t4, t5;
+clock_gettime(CLOCK_MONOTONIC, &t0);
+initialize();
+# ... run various functions ...
+cleanup();
+clock_gettime(CLOCK_MONOTONIC, &t5);
+print_all_clocks(&t0, &t1, &t2, &t3, &t4, &t5);
 \end{verbatim}
 
+$`CLOCK_MONOTONIC`$ ensures that the time measured is not affected by discontinuous jumps in the system time.
 
-\usepackage{listings}
-\usepackage{xcolor}
-
-% Define colors for code listing
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{lightgray},   
-    commentstyle=\color{green},
-    keywordstyle=\color{blue},
-    numberstyle=\tiny\color{gray},
-    stringstyle=\color{red},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-
-\lstset{style=mystyle}
 
 
 \subsubsection{Cumulative time}
+To measure cumulative time across multiple iterations or function calls, you can sum the time differences for each specific part:
 
-\begin{lstlisting}[language=Python]
-import time.time
-
-initialize()
-tA, tB, tC = 0
-
+\begin{verbatim}
 for i in range(1000000):
     t0 = time.time()
     function_A()
-    t1 = time.time()
-    function_B()
-    t2 = time.time()
-    function_C()
-    t3 = time.time()
-    
-    tA = tA + (t1 - t0)
-    tB = tB + (t2 - t1)
-    tC = tC + (t3 - t2)
+    tA += time.time() - t0
+    # ... similarly for functions B and C ...
+\end{verbatim}
 
-cleanup()
-
-\end{lstlisting}
-
-\textbf{Caveat:} measuring time takes time!
-
-\texttt{time.time()} \~{} 40 ns (and the actual time fluctuates)
+\paragraph{Caveats in Timing}
+\begin{itemize}
+    \item Measuring time itself takes time, which can introduce an overhead (~40 ns for `time.time()`).
+    \item The actual time may fluctuate due to various system factors.
+\end{itemize}
 
 \subsubsection{Microbenchmarks}
 
-What do we do if \texttt{function\_A()} takes much less time than \texttt{time.time()}?
+For functions that execute very quickly, microbenchmarking can be used to get a more accurate measure by running the function many times and measuring the total time:
 
-Microbenchmark for function\_A():
-
-\begin{lstlisting}[language=Python]
-import time.time
-
-initialize()
-
-t0 = time.time()
-
-for i in range(50000000):
+\begin{verbatim}
+tA, tB, tC = 0
+for i in range(5000000):
+    t0 = time.time()
     function_A()
+    tA += time.time() - t0
+    # ... similarly for functions B and C ...
+\end{verbatim}
 
-t1 = time.time()
-
-cleanup()
-
-\end{lstlisting}
+\paragraph{Key Takeaways}
+\begin{itemize}
+    \item When benchmarking, it's important to isolate the part of the code you're interested in.
+    \item Take into account the overhead introduced by the timing mechanism itself.
+    \item Use cumulative timing and microbenchmarking for a more precise performance analysis, especially for quick-executing code.
+\end{itemize}
 
 \subsubsection{Microbenchmarks limitations}
 
@@ -503,103 +356,48 @@ cleanup()
 \end{itemize}
 
 
-% Notes:
-% The original image included two code snippets, one at the top and one at the middle of the page.
-% Both code snippets have been transcribed verbatim into LaTeX using the 'listings' package.
-% The text outside of the code snippets, including the section headers and bullet points, has been transcribed using regular LaTeX commands.
-% The caution about the time measurement and the approximation for time.time() are written in text mode, with appropriate formatting for the 'time.time()' reference within text.
-% Specific formatting or styling information (e.g., fonts, alignment) that has not been explicitly conveyed in the image will not be reflected in this transcript.
-
-\usepackage{verbatim}
-
-
 \subsection{Automated instrumentation: profilers}
 
 \subsubsection{gprof}
+`gprof` is a profiling tool that helps identify sections of code that take up significant execution time. It automatically instruments the code, collects data on the program's performance, and generates a report.
 
-Add ``-pg'' to gcc/clang parameters
-\begin{verbatim}
-gcc -O3 -o app app.c -pg
-\end{verbatim}
+\paragraph{Using gprof}
+To use `gprof`, follow these steps:
+\begin{enumerate}
+    \item Compile the program with profiling enabled using `-pg` option:\\
+    \texttt{gcc -O3 -o app app.c -pg}
+    \item Run the application normally:\\
+    \texttt{./app}
+    \item Generate the performance report:\\
+    \texttt{gprof app}
+\end{enumerate}
 
-Run the application
-\begin{verbatim}
-./app
-\end{verbatim}
+The generated report includes a flat profile and a call graph that show the time spent in each function.
 
-Generate report
-\begin{verbatim}
-gprof app 
-\end{verbatim}
-
-[TBD] % Placeholder for the portion of the image containing report data
-
-% Below is the representation of the text in the Flat profile section
-\begin{verbatim}
-Flat profile:
-
-Each sample counts as 0.01 seconds.
- %   cumulative   self              self     total           
-time   seconds   seconds    calls  Ts/call  Ts/call  name    
-63.77    3.82     3.82        1     3.82     4.24  tree_fds
-48.18    5.85     2.03    25737     0.00     0.00  tixu_build
-2.84     5.90     0.17    10331     0.00     0.00  aux_d_sort_swapper
-0.33     5.99     0.02     6735     0.00     0.00  tree_sprnt
-0.00     5.99     0.00      706     0.00     0.00  tree_gc
-0.00     5.99     0.00        6     0.00     0.00  dict_spfind_file
-0.00     5.99     0.00        1     0.00     0.00  dict_filter_dupes
-0.00     5.99     0.00        1     0.00     0.00  lct_hash_word
-0.00     5.99     0.00        1     0.00     0.00  solver_connected
-0.00     5.99     0.00        1     0.00     5.97  tree_build
-\end{verbatim}
-
-
-
-% Start of the LaTeX document for the lecture content transcription
-
-% First code-like block
-\begin{verbatim}
-index % time    self  children    called     name
-                s/call  s/call
-
-[1]    99.7    0.00    5.97       1/1       main [2]
-                0.00    5.97       1/1       tree_build [1]
-                3.82    0.42       1/1       tree_dfs [3]
-                1.73    0.00       1/1       lut_build [4]
-                0.00    0.00       1/10331   aux_d_sort_wrapper [5]
-                0.00    0.00       1/1       lut_hashword [12]
-                0.00    0.00       1/6       dict_append_file [10]
----------------------------------------------------------
-[2]    99.7    0.00    5.97                 <spontaneous>
-                0.00    5.97       1/1       main [2]
-                0.00    0.00       1/1       tree_build [1]
-                ........................................
-                ........................................
-                0.00    0.00       4174      solver_connected [13]
-                3.82    0.42       1/4174    tree_dfs [3]
-\end{verbatim}
-
-% Second code-like block
-\begin{verbatim}
-[3]    70.8    3.82    0.42       1/4174    tree_build [1]
-                3.82    0.42       1/4174    tree_dfs [3]
-                0.17    0.25       103301/10331 aux_d_sort_swapper [5]
-                0.00    0.00       6715/6715  aux_hg_sort [8]
-                0.00    0.00       0/7616     tree_sum [9]
-                0.00    0.00       4174      tree_dfs [3]
-\end{verbatim}
-
-% Bullet points section
+\paragraph{Understanding gprof Output}
+The `gprof` output report contains:
 \begin{itemize}
-  \item Pros
-  \begin{itemize}
-    \item Easy to use
-    \item Exhaustive profile information
-    \item Generally low overhead
-  \end{itemize}
-  \item Cons
-  \begin{itemize}
-    \item Overhead increases when bottlenecks are in small, short functions (up to 2x runtime)
-    \item Limited accuracy
-  \end{itemize}
+    \item A flat profile with the time spent in each function.
+    \item A call graph showing the relationships between functions and the time spent in each call.
+\end{itemize}
+
+\subsubsection{Pros and Cons of gprof}
+\textbf{Pros:}
+\begin{itemize}
+    \item It is easy to use and integrates well with existing code bases.
+    \item Provides exhaustive profile information, including time spent in each function and the call hierarchy.
+    \item Generally introduces low overhead to the application's runtime.
+\end{itemize}
+
+\textbf{Cons:}
+\begin{itemize}
+    \item The overhead can increase when bottlenecks are in small, short functions due to the granularity of the profiling.
+    \item The accuracy of time measurement may be limited, and the actual time spent can be affected by the profiling itself.
+\end{itemize}
+
+\paragraph{Key Takeaways}
+\begin{itemize}
+    \item Understand how to compile and run a program with `gprof` to collect profiling data.
+    \item Be familiar with interpreting the `gprof` report to identify performance bottlenecks.
+    \item Recognize the advantages of using automated tools like `gprof` for profiling, as well as their limitations.
 \end{itemize}

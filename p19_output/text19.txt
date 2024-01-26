@@ -1,105 +1,53 @@
 \newpage
-\section{Lecture 19}
+\section{Data structures: Arrays, Linkned Lists}
 
 \subsection{Abstract Data Types and Data Strucutres}
 
+An abstract data type (ADT) is a model for data containers that defines the type's behavior in terms of possible values, operations, and behavior of those operations. Examples include:
+
 \begin{itemize}
-    \item An abstract data type is a data container
-    \begin{itemize}
-        \item Examples:
-        \begin{itemize}
-            \item in Python: \texttt{list}, \texttt{dict}, \texttt{set}, \ldots
-            \item in C++: \texttt{std::vector}, \texttt{std::unordered\_map}, \ldots
-        \end{itemize}
-        \item Specifies which operations are (natively) supported
-        \item Does not specify how data is stored
-        \item Does not specify how the operations are implemented
-    \end{itemize}
-    \item A data structure is an implementation of an \textit{abstract data type}
-    \begin{itemize}
-        \item Specifies how data is layed out in memory
-        \item Specifies which algorithms are used for operations
-        \begin{itemize}
-            \item We can compute the computational complexity of those algorithms
-        \end{itemize}
-    \end{itemize}
+    \item In Python: \texttt{list}, \texttt{dict}, \texttt{set}, etc.
+    \item In C++: \texttt{std::vector}, \texttt{std::unordered\_map}, etc.
 \end{itemize}
 
-% It should be noted that the transcription above has been created with the assumption that a LaTeX document preamble is already in place, which would typically include packages like `itemize` for lists and `texttt` for monospaced font to represent code.
+ADTs specify the operations supported but not the implementation details, such as how data is stored or how the operations are executed.
 
+\subsubsection{Data Structure Implementation}
+A data structure is a concrete implementation of an ADT that details how data is arranged in memory and the specific algorithms used for operations, which allows us to compute the computational complexity.
 
-% Begin LaTeX document - ensure that the document class and necessary packages are already set up in your LaTeX editor before compiling this content
 
 \subsection{Lists}
-
+Lists represent one of the simplest forms of ADTs, essentially a collection of ordered elements that support operations like:
 \begin{itemize}
-    \item Lists are one of the simplest abstract data type
-    \item Just a collection of ordered elements
-    \item They support
-    \begin{itemize}
-        \item storing multiple elements together
-        \item and \textit{optionally}
-        \begin{itemize}
-            \item appending an element (at the end of the list)
-            \item discarding the last element (at the end of the list)
-            \item inserting an element (in any position) in the list
-            \item deleting an element (in any position) in the list
-            \item accessing or modifying all elements in order
-            \item accessing or modifying an element at an arbitrary index (``random access'')
-            \item \ldots
-        \end{itemize}
-    \end{itemize}
+    \item Storing multiple elements together.
+    \item Optionally appending, inserting, or deleting elements.
+    \item Accessing or modifying all elements in sequence or at a specific index (with varying efficiency).
 \end{itemize}
 
 \subsection{Arrays}
-
-% End of the LaTeX document content
-
-
-% Static arrays section
 \subsubsection{Static arrays}
+Static arrays are fixed-size, contiguous memory data structures that provide:
 
 \begin{itemize}
-  \item Static arrays implement lists of a fixed size \( n \)
-  \item Elements are stored contiguously, one after another, in memory
-  \item They implement
-  \begin{itemize}
-    \item accessing or modifying an element at an arbitrary index
-    \begin{itemize}
-      \item \( \text{element\_address} = \text{array\_address} + \text{index} \times \text{element\_size} \)
-      \item complexity \( O(1) \)
-    \end{itemize}
-    \item accessing or modifying all elements in order (direct consequence of random access)
-    \begin{itemize}
-      \item complexity \( O(n) \)
-    \end{itemize}
-  \end{itemize}
+    \item Constant-time (\(O(1)\)) access or modification of elements via an index.
+    \item Linear-time (\(O(n)\)) traversal to access or modify all elements due to the direct addressing capability.
 \end{itemize}
 
-% Dynamic arrays section
 \subsubsection{Dynamic arrays}
+Dynamic arrays extend static arrays to allow variable size \( n \), which introduces additional complexity:
 
 \begin{itemize}
-  \item Dynamic arrays implement lists of a variable size \( n \)
-  \item Elements are stored contiguously, one after another, in memory
-  \item They implement static array operations, plus
-  \begin{itemize}
-    \item changing the size \( n \) of the list
-    \begin{itemize}
-      \item complexity \( O(n) \) in theory
-    \end{itemize}
-    \item as a consequence, we can
-    \begin{itemize}
-      \item append an element (at the end of the list) in \( O(n) \)
-      \item discard the last element (at the end of the list) in \( O(n) \)
-      \item insert an element (in any position) in the list in \( O(n) \)
-      \item delete an element (in any position) in the list in \( O(n) \)
-      \item \ldots
-    \end{itemize}
-  \end{itemize}
+    \item Theoretical complexity \( O(n) \) for operations that change the size of the list.
+    \item This affects the complexity of appending, inserting, or deleting elements.
 \end{itemize}
 
-% Size increase section
+\paragraph{Key Takeaways}
+\begin{itemize}
+    \item ADTs define the what, not the how, of data manipulation.
+    \item Data structures implement the specifics of ADTs and determine the efficiency of operations.
+    \item Understanding the difference between ADTs and data structures is crucial for choosing the right implementation for the needed operations, especially considering the performance implications.
+\end{itemize}
+
 \subsubsection{Size increase}
 
 \begin{itemize}
@@ -171,261 +119,109 @@ delete an element & $O(n)$ \\
 \end{center}
 
 \subsubsection{Over-allocation}
+Over-allocation is a strategy used in managing dynamic arrays where more memory is allocated than is immediately necessary.
 
 \begin{itemize}
-  \item We have two distinct quantities:
-  \begin{itemize}
-    \item the user-visible size $n$
-    \item the allocated size $a$
-  \end{itemize}
-
-  \item If the user requests a size increase $n' > n$
-  \begin{itemize}
-    \item as long as $n' \leq a$, nothing needs to happen
-  \end{itemize}
-
-  \item $a$ is never incremented (no $a' = a + 1$)
-
-  \item instead, at small sizes, we increase $a$ exponentially ($a' = 2a$)
+    \item We distinguish between two quantities:
+    \begin{itemize}
+        \item The user-visible size \( n \): the number of elements the user thinks the array can hold.
+        \item The allocated size \( a \): the actual amount of memory reserved for the array.
+    \end{itemize}
+    \item When the user requests an increase in the array size to \( n' \), if \( n' \leq a \), the dynamic array can accommodate the new size without needing additional memory allocation.
+    \item The allocated size \( a \) is not incremented by small amounts (no \( a' = a + 1 \)).
+    \item Instead, to optimize performance and minimize frequent allocations, \( a \) is typically increased exponentially, often doubling (\( a' = 2a \)) when the array needs to grow. This approach reduces the number of times the array must be resized and copied over the lifetime of the array.
 \end{itemize}
 
-\subsubsection{Exponential allocation (n = 3)}
-
+\paragraph{Benefits of Over-Allocation}
 \begin{itemize}
-  \item [TBD] % Placeholder for the visual representation of the memory blocks
-  \item (used) $3 = n$
-  \item $4 = a$
+\item \textbf{Efficiency:} By allocating more space than immediately necessary, we reduce the frequency of memory allocation operations, which are costly in terms of performance.
+\item \textbf{Growth Management:} Over-allocation manages the growth of an array more smoothly, preventing the system from reallocating memory for every single element added once the initial capacity is exceeded.
 \end{itemize}
 
-\subsubsection{Exponential allocation (n = 4)}
-
+\paragraph{Implications of Over-Allocation}
 \begin{itemize}
-  \item [TBD] % Placeholder for the visual representation of the memory blocks
-  \item $4 = n$
-  \item $4 = a$
-\end{itemize}
-
-% End of the LaTeX code for lecture material transcription
-
-
-% Slide 1: Exponential allocation (n = 5)
-\subsubsection{Exponential allocation (n = 5)} \\
-\begin{tabular}{cccccccc}
-$\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x & x & x \\
-\end{tabular} \\
-(used) \\
-5 = n \\
-8 = a \\
-
-% Slide 2: Exponential allocation (n = 6)
-\subsubsection{Exponential allocation (n = 6)} \\
-\begin{tabular}{cccccccc}
-$\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x & x \\
-\end{tabular} \\
-(used) \\
-6 = n \\
-8 = a \\
-
-% Slide 3: Exponential allocation (n = 7)
-\subsubsection{Exponential allocation (n = 7)} \\
-\begin{tabular}{cccccccc}
-$\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & $\cdot$ & x \\
-\end{tabular} \\
-(used) \\
-7 = n \\
-8 = a \\
-
-\subsubsection{Exponential allocation (n = 8)}
-\begin{verbatim}
-. . . . . . . . (used)
-\end{verbatim}
-\[ 8 = n \]
-\[ 8 = a \]
-
-\subsubsection{Exponential allocation (n = 9)}
-\begin{verbatim}
-. . . . . . . . x x x x x x x x (used)
-\end{verbatim}
-\[ 9 = n \]
-\[ 16 = a \]
-
-\subsubsection{Exponential allocation (n = 10)}
-\begin{verbatim}
-. . . . . . . . . x x x x x x x x x x x x x x x x (used)
-\end{verbatim}
-\[ 10 = n \]
-\[ 16 = a \]
-
-
-% Exponential allocation diagrams for n = 11, 12, 13
-% The following is an attempt to recreate the textual content of the provided slides.
-% Note: The graphical representations, such as dot sequences and "x" marks, are represented here as text.
-% A proper LaTeX representation would typically use a package like TikZ for graphics, which is not requested here.
-
-
-\subsubsection{Exponential allocation (n = 11)}
-\begin{verbatim}
-. . . . . . . . . . .
-(used)      x x x x x
-11 = n
-\end{verbatim}
-\( 16 = a \)
-
-\subsubsection{Exponential allocation (n = 12)}
-\begin{verbatim}
-. . . . . . . . . . . .
-(used)       x x x x x
-12 = n
-\end{verbatim}
-\( 16 = a \)
-
-\subsubsection{Exponential allocation (n = 13)}
-\begin{verbatim}
-. . . . . . . . . . . . .
-(used)        x x x x x
-13 = n
-\end{verbatim}
-\( 16 = a \)
-
-
-
-% Since the image provided consists of visuals without specific textual content such as sentences, labels, or equations, the LaTeX transcription will be limited to replicating the visible textual annotations associated with each visual.
-
-% First slide
-\subsubsection{Exponential allocation (n = 14)}
-
-\begin{itemize}
-    \item[] \textcolor{cyan}{\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet} \textcolor{green}{xx} % Used slots are represented by cyan dots and available slots by green 'x's.
-    \item (used)
-    \item \( 14 = n \) % The number of used slots
-    \item \( 16 = a \) % The total number of slots
-\end{itemize}
-
-% Second slide
-\subsubsection{Exponential allocation (n = 15)}
-
-\begin{itemize}
-    \item[] \textcolor{cyan}{\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet} \textcolor{green}{x} % Used slots are represented by cyan dots and available slots by a green 'x'.
-    \item (used)
-    \item \( 15 = n \) % The number of used slots
-    \item \( 16 = a \) % The total number of slots
-\end{itemize}
-
-
-% Third slide
-\subsubsection{Exponential allocation (n = 16)}
-
-\begin{itemize}
-    \item[] \textcolor{cyan}{\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet\textbullet} % Used slots are represented by cyan dots.
-    \item (used)
-    \item \( 16 = n \) % The number of used slots
-    \item \( 16 = a \) % The total number of slots
-\end{itemize}
-
-% The above code uses commands from the xcolor package (for the colored text) and assumes that the relevant colors are defined.
-% It also uses the amssymb package for the \textbullet command to represent the dots.
-% The slides show graphical representations of the exponential allocation with different numbers of slots used and available.
-% In a standard LaTeX document, these would likely correspond to figures or diagrams rather than itemized lists.
-
-\subsubsection{Exponential allocation (n = 17)}
-\begin{itemize}
-    \item[\textbullet] \textcolor{cyan}{(used)}
-    \item $\ldots$
-    \item[\textbf{x}] \textcolor{green}{17 = n}
-    \item[\textbf{x}] $\ldots$
-    \item \textcolor{green}{32 = a}
-\end{itemize}
-
-\subsubsection{Exponential allocation (n = 18)}
-\begin{itemize}
-    \item[\textbullet] \textcolor{cyan}{(used)}
-    \item $\ldots$
-    \item[\textbf{x}] \textcolor{green}{18 = n}
-    \item[\textbf{x}] $\ldots$
-    \item \textcolor{green}{32 = a}
-\end{itemize}
-
-\subsubsection{Exponential allocation (n = 19,\ldots)}
-\begin{itemize}
-    \item[\textbullet] \textcolor{cyan}{(used)}
-    \item[\textbf{x}] $\ldots$
-    \item \textcolor{green}{19 = n}
-    \item[\textbf{x}] $\ldots$
-    \item \textcolor{green}{32 = a}
+\item While over-allocation can improve efficiency, it does mean that the data structure may use more memory than what is strictly required for its current elements.
+\item This trade-off between memory usage and performance is often acceptable, especially since modern computing devices typically have memory resources to spare.
 \end{itemize}
 
 
 
-% Start of LaTeX code
+\subsubsection{Exponential memory allocation}
+Exponential memory allocation is a strategy used to manage the growth of data structures such as dynamic arrays efficiently. This method helps minimize the number of memory reallocations, which are computationally expensive operations.
 
-% Define 'verbatim' environment for code block within LaTeX document
-\begin{verbatim}
-struct dynamic_array {
-    void *address;
-    size_t n;
-    size_t a;
-};
+\begin{itemize}
+    \item In dynamic arrays, we differentiate between the user-visible size (\( n \)) and the allocated memory size (\( a \)).
+    \item When an array's size needs to be increased from \( n \) to \( n' \), if \( n' \) is less than or equal to \( a \), no additional memory allocation is required.
+    \item The allocated size (\( a \)) is not incremented linearly but rather grows exponentially, typically doubling when a size increase is necessary.
+\end{itemize}
 
-int grow(struct dynamic_array *d, size_t new_n)
-{
-    if (new_n <= d->a) {
-        d->n = new_n;
-        return SUCCESS;
-    }
+\paragraph{Illustration of Exponential Allocation}
+\begin{itemize}
+    \item Initially, an array may have an allocated size (\( a \)) larger than the user-visible size (\( n \)).
+    \item As elements are added and \( n \) grows, if \( n \) exceeds \( a \), the array is reallocated with twice the previous allocated size (\( a' = 2a \)).
+    \item This approach is visualized in the sequence of diagrams, where the allocated size (\( a \)) increases to accommodate the growing number of elements (\( n \)).
+\end{itemize}
 
-    size_t new_a = d->a*3;
-    while (n > new_a)
-        new_a = new_a * 2;
+\paragraph{Advantages of Exponential Allocation}
+\begin{itemize}
+    \item \textbf{Efficiency:} Reduces the frequency of memory allocation calls, which can be costly in terms of performance.
+    \item \textbf{Predictability:} Provides a predictable growth pattern, simplifying the management of memory for dynamic arrays.
+    \item \textbf{Space Utilization:} By allocating more space upfront, the overhead of reallocation is reduced, utilizing memory more effectively in the long run.
+\end{itemize}
 
-    void *new_addr = malloc(new_a);
-    if (new_addr == NULL)
-        return ERROR;
+\paragraph{Exponential Allocation in Practice}
+\begin{itemize}
+    \item When an array with \( n = 3 \) grows to \( n = 4 \), the previously allocated size (\( a = 4 \)) is sufficient.
+    \item However, when \( n \) reaches \( 5 \), the array is reallocated with \( a = 8 \), doubling the previous allocation to maintain the exponential growth strategy.
+    \item This pattern continues as \( n \) grows, with the next reallocation occurring when \( n \) exceeds \( 8 \), increasing \( a \) to \( 16 \).
+\end{itemize}
 
-    memcpy(new_addr, d->address, d->n); // O(n)
-    free(d->address);
+\paragraph{key concepts}
+\begin{itemize}
+    \item Understand how exponential allocation minimizes the number of memory allocations needed as an array grows.
+    \item Be prepared to explain the trade-off between immediate memory usage and long-term efficiency gains.
+    \item Recognize the patterns of growth in allocated size versus user-visible size in dynamic arrays.
+\end{itemize}
 
-    d->address = new_addr;
-    d->n = new_n;
-    d->a = new_a;
 
-    return SUCCESS;
-}
-\end{verbatim}
+
+
+
 
 \subsubsection{Pros and cons of exponential allocation}
 
+\textbf{Pros:}
 \begin{itemize}
-    \item we waste memory
-    \item but we always have \( a \leq 2n \)
-    \item specifically, \( a = 2^{\lceil \log_2{n} \rceil} \)
+    \item Reduces the frequency of memory reallocations.
+    \item Ensures that the allocated size \( a \) is always within a factor of the actual size \( n \), specifically \( a \leq 2n \).
+    \item Provides an \( O(1) \) amortized time complexity for increasing the size of the array.
 \end{itemize}
+
+\textbf{Cons:}
+\begin{itemize}
+    \item Can lead to memory waste as the allocated space might not always be fully utilized.
+    \item The wasted space is bound by the equation \( a = 2^{\lceil \log_2(n) \rceil} \), which can be significant for large arrays.
+\end{itemize}
+
+
 
 \subsubsection{Complexity of exponential allocation}
-
 \begin{itemize}
-    \item start with an empty array
-    \item increment its size \( n \) times
-    \item \(\Rightarrow\) we perform (at most) \( k := \lceil \log_2{(n)} \rceil \) moves,
-    of sizes 1, 2, 4, 8, 16, \(\ldots\), \( 2^{k-1} \).
-    \item \(\Rightarrow\) total cost:
+    \item Starting with an empty array and incrementing its size \( n \) times leads to at most \( k = \lceil \log_2(n) \rceil \) memory allocation moves.
+    \item The total cost of these moves is a power series sum: \( 1 + 2 + 4 + \ldots + 2^{k-1} = 2^k - 1 \).
+    \item This sum is less than or equal to \( 2n \), ensuring that the total time complexity for \( n \) size increments is \( O(n) \).
+    \item The amortized time complexity for each size increment is \( O(1) \).
 \end{itemize}
 
-\[
-    1 + 2 + 4 + 8 + \ldots + 2^{k-1}
-\]
-
+\paragraph{Operational Complexities}
 \begin{itemize}
-    \item \( = 2^k - 1 \) (power series)
-    \item \( = 2^{\lceil \log_2{(n)} \rceil} - 1 \)
-    \item \( \leq 2n \)
-    \item \( O(n) \) total (for \( n \) size increments)
-    \item \( O(1) \) amortized (for each size increment)
+    \item Access or modification at an arbitrary index: \( O(1) \).
+    \item Increase or decrease \( n \): \( O(1) \) amortized.
+    \item Append an element: \( O(1) \) amortized.
+    \item Discard the last element: \( O(1) \).
+    \item Insert or delete an element: \( O(n) \) due to the need to shift elements.
 \end{itemize}
 
-% End of LaTeX code
-
-
-% Begin transcription
 \begin{center}
 \begin{tabular}{ll}
 \hline
@@ -442,43 +238,46 @@ delete an element & $O(n)$ \\
 \end{tabular}
 \end{center}
 
+\paragraph{Key concepts}
+\begin{itemize}
+    \item Understand the balance between efficient allocation and potential memory waste.
+    \item Be able to calculate the upper bound of memory allocation and the amortized cost for array resizing.
+    \item Recognize the time complexities associated with different array operations
+\end{itemize}
+
 \subsubsection{Virtual memory}
+Virtual memory changes the complexity landscape for operations on dynamic arrays by allowing us to remap memory instead of physically moving it.
 
-In terms of asymptotic complexity, the cost of changing $n$ comes from
-
-\begin{verbatim}
-memcpy(new_addr, d->address, d->n); // O(n)
-\end{verbatim}
-
+\paragraph{Virtual Memory in Asymptotic Complexity}
 \begin{itemize}
-    \item But memory is virtualized,
-    \item we do not need to physically move bytes around.
-    \item Instead we can use the page table to
-    \begin{itemize}
-        \item remap the physical memory associated to a virtual address (d->address)
-        \item to a different virtual address (new\_addr).
-    \end{itemize}
+    \item The asymptotic complexity of changing the size \( n \) of an array involves an \( O(n) \) operation due to memory moves.
+    \item However, with virtualized memory, physical byte movement is unnecessary.
+    \item Instead, the page table remaps the physical memory associated with a virtual address to a new virtual address, which in practice, can make memory moves essentially \( O(1) \).
 \end{itemize}
 
-\subsubsection{Remapping virtual memory using the page table}
-
+\subsubsection{Remapping Memory Using the Page Table}
 \begin{itemize}
-    \item \textbf{Pro:} Memory move becomes essentially $O(1)$ in practice
-    \item \textbf{Con:} Need to call the OS kernel to change page table
+    \item \textbf{Pros:} Memory move becomes \( O(1) \) in practice due to virtual memory's ability to remap addresses instead of moving bytes.
+    \item \textbf{Cons:} It requires a system call to the OS kernel to change the page table, which introduces:
     \begin{itemize}
-        \item context switch (swap page table, pollute caches)
-        \item large fixed cost
+        \item A context switch, potentially polluting the CPU caches.
+        \item A significant fixed cost due to the system call overhead.
     \end{itemize}
-    \item As a consequence, this is done only when $n$ grows very large (multiple megabytes of data).
-    \item $n'$ = $a + K$ for some large $K$ (avoids waste of exponential increase)
+    \item This operation is therefore only performed when \( n \) grows very large, avoiding frequent system calls.
+    \item To manage growth, \( a' \) is set to \( a + K \) for some large \( K \), balancing between memory efficiency and system call overhead.
 \end{itemize}
 
-For very large \( n \):
-
-(multiple megabytes)
+For very large \( n \) (in the order of multiple megabytes), the operational complexities can be optimized:
+\begin{itemize}
+    \item Access or modification at an arbitrary index remains \( O(1) \).
+    \item Increasing or decreasing \( n \) can be \( O(1) \) with virtual memory's remapping capabilities.
+    \item Appending or discarding the last element is \( O(1) \).
+    \item Inserting or deleting an element within the array still has \( O(n) \) complexity due to the need to shift elements in the array.
+\end{itemize}
 
 \begin{center}
     \begin{tabular}{ l c c }
+    \hline
     \textbf{operation} & \textbf{complexity} \\
     \hline
     access/modify element at arbitrary index & \( O(1) \) \\
@@ -488,26 +287,36 @@ For very large \( n \):
     discard last element & \( O(1) \) \\
     insert an element & \( O(n) \) \\
     delete an element & \( O(n) \) \\
+    \hline
     \end{tabular}
 \end{center}
 
-\subsection{Linked Lists}
-
+\paragraph{Key Concepts}
 \begin{itemize}
-    \item Linked lists implement lists of a variable size \( n \)
-    \item They implement
-    \begin{itemize}
-        \item inserting, deleting, modifying an element (in any position): \( O(1) \)
-        \item accessing or modifying all elements in order: \( O(n) \)
-    \end{itemize}
-    \item They do not natively support
-    \begin{itemize}
-        \item accessing or modifying an element at an arbitrary index (“random access”)
-        \item can be implemented using above (“accessing all elements”), but with complexity \( O(n) \)
-    \end{itemize}
+    \item Understand the role of virtual memory in optimizing array resizing operations.
+    \item Discuss the pros and cons of using virtual memory to remap addresses instead of moving data physically.
+    \item Recognize the impact of system calls and context switches on the performance of dynamic arrays.
 \end{itemize}
 
+
+\subsection{Linked Lists}
+Linked lists are fundamental data structures that implement a collection of elements, allowing for variable size \( n \).\\
+
+\textbf{Linked lists support:}
+\begin{itemize}
+    \item Inserting, deleting, and modifying elements in \( O(1) \) time complexity, regardless of the position in the list.
+    \item Accessing or modifying all elements in order with \( O(n) \) time complexity.
+\end{itemize}
+
+\textbf{Linked lists do not natively support:}
+\begin{itemize}
+    \item Accessing or modifying an element at an arbitrary index, known as "random access," which would have \( O(n) \) complexity if implemented sequentially.
+\end{itemize}
+
+
 \subsubsection{Doubly-linked lists}
+
+Doubly-linked lists are an extension of linked lists where each element has a reference to both the previous and the next element.
 
 \begin{verbatim}
 struct element {
@@ -515,25 +324,11 @@ struct element {
     struct element *prev;
     struct element *next;
 };
-
-int insert_after(struct element *e, struct payload data)
-{
-    struct element *x = malloc(sizeof(struct element));
-    if (x == NULL)
-        return ERROR;
-    
-    struct element *f = e->next;
-    x->data = data;
-    x->prev = e;
-    x->next = f;
-    e->next = x;
-    f->prev = x;
-
-    return SUCCESS;
-}
 \end{verbatim}
 
-% Table will be represented in tabular environment
+Functionality such as insertion is demonstrated in the provided code snippet, showing how new elements are linked to their predecessors and successors.
+
+\paragraph{Comparative Operations}
 \begin{tabular}{lcc}
 \hline
 \textbf{operation} & \textbf{dynamic array} & \textbf{doubly-linked list} \\
@@ -581,70 +376,41 @@ delete an element & $O(n)$ & $O(1)$ \\
 \hline
 \end{tabular}
 
-\bigskip
 
-\begin{center}
 \subsubsection{Memory caches considerations}
-\end{center}
-
-\noindent\textbf{List traversal}
-
-\begin{minipage}[t]{0.5\textwidth}
-% Left code block
-\begin{verbatim}
-for (int i = 0; i < n; i++) {
-    struct payload data = dynamic_array[i];
-    ...
-}
-\end{verbatim}
-\end{minipage}%
-\begin{minipage}[t]{0.5\textwidth}
-% Right code block
-\begin{verbatim}
-struct element *e = first_element;
-while (1) {
-    struct payload data = e->data;
-    e = e->next;
-    if (e == first_element)
-        break;
-}
-\end{verbatim}
-\end{minipage}
+Cache usage is an important aspect of performance optimization. For linked lists, memory caches do not provide the same benefits as for dynamic arrays due to the non-contiguous memory allocation of elements.
 
 \begin{itemize}
-\item assuming deep pipelines and good branch prediction,
-\item the processor can start fetching \verb|dynamic_array[i + 1]|\\
-while waiting for \verb|dynamic_array[i]|
-\item but it cannot start fetching \verb|e->next->data|\\
-while waiting for \verb|e->data| / \verb|e->next| (data dependency)
+    \item With deep pipelines and good branch prediction, a processor can pre-fetch elements in a dynamic array, but it cannot do so as effectively with linked lists due to data dependencies.
 \end{itemize}
+While linked lists have fewer applications than one might expect, they can be extremely useful in situations where their specific advantages can be leveraged.
 
-% The explanatory notes
-Linked list have fewer applications than one could expect.\\
-However, when they are appropriate, they can be \textit{extremely useful}.
-
-
-% This LaTeX transcription is focused on the text content of the lecture slide
-% Non-textual elements like background and slide design aren't included
-% Code syntax and elements are transcribed as-is, without LaTeX formatting beyond basic structuring
 
 \subsubsection{More options}
+Beyond simple linked lists, other data structures offer different performance trade-offs:
 
 \begin{itemize}
-	\item Indirection (dynamic array of pointers)
-	\item In-memory tree data structures
-	\begin{verbatim}
-	struct nary_node {
-	    struct payload data;
-	    struct nary_node *children[MAX_CHILDREN];
-	};
+    \item Indirection, such as a dynamic array of pointers, allows for a level of indirection which can simplify memory management.
+    \item In-memory tree data structures, like binary trees or n-ary trees, provide hierarchical organization and can be more efficient for certain types of operations.
+\end{itemize}
 
-	struct dll_node {
-	    struct payload data;
-	    struct dll_node *prev_sibling;
-	    struct dll_node *next_sibling;
-	    struct dll_node *first_child;
-	};
-	\end{verbatim}
-	\item \ldots
+\begin{verbatim}
+struct nary_node {
+    struct payload data;
+    struct nary_node *children[MAX_CHILDREN];
+};
+
+struct dll_node {
+    struct payload data;
+    struct dll_node *prev_sibling;
+    struct dll_node *next_sibling;
+    struct dll_node *first_child;
+};
+\end{verbatim}
+
+\paragraph{Key concepts}
+\begin{itemize}
+    \item Understand the trade-offs between different data structures regarding memory allocation and access patterns.
+    \item Recognize that linked lists can incur additional overhead due to memory allocation and may not benefit as much from cache optimization.
+    \item Consider alternative data structures like indirection or in-memory trees for more complex needs or to improve performance.
 \end{itemize}
