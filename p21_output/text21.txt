@@ -1,43 +1,30 @@
 \newpage
-\section{Lecture 21}
+\section{Tries, hash tables, spatial data structures}
 
 \subsection{Associative Arrays}
+Associative arrays, also known as maps or dictionaries, are fundamental data structures in computer science and programming.
+
+\subsection*{Definition and Operations}
 \begin{itemize}
-    \item also known as maps or dictionaries
-    \item are collections of (key, value) tuples, where
+    \item Associative arrays are collections of key-value pairs or tuples.
+    \item Keys can be any string of bits, such as integers or strings.
+    \item Values are data associated with the keys.
+    \item Operations supported by associative arrays include:
     \begin{itemize}
-        \item key could be any string of bits (integer, character string, other data)
-        \item value is any data
-    \end{itemize}
-    \item that support
-    \begin{itemize}
-        \item insertion (add a (key, value) tuple)
-        \item deletion (remove a (key, value) tuple)
-        \item lookup given a key,
-        \begin{itemize}
-            \item find the corresponding value,
-            \item or determine that no such key has been added
-        \end{itemize}
+        \item Insertion: Adding a new key-value pair.
+        \item Deletion: Removing an existing key-value pair.
+        \item Lookup: Finding the value associated with a given key.
     \end{itemize}
 \end{itemize}
 
 
-% Start of LaTeX content transcription
 
 \subsubsection{Naive implementation}
+A naive implementation of an associative array can be achieved using a simple list of key-value tuples.
 
-Just some list of (key, value) tuples:
-\begin{align*}
-(k_0, v_0) \\
-(k_1, v_1) \\
-(k_2, v_2) \\
-(k_3, v_3) \\
-(k_4, v_4) \\
-(k_5, v_5) \\
-\ldots
-\end{align*}
+\subsubsection{Complexity}
+The complexity of operations in a naive implementation varies based on the underlying data structure:\\
 
-% We replace the table with LaTeX tabular environment 
 \begin{tabular}{lccc}
 \hline
 & Insertion & Deletion (after lookup) & Lookup \\
@@ -47,53 +34,44 @@ Dynamic array & $O(1)$ & $O(n)$ & $O(n)$ \\
 \hline
 \end{tabular}
 
-\subsection{Implementations using a total order on keys}
 
+
+\subsection{Implementations using a total order on keys}
 \subsubsection{Total order on keys}
+\textbf{Key comparison}
 \begin{itemize}
-\item We assume that we can compare keys (i.e. evaluate key\textunderscore{i} $\leq$ key\textunderscore{j} for any i, j)
-\item Always possible in practice (reinterpret key bits as a big integer)
-\item Sometimes, a specialized $<$ operator makes sense (e.g. constant-size keys)
-\item key space may be infinite (arbitrary-sized keys)
+    \item Associative arrays require a mechanism to compare keys (e.g., \( key_i \leq key_j \)).
+    \item In practice, key comparison is feasible by interpreting keys as large integers.
+    \item Specialized comparison operators may be more efficient for constant-sized keys.
+    \item Key space could potentially be infinite, accommodating arbitrary-sized keys.
 \end{itemize}
 
-% End of LaTeX content transcription
 
-
-% Sorted dynamic array of (key, value) tuples section
 \subsubsection{Sorted dynamic array of (key, value) tuples}
 
 \begin{itemize}
-    \item Assume key$_{0} \leq$ key$_{1} \leq \dots \leq$ key$_{n}$.
-    \item Use bisection for key lookup
+    \item Sorted dynamic arrays maintain keys in a total order (e.g., \( key_0 \leq key_1 \leq \dots \leq key_n \)).
+    \item Lookup operations can use binary search, leading to \( O(\log n) \) complexity.
 \end{itemize}
 
-% Table comparing insertion, deletion, and lookup operations
 \begin{tabular}{lccc}
+\hline
 \textbf{Data Structure} & \textbf{Insertion} & \textbf{Deletion (after lookup)} & \textbf{Lookup} \\
 \hline
 Linked list             & O(1)               & O(1)                            & O(n)             \\
 Dynamic array           & O(1)               & O(n)                            & O(n)             \\
-Sorted dynamic array    & O(n)               & O(n)                            & O(\log(n))       \\
+Sorted dynamic array    & O(n)               & O(n)                            & $O(\log(n))$       \\
+\hline
 \end{tabular}
 
-% Binary search tree section
 \subsubsection{Binary search tree}
 
 \begin{itemize}
-    \item Invariant: For any given node $i$,
-    \begin{itemize}
-        \item key$_{j}$ $<$ key$_{i}$ for every descendant node $j$ in the left subtree of $i$
-        \item key$_{j}$ $>$ key$_{i}$ for every descendant node $j$ in the right subtree of $i$
-    \end{itemize}
-    \item Main concern: depending on insertion order, we may get
+    \item A binary search tree (BST) maintains a total order invariant within its structure.
+    \item Each node \( i \) guarantees \( key_j \leq key_i \) for all \( j \) in its left subtree and \( key_j > key_i \) for all \( j \) in its right subtree.
+    \item The shape of the BST can vary greatly depending on the insertion order, which can impact performance.
 \end{itemize}
 
-% Placeholder for images depicting good and bad binary search trees
-% Actual images cannot be represented in LaTeX, hence the placeholder [TBD]
-[TBD: Illustrations of good and bad binary search trees]
-
-% Self-balancing binary search tree section
 \subsubsection{Self-balancing binary search tree}
 
 \begin{itemize}
@@ -102,22 +80,22 @@ Sorted dynamic array    & O(n)               & O(n)                            &
     \item B-trees, splay trees, treaps, \ldots
 \end{itemize}
 
-% Table comparing insertion, deletion, and lookup operations in self-balancing trees
 \begin{tabular}{lccc}
+\hline
 \textbf{Data Structure}     & \textbf{Insertion}         & \textbf{Deletion (after lookup)} & \textbf{Lookup}      \\
 \hline
 Linked list                 & O(1)                       & O(1)                            & O(n)                 \\
 Dynamic array               & O(1)                       & O(n)                            & O(n)                 \\
-Sorted dynamic array        & O(n)                       & O(n)                            & O(\log(n))           \\
+Sorted dynamic array        & O(n)                       & O(n)                            & $O(\log(n))$           \\
 Binary search tree          & O(n)                       & O(n)                            & O(n)                 \\
-AVL tree                    & O(\log(n))                 & O(\log(n))                      & O(\log(n))           \\
-Red-black tree              & O(\log(n))                 & O(\log(n))                      & O(\log(n))           \\
+AVL tree                    & $O(\log(n))$                 & $O(\log(n))$                      & $O(\log(n))$           \\
+Red-black tree              & $O(\log(n))$                 & $O(\log(n))$                      & $O(\log(n))$           \\
+\hline
 \end{tabular}
 
 
 \begin{itemize}
-    \item Cache behavior: ok, not great \\
-    (similar to other binary tree structures, e.g., heap)
+    \item Cache behavior: ok, not great (similar to other binary tree structures, e.g., heap)
 \end{itemize}
 
 
@@ -126,699 +104,362 @@ Red-black tree              & O(\log(n))                 & O(\log(n))           
 \subsubsection{Trie}
 
 \begin{itemize}
-    \item A trie (or prefix tree) is a tree of static arrays of size $2^T$
-    \item Key bits are divided into chunks of $T$ bits: ``letters''
-    \item Each $T$-bits letter gives an index for one node's static arrays
-    \item Letters form a path in the tree (from root to leaf)
+    \item A trie, also known as a prefix tree, is a tree structure that uses static arrays of size \(2^T\) for routing.
+    \item Keys are divided into chunks or "letters" of \(T\) bits.
+    \item Each chunk provides an index into a node's static arrays.
+    \item The path from the root to a leaf represents the complete key.
+\end{itemize}
+
+\paragraph{Trie Operations}
+A Trie is a specialized tree used to store associative arrays, where the keys are usually strings. Inserting a key into a trie involves several steps:
+\begin{enumerate}
+    \item A key is represented by a series of characters. In the context of a trie, each character can be thought of as a node in the tree.
+    \item To insert a key, we start at the root of the trie and traverse the tree by following the path defined by the key's characters.
+    \item At each step, we look at the current character in the key and move to the corresponding child node.
+    \item If a child node corresponding to the current character does not exist, we create a new node.
+    \item We continue this process until all characters in the key have been processed.
+    \item Once we reach the end of the key, we mark the final node as an end node, which signifies the completion of a key insertion.
+\end{enumerate}
+
+
+\paragraph{Trie Insertion Example}
+Consider the insertion of the hexadecimal keys \(0x9f2\), \(0x8cd\), and \(0x532\) with corresponding values \(V1\), \(V2\), and \(V3\) into a trie where each node represents 4 bits of the key.
+
+\begin{enumerate}
+    \item For the key \(0x9f2\) with value \(V1\), we would insert the 4-bit segments (2, f, 9) one by one, creating a path in the trie.
+    \item Next, for the key \(0x8cd\) with value \(V2\), we would insert the segments (d, 8, c) into the trie, potentially sharing nodes with the previous key if any 4-bit segments are the same.
+    \item Finally, for the key \(0x532\) with value \(V3\), we would insert the segments (2, 3, 5) into the trie, again sharing nodes with any previously inserted keys that have matching segments.
+\end{enumerate}
+
+
+\paragraph{Complexity Analysis}
+\begin{itemize}
+    \item Tries are highly efficient for lookups, insertions, and deletions.
+    \item They provide a means to search for keys in a dataset of strings in \(O(m)\) time complexity, where \(m\) is the length of the key to be searched.
+    \item They are particularly useful for implementing dictionaries with prefix-based lookups.
 \end{itemize}
 
 
-
-% Since the image includes content that mirrors a piece of code or console output,
-% we will use the verbatim environment to preserve whitespace and formatting.
-
-\begin{verbatim}
-T = 4
-
-\end{verbatim}
-
-\begin{verbatim}
-T = 4
-Insert (0xf92, V1) -> letters 2, f, 9
-
-\end{verbatim}
-
-\begin{verbatim}
-T = 4
-Insert (0xf92, V1) -> letters 2, f, 9
-
-0 1 2 3 4 5 6 7 8 9 a b c d e f
-\end{verbatim}
-
-% The [TBD] tokens are placeholders for the content that cannot be transcribed into LaTeX, 
-% such as images or other non-text elements.
-% This LaTeX code is structured in a manner that emulates the slide content from the provided image. 
-
-
-% Transcription of textual content in the image into LaTeX format.
-% Diagrams/images replaced with [TBD].
-
-T = 4 \\
-Insert (\texttt{0xf92}, V1) $\rightarrow$ letters 2, f, 9
-
-\begin{verbatim}
-    0123456789abcdef
-\end{verbatim}
-
-% Arrow and movement representations are omitted, replaced by [TBD] token.
-[TBD]
-
-\begin{verbatim}
-    0123456789abcdef
-\end{verbatim}
-
-% Arrow and movement representations are omitted, replaced by [TBD] token.
-[TBD]
-
-\begin{verbatim}
-    0123456789abcdef
-\end{verbatim}
-
-% Arrow and movement representations are omitted, replaced by [TBD] token.
-[TBD]
-
-
-% No document header or preamble is needed as requested, just the lecture material content.
-
-$T = 4$
-
-Insert $(0x9F, V1)$ $\rightarrow$ letters $2, f, g$
-
-Insert $(0x8d, V2)$ $\rightarrow$ letters $d, 8, c$
-
-% Arrows and the letter/number sequence diagrams are to be replaced with [TBD] as they cannot be transcribed into LaTeX directly.
-[TBD]
-
-[TBD]
-
-[TBD]
-
-
-\begin{verbatim}
-T = 4
-Insert (0x8F92, V1) -> letters 2, f, g
-Insert (0x8C4D, V2) -> letters d, 8, c
-\end{verbatim}
-
-% [TBD] - Non-textual elements are omitted
-
-\begin{verbatim}
-T = 4
-Insert (0x8F92, V1) -> letters 2, f, g
-Insert (0x8C4D, V2) -> letters d, 8, c
-Insert (0x5322, V3) -> letters 2, 3, 5
-\end{verbatim}
-
-% [TBD] - Non-textual elements are omitted
-
-\begin{verbatim}
-T = 4
-Insert (0x8F92, V1) -> letters 2, f, g
-Insert (0x8C4D, V2) -> letters d, 8, c
-Insert (0x5322, V3) -> letters 2, 3, 5
-\end{verbatim}
-
-% [TBD] - Non-textual elements are omitted
-
-
-
-% Preamble and document start are not required as per the instruction to focus on lecture content transcription.
-% The LaTeX content starts below; replace [TBD] with the proper content in your final document if necessary.
-
-
-
-% First part of the lecture content
-T = 4 \\
-Insert (0x9f2, V1) $\rightarrow$ letters 2, f, g \\
-Insert (0x8cd, V2) $\rightarrow$ letters d, 8, c \\
-Insert (0x532, V3) $\rightarrow$ letters 2, 3, 5 \\
-
-% Placeholder for the first sequence of graphical diagrams
-[TBD] 
-
-% Second part of the lecture content
-T = 4 \\
-Insert (0x9f2, V1) $\rightarrow$ letters 2, f, g \\
-Insert (0x8cd, V2) $\rightarrow$ letters d, 8, c \\
-Insert (0x532, V3) $\rightarrow$ letters 2, 3, 5 \\
-
-% Placeholder for the second sequence of graphical diagrams
-[TBD]
-
-% End of LaTeX content
-
-
 \subsubsection{Key space}
+The key space of an associative array refers to the range of all possible keys that can be used within the array. The concept of \emph{dense} and \emph{sparse} key spaces is crucial in the context of data structure efficiency.
 
 \begin{itemize}
-    \item Let us denote
-    \begin{itemize}
-        \item $K$: the set of all values a key can take
-        \item $n$: number of tuples in the associative array
-    \end{itemize}
-    \item We say that the key space is ``sparse'' if $n \ll K$
-    \item We call it ``dense'' otherwise
+    \item Let \( K \) be the set of all possible keys, and \( n \) the number of tuples in the associative array.
+    \item A key space is considered \emph{sparse} if \( n \ll K \), meaning that the number of actual keys used is much less than the possible number of keys.
+    \item If the number of used keys is comparable to the number of possible keys, the key space is considered \emph{dense}.
 \end{itemize}
 
 \subsubsection{``Dense'' key space}
 
-% The following code assumes a LaTeX package for algorithms or pseudo-code is available, 
-% such as algorithm2e or algorithmic, if this section is interpreted as pseudocode.
-% Else it can be considered as a simple textual enumeration.
-
 \begin{itemize}
-    \item $T = 4$
-    \item $n = 4096$
-    \item Insert $(0x001, V_0)$
-    \item Insert $(0x002, V_2)$
-    \item Insert $(0xffff, V_{4095})$
-\end{itemize}
-
-% Diagrams illustrating trie insertions would go here. Replace [TBD] with the actual diagram or use packages like tikz to recreate it.
-
-[TBD]
-
-\begin{itemize}
-    \item Insertion/deletion/lookup are $\sim O(3) = O(\log_{16} 4096) = O(\log_{2} n)$
-    \item but\dots
-    \item
-    \item \dots then why not use just a static array? (or equivalently choose $T = 12$)
+    \item In a \emph{dense} key space, most of the potential keys have values associated with them.
+    \item Operations such as insertion, deletion, and lookup can be done in \( O(\log{T} n) \) time, where \( T \) is a factor related to the trie branching (typically the size of the alphabet or character set).
+    \item For a dense key space, a static array can be more efficient as the operations become \( O(1) \).
 \end{itemize}
 
 \subsubsection{``Sparse'' key space}
 
 \begin{itemize}
-    \item Tries only make sense when the key space is sparse
-    \begin{itemize}
-        \item a static array of the size of the whole key space would be too big
-    \end{itemize}
-    \item Complexity not dependent on number of entries
-    \begin{itemize}
-        \item Depends on key size and $T$
-    \end{itemize}
-    \item Memory overhead can be large
-    \begin{itemize}
-        \item worst case: every leaf node has a single tuple, $O(n \times 2^{T})$
-    \end{itemize}
+    \item Tries are particularly useful for \emph{sparse} key spaces where a static array of the entire key space would be impractically large.
+    \item The complexity of trie operations in a sparse key space is not dependent on the number of entries but on the key size and the trie branching factor \( T \).
+    \item A sparse key space can lead to high memory overhead in the worst case, where every leaf node might contain only a single tuple.
 \end{itemize}
-
-
-
-% Since this transcription is to be formatted in LaTeX directly, I'm omitting the document preamble and begin/end document commands, focusing solely on the content.
+A trie provides a balance between the two extremes, offering more efficient memory usage in sparse key spaces without sacrificing the performance benefits of a static array in dense key spaces.
 
 \subsection{Implementations using key bits - hash tables}
-
-\begin{itemize}
-    \item Again, we denote
-    \begin{itemize}
-        \item $\mathcal{K}$: the set of all values a key can take
-        \item $n$: number of tuples in the associative array
-    \end{itemize}
-    \item If we had a ``dense'' key space ($n$ not much smaller than $\mathcal{K}$)
-    \begin{itemize}
-        \item then we would simply use a static array, indexed by keys
-    \end{itemize}
-    \item Could we map $\mathcal{K}$ into something dense?
-    \begin{itemize}
-        \item ... and then use a static array
-    \end{itemize}
-\end{itemize}
+Hash tables are a way to implement associative arrays by mapping a large, potentially sparse key space into a smaller, dense index space using a hash function.
 
 \subsubsection{Hash function}
-
 \begin{itemize}
-    \item A hash function $h$ is a mapping $h : \mathcal{K} \rightarrow \mathcal{U}$ where $\mathcal{U} \subseteq \mathbb{N}$ and $|\mathcal{U}| \ll |\mathcal{K}|$ \\ (indeed $\mathcal{K}$ may not be a finite set, e.g. for arbitrary-sized keys)
-    \item Since $|\mathcal{U}| < |\mathcal{K}|$, hash functions are necessarily surjective
-    \item[] $\exists k_1 \neq k_2$ such that $h(k_1) = h(k_2)$
-    \item Examples of (usually bad) hash functions:
-    \begin{itemize}
-        \item take just the lower 8 bits of the key
-        \item $h : \mathbb{Z} \rightarrow \{0, \ldots, m - 1\}, \quad h(k) = k \mod m$
-    \end{itemize}
+    \item A hash function \( h \) is a mapping from the key space \( K \) to an index space \( U \), where \( U \subseteq \mathbb{N} \) and the size of \( U \) is much smaller than \( K \).
+    \item A good hash function distributes keys evenly across the index space, minimizing the chance of collisions.
+    \item Examples of hash functions include taking a subset of the key bits or using modular arithmetic, such as \( h(k) = k \mod m \) for some integer \( m \).
 \end{itemize}
-
-
-% The content reflects the text in the slides provided in the image.
-% Ensure that the amsmath package is included in the preamble for proper rendering.
-
 
 \subsubsection{Hash table}
-
 \begin{itemize}
-    \item A hash table is a static array of size $|U|$
-    \item with an associated hash function \[ h : K \to U. \]
-    \item $(k, v)$ tuples are stored in the static array at index $h(k)$
-    \item Since $h$ is surjective, we may have collisions \\
-    (tuples with distinct keys stored at a same array index)
+    \item A hash table uses a static array of size \( |U| \) to store values.
+    \item Each key-value tuple \((k, v)\) is stored in the array at the index given by \( h(k) \).
+    \item Due to the surjective nature of hash functions, collisions can occur where multiple keys are hashed to the same index.
 \end{itemize}
 
-\subsubsection{How to deal with collisions (1)}
- 
+\subsubsection{Dealing with collisions}
+When implementing associative arrays using hash tables, collisions occur when two different keys hash to the same index. Here are some strategies to handle collisions:
+
+\paragraph{Collision Resolution Strategies}
 \begin{itemize}
-    \item Make the hash table
+    \item The hash table can be a static array of linked lists. When a collision occurs, the colliding elements are added to the list at the hashed index.
+    \item Alternatively, a static array of dynamic arrays (or vectors) can be used, where colliding elements are appended to the dynamic array at the hashed index.
+\end{itemize}
+
+\paragraph{Search Complexity in Case of Collisions}
+\begin{itemize}
+    \item When collisions occur, a linear search within the linked list or dynamic array at the hash index is performed.
+    \item If \( c \) is the maximum number of collisions at a hash index, the worst-case search complexity is \( O(c) \).
+    \item In the worst case where all elements collide at the same index, \( c \) can be equal to \( n \), making the complexity \( O(n) \).
+\end{itemize}
+
+\paragraph{Insertion and Lookup Operations}
+\begin{itemize}
+    \item To insert a key-value pair \((k, v)\), hash the key to find the index and add the pair to the appropriate data structure at that index.
+    \item To lookup a value for a key, hash the key to find the index, and then search through the data structure at that index to find the value.
+\end{itemize}
+
+
+
+
+\subsubsection{Open addressing as a collision resolution method}
+Open addressing is a collision resolution method in hash tables. When a collision occurs, it finds another place within the hash table.
+
+\paragraph{Insertion Process}
+\begin{enumerate}
+    \item Compute the hash index \( i = h(\text{key}) \).
+    \item If \texttt{array[i]} is empty, place the \((\text{key}, \text{value})\) tuple there. Process done.
+    \item Otherwise, if \texttt{array[i]} is occupied (collision), then let \( i = (i + 1) \mod |U| \), and repeat from step 2.
+\end{enumerate}
+
+\textbf{Example of Open Addressing}
+\begin{lstlisting}
+h(k) = k mod 16
+Insert (0x9f2, V1) -> h(0x9f2) = 0x2
+Insert (0x8cd, V2) -> h(0x8cd) = 0xd
+Insert (0x532, V3) -> h(0x532) = 0x2
+
+// Array after insertion
+// Indices:   0 1 2 3 4 5 6 7 8 9 a b c d e f
+// Values:    . . V1V3. . . . . . . . . V2. .
+\end{lstlisting}
+
+\paragraph{Handling Collisions}
+\begin{itemize}
+    \item If a collision is found at index \( i \), check the next index \( i+1 \).
+    \item Continue checking in a circular manner until an empty slot is found.
+    \item If the table is full, the insertion fails (or rehashing is needed).
+\end{itemize}
+
+\paragraph{Lookup After Collision}
+\begin{itemize}
+    \item To lookup a value for a key after collisions, start at \( h(\text{key}) \) and search sequentially until:
     \begin{itemize}
-        \item a static array of linked lists, or
-        \item a static array of dynamic arrays
-    \end{itemize}
-    \item In case of collision, resort to $O(c)$ linear search \\
-    (where $c$ is the maximum number of collisions)
-    \begin{itemize}
-        \item in the worst case, $c = n$
+        \item The key is found, or
+        \item An empty slot is encountered, indicating the key is not in the table.
     \end{itemize}
 \end{itemize}
 
-% The following section contains a series of operations with corresponding hash values
-% and an illustration of data being placed into the hash table.
-% The illustration should be replaced by [TBD] as it cannot be represented in LaTeX.
-\[
-\begin{array}{l}
-h(k) = k \mod 16 \\
-\text{Insert} (0x9F82, V1) \to h(0x9F82) = 0x02 \\
-\text{Insert} (0x5AD6, V2) \to h(0x5AD6) = 0x0D \\
-\text{Insert} (0x5823, V3) \to h(0x5823) = 0x02 \\
-\end{array}
-\]
-\[ \text{[TBD]} \] % Placeholder for the hash table illustration
 
+\paragraph{Lookup in Hash Tables with Open Addressing}
+The lookup process for retrieving the value associated with a key in a hash table that uses open addressing is as follows:
 
-
-% Preamble or document class commands are omitted as only the transcription of the lecture content is required
-
-\[
-h(k) = k \mod 16
-\]
-\begin{align*}
-\text{Insert }(0x9f2, \, V1) & \rightarrow h(0x9f2) = 0x2 \\
-\text{Insert }(0x8c8, \, V2) & \rightarrow h(0x8c8) = 0xd \\
-\text{Insert }(0x532, \, V3) & \rightarrow h(0x532) = 0x2 \\
-\text{Lookup }0x4d2 & \rightarrow h(0x4d2) = 0x2
-\end{align*}
-% Visual representation of hash table omitted, replaced by [TBD]
-[TBD]
-
-% Second variant with slightly different results, likely depicting different states in the hash table after operations
-\[
-h(k) = k \mod 16
-\]
-\begin{align*}
-\text{Insert }(0x9f2, \, V1) & \rightarrow h(0x9f2) = 0x2 \\
-\text{Insert }(0x8c8, \, V2) & \rightarrow h(0x8c8) = 0xd \\
-\text{Insert }(0x532, \, V3) & \rightarrow h(0x532) = 0x2 \\
-\text{Lookup }0x4d2 & \rightarrow h(0x4d2) = 0x2 \text{ - not found}
-\end{align*}
-% Visual representation of hash table omitted, replaced by [TBD]
-[TBD]
-
-% Note: The LaTeX code provided above should be placed within a LaTeX document, within the appropriate section such as a document or a math environment in order to compile.
-
-
-% Ensure that the necessary packages for lists and math are included when compiling this LaTeX document
-
-\subsubsection{How to deal with collisions (2): Open addressing}
-
-\begin{itemize}
-  \item Insertion of \texttt{(key, value)}:
-  \begin{itemize}
-    \item Step 0: Compute index \texttt{i = h(key)}
-    \item Step 1: If \texttt{array[i]} is empty,
+\begin{enumerate}
+    \item Compute the initial index \( i \) using the hash function: \( i = h(\text{key}) \).
+    \item Check if the key at the computed index matches the key we are looking for:
     \begin{itemize}
-      \item place \texttt{(key, value)} there, done.
+        \item If \texttt{array[i]} matches the key, return \texttt{array[i]}.
+        \item If \texttt{array[i]} is empty, return \textcolor{red}{\textbf{not found}}.
+        \item If another key is found at \texttt{array[i]}, compute the next index \( i = (i + 1) \mod |U| \), and go back to the previous step.
     \end{itemize}
-    \item Step 2: Otherwise,
-    \begin{itemize}
-      \item let \texttt{i = (i + 1) mod |U|},
-      \item go back to Step 1.
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-
-% Below is an ASCII representation (and not actual LaTeX code) of the hash table state visual
-% Remember to replace or recreate the visual appropriately if necessary
-% [TBD] Image content describing the hash table state is not transcribed into LaTeX
-
-\begin{verbatim}
-h(k) = k mod 16
-Insert (0x8F92, V1)   -> h(0x8F92) = 0x2
-Insert (0x8C8D, V2)   -> h(0x8C8D) = 0xD
-Insert (0x532, V3)    -> h(0x532) = 0x2
-
-    0 1 2 3 4 5 6 7 8 9 a b c d e f
-    | |V3| | | | | | | | | | | |V2| |
-\end{verbatim}
-
-\begin{verbatim}
-h(k) = k mod 16
-Insert (0x8F92, V1)   -> h(0x8F92) = 0x2
-Insert (0x8C8D, V2)   -> h(0x8C8D) = 0xD
-Insert (0x532, V3)    -> h(0x532) = 0x2
-Insert (0x8C82, V4)   -> h(0x8C8D) = 0xD
-Lookup (0x4D2)        -> h(0x4D2) = 0x2
-
-    0 1 2 3 4 5 6 7 8 9 a b c d e f
-    | |V1V3| | | | | | | | | | | |V2| |
-\end{verbatim}
-
-% The actual visuals would need to be created using a LaTeX package capable of drawing such diagrams,
-% such as Tikz, or another method such as tabular environments or specialized hash table representation packages.
-
-
-% Since LaTeX doesn't handle images natively without \includegraphics, we'll use [TBD] to represent where an image would go.
-% Start of the LaTeX document content
-
-
-% First block of lecture content
-h(k) = k mod 16
-
-\begin{tabular}{ll}
-Insert &(0xf92, V1) & $\rightarrow$ & h(0xf92) = 0x2 \\
-Insert &(0x8c8, V2) & $\rightarrow$ & h(0x8c8) = 0xd \\
-Insert &(0x532, V3) & $\rightarrow$ & h(0x532) = 0x2 \\
-Lookup &0x4d2       & $\rightarrow$ & h(0x4d2) = 0x2 \\
-\end{tabular}
-
-[TBD] % Placeholder for the image that cannot be represented in LaTeX
-
-% Second block of lecture content (same as the first, suitable for direct use)
-h(k) = k mod 16
-
-\begin{tabular}{ll}
-Insert &(0xf92, V1) & $\rightarrow$ & h(0xf92) = 0x2 \\
-Insert &(0x8c8, V2) & $\rightarrow$ & h(0x8c8) = 0xd \\
-Insert &(0x532, V3) & $\rightarrow$ & h(0x532) = 0x2 \\
-Lookup &0x4d2       & $\rightarrow$ & h(0x4d2) = 0x2 \\
-\end{tabular}
-
-[TBD] % Placeholder for the image that cannot be represented in LaTeX
-
-% Third block of lecture content (same as the first, suitable for direct use)
-h(k) = k mod 16
-
-\begin{tabular}{ll}
-Insert &(0xf92, V1) & $\rightarrow$ & h(0xf92) = 0x2 \\
-Insert &(0x8c8, V2) & $\rightarrow$ & h(0x8c8) = 0xd \\
-Insert &(0x532, V3) & $\rightarrow$ & h(0x532) = 0x2 \\
-Lookup &0x4d2       & $\rightarrow$ & h(0x4d2) = 0x2 \\
-\end{tabular}
-
-[TBD] % Placeholder for the image that cannot be represented in LaTeX
-
-% End of the LaTeX document content
-
-
-% Since this is lecture content transcribed into LaTeX and not a full document,
-% Simply put the content below into a LaTeX document body where appropriate.
-
-h(k) = k \text{ mod } 16 \\
-\text{Insert } (0x9f12, V1) \rightarrow h(0x9f12) = 0x2 \\
-\text{Insert } (0x58, V2) \rightarrow h(0x58) = 0x8 \\
-\text{Insert } (0x2cd2, V3) \rightarrow h(0x2cd2) = 0x2 \\
-\text{Lookup } 0x4d2 \rightarrow h(0x4d2) = 0x2 \text{ not found}
-
-% [TBD] refers to the table which is not included in LaTeX transcription.
-[TBD] 
-
-\begin{itemize}
-  \item Lookup for key:
-  \begin{itemize}
-    \item Step 0: Compute index $i = h(\text{key})$
-    \item Step 1: If \texttt{array[$i$]} matches key,
-    \begin{itemize}
-      \item return \texttt{array[$i$]}.
-    \end{itemize}
-    \item Step 2: If \texttt{array[$i$]} is empty,
-    \begin{itemize}
-      \item return \textit{not found}.
-    \end{itemize}
-    \item Step 2: Otherwise,
-    \begin{itemize}
-      \item let $i = (i + 1) \mod |U|$,
-      \item go back to Step 1.
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
+\end{enumerate}
 
 \subsubsection{Probing}
 
+Probing is a technique used in hash tables to resolve collisions. It involves finding the next available slot or bucket when a collision occurs. Here's how it works during insertion:
+
+\begin{enumerate}
+    \item \textbf{Compute initial index}: Let \( h_0 = h(k) \) be the hash of key \( k \), and initialize \( j = 0 \).
+    \item \textbf{Check the slot}: If the slot \( array[i(h_0, j)] \) is empty, insert \( (k, v) \) there and terminate the insertion.
+    \item \textbf{Collision resolution}: If the slot is occupied, increment \( j \) and find the next slot using a probing function \( i(h_0, j) \), then repeat step 2.
+\end{enumerate}
+
+The probing function \( i(h_0, j) \) can vary:
 \begin{itemize}
-  \item Insertion of $(k, v)$:
-  \begin{itemize}
-    \item Step 0:
-    \begin{itemize}
-      \item Compute index $h_0 = h(k)$
-      \item Let $j = 0$
-    \end{itemize}
-    \item Step 1: If \texttt{array[$i(h_0, j)$]} is empty,
-    \begin{itemize}
-      \item place $(k, v)$ there, done.
-    \end{itemize}
-    \item Step 2: Otherwise,
-    \begin{itemize}
-      \item let $j = j + 1$,
-      \item go back to Step 1.
-    \end{itemize}
-  \end{itemize}
-  \item where $i(h_0, j)$ can be:
-  \begin{itemize}
-    \item $i(h_0, j) = (h_0 + j) \mod |U|$ as before
-    \item $i(h_0, j) = (h_0 + Kj) \mod |U|$ for some constant $K$ ("linear probing")
-    \item $i(h_0, j) = (h_0 + Kj + Lj^2) \mod |U|$ for some $K, L$ ("quadratic probing")
-  \end{itemize}
+    \item \textbf{Linear probing}: \( i(h_0, j) = (h_0 + j) \mod |U| \).
+    \item \textbf{Quadratic probing}: \( i(h_0, j) = (h_0 + Kj + Lj^2) \mod |U| \) for some constants \( K \) and \( L \).
 \end{itemize}
 
 
-% Since the image is not to be included, it is replaced with the [TBD] token.
-% This LaTeX code represents the content of the slides as text.
-[TBD]
-
 \subsubsection{Good hash functions}
-
 \begin{itemize}
-  \item in practice, naive hash functions yield horrible collision rates \\
-  (even for random keys!)
-
-  \item good hash functions perform great on real (non-random) keys
-  \begin{itemize}
-    \item they take a non-uniform distribution of keys over \( K \)
-    \item map it into a distribution over \( U \) that ``looks'' uniformly random
-  \end{itemize}
-
-  \item Fowler–Noll–Vo (FNV), djb2, SipHash (lookup ``non-cryptographic hash functions'')
-  
-  \item Such generic hash functions \( h_0 \) typically return 32-, 64- or 128-bit numbers.
-  \begin{itemize}
-    \item we use index \( h(k) = h_0(k) \mod |U| \)
-  \end{itemize}
+    \item Naive hash functions can lead to high collision rates, even with random keys.
+    \item Effective hash functions take a non-uniform distribution of keys over the key space \( K \) and map it to a uniform-looking distribution over a set \( U \), minimizing collisions.
+    \item Examples of good hash functions are Fowler–Noll–Vo (FNV), djb2, SipHash.
+    \item These functions usually output 32-, 64-, or 128-bit numbers, which are then mapped to the table size using modulo operation: \( h(k) = h_0(k) \mod |U| \).
 \end{itemize}
 
 \subsubsection{Complexity of hash table operations}
 
+Performance is influenced by many factors, including:
 \begin{itemize}
-  \item performance depends on
-  \begin{itemize}
-    \item density (\( \frac{n}{|U|} \))
-    \item key distribution
-    \item hash function
-    \item probing method
-  \end{itemize}
-  
-  \item when density approaches 1,
-  \begin{itemize}
-    \item increase \( |U| \) (e.g. double it)
-    \item rebuild hash table (``rehashing'')
-  \end{itemize}
+    \item The density \( \frac{n}{|U|} \), key distribution, hash function choice, and probing method all affect performance.
+    \item As table density approaches 1, it's often necessary to increase \( |U| \) and rebuild the hash table, known as "rehashing".
 \end{itemize}
-
-% The following is the transcription of the example calculations on the slide.
-% However, they are nonsensical without the context of the hash function and values being calculated.
-% The diagrams/graphs have been omitted and are represented as [TBD].
-\[ h(k) = k \mod 16 \]
-\[ \text{Insert (0xf91c, V1)} \rightarrow h(0xf91c) = 0x2 \]
-\[ \text{Insert (0x8cd, V2)} \rightarrow h(0x8cd) = 0xd \]
-\[ \text{Insert (0x532, V3)} \rightarrow h(0x532) = 0x2 \]
-
-% Diagrams/graphs hash table representation
-[TBD]
-
-
-
-% LaTeX content transcribed from lecture slide image
 
 \subsubsection{In practice}
 \begin{itemize}
-  \item as long as collision rate is kept low
-  \begin{itemize}
-    \item insert/delete/lookup are essentially \( O(1) \)
-  \end{itemize}
-  \item first hash table access is typically a cache miss (at least L1)
-  \item but with open addressing, in case of collisions, probing may not be
+    \item Keeping the collision rate low ensures that operations like insert, delete, and lookup can remain \( O(1) \) in average case.
+    \item The initial access to a hash table often results in a cache miss, which impacts performance.
+    \item With open addressing, collisions can affect the constant time performance due to the need for probing.
 \end{itemize}
 
 \subsection{Associative Arrays: performance}
-
+\textbf{Choice of Data Structure:}
 \begin{itemize}
-  \item Between self-balancing trees, tries and hash tables, no clearly superior data structure.
-  \item Data- and application-dependent.
-  \item Try, benchmark
+    \item There is no universally superior data structure for all scenarios; the choice between self-balancing trees, tries, and hash tables is highly dependent on the specific data and application requirements.
+    \item It is often beneficial to perform benchmarking to determine the most appropriate data structure.
 \end{itemize}
 
-
-
-Hash tables often perform better... when suitable:
+\paragraph{Hash Tables}
 \begin{itemize}
-  \item when hashing is cheap
-  \item when we can ensure few collisions
-  \item when the order of magnitude of $n$ known in advance
-\end{itemize}
-
-Self-balancing trees are often more robust:
-\begin{itemize}
-  \item much better worst case non-amortized complexity (rehashing!)
-\end{itemize}
-
-Tries can be faster when keys have a special structure
-\begin{itemize}
-  \item page table (virtual address translation)
-  \item network routing (IP addresses)
-  \item GPT-type tokenizers
-\end{itemize}
-
-\subsubsection{Combinations are possible and commonly used}
-\begin{itemize}
-  \item Hash table as a static array of self-balancing trees
-  \item Depth-K trie with self-balancing trees at leaf nodes
-  \item \ldots
-\end{itemize}
-
-\section{Spatial data structures}
-
-\subsection{Spatial data structures}
-Spatial data structures store collections of vectors in $\mathbb{R}^m$.
-\begin{itemize}
-    \item they allow operations such as
+    \item Hash tables may perform better when:
     \begin{itemize}
-        \item insertion (add a vector $\mathbf{x} \in \mathbb{R}^m$)
-        \item deletion (remove one vector)
-        \item find the vector closest to a given $\mathbf{y} \in \mathbb{R}^m$
-        \item for every inserted vector, find its nearest neighbor
-        \item for every inserted vector, find its $k$ nearest neighbors
-        \item for every inserted vector, find all other vectors within a distance $d$
+        \item Hashing operations are low-cost.
+        \item Collisions are infrequent.
+        \item The scale of the dataset (\( n \)) is predictable.
     \end{itemize}
 \end{itemize}
 
+\paragraph{Self-balancing Trees}
+\begin{itemize}
+    \item Self-balancing trees provide:
+    \begin{itemize}
+        \item Robustness with better worst-case non-amortized complexity, particularly during operations like rehashing.
+    \end{itemize}
+\end{itemize}
+
+\paragraph{Tries}
+\begin{itemize}
+    \item Tries can be more efficient when working with keys that have a structured pattern, such as:
+    \begin{itemize}
+        \item Virtual address translation in page tables.
+        \item IP address routing for networks.
+        \item Tokenizers in natural language processing (e.g., GPT-type models).
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Combinations of Data Structures}
+\begin{itemize}
+    \item Combining data structures can yield the benefits of multiple approaches and is common practice. Examples include:
+    \begin{itemize}
+        \item Hash tables implemented as a static array of self-balancing trees.
+        \item Depth-k tries with self-balancing trees at the leaf nodes.
+    \end{itemize}
+\end{itemize}
+
+
+
+\subsection{Spatial data structures}
+Spatial data structures are designed to manage multidimensional data, such as vectors in $\mathbb{R}^m$. They support various operations:
+
+\begin{itemize}
+    \item Insertion: Adding a vector $\mathbf{x} \in \mathbb{R}^m$.
+    \item Deletion: Removing a vector.
+    \item Finding the closest vector to a given vector $\mathbf{y} \in \mathbb{R}^m$.
+    \item Locating nearest neighbors for each inserted vector.
+    \item Identifying $k$ nearest neighbors for each inserted vector.
+    \item Discovering all vectors within a certain distance $d$ from each inserted vector.
+\end{itemize}
+
 \subsubsection{The problem}
-\textit{``for every inserted vector, find all other vectors within a distance $d$''}
+Given a set of vectors, the goal is to find all pairs of vectors that are within a distance $d$ from each other. A naive approach to this problem has a time complexity of $O(n^2)$, described by the following pseudocode:
 
-% The image is replaced with [TBD] as per instruction for non-textual elements
-[TBD]
+\begin{verbatim}
+R := {}
+for i = 0 to n - 1:
+    for j = i + 1 to n - 1:
+        if ||x^i - x^j|| <= d:
+            R := R union {(i, j)}
+\end{verbatim}
 
-% Document end not included, as per instructions.
-
-
-% Begin LaTeX transcription of image content
-
-Naively, this problem has $O(n^2)$ complexity:
-\begin{align*}
-R &:= \emptyset \\
-\text{For } i &= 0, \ldots, n - 1: \\
-&\quad \text{For } j = i + 1, \ldots, n - 1: \\
-&\quad\quad \text{If } \lVert x_i - x_j \rVert \leq d : \\
-&\quad\quad\quad R := R \cup \{(i,j)\}
-\end{align*}
-
-% Image content replaced with [TBD] as per the user request
-% [TBD] represents the images of grids with points and circle overlays found in the original image.
-Grids
-[TBD]
-
-Grids
-[TBD]
-
-% End LaTeX transcription of image content
-
-
-% The content of the slide is transcribed into LaTeX format.
-% [TBD] is used to denote the placeholder for images or diagrams as they cannot be represented in LaTeX through transcription.
 
 \subsubsection{Grids}
+A grid-based approach divides the space into a finite number of cells, which can significantly reduce the number of comparisons needed.
+
+\subsubsection*{Pros and Cons of Using Grids}
+\begin{itemize}
+    \item \textbf{Pros:}
+    \begin{itemize}
+        \item Quadratic complexity is limited to within individual grid cells.
+    \end{itemize}
+    \item \textbf{Cons:}
+    \begin{itemize}
+        \item Requires finite bounds $L \leq \mathbf{x}_i \leq U$ for all vectors.
+        \item Fixed cell size, which can lead to:
+        \begin{itemize}
+            \item A variable number of vectors in each cell.
+            \item Many cells being empty, especially in sparse regions.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+
+
+\subsubsection{Quadtrees and octrees}
+Quadtrees and octrees are tree data structures which partition a two-dimensional and three-dimensional space respectively into successively smaller regions.
+
+\begin{itemize}
+    \item They adaptively divide the space based on the distribution of the objects within.
+    \item Each node in a quadtree corresponds to a square region of space and has four children, which correspond to the four quadrants of the square.
+    \item Similarly, each node in an octree corresponds to a cubic region and has eight children.
+\end{itemize}
+
+\subsubsection{k-d trees}
+k-d trees are a binary tree used to organize points in k-dimensional space.
+
+\begin{itemize}
+    \item Nodes which are not leaves represent hyperplanes that divide the space into two parts, known as half-spaces.
+    \item Points to the left of this hyperplane are represented by the left subtree of that node and points to the right by the right subtree.
+    \item The tree alternates between axes used to partition the space.
+\end{itemize}
+
+
+\subsubsection{Quadtrees, octrees, k-d trees: Pros and Cons}
+\begin{itemize}
+    \item \textbf{Pros:}
+    \begin{itemize}
+        \item No need for finite bounds $L \leq \mathbf{x}_i \leq U$ for all points.
+        \item Cell size adapts to the distribution of the data.
+    \end{itemize}
+    \item \textbf{Limitations:}
+    \begin{itemize}
+        \item Cells have a fixed shape, which can be inefficient for high-dimensional data.
+        \item As the number of dimensions grows, the number of cells can grow exponentially, which is known as the curse of dimensionality.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Binary space partitioning}
+Binary Space Partitioning (BSP) is a method for recursively subdividing a space into convex sets by hyperplanes. This method is commonly used in computer graphics, computational geometry, and for developing spatial data structures.
+
+\begin{itemize}
+    \item BSP is a generic process of partitioning a space into two parts at each step.
+    \item It is typically implemented as a binary tree where each node represents a subregion of space partitioned by a hyperplane.
+\end{itemize}
 
 \begin{itemize}
     \item \textbf{Pros:}
     \begin{itemize}
-        \item quadratic only within grid cells
+        \item Variable cell shape, which allows for efficient space division according to the distribution of objects.
     \end{itemize}
     \item \textbf{Cons:}
     \begin{itemize}
-        \item need finite bounds \(L \leq x_i \leq U\) for all \(x\), for all \(i\)
-        \item fixed cell size
-        \begin{itemize}
-            \item some may have too many \(x\)s
-            \item many may be empty
-        \end{itemize}
+        \item Computation of separating hyperplanes can be costly.
     \end{itemize}
-\end{itemize}
-
-\subsubsection{Quadtrees and octrees}
-
-[TBD] % Placeholder for the first image - grid with scattered points
-
-% Since there is no text content associated with the images, no additional transcription is provided for them.
-
-[TBD] % Placeholder for the second image - grid with scattered points and a highlighted area (circle with shading)
-
-
-
-% [TBD: Image depicting an example of Quadtree spatial decomposition in a 2D space with points and a circular range query.]
-
-\subsubsection{k-d trees}
-
-% [TBD: Two images depicting examples of k-d tree spatial decomposition in a 2D space with points and a circular range query.]
-
-% Since the actual points and the specific division of space are graphical, they are represented as [TBD] here.
-
-
-
-[TBD]
-
-\subsubsection{Quadtrees, octrees, k-d trees}
-\begin{itemize}
-    \item Pros:
+    \item \textbf{Limitations:}
     \begin{itemize}
-        \item no need for finite bounds \(L \leq x_i \leq U\) for all \(x\), for all \(i\)
-        \item variable cell size
-    \end{itemize}
-    \item Limitations:
-    \begin{itemize}
-        \item fixed cell shape (cubes / boxes)
-        \item poor fit for high-dimensional data:
-        \begin{itemize}
-            \item as \(m\) grows
-            \item data size grows linearly
-            \item number of cells grows exponentially
-            \item even if all points are on a 2-dimensional hyperplane
-        \end{itemize}
+        \item Not suitable for high-dimensional data due to the curse of dimensionality.
     \end{itemize}
 \end{itemize}
 
-\subsubsection{Binary space partitioning}
-[TBD]
-
-\subsubsection{Binary space partitioning}
-
-\begin{itemize}
-\item \textbf{Pros:}
-  \begin{itemize}
-  \item variable cell shape
-  \end{itemize}
-\item \textbf{Cons:}
-  \begin{itemize}
-  \item separating hyperplane computation is costly
-  \end{itemize}
-\item \textbf{Limitations:}
-  \begin{itemize}
-  \item not a good fit for high-dimensional data if, e.g., on a 2-dimensional curved manifold
-  \end{itemize}
-\end{itemize}
 
 \subsubsection{Locality-sensitive hashing}
+Locality-Sensitive Hashing (LSH) is an algorithmic technique that hashes similar input items into the same “buckets” with high probability. The buckets are used to partition the space in a way that preserves locality.
 
-% Begin itemized list
 \begin{itemize}
-    \item Design a function $h : \mathbb{R}^m \rightarrow \mathbb{R}$
-
-    \item such that $\| y - x \| small \implies | h(y) - h(x) | \text{ small, with high probability}$
-
-    \item Impossible in all generality
-
-    \item Depends on data
+    \item The goal is to maximize the probability that similar items map to the same bucket.
+    \item LSH is used for approximate nearest neighbor search in high-dimensional spaces.
 \end{itemize}
-% End of the itemized list
+
+\subsection*{Designing a Locality-Sensitive Hash Function}
+
+\begin{itemize}
+    \item The hash function \( h \colon \mathbb{R}^m \to \mathbb{R} \) should ensure that if two points \( \mathbf{x}, \mathbf{y} \) are close in the input space, their hash values \( h(\mathbf{x}), h(\mathbf{y}) \) should be close as well.
+    \item It is often used in conjunction with other data structures to handle high-dimensional data efficiently.
+\end{itemize}
