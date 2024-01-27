@@ -2,19 +2,6 @@
 \section{Programming Languages}
 
 \subsection{Compilers vs Interpreters}
-
-
-
-% LaTeX code ends
-
-% Since LaTeX is a typesetting language, some commands might be specific to the document class or packages used.
-% The above example assumes a simple article or report document class without extra formatting packages.
-
-
-
-
-% The LaTeX transcription below focuses on the textual content of the lecture slides as displayed in the image.
-
 \subsubsection{Parsing}
 
 Parsing is the process of taking the source code and creating the corresponding abstract syntax tree (AST).
