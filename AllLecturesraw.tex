@@ -81,7 +81,7 @@
 operator    & math      & pseudocode & C code & logic gate \\
 negation    & $\neg$    & not        & !      & [TBD]      \\
 conjunction & $\land, \times$  & and         & \&\&, \&     & [TBD]      \\
-disjunction & $\lor, +$ & or          & ||, |      & [TBD]      \\
+disjunction & $\lor, +$ & or          & \texttt{||, |}      & [TBD]      \\
 \end{tabular}
 \vspace{4.5mm}
 
@@ -556,7 +556,7 @@ In computer systems, integers have a fixed number of bits, determining their siz
 \subsubsection{Operations with integers}
 Integer operations in binary are analogous to the decimal operations learned in school.
 
-\subsection*{Binary Addition Example}
+\paragraph{Binary Addition Example}
 \begin{verbatim}
   0 1 0 1 0 0 1 1
 + 0 1 1 0 0 0 0 1
@@ -571,21 +571,21 @@ Integer operations in binary are analogous to the decimal operations learned in 
     \item Division is the most complex, requiring iterative subtraction and shifting.
 \end{itemize}
 
-\subsubsection{Signed integers}
+\subsection{Signed integers}
 Representing negative numbers in binary requires special encoding:
 \subsubsection{Sign-Magnitude Representation}
 \begin{itemize}
     \item One bit is reserved for the sign (most significant bit).
-    \item Zero has two representations: $+0$ and $-0$.
-    \item Arithmetic with sign-magnitude is not straightforward.
+    \item Drawback: Zero has two representations: $+0$ and $-0$.
+    \item Drawback: Arithmetic with sign-magnitude is not straightforward.
 \end{itemize}
 
 \subsubsection{One's Complement Representation}
 \begin{itemize}
     \item The sign bit is also the most significant bit.
     \item Negative numbers are represented by flipping all bits of the positive value.
-    \item Zero still has two representations: $+0$ and $-0$.
-    \item Arithmetic is simpler than sign-magnitude but still not straightforward.
+    \item Drawback: Zero still has two representations: $+0$ and $-0$.
+    \item Drawback: Arithmetic is simpler than sign-magnitude but still not straightforward.
 \end{itemize}
 
 
@@ -594,9 +594,9 @@ It is the approach adopted by most current computers.
 \begin{itemize}
     \item In two's complement representation, a negative number \( x \) is represented by \( 2^n - x \) for an \( n \)-bit number.
     \item The most significant bit (MSB) is the sign bit, where \( 1 \) indicates a negative number.
-    \item Flipping the sign requires inverting all bits and adding \( 1 \).
-    \item This representation gives zero a single unique representation.
-    \item Arithmetic operations for addition and subtraction are the same as for unsigned integers.
+    \item Drawback: Flipping the sign requires inverting all bits and adding \( 1 \).
+    \item Advantage: This representation gives zero a single unique representation.
+    \item Advantage: Arithmetic operations for addition and subtraction are the same as for unsigned integers.
 \end{itemize}
 
 
@@ -1069,34 +1069,13 @@ Registers are mainly used for arithmetic, addressing, and control processes with
     \item To enhance performance, CPUs may duplicate these architectural registers, facilitating parallel and speculative execution.
     \item Allocation is managed by a compiler during code generation or by an assembly language programmer.
 \end{itemize}
-
-
-\paragraph{x86\_64:}
-\begin{verbatim}
-f:
- mov eax, edi       # 89 f8
- mov ecx, edx       # 89 d1
- imul eax, esi      # 0f af c6
- cdq                # 99
- idiv ecx           # f7 f9
- ret                # c3
-\end{verbatim}
-
-
-\paragraph{AArch64:}
-\begin{verbatim}
-f:
- mul w0, w0, w1     # 1b 01 7c 00
- sdiv w0, w0, w2    # 1a c2 0c 00
- ret                # d6 5f 03 c0
-\end{verbatim}
-
 \begin{itemize}
-  \item small, fixed set of variables that can be accessed instantly
-  \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
-  \item special registers and flags (not accessible directly)
-  \item larger registers for extended operations (e.g., non-integer numbers)
-\end{itemize}
+    \item small, fixed set of variables that can be accessed instantly
+    \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
+    \item special registers and flags (not accessible directly)
+    \item larger registers for extended operations (e.g., non-integer numbers)
+  \end{itemize}
+
 \subsubsection{Registers (x86\_64)}
 
 \begin{itemize}
