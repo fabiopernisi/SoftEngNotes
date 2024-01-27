@@ -35,6 +35,28 @@
 
 \tableofcontents
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Boolean Logic and Integers}
 
@@ -625,47 +647,82 @@ bits & $-2^{bits-1}$ (min) & $2^{bits-1} - 1$ (max) \\
 64 & $\approx -9.10^{18}$ & $\approx 9.10^{18}$ \\
 128 & $\approx -2.10^{38}$ & $\approx 2.10^{38}$ \\
 \end{tabular}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Instructions and Memory}
 
 \subsection{Integers (Continued)}
 
-\subsubsection*{Two's complement:}
+\subsubsection{Two's complement}
+Two's complement uses the binary digit with the greatest place value (i.e. what we here call $bit(n-1)$) as the sign to indicate whether the binary number is positive or negative. When the most significant bit is 1, the number is signed as negative; and when the most significant bit is 0 the number is signed as positive.\\
+The remaining \(n-1\) bits indicate the magnitude of the number.
 \begin{itemize}
     \item Given a single \textit{n}-bit pattern,
     \begin{itemize}
         \item let \textit{u} be its unsigned value
         \item let \textit{s} be its signed value,
     \end{itemize}
-    \item If bit $(n - 1) = 0$, then:
-    \begin{itemize}
-        \item $s := u$
-    \end{itemize}
-    \item If bit $(n - 1) = 1$, then:
-    \begin{itemize}
-        \item $s := u - 2^n$
-    \end{itemize}
-\end{itemize}
-\paragraph{4-bit example:}
-
-\begin{itemize}
-    \item bit $(n - 1) = 0 \Rightarrow s = u$
-    \item bit $(n - 1) = 1 \Rightarrow s = u - 2^n$
+    \item If bit $(n - 1) = 0$, then the number is non-negative, and \( s = u \).
+    \item If bit $(n - 1) = 1$, then the number is negative, and \( s \) is found by subtracting \( 2^n \) from \( u \), i.e., \( s = u - 2^n \).
 \end{itemize}
 
 \paragraph{In general:}
 
-\begin{tabular}{c|c|c|c|c}
-    \textbf{bit pattern} & \textbf{00 \ldots 0} & \textbf{01 \ldots 1} & \textbf{10 \ldots 0} & \textbf{11 \ldots 1} \\
-    \hline
-    \textbf{unsigned $u$} & 0 & $(2^{n-1}) - 1$ & $(2^{n-1})$ & $(2^{n}) - 1$ \\
-    \textbf{signed $s$} & 0 & $(2^{n-1}) - 1$ & $-(2^{n-1})$ & $-1$
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\rowcolor[gray]{0.9} Bit Pattern & Unsigned \( u \) & Signed \( s \) \\
+\hline
+0000 & 0 & 0 \\
+\hline
+0001 & 1 & 1 \\
+\hline
+... & ... & ... \\
+\hline
+0111 & 7 & 7 \\
+\hline
+1000 & 8 & -8 \\
+\hline
+1001 & 9 & -7 \\
+\hline
+... & ... & ... \\
+\hline
+1111 & 15 & -1 \\
+\hline
 \end{tabular}
+\end{center}
+In this example, the signed interpretation of the bit pattern changes when \(bit(n-1)\) is 1, indicating a negative number.\\
 
+For an arbitrary \( n \)-bit number:
 \begin{itemize}
-    \item Unsigned: $u \in \{0, \ldots, (2^n) - 1\}$
-    \item Signed: $s \in \{-(2^{n-1}), \ldots, -1, 0, \ldots (2^{n-1}) - 1\}$
+    \item The range of unsigned integers is \( 0 \) to \( (2^n - 1) \).
+    \item The range of signed integers in two's complement is \( -(2^{n-1}) \) to \( (2^{n-1} - 1) \).
 \end{itemize}
+This allows for a symmetric range around zero, facilitating arithmetic operations like addition and subtraction.
+
+
+\paragraph{Conversion to Two's Complement}
+To convert a positive number to negative in two's complement:
+\begin{enumerate}
+    \item Invert all bits of the number (one's complement).
+    \item Add one to the resulting number.
+\end{enumerate}
+This process changes the sign of the number while maintaining the magnitude in a form that is conducive to binary arithmetic.
+
+
 \paragraph{Conversely:}
 
 \begin{itemize}
@@ -851,6 +908,48 @@ $\rightarrow$ We break down complex algorithms into simple steps.
     \item What instructions are available
     \item How instructions are encoded into bits
 \end{itemize}
+More precisely,
+\begin{itemize}
+    \item ISA defines instructions, data types, registers, and hardware support for memory management.
+    \item Fundamental features include memory consistency, addressing modes, virtual memory, and the I/O model.
+\end{itemize}
+
+\textbf{Implementation and Binary Compatibility:}
+\begin{itemize}
+    \item Ensures behavior of machine code is consistent across different implementations of the ISA.
+    \item Provides binary compatibility, allowing hardware variation without software replacement.
+    \item Supports evolution of microarchitectures while maintaining software compatibility with older generations.
+\end{itemize}
+
+\textbf{Application Binary Interface (ABI) and Operating Systems:}
+\begin{itemize}
+    \item A standard ABI allows software to run on future implementations of the ISA.
+    \item ISA's multi-OS support doesn't ensure cross-OS compatibility for machine code without OS-level support.
+\end{itemize}
+
+\textbf{Extensions and Compatibility:}
+\begin{itemize}
+    \item ISAs can be extended for additional instructions, capabilities, and larger addresses/data values.
+    \item Extended ISA implementations remain backward compatible with non-extended ISA machine code.
+    \item Machine code using extensions only runs on supporting implementations.
+\end{itemize}
+
+\textbf{ISA vs. Microarchitecture:}
+\begin{itemize}
+    \item ISA is distinct from microarchitecture, which is how the instruction set is implemented in a processor.
+    \item Different microarchitectures can share the same instruction set, e.g., Intel Pentium and AMD Athlon with x86.
+\end{itemize}
+
+\textbf{Virtual Machines and Bytecode:}
+\begin{itemize}
+    \item Some virtual machines use bytecode as their ISA and execute it via JIT compilation or interpretation.
+    \item Transmeta used this approach to implement x86 instruction set on VLIW processors.
+\end{itemize}
+
+\textbf{Significance:}
+\begin{itemize}
+    \item Binary compatibility of ISAs is a fundamental abstraction in computing, enabling hardware and software ecosystem longevity.
+\end{itemize}
 
 \subsubsection{Two major ISAs in practice:}
 \begin{itemize}
@@ -901,10 +1000,26 @@ f:
 \end{minipage}
 \subsubsection{Assembly}
 \begin{itemize}
-    \item Assembly is the lowest-level programming language
-    \item Assembly is in 1:1 correspondence with binary encoding of instructions
-    \item Typically, one line per instruction
+    \item Assembly language has a strong correspondence with the machine code instructions of the architecture.
+    \item Generally, it follows a one-to-one relationship between statements and machine instructions.
 \end{itemize}
+
+\textbf{Architecture Specificity:}
+\begin{itemize}
+    \item Each assembly language is specific to its computer architecture.
+    \item Because each processor type's instruction set is unique, assembly languages are necessarily different among processor types.
+\end{itemize}
+
+\textbf{Assemblers and Operating Systems:}
+\begin{itemize}
+    \item Assembly code is converted into executable machine code by a utility program referred to as an assembler.
+    \item Multiple assemblers may exist for a single architecture.
+    \item An assembler might be designed for use with specific operating systems.
+    \item Assembly languages usually do not have specific syntax for operating system calls.
+    \item They provide access to the real capabilities of the processor, upon which all system call mechanisms ultimately rest
+\end{itemize}
+
+
 \subsubsection{Instructions (x86\_64)}
 
 \begin{verbatim}
@@ -941,6 +1056,20 @@ f:
 \end{itemize}
 
 \subsubsection{Registers}
+Registers are mainly used for arithmetic, addressing, and control processes within the CPU.
+
+\begin{itemize}
+    \item Registers are highly accessible locations for a processor, consisting of a small amount of fast storage.
+    \item Some registers have specific hardware functions and may have read-only or write-only access rights.
+    \item Typically, registers are addressed uniquely, not via main memory, though exceptions exist in some architectures (e.g., DEC PDP-10, ICT 1900).
+    \item Registers are essential for arithmetic, bitwise operations, and other machine instruction manipulations, with results often stored back in main memory.
+    \item Modern processors use static or dynamic RAM for main memory, with dynamic RAM accessed via cache levels.
+    \item The hierarchy places registers at the top, offering the quickest data access method.
+    \item The term "register" usually refers to those directly encoded in an instruction, as per the instruction set.
+    \item To enhance performance, CPUs may duplicate these architectural registers, facilitating parallel and speculative execution.
+    \item Allocation is managed by a compiler during code generation or by an assembly language programmer.
+\end{itemize}
+
 
 \paragraph{x86\_64:}
 \begin{verbatim}
@@ -1075,9 +1204,10 @@ g:
 \end{itemize}
 
 \subsubsection{Byte ordering}
+Consider the following simplified model of memory
 \begin{tabular}{c c c c c c c c c c c c c}
     \hline
-    address & 0 & 1 & 2 & ... & 239 & 240 & 241 & 242 & 243 & 244 & ... \\
+    address & 0 & 1 & 2 & 3 & ... & 239 & 240 & 241 & 242 & 243 & 244 & ... \\
     \hline
     value (hex) & ef & cd & ab & 89 & ... & ff & a0 & a1 & a2 & a3 & 42 & ... \\
     \hline
@@ -1090,11 +1220,23 @@ g:
     \item the byte at address 243 is (hex) \textbf{a3} = (decimal) 163
 \end{itemize}
 
-Q: What is the value of the 32-bit integer at address 240?
+\textbf{Q}: What is the value of the 32-bit integer at address 240?
 
-A: It depends!
+\textbf{A}: It depends!
 
 \subsubsection{Byte ordering / "Endianness"}
+Endianness refers to the sequence of byte order within a word in memory or during data transmission.\\
+
+\textbf{Big-endian and Little-endian Systems:}
+\begin{itemize}
+    \item Big-endian systems store the most significant byte at the smallest memory address.
+    \item Little-endian systems store the least significant byte at the smallest memory address.
+    \item Bi-endianness allows for switchable endianness and is supported by some architectures.
+    \item Middle-endian and mixed-endian refer to other byte orderings.
+\end{itemize}
+
+Consider again the same simplified model:
+
 \begin{tabular}{c c c c c c c c c c c c c}
 \hline
 address & 0 & 1 & 2 & 3 & ... & \textbf{239} & \textbf{240} & \textbf{241} & \textbf{242} & \textbf{243} & 244 & ... \\
@@ -1146,6 +1288,26 @@ ldr w0, [240]              # w0 = (hex) a3a2a1a0
 \end{verbatim}
 \end{itemize}
 \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Compilation, Operating Systems, Virtual Memory}
 
@@ -1563,6 +1725,24 @@ All the memory that is not on stack is sometimes called the "heap".
     \end{itemize}
 \end{itemize}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Compiler invocation, IDEs, build systems}
 
@@ -1956,6 +2136,26 @@ man make
 # Writing Makefiles
 info make
 \end{verbatim}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Programming Languages}
@@ -2519,6 +2719,25 @@ x1 and (not x2 or x3) and (not x3)
 \end{verbatim}
 This SAT formula describes a logical constraint. The solver's role is to find a solution that satisfies this constraint, without the programmer detailing the steps to find such a solution.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Portability, Dependencies and Packaging}
 
@@ -2823,6 +3042,25 @@ They can solve it...
     \end{verbatim}
 \end{itemize}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Python formatted strings, list comprehensions}
 
@@ -3073,6 +3311,24 @@ Note: there is no tuple comprehension
     \item generator expressions
 \end{itemize}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Regular Expressions}
 \subsection{Definition}
@@ -3321,6 +3577,27 @@ See: \texttt{man regex}
 \end{verbatim}
 
 \textgreater{} \href{https://docs.python.org/3/library/re.html}{documentation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Version Control Systems}
@@ -3612,6 +3889,21 @@ git format-patch
 \end{itemize}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Software Licenses}
 
@@ -3824,6 +4116,27 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
     \item Automatically make email addresses clickable (Apple)
     \item Fourier (1768--1830) series for compression (Fraunhofer Institute)
 \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Specifications}
@@ -4207,6 +4520,27 @@ int int_at(int *pointer) {
     return r;
 }
 \end{verbatim}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Lecture 12}
@@ -4753,6 +5087,28 @@ Undefined behavior:
     \end{verbatim}
 \end{itemize}
 C23 pp584--594: 218 types of undefined behavior
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Floating-point arithmetic}
 
@@ -5443,6 +5799,28 @@ Several systems are available for performing symbolic computations:
 
 WolframAlpha, a web application based on Mathematica, provides step-by-step solutions and is accessible at \href{http://www.wolframalpha.com}{WolframAlpha}.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Software engineering practices}
 \subsection{Tools for Program Correctness}
@@ -5972,6 +6350,25 @@ On a basic level, a fuzzer proceeds as follows:
     \item generates modified input files that (try to) yield crashes
 \end{itemize}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Debugging}
 \subsection{Debugging Techniques}
@@ -6196,6 +6593,27 @@ git bisect good b2daa9b # mark commit b2daa9b as good
     \item Debuggers for interpreted languages are language-specific
     \item Debuggers for compiled languages work at the assembly level
 \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Lecture 16}
@@ -6524,6 +6942,27 @@ Cache line size      & 64 b               & 64 b                & 64 b          
     \item $\Rightarrow$ Qualitatively: we try to \textbf{understand} how caches work
     \item $\Rightarrow$ Quantitatively: We \textbf{measure} at runtime
 \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Benchmarking and static instrumentation}
@@ -6929,6 +7368,28 @@ The `gprof` output report contains:
     \item Recognize the advantages of using automated tools like `gprof` for profiling, as well as their limitations.
 \end{itemize}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Lecture 18}
 
@@ -7044,6 +7505,25 @@ Since then, Intel and ARM have added many more performance counters:
 
 \subsubsection{Flame graphs}
 [TBD] - Placeholder for the flame graphs image
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Data structures: Arrays, Linkned Lists}
@@ -7461,6 +7941,29 @@ struct dll_node {
     \item Recognize that linked lists can incur additional overhead due to memory allocation and may not benefit as much from cache optimization.
     \item Consider alternative data structures like indirection or in-memory trees for more complex needs or to improve performance.
 \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Lecture 20}
@@ -7939,6 +8442,29 @@ Heap sort & $O(n \log(n))$ & $O(n \log(n))$ & none \\
     \item[] $\Rightarrow O(n)$
 \end{itemize}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Tries, hash tables, spatial data structures}
 
@@ -8404,6 +8930,27 @@ Locality-Sensitive Hashing (LSH) is an algorithmic technique that hashes similar
     \item The hash function \( h \colon \mathbb{R}^m \to \mathbb{R} \) should ensure that if two points \( \mathbf{x}, \mathbf{y} \) are close in the input space, their hash values \( h(\mathbf{x}), h(\mathbf{y}) \) should be close as well.
     \item It is often used in conjunction with other data structures to handle high-dimensional data efficiently.
 \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Lecture 22}
