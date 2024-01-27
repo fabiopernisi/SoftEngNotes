@@ -35,28 +35,6 @@
 
 \tableofcontents
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Boolean Logic and Integers}
 
@@ -647,82 +625,48 @@ bits & $-2^{bits-1}$ (min) & $2^{bits-1} - 1$ (max) \\
 64 & $\approx -9.10^{18}$ & $\approx 9.10^{18}$ \\
 128 & $\approx -2.10^{38}$ & $\approx 2.10^{38}$ \\
 \end{tabular}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Instructions and Memory}
 
 \subsection{Integers (Continued)}
 
-\subsubsection{Two's complement}
-Two's complement uses the binary digit with the greatest place value (i.e. what we here call $bit(n-1)$) as the sign to indicate whether the binary number is positive or negative. When the most significant bit is 1, the number is signed as negative; and when the most significant bit is 0 the number is signed as positive.\\
-The remaining \(n-1\) bits indicate the magnitude of the number.
+\subsubsection*{Two's complement:}
 \begin{itemize}
     \item Given a single \textit{n}-bit pattern,
     \begin{itemize}
         \item let \textit{u} be its unsigned value
         \item let \textit{s} be its signed value,
     \end{itemize}
-    \item If bit $(n - 1) = 0$, then the number is non-negative, and \( s = u \).
-    \item If bit $(n - 1) = 1$, then the number is negative, and \( s \) is found by subtracting \( 2^n \) from \( u \), i.e., \( s = u - 2^n \).
+    \item If bit $(n - 1) = 0$, then:
+    \begin{itemize}
+        \item $s := u$
+    \end{itemize}
+    \item If bit $(n - 1) = 1$, then:
+    \begin{itemize}
+        \item $s := u - 2^n$
+    \end{itemize}
 \end{itemize}
+\paragraph{4-bit example}
+
+Represented in the table on page 21.
 
 \paragraph{In general:}
-
-\begin{center}
-\begin{tabular}{|c|c|c|}
-\hline
-\rowcolor[gray]{0.9} Bit Pattern & Unsigned \( u \) & Signed \( s \) \\
-\hline
-0000 & 0 & 0 \\
-\hline
-0001 & 1 & 1 \\
-\hline
-... & ... & ... \\
-\hline
-0111 & 7 & 7 \\
-\hline
-1000 & 8 & -8 \\
-\hline
-1001 & 9 & -7 \\
-\hline
-... & ... & ... \\
-\hline
-1111 & 15 & -1 \\
-\hline
-\end{tabular}
-\end{center}
-In this example, the signed interpretation of the bit pattern changes when \(bit(n-1)\) is 1, indicating a negative number.\\
-
-For an arbitrary \( n \)-bit number:
 \begin{itemize}
-    \item The range of unsigned integers is \( 0 \) to \( (2^n - 1) \).
-    \item The range of signed integers in two's complement is \( -(2^{n-1}) \) to \( (2^{n-1} - 1) \).
+    \item bit $(n - 1) = 0 \Rightarrow s = u$
+    \item bit $(n - 1) = 1 \Rightarrow s = u - 2^n$
 \end{itemize}
-This allows for a symmetric range around zero, facilitating arithmetic operations like addition and subtraction.
 
+\begin{tabular}{c|c|c|c|c}
+    \textbf{bit pattern} & \textbf{00 \ldots 0} & \textbf{01 \ldots 1} & \textbf{10 \ldots 0} & \textbf{11 \ldots 1} \\
+    \hline
+    \textbf{unsigned $u$} & 0 & $(2^{n-1}) - 1$ & $(2^{n-1})$ & $(2^{n}) - 1$ \\
+    \textbf{signed $s$} & 0 & $(2^{n-1}) - 1$ & $-(2^{n-1})$ & $-1$
+\end{tabular}
 
-\paragraph{Conversion to Two's Complement}
-To convert a positive number to negative in two's complement:
-\begin{enumerate}
-    \item Invert all bits of the number (one's complement).
-    \item Add one to the resulting number.
-\end{enumerate}
-This process changes the sign of the number while maintaining the magnitude in a form that is conducive to binary arithmetic.
-
-
+\begin{itemize}
+    \item Unsigned: $u \in \{0, \ldots, (2^n) - 1\}$
+    \item Signed: $s \in \{-(2^{n-1}), \ldots, -1, 0, \ldots (2^{n-1}) - 1\}$
+\end{itemize}
 \paragraph{Conversely:}
 
 \begin{itemize}
@@ -837,10 +781,6 @@ How do we map bit patterns to characters in order to form text?
             \item Default on Windows, for Java code, and for SMS
         \end{itemize}
     \end{itemize}
-\end{itemize}
-
-\subsubsection{Unicode (1988-)}
-\begin{itemize}
     \item Aims at encoding all languages:
     \begin{itemize}
         \item including extinct ones
@@ -893,7 +833,7 @@ $\rightarrow$ We break down complex algorithms into simple steps.
   \begin{itemize}
     \item Instead, at each cycle, the computer executes one of a limited set of \textbf{instructions} in a \textbf{processor} (a.k.a. \textsl{"Central Processing Unit", CPU}), e.g.
     \begin{itemize}
-      \item no memory read / write
+      \item memory read / write
       \item 64-bit arithmetic (+, -, $\times$, \ldots)
       \item comparison ($<$, $>$, $=$, \ldots)
       \item branch (if, while, \ldots)
@@ -907,48 +847,6 @@ $\rightarrow$ We break down complex algorithms into simple steps.
     \item How the machine is organized (memory, etc.)
     \item What instructions are available
     \item How instructions are encoded into bits
-\end{itemize}
-More precisely,
-\begin{itemize}
-    \item ISA defines instructions, data types, registers, and hardware support for memory management.
-    \item Fundamental features include memory consistency, addressing modes, virtual memory, and the I/O model.
-\end{itemize}
-
-\textbf{Implementation and Binary Compatibility:}
-\begin{itemize}
-    \item Ensures behavior of machine code is consistent across different implementations of the ISA.
-    \item Provides binary compatibility, allowing hardware variation without software replacement.
-    \item Supports evolution of microarchitectures while maintaining software compatibility with older generations.
-\end{itemize}
-
-\textbf{Application Binary Interface (ABI) and Operating Systems:}
-\begin{itemize}
-    \item A standard ABI allows software to run on future implementations of the ISA.
-    \item ISA's multi-OS support doesn't ensure cross-OS compatibility for machine code without OS-level support.
-\end{itemize}
-
-\textbf{Extensions and Compatibility:}
-\begin{itemize}
-    \item ISAs can be extended for additional instructions, capabilities, and larger addresses/data values.
-    \item Extended ISA implementations remain backward compatible with non-extended ISA machine code.
-    \item Machine code using extensions only runs on supporting implementations.
-\end{itemize}
-
-\textbf{ISA vs. Microarchitecture:}
-\begin{itemize}
-    \item ISA is distinct from microarchitecture, which is how the instruction set is implemented in a processor.
-    \item Different microarchitectures can share the same instruction set, e.g., Intel Pentium and AMD Athlon with x86.
-\end{itemize}
-
-\textbf{Virtual Machines and Bytecode:}
-\begin{itemize}
-    \item Some virtual machines use bytecode as their ISA and execute it via JIT compilation or interpretation.
-    \item Transmeta used this approach to implement x86 instruction set on VLIW processors.
-\end{itemize}
-
-\textbf{Significance:}
-\begin{itemize}
-    \item Binary compatibility of ISAs is a fundamental abstraction in computing, enabling hardware and software ecosystem longevity.
 \end{itemize}
 
 \subsubsection{Two major ISAs in practice:}
@@ -1000,26 +898,10 @@ f:
 \end{minipage}
 \subsubsection{Assembly}
 \begin{itemize}
-    \item Assembly language has a strong correspondence with the machine code instructions of the architecture.
-    \item Generally, it follows a one-to-one relationship between statements and machine instructions.
+    \item Assembly is the lowest-level programming language
+    \item Assembly is in 1:1 correspondence with binary encoding of instructions
+    \item Typically, one line per instruction
 \end{itemize}
-
-\textbf{Architecture Specificity:}
-\begin{itemize}
-    \item Each assembly language is specific to its computer architecture.
-    \item Because each processor type's instruction set is unique, assembly languages are necessarily different among processor types.
-\end{itemize}
-
-\textbf{Assemblers and Operating Systems:}
-\begin{itemize}
-    \item Assembly code is converted into executable machine code by a utility program referred to as an assembler.
-    \item Multiple assemblers may exist for a single architecture.
-    \item An assembler might be designed for use with specific operating systems.
-    \item Assembly languages usually do not have specific syntax for operating system calls.
-    \item They provide access to the real capabilities of the processor, upon which all system call mechanisms ultimately rest
-\end{itemize}
-
-
 \subsubsection{Instructions (x86\_64)}
 
 \begin{verbatim}
@@ -1056,26 +938,13 @@ f:
 \end{itemize}
 
 \subsubsection{Registers}
-Registers are mainly used for arithmetic, addressing, and control processes within the CPU.
 
 \begin{itemize}
-    \item Registers are highly accessible locations for a processor, consisting of a small amount of fast storage.
-    \item Some registers have specific hardware functions and may have read-only or write-only access rights.
-    \item Typically, registers are addressed uniquely, not via main memory, though exceptions exist in some architectures (e.g., DEC PDP-10, ICT 1900).
-    \item Registers are essential for arithmetic, bitwise operations, and other machine instruction manipulations, with results often stored back in main memory.
-    \item Modern processors use static or dynamic RAM for main memory, with dynamic RAM accessed via cache levels.
-    \item The hierarchy places registers at the top, offering the quickest data access method.
-    \item The term "register" usually refers to those directly encoded in an instruction, as per the instruction set.
-    \item To enhance performance, CPUs may duplicate these architectural registers, facilitating parallel and speculative execution.
-    \item Allocation is managed by a compiler during code generation or by an assembly language programmer.
+  \item small, fixed set of variables that can be accessed instantly
+  \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
+  \item special registers and flags (not accessible directly)
+  \item larger registers for extended operations (e.g., non-integer numbers)
 \end{itemize}
-\begin{itemize}
-    \item small, fixed set of variables that can be accessed instantly
-    \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
-    \item special registers and flags (not accessible directly)
-    \item larger registers for extended operations (e.g., non-integer numbers)
-  \end{itemize}
-
 \subsubsection{Registers (x86\_64)}
 
 \begin{itemize}
@@ -1183,13 +1052,12 @@ g:
 \end{itemize}
 
 \subsubsection{Byte ordering}
-Consider the following simplified model of memory
 \begin{tabular}{c c c c c c c c c c c c c}
-    \hline
-    address & 0 & 1 & 2 & 3 & ... & 239 & 240 & 241 & 242 & 243 & 244 & ... \\
-    \hline
-    value (hex) & ef & cd & ab & 89 & ... & ff & a0 & a1 & a2 & a3 & 42 & ... \\
-    \hline
+\hline
+address & 0 & 1 & 2 & 3 & ... & \textbf{239} & \textbf{240} & \textbf{241} & \textbf{242} & \textbf{243} & 244 & ... \\
+\hline
+value (hex) & ef & cd & ab & 89 & ... & ff & \textbf{a0} & \textbf{a1} & \textbf{a2} & \textbf{a3} & 42 & ... \\
+\hline
 \end{tabular}
 
 \begin{itemize}
@@ -1199,23 +1067,11 @@ Consider the following simplified model of memory
     \item the byte at address 243 is (hex) \textbf{a3} = (decimal) 163
 \end{itemize}
 
-\textbf{Q}: What is the value of the 32-bit integer at address 240?
+Q: What is the value of the 32-bit integer at address 240?
 
-\textbf{A}: It depends!
+A: It depends!
 
 \subsubsection{Byte ordering / "Endianness"}
-Endianness refers to the sequence of byte order within a word in memory or during data transmission.\\
-
-\textbf{Big-endian and Little-endian Systems:}
-\begin{itemize}
-    \item Big-endian systems store the most significant byte at the smallest memory address.
-    \item Little-endian systems store the least significant byte at the smallest memory address.
-    \item Bi-endianness allows for switchable endianness and is supported by some architectures.
-    \item Middle-endian and mixed-endian refer to other byte orderings.
-\end{itemize}
-
-Consider again the same simplified model:
-
 \begin{tabular}{c c c c c c c c c c c c c}
 \hline
 address & 0 & 1 & 2 & 3 & ... & \textbf{239} & \textbf{240} & \textbf{241} & \textbf{242} & \textbf{243} & 244 & ... \\
@@ -1267,26 +1123,6 @@ ldr w0, [240]              # w0 = (hex) a3a2a1a0
 \end{verbatim}
 \end{itemize}
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Compilation, Operating Systems, Virtual Memory}
 
@@ -1704,24 +1540,6 @@ All the memory that is not on stack is sometimes called the "heap".
     \end{itemize}
 \end{itemize}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Compiler invocation, IDEs, build systems}
 
@@ -2115,26 +1933,6 @@ man make
 # Writing Makefiles
 info make
 \end{verbatim}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Programming Languages}
@@ -2698,25 +2496,6 @@ x1 and (not x2 or x3) and (not x3)
 \end{verbatim}
 This SAT formula describes a logical constraint. The solver's role is to find a solution that satisfies this constraint, without the programmer detailing the steps to find such a solution.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Portability, Dependencies and Packaging}
 
@@ -3021,25 +2800,6 @@ They can solve it...
     \end{verbatim}
 \end{itemize}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Python formatted strings, list comprehensions}
 
@@ -3290,24 +3050,6 @@ Note: there is no tuple comprehension
     \item generator expressions
 \end{itemize}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Regular Expressions}
 \subsection{Definition}
@@ -3556,27 +3298,6 @@ See: \texttt{man regex}
 \end{verbatim}
 
 \textgreater{} \href{https://docs.python.org/3/library/re.html}{documentation}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Version Control Systems}
@@ -3868,21 +3589,6 @@ git format-patch
 \end{itemize}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Software Licenses}
 
@@ -4095,27 +3801,6 @@ commercial & Microsoft Windows, Microsoft 365, iWork, Adobe suite, Autodesk, \ld
     \item Automatically make email addresses clickable (Apple)
     \item Fourier (1768--1830) series for compression (Fraunhofer Institute)
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Specifications}
@@ -4499,27 +4184,6 @@ int int_at(int *pointer) {
     return r;
 }
 \end{verbatim}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Lecture 12}
@@ -5066,28 +4730,6 @@ Undefined behavior:
     \end{verbatim}
 \end{itemize}
 C23 pp584--594: 218 types of undefined behavior
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Floating-point arithmetic}
 
@@ -5778,28 +5420,6 @@ Several systems are available for performing symbolic computations:
 
 WolframAlpha, a web application based on Mathematica, provides step-by-step solutions and is accessible at \href{http://www.wolframalpha.com}{WolframAlpha}.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Software engineering practices}
 \subsection{Tools for Program Correctness}
@@ -5833,32 +5453,30 @@ Documentation is \textbf{Good}.
     \item Questions and answers (Q\&A)
 \end{itemize}
 
-\subsubsection{Reference manuals}
+\paragraph{Reference manuals}
 \begin{itemize}
     \item Authoritative source of information \\
     If the code does not do what the manual says, then the code is wrong.
     
     \item Must be complete
     
-    \item Must use precise language \\
-    Even at the cost of legibility
+    \item Must use precise language, even at the cost of legibility
     
     \item Examples: ``man'' pages, C standard, IEEE-754 specifications
 \end{itemize}
 
-\subsubsection{Tutorials}
+\paragraph{Tutorials}
 \begin{itemize}
     \item Beginner-friendly
     
-    \item Usually emphasize getting things to work quickly \\
-    even at the cost of completeness
+    \item Usually emphasize getting things to work quickly, even at the cost of completeness
     
     \item Good tutorials do not sacrifice accuracy (but many bad ones do)
     
     \item Examples: various books (K\&R C, Think Python) and intro material
 \end{itemize}
 
-\subsubsection{Questions and answers (Q\&A)}
+\paragraph{Questions and answers (Q\&A)}
 \begin{itemize}
     \item Prioritize quick answers to frequently asked questions
     
@@ -5917,9 +5535,9 @@ Note: Some projects choose to not use automated documentation.
  */
 int five_if_some_five(int a, int b)
 {
-    if (a == 5)
+    if (a != 5)
         a = 0;
-    if (b == 5)
+    if (b != 5)
         b = 0;
     return a | b;
 }
@@ -5974,7 +5592,7 @@ Branch coverage: & 50\%
 Line coverage measures the percentage of code lines that have been executed during a test run. Line coverage does not ensure that all edge cases or logical branches are tested; it only indicates which lines of code were run.
 
 \subsubsection{Limitations of test coverage measures (1)}
-\begin{verbatim}[language=C, basicstyle=\footnotesize\ttfamily, breaklines=true, showstringspaces=false]
+\begin{verbatim}
 /*
  This functions returns:
  5 if one or both of its arguments are 5
@@ -6076,7 +5694,6 @@ If you use a Makefile, run
 \begin{verbatim}
 scan-build make
 \end{verbatim}
-\textgreater{> result}
 \subsubsection{Python linters}
 \begin{itemize}
 \item A ``linter'' is a static analyzer
@@ -6089,6 +5706,7 @@ Examples:
 \item flake8
 \item mypy (adds static type checking)
 \end{itemize}
+\paragraph{Example}
 \begin{verbatim}
 def fib(n):
     a, b = 0, 1
@@ -6116,7 +5734,7 @@ def fib(n: int) -> Iterator[int]:
 \subsubsection{Sanitizers}
 
 With \emph{sanitizers}, runtime checks are added by the \emph{compiler}.
-\paragraph{UBSan}
+\subsubsection{UBSan}
 
 \begin{itemize}
     \item The ``undefined behavior sanitizer'' detects many types of undefined behavior (at runtime)
@@ -6149,7 +5767,7 @@ The code sample illustrates the usage of the Undefined Behavior Sanitizer (UBSan
 \begin{itemize}
     \item Not all types of undefined behavior detected (most are)
     \item Does not always stop the compiler from exploiting undefined behavior
-    \item Overhead (\textasciitilde3x slowdown)
+    \item Overhead (ca. 3x slowdown)
     \item Needs good tests
 \end{itemize}
 
@@ -6256,7 +5874,7 @@ void f()
 \textbf{Cons}
 \begin{itemize}
     \item Not every memory issue detected (many are)
-    \item Overhead ($\sim$2x slowdown)
+    \item Overhead (ca. 2x slowdown)
     \item Needs good tests
 \end{itemize}
 
@@ -6292,8 +5910,7 @@ void f()
 
 \begin{itemize}
     \item Dynamic analysis tools are useful 
-    \item but only if we have good test cases
-    \item and enough of them
+    \item but only if we have good test cases and enough of themm
     \item $\Rightarrow$ How do we generate good tests?
 \end{itemize}
 
@@ -6315,10 +5932,10 @@ On a basic level, a fuzzer proceeds as follows:
 \paragraph{Advanced fuzzers}
 
 \begin{itemize}
-    \item use test coverage techniques \\
-    to determine which input files are ``interesting'', \\
+    \item use test coverage techniques 
+    to determine which input files are ``interesting'',
     in that they cover previously-uncovered source code
-    \item use static analysis techniques \\
+    \item use static analysis techniques 
     to determine input file modifications that could trigger specific code branches
 \end{itemize}
 
@@ -6328,25 +5945,6 @@ On a basic level, a fuzzer proceeds as follows:
     \item takes as an input a directory with many (mostly valid) example input files
     \item generates modified input files that (try to) yield crashes
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Debugging}
@@ -6573,27 +6171,6 @@ git bisect good b2daa9b # mark commit b2daa9b as good
     \item Debuggers for compiled languages work at the assembly level
 \end{itemize}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Lecture 16}
 
@@ -6613,7 +6190,7 @@ We want computers to perform required actions while minimizing their use of \tex
 We care about those resources in proportion to their cost (financial, emotional, etc.)
 
 \subsubsection{How do we achieve good performance?}
-High level to low level:
+From high level to low level:
 \begin{enumerate}
     \item Pick a good algorithm
     \begin{itemize}
@@ -6643,13 +6220,7 @@ Specifically,
     \item Algorithm B performs $16n \log(n) + 64$ operations
 \end{itemize}
 
-Graph showing that, for smaller n, $O(n^2)$ is be better even though it has a worse big-O scale.
-\[
-\begin{array}{cc}
-\text{Algorithm A} & \text{Algorithm B} \\
-2n^2 + 16 & 16n \log(n) + 64 
-\end{array}
-\]
+For smaller n, Algorithm A is better even though it has a worse big-O scale.
 
 \subsubsection{Which algorithm do we choose?}
 
@@ -6678,11 +6249,11 @@ Instruction decoding:
 
 \begin{verbatim}
 48 2b 06        sub    rax, QWORD PTR [rsi]
-48 af           imul   rax, QWORD PTR [rsi]
-48 af af 06     imul   rax, QWORD PTR [rdx]
+48 0f af 06          imul   rax, QWORD PTR [rsi]
+48 af af 02     imul   rax, QWORD PTR [rdx]
 \end{verbatim}
 
-From \texttt{48 af af 06}, the CPU needs to understand:
+From \texttt{48 0f af 06}, the CPU needs to understand:
 
 \begin{itemize}
   \item that it must perform a multiplication (as opposed to, say, a subtraction)
@@ -6692,7 +6263,7 @@ From \texttt{48 af af 06}, the CPU needs to understand:
 
 
 \paragraph{What happens after instruction decoding?}
-\texttt{48 af af 06     imul   rax, QWORD PTR [rdx]]}
+\texttt{48 af af 06     imul   rax, QWORD PTR [rsi]]}
 \begin{itemize}
     \item the CPU has Boolean circuitry to compute multiplications
     \item it must ensure that one of the two inputs of the multiplier is \texttt{rax}
@@ -6921,27 +6492,6 @@ Cache line size      & 64 b               & 64 b                & 64 b          
     \item $\Rightarrow$ Qualitatively: we try to \textbf{understand} how caches work
     \item $\Rightarrow$ Quantitatively: We \textbf{measure} at runtime
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Benchmarking and static instrumentation}
@@ -7237,7 +6787,7 @@ clock_gettime(CLOCK_MONOTONIC, &t5);
 print_all_clocks(&t0, &t1, &t2, &t3, &t4, &t5);
 \end{verbatim}
 
-$`CLOCK_MONOTONIC`$ ensures that the time measured is not affected by discontinuous jumps in the system time.
+"CLOCK\_MONOTONIC" ensures that the time measured is not affected by discontinuous jumps in the system time.
 
 
 
@@ -7264,11 +6814,12 @@ For functions that execute very quickly, microbenchmarking can be used to get a 
 
 \begin{verbatim}
 tA, tB, tC = 0
+t0 = time.time()
 for i in range(5000000):
-    t0 = time.time()
     function_A()
-    tA += time.time() - t0
-    # ... similarly for functions B and C ...
+t1 = time.time()
+
+cleanup()
 \end{verbatim}
 
 \paragraph{Key Takeaways}
@@ -7347,28 +6898,6 @@ The `gprof` output report contains:
     \item Recognize the advantages of using automated tools like `gprof` for profiling, as well as their limitations.
 \end{itemize}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Lecture 18}
 
@@ -7432,7 +6961,7 @@ Since then, Intel and ARM have added many more performance counters:
     \item How could we find \textbf{hot spots}\\
     (small groups of instructions that the application spends a lot of time running)
     
-    \item What about performance counts (cache misses, mispredicted branches,\ldots)\\
+    \item What about performance counts (cache misses, mispredicted branches,\ldots)
     at those \textbf{hot spots}?
     
     \item Instrumentation is expensive (and affects accuracy)
@@ -7485,25 +7014,6 @@ Since then, Intel and ARM have added many more performance counters:
 \subsubsection{Flame graphs}
 [TBD] - Placeholder for the flame graphs image
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Data structures: Arrays, Linkned Lists}
 
@@ -7527,7 +7037,7 @@ Lists represent one of the simplest forms of ADTs, essentially a collection of o
 \begin{itemize}
     \item Storing multiple elements together.
     \item Optionally appending, inserting, or deleting elements.
-    \item Accessing or modifying all elements in sequence or at a specific index (with varying efficiency).
+    \item Optinally accessing or modifying all elements in sequence or at a specific index (with varying efficiency).
 \end{itemize}
 
 \subsection{Arrays}
@@ -7535,7 +7045,7 @@ Lists represent one of the simplest forms of ADTs, essentially a collection of o
 Static arrays are fixed-size, contiguous memory data structures that provide:
 
 \begin{itemize}
-    \item Constant-time (\(O(1)\)) access or modification of elements via an index.
+    \item Constant-time (\(O(1)\)) access or modification of elements via an arbitrary index.
     \item Linear-time (\(O(n)\)) traversal to access or modify all elements due to the direct addressing capability.
 \end{itemize}
 
@@ -7559,7 +7069,7 @@ Dynamic arrays extend static arrays to allow variable size \( n \), which introd
 \begin{itemize}
   \item An array occupies the bytes in memory:
   \begin{itemize}
-    \item from ``array\_address'' % Using double quotes for literal strings
+    \item from array\_address
     \item to \( \text{array\_address} + n \times \text{element\_size} - 1 \)
   \end{itemize}
   \item Increasing \( n \) has \( O(n) \) complexity, because the memory at
@@ -7652,27 +7162,11 @@ Over-allocation is a strategy used in managing dynamic arrays where more memory 
 
 
 
-\subsubsection{Exponential memory allocation}
-Exponential memory allocation is a strategy used to manage the growth of data structures such as dynamic arrays efficiently. This method helps minimize the number of memory reallocations, which are computationally expensive operations.
-
-\begin{itemize}
-    \item In dynamic arrays, we differentiate between the user-visible size (\( n \)) and the allocated memory size (\( a \)).
-    \item When an array's size needs to be increased from \( n \) to \( n' \), if \( n' \) is less than or equal to \( a \), no additional memory allocation is required.
-    \item The allocated size (\( a \)) is not incremented linearly but rather grows exponentially, typically doubling when a size increase is necessary.
-\end{itemize}
-
-\paragraph{Illustration of Exponential Allocation}
+\subsubsection{Illustration of Exponential Allocation}
 \begin{itemize}
     \item Initially, an array may have an allocated size (\( a \)) larger than the user-visible size (\( n \)).
     \item As elements are added and \( n \) grows, if \( n \) exceeds \( a \), the array is reallocated with twice the previous allocated size (\( a' = 2a \)).
     \item This approach is visualized in the sequence of diagrams, where the allocated size (\( a \)) increases to accommodate the growing number of elements (\( n \)).
-\end{itemize}
-
-\paragraph{Advantages of Exponential Allocation}
-\begin{itemize}
-    \item \textbf{Efficiency:} Reduces the frequency of memory allocation calls, which can be costly in terms of performance.
-    \item \textbf{Predictability:} Provides a predictable growth pattern, simplifying the management of memory for dynamic arrays.
-    \item \textbf{Space Utilization:} By allocating more space upfront, the overhead of reallocation is reduced, utilizing memory more effectively in the long run.
 \end{itemize}
 
 \paragraph{Exponential Allocation in Practice}
@@ -7681,18 +7175,6 @@ Exponential memory allocation is a strategy used to manage the growth of data st
     \item However, when \( n \) reaches \( 5 \), the array is reallocated with \( a = 8 \), doubling the previous allocation to maintain the exponential growth strategy.
     \item This pattern continues as \( n \) grows, with the next reallocation occurring when \( n \) exceeds \( 8 \), increasing \( a \) to \( 16 \).
 \end{itemize}
-
-\paragraph{key concepts}
-\begin{itemize}
-    \item Understand how exponential allocation minimizes the number of memory allocations needed as an array grows.
-    \item Be prepared to explain the trade-off between immediate memory usage and long-term efficiency gains.
-    \item Recognize the patterns of growth in allocated size versus user-visible size in dynamic arrays.
-\end{itemize}
-
-
-
-
-
 
 \subsubsection{Pros and cons of exponential allocation}
 
@@ -7744,13 +7226,6 @@ delete an element & $O(n)$ \\
 \end{tabular}
 \end{center}
 
-\paragraph{Key concepts}
-\begin{itemize}
-    \item Understand the balance between efficient allocation and potential memory waste.
-    \item Be able to calculate the upper bound of memory allocation and the amortized cost for array resizing.
-    \item Recognize the time complexities associated with different array operations
-\end{itemize}
-
 \subsubsection{Virtual memory}
 Virtual memory changes the complexity landscape for operations on dynamic arrays by allowing us to remap memory instead of physically moving it.
 
@@ -7770,7 +7245,7 @@ Virtual memory changes the complexity landscape for operations on dynamic arrays
         \item A significant fixed cost due to the system call overhead.
     \end{itemize}
     \item This operation is therefore only performed when \( n \) grows very large, avoiding frequent system calls.
-    \item To manage growth, \( a' \) is set to \( a + K \) for some large \( K \), balancing between memory efficiency and system call overhead.
+    \item To manage growth, \( a' \) is set to \( a + K \) for some large \( K \), to avoid waste of exponential decrease.
 \end{itemize}
 
 For very large \( n \) (in the order of multiple megabytes), the operational complexities can be optimized:
@@ -7796,14 +7271,6 @@ For very large \( n \) (in the order of multiple megabytes), the operational com
     \hline
     \end{tabular}
 \end{center}
-
-\paragraph{Key Concepts}
-\begin{itemize}
-    \item Understand the role of virtual memory in optimizing array resizing operations.
-    \item Discuss the pros and cons of using virtual memory to remap addresses instead of moving data physically.
-    \item Recognize the impact of system calls and context switches on the performance of dynamic arrays.
-\end{itemize}
-
 
 \subsection{Linked Lists}
 Linked lists are fundamental data structures that implement a collection of elements, allowing for variable size \( n \).\\
@@ -7867,22 +7334,7 @@ if (new_n <= d->sz) {
 }
 \end{verbatim}
 
-% The complexity table
-\begin{tabular}{lcc}
-\hline
-\textbf{operation} & \textbf{dynamic array} & \textbf{doubly-linked list} \\
-\hline
-access/modify element at arbitrary index & $O(1)$ & $O(n)$ \\
-increase $n$ & $O(1)$ & $O(1)$ \\
-decrease $n$ & $O(1)$ & $O(1)$ \\
-append an element & $O(1)$ & $O(1)$ \\
-discard last element & $O(1)$ & $O(1)$ \\
-insert an element & $O(n)$ & $O(1)$ \\
-delete an element & $O(n)$ & $O(1)$ \\
-\hline
-\end{tabular}
-
-
+This means that the $O(1)$ complexity of doubly-linked list is slower than the $O(1)$ complexity of dynamic arrays.
 \subsubsection{Memory caches considerations}
 Cache usage is an important aspect of performance optimization. For linked lists, memory caches do not provide the same benefits as for dynamic arrays due to the non-contiguous memory allocation of elements.
 
@@ -7913,37 +7365,6 @@ struct dll_node {
     struct dll_node *first_child;
 };
 \end{verbatim}
-
-\paragraph{Key concepts}
-\begin{itemize}
-    \item Understand the trade-offs between different data structures regarding memory allocation and access patterns.
-    \item Recognize that linked lists can incur additional overhead due to memory allocation and may not benefit as much from cache optimization.
-    \item Consider alternative data structures like indirection or in-memory trees for more complex needs or to improve performance.
-\end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \newpage
 \section{Lecture 20}
 
@@ -8148,7 +7569,7 @@ As we enqueue elements, they take their place at the tail end of the queue. When
     \item maintain a variable with the number of elements currently in the queue
     \item or keep incrementing head and tail, and index the static array as
         \begin{align*}
-            \text{array[head \% size]} && \text{and} \\
+            \text{array[head \% size]} && \text{and} && 
             \text{array[tail \% size]}
         \end{align*}
 \end{itemize}
@@ -8274,7 +7695,7 @@ As we enqueue elements, they take their place at the tail end of the queue. When
     \begin{center}
         \begin{tabular}{|c|ccccccccccccccc|}
         \hline
-        depth & 0 & 1 & 1 & 2 & 2 & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 3 & 3 \\
+        depth & 0 & 1 & 1 & 2 & 2 & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3\\
         index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
         \hline
         \end{tabular}
@@ -8286,12 +7707,14 @@ As we enqueue elements, they take their place at the tail end of the queue. When
 
 \subsubsection{Storage scheme}
 
-[TBD]
-
-\begin{tabular}{cccccccccccccccc}
-depth & 0 & 1 & 1 & 2 & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3 \\
-index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
-\end{tabular}
+    \begin{center}
+        \begin{tabular}{|c|ccccccccccccccc|}
+        \hline
+        depth & 0 & 1 & 1 & 2 & 2 & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3\\
+        index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+        \hline
+        \end{tabular}
+    \end{center}
 
 \begin{itemize}
   \item If a node has index \( j \)
@@ -8376,13 +7799,13 @@ index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
 \subsubsection{Comparison sort methods}
 \begin{table}[h!]
 \centering
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \hline
-\textbf{Method} & \textbf{Average} & \textbf{Worst case} & \textbf{Additional storage} \\
+\textbf{Method} & \textbf{Average} & \textbf{Worst case} & \textbf{Additional storage} & \textbf{Combines with insert. sort} \\
 \hline
-Quicksort & $O(n \log(n))$ & $O(n^2)$ & none \\
-Merge sort & $O(n \log(n))$ & $O(n \log(n))$ & $n$ \\
-Heap sort & $O(n \log(n))$ & $O(n \log(n))$ & none \\
+Quicksort & $O(n \log(n))$ & $O(n^2)$ & none & yes\\
+Merge sort & $O(n \log(n))$ & $O(n \log(n))$ & $n$ & yes\\
+Heap sort & $O(n \log(n))$ & $O(n \log(n))$ & none & no\\
 \hline
 \end{tabular}
 \end{table}
@@ -8420,29 +7843,6 @@ Heap sort & $O(n \log(n))$ & $O(n \log(n))$ & none \\
     \end{itemize}
     \item[] $\Rightarrow O(n)$
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Tries, hash tables, spatial data structures}
@@ -8599,7 +7999,7 @@ The key space of an associative array refers to the range of all possible keys t
 
 \begin{itemize}
     \item In a \emph{dense} key space, most of the potential keys have values associated with them.
-    \item Operations such as insertion, deletion, and lookup can be done in \( O(\log{T} n) \) time, where \( T \) is a factor related to the trie branching (typically the size of the alphabet or character set).
+    \item Operations such as insertion, deletion, and lookup can be done in \( O(\log_{2^T} n) \) time, where \( T \) is a factor related to the trie branching (typically the size of the alphabet or character set).
     \item For a dense key space, a static array can be more efficient as the operations become \( O(1) \).
 \end{itemize}
 
@@ -8608,7 +8008,7 @@ The key space of an associative array refers to the range of all possible keys t
 \begin{itemize}
     \item Tries are particularly useful for \emph{sparse} key spaces where a static array of the entire key space would be impractically large.
     \item The complexity of trie operations in a sparse key space is not dependent on the number of entries but on the key size and the trie branching factor \( T \).
-    \item A sparse key space can lead to high memory overhead in the worst case, where every leaf node might contain only a single tuple.
+    \item A sparse key space can lead to high memory overhead in the worst case, where every leaf node might contain only a single tuple ( $O(n \times 2^T)$).
 \end{itemize}
 A trie provides a balance between the two extremes, offering more efficient memory usage in sparse key spaces without sacrificing the performance benefits of a static array in dense key spaces.
 
@@ -8617,16 +8017,16 @@ Hash tables are a way to implement associative arrays by mapping a large, potent
 
 \subsubsection{Hash function}
 \begin{itemize}
-    \item A hash function \( h \) is a mapping from the key space \( K \) to an index space \( U \), where \( U \subseteq \mathbb{N} \) and the size of \( U \) is much smaller than \( K \).
+    \item A hash function \( h \) is a mapping from the key space \( K \) to an index space \( U \), where \( U \subseteq \mathbb{N} \) and the size of \( U \) is much smaller than \( K \). Since $|U| < |K|$ hash functions are necessarily surjective $\exists k_1 \neq k_2 $ such that $h(k_1)=h(k_2)$.
     \item A good hash function distributes keys evenly across the index space, minimizing the chance of collisions.
-    \item Examples of hash functions include taking a subset of the key bits or using modular arithmetic, such as \( h(k) = k \mod m \) for some integer \( m \).
+    \item Examples of (usually bad) hash functions include taking a subset of the key bits or using modular arithmetic, such as \( h(k) = k \mod m \) for some integer \( m \).
 \end{itemize}
 
 \subsubsection{Hash table}
 \begin{itemize}
     \item A hash table uses a static array of size \( |U| \) to store values.
     \item Each key-value tuple \((k, v)\) is stored in the array at the index given by \( h(k) \).
-    \item Due to the surjective nature of hash functions, collisions can occur where multiple keys are hashed to the same index.
+    \item Due to the surjective nature of hash functions, collisions can occur where multiple keys are hashed to the same index (i.e. tuples with distinct keys are stored at a same array index).
 \end{itemize}
 
 \subsubsection{Dealing with collisions}
@@ -8657,7 +8057,7 @@ When implementing associative arrays using hash tables, collisions occur when tw
 \subsubsection{Open addressing as a collision resolution method}
 Open addressing is a collision resolution method in hash tables. When a collision occurs, it finds another place within the hash table.
 
-\paragraph{Insertion Process}
+\paragraph{Insertion Process of (key, value)}
 \begin{enumerate}
     \item Compute the hash index \( i = h(\text{key}) \).
     \item If \texttt{array[i]} is empty, place the \((\text{key}, \text{value})\) tuple there. Process done.
@@ -8675,13 +8075,6 @@ Insert (0x532, V3) -> h(0x532) = 0x2
 // Indices:   0 1 2 3 4 5 6 7 8 9 a b c d e f
 // Values:    . . V1V3. . . . . . . . . V2. .
 \end{lstlisting}
-
-\paragraph{Handling Collisions}
-\begin{itemize}
-    \item If a collision is found at index \( i \), check the next index \( i+1 \).
-    \item Continue checking in a circular manner until an empty slot is found.
-    \item If the table is full, the insertion fails (or rehashing is needed).
-\end{itemize}
 
 \paragraph{Lookup After Collision}
 \begin{itemize}
@@ -8713,12 +8106,13 @@ Probing is a technique used in hash tables to resolve collisions. It involves fi
 \begin{enumerate}
     \item \textbf{Compute initial index}: Let \( h_0 = h(k) \) be the hash of key \( k \), and initialize \( j = 0 \).
     \item \textbf{Check the slot}: If the slot \( array[i(h_0, j)] \) is empty, insert \( (k, v) \) there and terminate the insertion.
-    \item \textbf{Collision resolution}: If the slot is occupied, increment \( j \) and find the next slot using a probing function \( i(h_0, j) \), then repeat step 2.
+    \item \textbf{Collision resolution}: If the slot is occupied, increment \( j \) by 1 and find the next slot using a probing function \( i(h_0, j) \), then repeat step 2.
 \end{enumerate}
 
 The probing function \( i(h_0, j) \) can vary:
 \begin{itemize}
-    \item \textbf{Linear probing}: \( i(h_0, j) = (h_0 + j) \mod |U| \).
+    \item \( i(h_0, j) = (h_0 + j) \mod |U| \) as before
+    \item \textbf{Linear probing}: \( i(h_0, j) = (h_0 + Kj) \mod |U| \) for some constant $K$.
     \item \textbf{Quadratic probing}: \( i(h_0, j) = (h_0 + Kj + Lj^2) \mod |U| \) for some constants \( K \) and \( L \).
 \end{itemize}
 
@@ -8742,8 +8136,8 @@ Performance is influenced by many factors, including:
 \subsubsection{In practice}
 \begin{itemize}
     \item Keeping the collision rate low ensures that operations like insert, delete, and lookup can remain \( O(1) \) in average case.
-    \item The initial access to a hash table often results in a cache miss, which impacts performance.
-    \item With open addressing, collisions can affect the constant time performance due to the need for probing.
+    \item The initial access to a hash table often results in a cache miss (at least L1), which impacts performance.
+    \item With open addressing, in case of collisions, probing may not be.
 \end{itemize}
 
 \subsection{Associative Arrays: performance}
@@ -8909,27 +8303,6 @@ Locality-Sensitive Hashing (LSH) is an algorithmic technique that hashes similar
     \item The hash function \( h \colon \mathbb{R}^m \to \mathbb{R} \) should ensure that if two points \( \mathbf{x}, \mathbf{y} \) are close in the input space, their hash values \( h(\mathbf{x}), h(\mathbf{y}) \) should be close as well.
     \item It is often used in conjunction with other data structures to handle high-dimensional data efficiently.
 \end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Lecture 22}
@@ -9099,10 +8472,6 @@ bits                   & 255..224             & 223..192             & 191..160 
 8                      & \multicolumn{8}{c|}{}                                                                                                                                      \\ \hline
 \end{tabular}
 
-
-
-
-
 \begin{itemize}
     \item but
     \begin{itemize}
@@ -9115,13 +8484,13 @@ bits                   & 255..224             & 223..192             & 191..160 
 \begin{itemize}
     \item On Intel (and AMD) ISAs:
     \begin{itemize}
-        \item SSE (~1999): 8 128-bit registers xmm0 - xmm7
-        \item AVX (~2011): 16 256-bit registers ymm0 - ymm15
-        \item AVX-512 (~2016, but not yet generally available): 32 512-bit registers zmm0 - zmm31
+        \item SSE (ca. 1999): 8 128-bit registers xmm0 - xmm7
+        \item AVX (ca. 2011): 16 256-bit registers ymm0 - ymm15
+        \item AVX-512 (ca. 2016, but not yet generally available): 32 512-bit registers zmm0 - zmm31
     \end{itemize}
     \item On ARM:
     \begin{itemize}
-        \item Neon (~2005): 16 128-bit registers Q0 - Q15
+        \item Neon (ca. 2005): 16 128-bit registers Q0 - Q15
     \end{itemize}
 \end{itemize}
 
