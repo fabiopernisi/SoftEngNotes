@@ -1043,6 +1043,13 @@ f:
 Registers are mainly used for arithmetic, addressing, and control processes within the CPU.
 
 \begin{itemize}
+    \item small, fixed set of variables that can be accessed instantly
+    \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
+    \item special registers and flags (not accessible directly)
+    \item larger registers for extended operations (e.g., non-integer numbers)
+\end{itemize}
+More in detail
+\begin{itemize}
     \item Registers are highly accessible locations for a processor, consisting of a small amount of fast storage.
     \item Some registers have specific hardware functions and may have read-only or write-only access rights.
     \item Typically, registers are addressed uniquely, not via main memory, though exceptions exist in some architectures (e.g., DEC PDP-10, ICT 1900).
@@ -1054,33 +1061,6 @@ Registers are mainly used for arithmetic, addressing, and control processes with
     \item Allocation is managed by a compiler during code generation or by an assembly language programmer.
 \end{itemize}
 
-
-\paragraph{x86\_64:}
-\begin{verbatim}
-f:
- mov eax, edi       # 89 f8
- mov ecx, edx       # 89 d1
- imul eax, esi      # 0f af c6
- cdq                # 99
- idiv ecx           # f7 f9
- ret                # c3
-\end{verbatim}
-
-
-\paragraph{AArch64:}
-\begin{verbatim}
-f:
- mul w0, w0, w1     # 1b 01 7c 00
- sdiv w0, w0, w2    # 1a c2 0c 00
- ret                # d6 5f 03 c0
-\end{verbatim}
-
-\begin{itemize}
-  \item small, fixed set of variables that can be accessed instantly
-  \item 16 (x86\_64) or 31 (AArch64) general-purpose 64-bit registers
-  \item special registers and flags (not accessible directly)
-  \item larger registers for extended operations (e.g., non-integer numbers)
-\end{itemize}
 \subsubsection{Registers (x86\_64)}
 
 \begin{itemize}
@@ -1188,7 +1168,7 @@ g:
 \end{itemize}
 
 \subsubsection{Byte ordering}
-Consider the following simplified model of memory
+Consider the following simplified model of memory\\
 \begin{tabular}{c c c c c c c c c c c c c}
     \hline
     address & 0 & 1 & 2 & 3 & ... & 239 & 240 & 241 & 242 & 243 & 244 & ... \\
@@ -1233,13 +1213,13 @@ value (hex) & ef & cd & ab & 89 & ... & ff & \textbf{a0} & \textbf{a1} & \textbf
 \begin{itemize}
     \item "big-endian" (BE): 32-bit int at 240 is (hex) \textbf{a0 a1 a2 a3}
     \begin{itemize}
-        \item = (decimal) $160 \times 2^{24} + 161 \times 2^{16} + 162 \times 2^{8} + 163$
-        \item = (decimal) 2,694,947,491
+        \item[] = (decimal) $160 \times 2^{24} + 161 \times 2^{16} + 162 \times 2^{8} + 163$
+        \item[] = (decimal) 2,694,947,491
     \end{itemize}
     \item "little-endian" (LE): 32-bit int at 240 is (hex) \textbf{a3 a2 a1 a0}
     \begin{itemize}
-        \item = (decimal) $163 \times 2^{24} + 162 \times 2^{16} + 161 \times 2^{8} + 160$
-        \item = (decimal) 2,745,344,416
+        \item[] = (decimal) $163 \times 2^{24} + 162 \times 2^{16} + 161 \times 2^{8} + 160$
+        \item[] = (decimal) 2,745,344,416
     \end{itemize}
 \end{itemize}
 
@@ -9312,9 +9292,4 @@ matmul\_8 & OpenBLAS, 24 threads & 50.577 s \quad 11x \\
 matmul\_9 & cuBLAS, \textit{nVidia} A100 (Apr 2021) & 13.152 s \quad 42x \\
 matmul\_9 & cuBLAS, \textit{nVidia} H100 (Mar 2022) & ? s \quad 84x? \\
 \end{tabular}
-
-
-
-
-
 \end{document}
