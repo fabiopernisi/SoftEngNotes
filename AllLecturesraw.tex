@@ -1,14 +1,19 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{geometry}
 \usepackage{listings}
 \usepackage{booktabs}
-\setlength{\parindent}{0pt}
 \usepackage{comment}
 \usepackage[utf8]{inputenc}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -17,8 +22,15 @@
     linkcolor=black,
     urlcolor=black
 }
-\geometry{a4paper, margin=1in}
-\usepackage{titlesec}
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+\setlength\parindent{0pt}
 
 \setcounter{secnumdepth}{4}
 
@@ -26,6 +38,9 @@
 {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph}
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\geometry{a4paper, margin=1in}
+
 \begin{document}
 
 \title{Software Engineering Course Notes}
@@ -836,16 +851,17 @@ How do we map bit patterns to characters in order to form text?
             \item Code points are encoded by either two or four bytes
             \item Default on Windows, for Java code, and for SMS
         \end{itemize}
-    \item Aims at encoding all languages:
-    \begin{itemize}
-        \item including extinct ones
-        \item left-to-right, right-to-left or vertical
-        \item and more (emojis)
+        \item Aims at encoding all languages:
+        \begin{itemize}
+            \item including extinct ones
+            \item left-to-right, right-to-left or vertical
+            \item and more (emojis)
+        \end{itemize}
+        \item Some ``characters'' require multiple code points (flag emojis, skin tone modifiers)
+        \item What is even a ``character''? (code point, glyph, grapheme, cluster)
+        \item Unicode is extremely complicated
+        \item Latest version (v15.0.0, 2022) specification is 1,060 pages
     \end{itemize}
-    \item Some ``characters'' require multiple code points (flag emojis, skin tone modifiers)
-    \item What is even a ``character''? (code point, glyph, grapheme, cluster)
-    \item Unicode is extremely complicated
-    \item Latest version (v15.0.0, 2022) specification is 1,060 pages
 \end{itemize}
 \subsection{Hardware}
 
@@ -4917,11 +4933,11 @@ This code violates strict aliasing rules by accessing a `uint32\_t` object throu
 
 \subsubsection{Strict aliasing violations (2)}
 
-This code demonstrates a strict aliasing violation involving different structure types. Although `struct my_data_0`, `struct my_data_1`, and `struct my_data_2` all have a common initial member `subtype`, they are distinct types with different memory layouts. The function `get_first` attempts to access the passed `struct my_data_0 *data` pointer as if it could be `struct my_data_1 *` or `struct my_data_2 *` based on the `subtype`. This violates strict aliasing rules because `struct my_data_1` and `struct my_data_2` are not compatible with `struct my_data_0`, and accessing memory through incompatible types leads to undefined behavior. The C standard does not guarantee that different structure types will have compatible memory layouts, even if they share initial members.
+This code demonstrates a strict aliasing violation involving different structure types. Although `struct $my_data_0$`, `struct $my_data_1$`, and `struct $my_data_2$` all have a common initial member `subtype`, they are distinct types with different memory layouts. The function `$get_first$` attempts to access the passed `struct $my_data_0$ *data` pointer as if it could be `struct $my_data_1$ *` or `struct $my_data_2$ *` based on the `subtype`. This violates strict aliasing rules because `struct $my_data_1$` and `struct $my_data_2$` are not compatible with `struct $my_data_0$`, and accessing memory through incompatible types leads to undefined behavior. The C standard does not guarantee that different structure types will have compatible memory layouts, even if they share initial members.
 
 \subsubsection{Strict aliasing violations (3)}
 
-The code snippet involves a `union` named `mux` that allows its memory to be accessed as either an array of `int32_t` (`i`) or `int16_t` (`s`). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the `int32_t` array and then attempts to access these values through the `int16_t` array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined. However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged
+The code snippet involves a `union` named `mux` that allows its memory to be accessed as either an array of `$int32_t$` (`i`) or `$int16_t$` (`s`). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the `$int32_t$` array and then attempts to access these values through the `$int16_t$` array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined. However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged
 
 \textbf{Note:} Some compilers promise to yield the intended operations here.
 
@@ -9296,4 +9312,9 @@ matmul\_8 & OpenBLAS, 24 threads & 50.577 s \quad 11x \\
 matmul\_9 & cuBLAS, \textit{nVidia} A100 (Apr 2021) & 13.152 s \quad 42x \\
 matmul\_9 & cuBLAS, \textit{nVidia} H100 (Mar 2022) & ? s \quad 84x? \\
 \end{tabular}
+
+
+
+
+
 \end{document}
