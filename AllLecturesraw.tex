@@ -1384,7 +1384,7 @@ Examples:
     \item \texttt{Qt}: cross-platform GUI toolkit
 \end{itemize}
 
-Most languages have a \textit{standard library}
+Most languages have a \textit{standard library},  i.e. a library made available across implementations of a programming language. 
 \begin{itemize}
     \item Distinct from the language itself, but usually necessary in any program
     \item The C language provides no functions. \\
@@ -1449,6 +1449,7 @@ The operating system (OS) manages the computer and provides services to applicat
     \item Some tools: CLI utilities, compilers, settings/configuration apps
   \end{itemize}
 \end{itemize}
+The critical code of the kernel is usually loaded into a separate area of memory, which is protected from access by application software.
 
 \paragraph{Popular OSs:}
 
@@ -4921,11 +4922,11 @@ This code violates strict aliasing rules by accessing a `uint32\_t` object throu
 
 \subsubsection{Strict aliasing violations (2)}
 
-This code demonstrates a strict aliasing violation involving different structure types. Although `struct $my_data_0$`, `struct $my_data_1$`, and `struct $my_data_2$` all have a common initial member `subtype`, they are distinct types with different memory layouts. The function `$get_first$` attempts to access the passed `struct $my_data_0$ *data` pointer as if it could be `struct $my_data_1$ *` or `struct $my_data_2$ *` based on the `subtype`. This violates strict aliasing rules because `struct $my_data_1$` and `struct $my_data_2$` are not compatible with `struct $my_data_0$`, and accessing memory through incompatible types leads to undefined behavior. The C standard does not guarantee that different structure types will have compatible memory layouts, even if they share initial members.
+This code demonstrates a strict aliasing violation involving different structure types. Although `struct my\_data\_0`, `struct my\_data\_1`, and `struct my\_data\_2` all have a common initial member `subtype`, they are distinct types with different memory layouts. The function `get\_first` attempts to access the passed `struct my\_data\_0 *data` pointer as if it could be `struct my\_data\_1 *` or `struct my\_data\_2 *` based on the `subtype`. This violates strict aliasing rules because `struct my\_data\_1` and `struct my\_data\_2` are not compatible with `struct my\_data\_0`, and accessing memory through incompatible types leads to undefined behavior. The C standard does not guarantee that different structure types will have compatible memory layouts, even if they share initial members.
 
 \subsubsection{Strict aliasing violations (3)}
 
-The code snippet involves a `union` named `mux` that allows its memory to be accessed as either an array of `$int32_t$` (`i`) or `$int16_t$` (`s`). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the `$int32_t$` array and then attempts to access these values through the `$int16_t$` array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined. However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged
+The code snippet involves a `union` named `mux` that allows its memory to be accessed as either an array of `int32\_t` (`i`) or `int16\_t` (`s`). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the `int32\_t` array and then attempts to access these values through the `int16\_t` array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined. However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged
 
 \textbf{Note:} Some compilers promise to yield the intended operations here.
 
