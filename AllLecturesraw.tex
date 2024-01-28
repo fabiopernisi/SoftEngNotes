@@ -2005,8 +2005,6 @@ Otherwise, consider target up-to-date and do nothing.
     \item \verb|$(^)| all the sources of the current rule
 \end{itemize}
 
-[big verbatim]
-
 \subsubsection{Static pattern rules}
 \begin{itemize}
     \item Static pattern syntax:
@@ -2146,9 +2144,6 @@ Example:
 t = 3 * ((y * w) + x)
 \end{verbatim}
 
-becomes:
-
-% [TBD] - This is where the abstract syntax tree diagram will be placed if this were to be replaced with a LaTeX-tree representation.
 
 \subsubsection{Compiler vs. interpreter}
 
@@ -2207,16 +2202,6 @@ Despite the flexibility, languages tend to be associated with a standard executi
   \item Lisp, Perl, PHP, R, Ruby, VBScript
 \end{itemize}
 
-% All non-textual elements that cannot be represented in LaTeX have been replaced with [TBD].
-[TBD]
-
-% End of LaTeX transcription.
-
-
-
-
-% Transcription of the image's content into LaTeX format
-
 \subsubsection{Compilation Targets and Strategies}
 
 Understanding the compilation process involves knowing not only how source code is transformed but also what it is compiled into.
@@ -2249,14 +2234,10 @@ An alternative approach to traditional compilation is Just-in-Time (JIT) compila
   \item JIT avoids long compilation times by compiling code on-the-fly, as it is needed.
   \item This strategy can result in execution that is both portable and fast.
   \item By compiling section-by-section—be it a file, function, or block of code—JIT compilers can optimize at runtime, providing speed without sacrificing flexibility.
+  \item This may consist of source code translation but is more commonly bytecode translation to machine code, which is then executed directly. 
 \end{itemize}
 
 JIT compilation offers a balance, aiming to combine the best aspects of interpretation (portability) and compilation (speed).
-
-\paragraph{Conclusion}
-
-The choice of a compilation target impacts the distribution, execution, and performance of a programming language. Understanding these concepts is vital for developers to make informed decisions about code deployment and runtime environments.
-
 
 \subsubsection{Languages with JIT compilation}
 
@@ -2268,13 +2249,6 @@ The choice of a compilation target impacts the distribution, execution, and perf
     \item LuaJIT (Lua)
 \end{itemize}
 
-% Note: the coloring of the words 'advantage' and 'drawback' should be done using custom commands or by including the xcolor package and defining colors named 'advantage' and 'drawback'. This LaTeX code snippet does not define colors and assumes the document will have the necessary package and color definitions.
-% Also, the icons/symbols next to the bullet points are not included since LaTeX doesn't readily support the exact representation of these icons. They should be represented by custom commands if needed.
-
-
-
-
-% Use the 'booktabs' package for better table quality
 
 
 \subsubsection{Pros and cons (summary)}
@@ -2742,8 +2716,6 @@ An application binary interfaces (ABI) defines:
 \end{itemize}
 
 It is called binary because it is independent of the language in which applications are written (i.e., it is related to the machine code, not to the source code)
-
-\subsubsection{ABI: function calls (x86\_64)}
 
 \paragraph{ABI: function calls (x86\_64)}
 
@@ -7079,15 +7051,7 @@ File caching by the operating system can have a significant effect on the perfor
 time md5sum 2GB_file
 \end{verbatim}
 
-In this example, the second run of `md5sum` on the same file is faster due to the effect of file caching.\\
-
-\textbf{Key Points}\\
-\begin{itemize}
-    \item Understand how CPU power management can affect execution times.
-    \item Be aware of the role of the OS and hardware in caching data, and how it impacts performance measurements.
-    \item Remember that concurrent processes compete for resources and can cause measurable differences in performance.
-    \item Practice interpreting output from system monitoring tools to diagnose performance issues.
-\end{itemize}
+In this example, the second run of `md5sum` on the same file is faster due to the effect of file caching.
 
 % Inaccuracies section
 \subsubsection{Inaccuracies}
