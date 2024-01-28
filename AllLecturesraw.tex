@@ -2231,13 +2231,13 @@ The JVM introduces both advantages and drawbacks:
 An alternative approach to traditional compilation is Just-in-Time (JIT) compilation:
 
 \begin{itemize}
-  \item JIT avoids long compilation times by compiling code on-the-fly, as it is needed.
+  \item JIT avoids long compilation times by compiling code on-the-fly, as it is needed, at run time.
   \item This strategy can result in execution that is both portable and fast.
   \item By compiling section-by-section—be it a file, function, or block of code—JIT compilers can optimize at runtime, providing speed without sacrificing flexibility.
-  \item This may consist of source code translation but is more commonly bytecode translation to machine code, which is then executed directly. 
+  \item JIT compilation may consist of source code translation, but is more commonly bytecode translation to machine code, which is then executed directly. 
 \end{itemize}
 
-JIT compilation offers a balance, aiming to combine the best aspects of interpretation (portability) and compilation (speed).
+JIT compilation offers a balance, aiming to combine the best aspects of interpretation (portability and platform independence) and compilation (speed).
 
 \subsubsection{Languages with JIT compilation}
 
@@ -2331,35 +2331,36 @@ The terms "strong" and "weak" typing are used to describe how strictly a program
 
 \paragraph{Weak Typing}
 
-Weak typing indicates a language where types may be implicitly converted and operations may succeed even if they do not make sense from a type-safety perspective. Example from C:
+Weak typing indicates a language where types may be implicitly converted and operations may succeed even if they do not make sense from a type-safety perspective.
 
 \begin{itemize}
     \item Implicit type conversion allows assigning a floating-point number to an integer variable without an error, merely truncating the value.
     \item Pointer type conversions can lead to compiled code that may cause runtime errors or undefined behavior.
 \end{itemize}
-
-\begin{verbatim}
+Example from C:
+\begin{lstlisting}
 int a = -1.8; // Implicitly converted to int, truncated to -1
 int *p = (int *)((long int)"abc" + 5); // Compiles, but unsafe
 *p = 3; // Dereferencing p could lead to a crash
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Strong Typing}
 
-Strong typing means the language enforces strict adherence to typing, preventing implicit, potentially unsafe conversions. Example from Python:
+Strong typing means the language enforces strict adherence to typing, preventing implicit, potentially unsafe conversions.
 
 \begin{itemize}
     \item Operations on incompatible types are not allowed and result in a clear error message.
     \item Certain type-related operations are defined within the language, such as multiplying a string by an integer to repeat the string.
 \end{itemize}
 
-\begin{verbatim}
+Example from Python:
+\begin{lstlisting}
 >>> "a" + 4
 TypeError: Can only concatenate str (not "int") to str
 
 >>> "a" * 4
 'aaaa'
-\end{verbatim}
+\end{lstlisting}
 
 
 The distinction between strong and weak typing can affect the reliability, safety, and clarity of code. Strongly typed languages may prevent subtle bugs at the cost of less flexibility, while weakly typed languages might allow for a wider range of behaviors at the risk of runtime errors.
@@ -2384,7 +2385,7 @@ When using \texttt{malloc} for dynamic memory allocation, common mistakes includ
 \paragraph{Example of Poor Memory Management}
 The following C function \texttt{getint} does not check for allocation failure and forgets to free the allocated memory:
 
-\begin{verbatim}
+\begin{lstlisting}
 int getint() {
     char *buffer = malloc(1024);
     size_t n = fread(buffer, 1, 1023, stdin);
@@ -2392,15 +2393,9 @@ int getint() {
     return strtol(buffer, NULL, 0);
     // Missing free(buffer) leads to a memory leak
 }
-\end{verbatim}
+\end{lstlisting}
 
-\paragraph{Corrected Memory Management}
 A more robust version of the function includes error checking and properly frees the allocated memory.
-
-\paragraph{Key Takeaways}
-
-Proper memory management is crucial in C to avoid errors and resource leaks. Developers must ensure that every \texttt{malloc} call is paired with a corresponding \texttt{free} and that all potential errors are checked and handled appropriately.
-
 
 
 \subsubsection{Automatic memory management}
@@ -2414,6 +2409,7 @@ def getint():
     buffer = input()
     return int(buffer)
 \end{verbatim}
+
 
 % Slide title "How does automatic memory management work?"
 \subsubsection{How does automatic memory management work?}
@@ -3036,13 +3032,13 @@ Syntax:
     \item the f-string is \textit{immediately} evaluated into a string:
 \end{itemize}
 
-\begin{verbatim}
+\begin{lstlisting}
 >>> x = 3
 >>> f'Hello {x}'
 'Hello 3'
 >>> type(f'Hello {x}')
 <class 'str'>
-\end{verbatim}
+\end{lstlisting}
 
 Format:
 \begin{itemize}
@@ -3189,25 +3185,22 @@ The general syntax for a list comprehension in Python is:
 
 % The Python examples are included using verbatim to preserve whitespace and formatting
 \paragraph{Examples}
-\begin{verbatim}
+\begin{lstlisting}
+
 >>> [i * 2 for i in range(8)]
 [0, 2, 4, 6, 8, 10, 12, 14]
 
 >>> [str(i) for i in range(8)]
 ['0', '1', '2', '3', '4', '5', '6', '7']
-\end{verbatim}
+
+>>> [f'{i:02d}' for i in range(8)]|
+['00', '01', '02', '03', '04', '05', '06', '07']|
+
+>>> [f'{i:03b}' for i in range(8)]|
+['000', '001', '010', '011', '100', '101', '110', '111']|
+\end{lstlisting}
 
 
-
-% Example of list comprehension for zero padding numbers
-\verb|>>> [f'{i:02d}' for i in range(8)]|\\
-\verb|['00', '01', '02', '03', '04', '05', '06', '07']|
-
-% Example of list comprehension for binary representation with padding
-\verb|>>> [f'{i:03b}' for i in range(8)]|\\
-\verb|['000', '001', '010', '011', '100', '101', '110', '111']|
-
-% Title for the next section
 \subsection{Dictionary Comprehensions}
 
 % Explanation and syntax for dictionary comprehensions
