@@ -1276,6 +1276,14 @@ ldr w0, [240]              # w0 = (hex) a3a2a1a0
 \section{Compilation, Operating Systems, Virtual Memory}
 
 \subsection{Compilation}
+The compilation process can be divided into four steps:
+\begin{itemize}
+    \item Pre-processing
+    \item Compiling
+    \item Assembling
+    \item Linking
+\end{itemize}
+Most compilation systems provide a \textbf{compiler driver} that invokes these four steps, as needed on behalf of the user.
 
 \textbf{A compiler:}
 
@@ -1498,8 +1506,9 @@ Memory virtualization is a fundamental concept in modern computing systems. It a
 
 \begin{itemize}
     \item Each time a process accesses memory, the hardware translates the virtual address provided by the process into a physical hardware address.
-    \item This translation is performed using a \textit{page table}, which is managed by the operating system's kernel.
+    \item This translation is performed using a \textit{\textbf{page table}}, which is managed by the operating system's kernel.
 \end{itemize}
+All virtual addresses correspond to some hardware address, but \textbf{not} all hardware addresses correspond to some virtual address (some hardware addresses are reserved for the page table itself, for instance).
 
 \paragraph{An example}
 Consider the C code example provided:
@@ -1523,7 +1532,7 @@ mov eax, DWORD PTR [4100]
 \end{verbatim}
 
 \paragraph{Page table (managed by the kernel)}
-
+The page table is set up by the computer's operating system.\\
 Here's how the memory virtualization works in this context:
 
 \begin{itemize}
