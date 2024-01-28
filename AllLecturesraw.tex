@@ -81,7 +81,7 @@
 operator    & math      & pseudocode & C code & logic gate \\
 negation    & $\neg$    & not        & !      & [TBD]      \\
 conjunction & $\land, \times$  & and         & \&\&, \&     & [TBD]      \\
-disjunction & $\lor, +$ & or          & ||, |      & [TBD]      \\
+disjunction & $\lor, +$ & or          & \texttt{||, |}      & [TBD]      \\
 \end{tabular}
 \vspace{4.5mm}
 
@@ -374,7 +374,7 @@ $x1$ & $x2$ & $x3$ & $x1 \land ((\neg x2 \lor x3) \land (\neg x3))$ \\
 
 A solution to the SAT problem for this expression is \(x1 = 1\), \(x2 = 0\), \(x3 = 0\).
 
-\subsection*{Definitions}
+\subsubsection{Definitions}
 \begin{itemize}
 \item \textbf{Variable:} \(x_j\) for some \(j \in J \subseteq \mathbb{N}\).
 \item \textbf{Literal:} Either \(x_j\) or \(\neg x_j\) for some \(j \in J\).
@@ -556,7 +556,7 @@ In computer systems, integers have a fixed number of bits, determining their siz
 \subsubsection{Operations with integers}
 Integer operations in binary are analogous to the decimal operations learned in school.
 
-\subsection*{Binary Addition Example}
+\paragraph{Binary Addition Example}
 \begin{verbatim}
   0 1 0 1 0 0 1 1
 + 0 1 1 0 0 0 0 1
@@ -571,21 +571,21 @@ Integer operations in binary are analogous to the decimal operations learned in 
     \item Division is the most complex, requiring iterative subtraction and shifting.
 \end{itemize}
 
-\subsubsection{Signed integers}
+\subsection{Signed integers}
 Representing negative numbers in binary requires special encoding:
 \subsubsection{Sign-Magnitude Representation}
 \begin{itemize}
     \item One bit is reserved for the sign (most significant bit).
-    \item Zero has two representations: $+0$ and $-0$.
-    \item Arithmetic with sign-magnitude is not straightforward.
+    \item Drawback: Zero has two representations: $+0$ and $-0$.
+    \item Drawback: Arithmetic with sign-magnitude is not
 \end{itemize}
 
 \subsubsection{One's Complement Representation}
 \begin{itemize}
     \item The sign bit is also the most significant bit.
     \item Negative numbers are represented by flipping all bits of the positive value.
-    \item Zero still has two representations: $+0$ and $-0$.
-    \item Arithmetic is simpler than sign-magnitude but still not straightforward.
+    \item Drawback: Zero still has two representations: $+0$ and $-0$.
+    \item Drawback: Arithmetic is simpler than sign-magnitude but 
 \end{itemize}
 
 
@@ -594,9 +594,9 @@ It is the approach adopted by most current computers.
 \begin{itemize}
     \item In two's complement representation, a negative number \( x \) is represented by \( 2^n - x \) for an \( n \)-bit number.
     \item The most significant bit (MSB) is the sign bit, where \( 1 \) indicates a negative number.
-    \item Flipping the sign requires inverting all bits and adding \( 1 \).
-    \item This representation gives zero a single unique representation.
-    \item Arithmetic operations for addition and subtraction are the same as for unsigned integers.
+    \item Drawback: Flipping the sign requires inverting all bits and adding \( 1 \).
+    \item Drawback: This representation gives zero a single unique representation.
+    \item Drawback: Arithmetic operations for addition and subtraction are the same as for unsigned integers.
 \end{itemize}
 
 
@@ -836,11 +836,6 @@ How do we map bit patterns to characters in order to form text?
             \item Code points are encoded by either two or four bytes
             \item Default on Windows, for Java code, and for SMS
         \end{itemize}
-    \end{itemize}
-\end{itemize}
-
-\subsubsection{Unicode (1988-)}
-\begin{itemize}
     \item Aims at encoding all languages:
     \begin{itemize}
         \item including extinct ones
@@ -893,7 +888,7 @@ $\rightarrow$ We break down complex algorithms into simple steps.
   \begin{itemize}
     \item Instead, at each cycle, the computer executes one of a limited set of \textbf{instructions} in a \textbf{processor} (a.k.a. \textsl{"Central Processing Unit", CPU}), e.g.
     \begin{itemize}
-      \item no memory read / write
+      \item memory read / write
       \item 64-bit arithmetic (+, -, $\times$, \ldots)
       \item comparison ($<$, $>$, $=$, \ldots)
       \item branch (if, while, \ldots)
@@ -970,34 +965,7 @@ Many older and less prominent ISAs:
 }
 \end{verbatim}
 
-\subsubsection*{x86\_64:}
-\begin{minipage}[t]{0.5\textwidth}
-\begin{verbatim}
-89 f8 89 d1 0f af c6 99 f7 f9 c3
-\end{verbatim}
-f:
-\begin{verbatim}
-    mov eax, edi     # 89 f8
-    mov ecx, edx     # 89 d1
-    imul eax, esi    # 0f af c6
-    cdq              # 99
-    idiv ecx         # f7 f9
-    ret              # c3
-\end{verbatim}
-\end{minipage}
-\hspace{0.5cm}
-\subsubsection*{AArch64:}
-\begin{minipage}[t]{0.5\textwidth}
-\begin{verbatim}
-1b 01 7c 00 1a c2 0c 00 d6 5f 03 c0
-\end{verbatim}
-f:
-\begin{verbatim}
-    mul w0, w0, w1  # 1b 01 7c 00
-    sdiv w0, w0, w2 # 1a c2 0c 00
-    ret             # d6 5f 03 c0
-\end{verbatim}
-\end{minipage}
+
 \subsubsection{Assembly}
 \begin{itemize}
     \item Assembly language has a strong correspondence with the machine code instructions of the architecture.
@@ -3709,7 +3677,7 @@ git add new_file_A.py new_file_B.py
 git commit -m "My first commit."
 \end{lstlisting}
 
-\subsection*{Listing Past Commits}
+\subsubsection{Listing Past Commits}
 \begin{lstlisting}[language=bash]
 git log
 \end{lstlisting}
@@ -8399,7 +8367,7 @@ Heap sort & $O(n \log(n))$ & $O(n \log(n))$ & none & no\\
 \subsection{Associative Arrays}
 Associative arrays, also known as maps or dictionaries, are fundamental data structures in computer science and programming.
 
-\subsection*{Definition and Operations}
+\subsubsection{Definition and Operations}
 \begin{itemize}
     \item Associative arrays are collections of key-value pairs or tuples.
     \item Keys can be any string of bits, such as integers or strings.
@@ -8762,7 +8730,7 @@ for i = 0 to n - 1:
 \subsubsection{Grids}
 A grid-based approach divides the space into a finite number of cells, which can significantly reduce the number of comparisons needed.
 
-\subsubsection*{Pros and Cons of Using Grids}
+\subsubsection{Pros and Cons of Using Grids}
 \begin{itemize}
     \item \textbf{Pros:}
     \begin{itemize}
@@ -8846,7 +8814,7 @@ Locality-Sensitive Hashing (LSH) is an algorithmic technique that hashes similar
     \item LSH is used for approximate nearest neighbor search in high-dimensional spaces.
 \end{itemize}
 
-\subsection*{Designing a Locality-Sensitive Hash Function}
+\subsubsection{Designing a Locality-Sensitive Hash Function}
 
 \begin{itemize}
     \item The hash function \( h \colon \mathbb{R}^m \to \mathbb{R} \) should ensure that if two points \( \mathbf{x}, \mathbf{y} \) are close in the input space, their hash values \( h(\mathbf{x}), h(\mathbf{y}) \) should be close as well.
