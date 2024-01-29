@@ -5251,7 +5251,7 @@ fix_mul(a, b) := (a x b) / 2^32
 fix_div(a, b) := (a x 2^32) / b
 \end{lstlisting}
 
-The function $i64_to_fix()$ is taking an integer $e$ of type $i64$ (which is a 64-bit integer) and converting it into a fixed-point representation of type \textit{fix}. The multiplication by $2^32$ effectively shifts the integer value $e$ into the higher 32 bits of the 64-bit representation, leaving the lower 32 bits for the fractional part. This way,  it is possible to perform fixed-point arithmetic with fix types while maintaining precision for the fractional component of the values.\\
+The function \texttt{i64\_to\_fix()} is taking an integer \texttt{e} of type \texttt{i64} (which is a 64-bit integer) and converting it into a fixed-point representation of type \textit{fix}. The multiplication by $2^{32}$ effectively shifts the integer value \texttt{e} into the higher 32 bits of the 64-bit representation, leaving the lower 32 bits for the fractional part. This way,  it is possible to perform fixed-point arithmetic with fix types while maintaining precision for the fractional component of the values.\\
 
 These operations are implemented using integer arithmetic, providing precise control over the scaling and range of the values.
 
@@ -5273,7 +5273,7 @@ Each operation maintains the scale of fixed-point representation and ensures tha
 \paragraph{Fixed-point arithmetic, Pros}
 \begin{itemize}
     \item fast, no need for extra hardware
-    \item easy to understand and study (predictible):
+    \item easy to understand and study (predictable):
     \begin{itemize}
         \item uniform absolute precision (e.g. $2^{-32}$ over whole range)
     \end{itemize}
@@ -5302,6 +5302,13 @@ Each operation maintains the scale of fixed-point representation and ensures tha
 % Explanatory comments and LaTeX commands are included as % comments for clarity
 
 \subsubsection{Scientific notation}
+Scientific notation is a way to express numbers that are too large or too small to be conveniently written in decimal form. It is commonly used in calculations and by scientists, mathematicians, and engineers.
+
+\begin{itemize}
+    \item In scientific notation, numbers are written as a product of two numbers: a coefficient and \(10\) raised to a power, for example, \(-2.147483648999 \times 10^9\).
+    \item The coefficient must be a number between \(1\) and \(9\), followed by a decimal point and the rest of the significant digits.
+    \item The exponent is written as a power of \(10\), indicating how many places the decimal point should be moved to convert the number into a standard decimal number.
+\end{itemize}
 
 Take the number $-2147483648.999$: 
 \begin{align*}
@@ -5315,17 +5322,9 @@ Similarly, take the number $0.0000000002328$:
 &= 2.328e-10
 \end{align*}
 
-\subsubsection{Scientific Notation}
-Scientific notation is a way to express numbers that are too large or too small to be conveniently written in decimal form. It is commonly used in calculations and by scientists, mathematicians, and engineers.
-
-\begin{itemize}
-    \item In scientific notation, numbers are written as a product of two numbers: a coefficient and \(10\) raised to a power, for example, \(-2.147483648999 \times 10^9\).
-    \item The coefficient must be a number between \(1\) and \(9\), followed by a decimal point and the rest of the significant digits.
-    \item The exponent is written as a power of \(10\), indicating how many places the decimal point should be moved to convert the number into a standard decimal number.
-\end{itemize}
 
 \subsubsection{Binary Floating-Point Numbers}
-In computing, binary floating-point numbers are a way to represent real numbers in a binary system, typically using three components: the sign, exponent, and mantissa.
+In computing, binary floating-point numbers are a way to represent real numbers in a binary system, typically using three components: the \textbf{sign}, \textbf{exponent}, and \textbf{mantissa}.
 
 \begin{itemize}
     \item The sign determines if the number is positive or negative.
@@ -5480,7 +5479,7 @@ Consider computing the derivative of \( f(x) = x \) at large values of \( x \) u
         \item and get a number in $[1 - 1.91, 1 + 1.91]$
     \end{itemize}
 \end{itemize}
-The deviations we just discussed arise because floating-point numbers have more relative precision near zero, and less absolute precision as their magnitude increases.
+The deviations we just discussed arise because floating-point numbers have less absolute precision as their magnitude increases (meaning that the \textit{Absolute Precision} metric has a larger value as the magnitude increases).
 
 Therefore,
 \begin{itemize}
@@ -5837,7 +5836,7 @@ WolframAlpha, a web application based on Mathematica, provides step-by-step solu
 \newpage
 \section{Software engineering practices}
 \subsection{Tools for Program Correctness}
-Today:
+In this section:
 \begin{enumerate}
   \item Documentation
   \item Testing
@@ -5941,12 +5940,8 @@ Automated documentation systems
 Note: Some projects choose to not use automated documentation.
 
 \subsection{Testing}
+Consider the following function, which returns 5 if one or both of its arguments are 5, 0 otherwise:
 \begin{lstlisting}
-/*
- * This functions returns:
- * 5 if one or both of its arguments are 5
- * 0 otherwise
- */
 int five_if_some_five(int a, int b)
 {
     if (a != 5)
@@ -6012,6 +6007,7 @@ Line coverage measures the percentage of code lines that have been executed duri
  5 if one or both of its arguments are 5
  0 otherwise
  */
+ 
 int WRONG_five_if_some_five(int a, int b)
 {
     return a | b;
@@ -6157,6 +6153,28 @@ With \emph{sanitizers}, runtime checks are added by the \emph{compiler}.
 \end{itemize}
 
 \paragraph{Demonstration of UBSan in Action}
+Consider the following C code:
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <stdlib.h>
+
+int f(int a, int b)
+{
+    printf("a = %d, b = %d\n", a, b);
+    int r = a / b;
+    printf("We survived!\n");
+    return r;
+}
+
+int main(int argc, char **argv)
+{
+    int i = (argc < 2) ? 5 : strtol(argv[1], NULL, 0);
+    int r = f(10, i);
+    printf("r = %d\n", r);
+    return 0;
+}    
+\end{lstlisting}
 
 The code sample illustrates the usage of the Undefined Behavior Sanitizer (UBSan) by comparing the output of a program compiled without and with UBSan.
 
@@ -6195,6 +6213,26 @@ The code sample illustrates the usage of the Undefined Behavior Sanitizer (UBSan
 \end{itemize}
 
 \paragraph{Example}
+
+\begin{lstlisting}
+#include <stdio.h>
+
+char *f()
+{
+    char buffer[16];
+    snprintf(buffer, sizeof(buffer), "Hello");
+    return buffer;
+}
+
+int main()
+{
+    char *s = f();
+    printf("Here is the return value of f():\n");
+    printf("%s\n", s);
+    return 0;
+}
+\end{lstlisting}
+
 In the function \texttt{f}, a local buffer is declared, and a string is written into it. The function then returns a pointer to this local buffer, which is a mistake because the buffer's scope ends when the function returns, rendering the pointer invalid.
 
 When the program is compiled without sanitization, this bug may go unnoticed, potentially leading to undefined behavior at runtime. However, when compiled with ASan using \texttt{clang -O3 -fsanitize=address -o bug bug.c}, the error is caught:
@@ -6719,7 +6757,11 @@ From \texttt{48 0f af 06}, the CPU needs to understand:
 
 
 \paragraph{What happens after instruction decoding?}
-\texttt{48 af af 06     imul   rax, QWORD PTR [rsi]]}
+Consider the instruction:
+\begin{lstlisting}
+48 af af 06     imul   rax, QWORD PTR [rsi]]
+\end{lstlisting}
+
 \begin{itemize}
     \item the CPU has Boolean circuitry to compute multiplications
     \item it must ensure that one of the two inputs of the multiplier is \texttt{rax}
@@ -6739,20 +6781,25 @@ From \texttt{48 0f af 06}, the CPU needs to understand:
 
 \paragraph{Sequential Execution of CPU Instructions}
 
-The provided diagrams illustrate the sequential execution of two assembly instructions in a non-pipelined CPU architecture. Each instruction goes through the decode, memory, and arithmetic stages one at a time without overlap. Considering one cycle for each stage, the execution timeline is as follows:
+In a non-pipelined CPU architecture, the sequential execution of two assembly instructions like
+\begin{verbatim}
+    sub rax, [rdi]
+    imul rbx, [rsi]
+\end{verbatim}
+occurs as follows: each instruction goes through the decode, memory, and arithmetic stages one at a time \textbf{without overlap}. Considering one cycle for each stage, the execution timeline is as follows:
 
 \begin{enumerate}
     \item The first instruction, \texttt{sub rax, [rdi]}, involves subtracting the value at the memory location pointed to by \texttt{rdi} from the \texttt{rax} register. The execution stages are:
     \begin{itemize}
-        \item Cycle 1: Decoding the \texttt{sub} instruction.
-        \item Cycle 2: Fetching the operand from memory \texttt{[rdi]}.
-        \item Cycle 3: Performing the subtraction and updating the \texttt{rax} register.
+        \item Cycle 1: \textbf{Decoding} the \texttt{sub} instruction.
+        \item Cycle 2: \textbf{Fetching} the operand from memory \texttt{[rdi]}.
+        \item Cycle 3: \textbf{Performing} the subtraction and updating the \texttt{rax} register.
     \end{itemize}
     \item After the first instruction completes all its stages, the second instruction, \texttt{imul rbx, [rsi]}, which multiplies the \texttt{rbx} register by the value at the memory location pointed to by \texttt{rsi}, begins its execution:
     \begin{itemize}
-        \item Cycle 4: Decoding the \texttt{imul} instruction.
-        \item Cycle 5: Fetching the operand from memory \texttt{[rsi]}.
-        \item Cycle 6: Performing the multiplication and updating the \texttt{rbx} register.
+        \item Cycle 4: \textbf{Decoding} the \texttt{imul} instruction.
+        \item Cycle 5: \textbf{Fetching} the operand from memory \texttt{[rsi]}.
+        \item Cycle 6: \textbf{Performing} the multiplication and updating the \texttt{rbx} register.
     \end{itemize}
 \end{enumerate}
 
@@ -6767,7 +6814,15 @@ However, in this model,
 We can exploit this!
 \subsubsection{Pipelined execution}
 
-The images demonstrate the pipelined execution of instructions in a modern CPU. This execution model allows multiple instructions to be processed concurrently at different stages of the instruction cycle. Given the scenario where each stage (decode, memory access, arithmetic operation) takes one cycle to complete, the pipeline allows for a new instruction to enter the pipeline before the previous instruction has finished, thus improving the overall throughput of the system.
+The execution model of instructions in modern CPUs allows multiple instructions to be processed concurrently at different stages of the instruction cycle.\\
+Given the scenario where each stage (decode, memory access, arithmetic operation) takes one cycle to complete, the pipeline allows for a new instruction to enter the pipeline before the previous instruction has finished, thus improving the overall throughput of the system.\\
+Consider the followin set of instructions:
+\begin{verbatim}
+    sub rax, [rdi]
+    imul rbx, [rsi]
+    add rcx, [rbp]
+\end{verbatim}
+
 
 \begin{itemize}
     \item Initially, the pipeline is filled with the first instruction \texttt{sub rax, [rdi]} going through the decode, memory, and arithmetic stages.
@@ -6793,7 +6848,12 @@ The pipelined execution is visualized in the images, with each horizontal level 
 
 \subsubsection{Data dependencies}
 
-The images depict the execution of two assembly instructions that have a data dependency. Data dependencies occur when an instruction requires the result of a previous instruction.
+Consider now the execution of two assembly instructions that have a data dependency:
+\begin{verbatim}
+    mul rcx, [rdx]
+    add rdx, [rsi]
+\end{verbatim}
+Data dependencies occur when an instruction requires the result of a previous instruction.
 
 \begin{enumerate}
     \item The first instruction, \texttt{mul rcx, [rdx]}, performs a multiplication operation with the value at the memory location pointed to by \texttt{rdx} and stores the result in \texttt{rcx}.
@@ -6813,18 +6873,33 @@ The execution proceeds as follows:
     \item This results in a stall in the pipeline, where the \texttt{add} instruction's decoding is delayed until the \texttt{mul} instruction's result is written back, ensuring the correct value is used for the addition.
 \end{itemize}
 
-The pipelined execution is disrupted by the data dependency, causing delays or stalls, which are illustrated in the sequence of images.
-
 \subsubsection{Conditional branching}
 
-Conditional branching poses a unique challenge in CPU instruction pipelines. When an \texttt{if} statement is encountered, the CPU must determine which path to follow – the true branch or the false branch. The provided diagrams illustrate the step-by-step decision-making process in a simplified CPU pipeline.
+Conditional branching poses a unique challenge in CPU instruction pipelines. When an \texttt{if} statement is encountered, the CPU must determine which path to follow – the true branch or the false branch. 
+Consider the code:
+\begin{lstlisting}
+if (a < b) {
+    YYY
+}
+ZZZ
+\end{lstlisting}
+which gets translated into the following instructions:
+\begin{lstlisting}
+        cmp rdi, rsi
+        jge.L1
+        YYY
+.L1:
+    ZZZ
+\end{lstlisting}
+
+Here's a step-by-step decision-making process in a simplified CPU pipeline.
 
 \begin{enumerate}
     \item Initially, the CPU decodes the comparison instruction \texttt{cmp rdi, rsi}. This instruction sets up the condition flags based on the comparison of the values in the \texttt{rdi} and \texttt{rsi} registers.
     
     \item Once the \texttt{cmp} instruction is decoded, the CPU moves on to decode the subsequent \texttt{jge} (jump if greater or equal) instruction. However, the jump cannot be performed until the result of the \texttt{cmp} instruction is known, which requires waiting for the arithmetic stage to complete.
     
-    \item If the condition is true, the CPU follows the branch to the instruction labeled \texttt{.L1} (in this case, representing the code block \texttt{YYY}). Otherwise, it continues to the next instruction in sequence (\texttt{zzz}).
+    \item If the condition is true, the CPU follows the branch to the instruction labeled \texttt{.L1} (in this case, representing the code block \texttt{YYY}). Otherwise, it continues to the next instruction in sequence (\texttt{ZZZ}).
     
     \item During this decision phase, the pipeline may stall, waiting for the comparison result to decide the next instruction to fetch and decode. This waiting period is where branch prediction can play a significant role in maintaining pipeline efficiency.
 \end{enumerate}
@@ -6836,15 +6911,13 @@ Conditional branching poses a unique challenge in CPU instruction pipelines. Whe
 \end{itemize}
 
 
-\paragraph{Example}
+\paragraph{Example (continuation)}
 \begin{itemize}
-    \item Initially, the CPU encounters a conditional branch instruction (\texttt{jge .L1}) and speculatively decodes the subsequent instructions (YYY) assuming the branch will not be taken.
+    \item Initially, the CPU encounters the conditional branch instruction (\texttt{jge .L1}) and speculatively decodes the subsequent instructions (YYY) assuming the branch will not be taken.
     \item Meanwhile, the comparison instruction (\texttt{cmp rdi, rsi}) is executed to evaluate the actual condition. Until this condition is evaluated, the CPU continues to decode and execute the speculatively chosen path.
     \item If the branch prediction is correct, the CPU continues execution without any interruption, leading to higher performance due to reduced waiting time.
-    \item However, if the prediction is incorrect, as depicted in the final images, the CPU must discard or "flush" the speculatively executed instructions (YYY) and redirect execution to the correct path (ZZZ). This action is known as a pipeline flush, which can cause a temporary decrease in performance due to the time taken to correct the path and refill the pipeline with the correct instructions.
+    \item However, if the prediction is incorrect, the CPU must discard or "flush" the speculatively executed instructions (YYY) and redirect execution to the correct path (ZZZ). This action is known as a pipeline flush, which can cause a temporary decrease in performance due to the time taken to correct the path and refill the pipeline with the correct instructions.
 \end{itemize}
-
-The diagrams illustrate a scenario where the CPU's branch predictor incorrectly anticipates the direction of a branch, resulting in several cycles of mispredicted instruction execution. Once the correct path is determined (ZZZ), the pipeline is adjusted, but the mispredicted instructions (YYY) must be invalidated, showcasing the cost of a misprediction.
 
 \subsubsection{In practice}
 \begin{itemize}
@@ -6865,11 +6938,18 @@ The diagrams illustrate a scenario where the CPU's branch predictor incorrectly 
 
 \subsubsection{Out-of-order execution}
 
-Out-of-order execution is an advanced CPU technique that improves the utilization of execution units by allowing instructions behind a slow-running instruction to be executed in advance if the operands they require are available.
+Out-of-order execution is an advanced CPU technique that improves the utilization of execution units by allowing instructions behind a slow-running instruction to be executed in advance if the operands they require are available.\\
+As an example, consider the following instructions ( two addition instruc-
+tions and one memory read instruction):
 
-\begin{itemize}
-    \item In the given example, there are three assembly instructions: two addition instructions (\texttt{add rdx, rdi} and \texttt{add rcx, rbx}) and one memory read instruction (\texttt{mov rax, [rsi]}).
-    
+\begin{verbatim}
+    add rdx, rdi
+    add rcx, rbx
+    mov rax, [rsi]
+\end{verbatim}
+
+
+\begin{itemize}    
     \item The CPU starts by decoding the first instruction. If the operands are immediately available, it may dispatch this instruction to an Arithmetic Logic Unit (ALU) for execution.
     
     \item If the subsequent instruction does not depend on the first one's result and its operands are ready, the CPU may decode and dispatch this instruction to another ALU, even if the first instruction has not completed yet.
@@ -6879,37 +6959,38 @@ Out-of-order execution is an advanced CPU technique that improves the utilizatio
     \item This results in improved overall throughput as the CPU does not idle waiting for instructions to complete in program order. However, the CPU must ensure that the results are written back in the correct order to preserve the program's logical flow.
 \end{itemize}
 
+
 \subsection{Memory}
+Access to different types of memory varies in speed. Random Access Memory (RAM) is typically slower compared to the CPU's processing speed and is physically located at a distance from the CPU on the motherboard. The discrepancy in speed is mitigated through a caching mechanism which consists of multiple levels of caches:
 
-Access to memory (``random access memory'' or RAM) is slow
-
-On desktop computers, RAM is typically on distinct integrated circuit (IC) packages,
-physically centimeters away from the CPU.
-
-Solution: \textbf{caching}
-
-\subsubsection{Caching}
-
-Level 1 (``L1'') cache:
+\subsubsection{Levels of Cache}
 \begin{itemize}
-    \item The CPU contains a \textbf{small amount of extremely fast memory}
-    \item This memory \textbf{requires many of logic gates} on-package
-    \item But it is \textbf{always available} (no latency)
-    \item The CPU contains logic to decide which part of the main memory gets stored in its L1 cache
-    \item This continuously changes over time
+    \item \textbf{Level 1 (L1) Cache:} It is the fastest and closest to the CPU core, containing a small amount of memory that can be accessed quickly. It requires a high number of logic gates and is always available, avoiding latency issues.
+    \item \textbf{Level 2 (L2) Cache:} Slower than L1 but still significantly faster than RAM, L2 cache acts as an intermediary, offering more storage space at the cost of slightly increased access time.
+    \item \textbf{Level 3 (L3) Cache:} This is even slower than L2 but offers a larger storage capacity. It serves as a further step to bridge the gap between the rapid processing capabilities of the CPU and the slower RAM.
 \end{itemize}
 
-Level 2 (``L2'') cache:
-\begin{itemize}
-    \item slower than L1
-    \item but requires fewer logic gates, so we can have more
-\end{itemize}
+\subsubsection{Caching Operation}
+The CPU logic determines which parts of data should reside in the cache. This data is continuously updated over time based on the CPU's access patterns to optimize performance.
 
-Level 3 (``L3'') cache:
-\begin{itemize}
-    \item slower than L2
-    \item but requires fewer logic gates, so we can have more
-\end{itemize}
+\paragraph{Cache and Main Memory Interaction}
+The following is a simplified representation of the memory access times and cache sizes in a typical desktop computer:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Memory} & \textbf{Size} & \textbf{Access Time} \\
+\hline
+L1 Cache & 32 KB & 4 CPU cycles \\
+L2 Cache & 256 KB & 40 CPU cycles \\
+L3 Cache & 3 MB & 80 CPU cycles \\
+DRAM & 8 GB & Much slower than L3 \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsubsection{Typical configuration}
 
 \begin{table}[h!]
 \centering
@@ -6923,7 +7004,6 @@ Cache line size      & 64 b               & 64 b                & 64 b          
 \caption{Cache configuration for Zen 4 architecture.}
 \label{table:zen4cache}
 \end{table}
-\subsubsection{Typical configuration}
 
 \begin{itemize}
     \item memory transits through in units of one cache line
@@ -6974,7 +7054,7 @@ Cache line size      & 64 b               & 64 b                & 64 b          
 \section{Benchmarking and static instrumentation}
 
 \subsection{More caches and pipelines}
-Virtualization of memory involves translating virtual addresses to hardware addresses, which is essential for every memory access operation. This translation relies on a page table, which is itself stored in memory. This process might suggest the need for two memory accesses per memory fetch instruction, which is inefficient.
+Virtualization of memory involves translating virtual addresses to hardware addresses, which is essential for every memory access operation. This translation relies on a page table, which is itself stored in memory. This process might suggest the need for two memory accesses per memory fetch instruction, which is inefficient.\\
 
 \textbf{Solution:} To optimize this, a portion of the page table is cached in the CPU in the Translation Lookaside Buffer (TLB), reducing the frequency of memory accesses.
 
@@ -7026,14 +7106,6 @@ PING google.com.au (142.251.209.3): 56 data bytes
 ... (similar lines omitted for brevity) ...
 64 bytes from mi104s04-in-f3.1e100.net (142.251.209.3): icmp_seq=4 ttl=115 time=11.8 ms
 \end{lstlisting}
-
-\textbf{Key points}
-\begin{itemize}
-    \item Understand the role of the Translation Lookaside Buffer (TLB) in reducing memory access latency.
-    \item Be able to compare the latencies of different memory and storage technologies, from CPU instructions to transatlantic internet round-trips.
-    \item Recognize the impact of caching at various system levels, including hardware (like SSDs) and software (like operating system file caches).
-    \item Consider the real-world implications of caching, such as the performance differences observed when accessing local vs. remote resources.
-\end{itemize}
 
 
 \subsubsection{Examples of pipelines}
@@ -7360,13 +7432,6 @@ The `gprof` output report contains:
     \item The accuracy of time measurement may be limited, and the actual time spent can be affected by the profiling itself.
 \end{itemize}
 
-\paragraph{Key Takeaways}
-\begin{itemize}
-    \item Understand how to compile and run a program with `gprof` to collect profiling data.
-    \item Be familiar with interpreting the `gprof` report to identify performance bottlenecks.
-    \item Recognize the advantages of using automated tools like `gprof` for profiling, as well as their limitations.
-\end{itemize}
-
 
 
 
@@ -7526,7 +7591,7 @@ Since then, Intel and ARM have added many more performance counters:
 
 
 \newpage
-\section{Data structures: Arrays, Linkned Lists}
+\section{Data structures: Arrays, Linked Lists}
 
 \subsection{Abstract Data Types and Data Strucutres}
 
@@ -8184,17 +8249,16 @@ As we enqueue elements, they take their place at the tail end of the queue. When
 
 
 \subsubsection{Binary heap pop}
-
-% The tree is not transcribed as it requires specific drawing packages.
-% Tree representation: 
-%       30
-%     /    \
-%    25    15
-%   /  \
-%  5   18 
-%         \
-%         9
-[TBD]
+A simplified tree:
+\begin{verbatim}
+       30
+     /    \
+    25    15
+   /  \
+  5   18 
+         \
+         9
+\end{verbatim}
 
 \begin{itemize}
     \item Step 0: Replace root with last element (on deepest level)
