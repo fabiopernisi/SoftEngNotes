@@ -1611,6 +1611,15 @@ Virtual memory introduces several advantages and some drawbacks:
     \end{itemize}
 \end{itemize}
 
+\paragraph{Remarks on virtual memory}
+
+\begin{itemize}
+    \item Virtual addresses do not necessarily correspond to a hardware address; they are mapped to hardware addresses when needed.
+    \item Not all hardware addresses correspond to virtual addresses; some may be reserved for the operating system or for special purposes.
+    \item A process can map a virtual address to a specific location in memory, including to a cache line.
+    \item Different processes can map the same virtual address to different hardware addresses, providing process isolation.
+\end{itemize}
+
 
 \subsubsection{Function Calls and Stack Management}
 
@@ -1674,11 +1683,31 @@ The lifecycle of the stack from the initiation of \texttt{f1} through the nested
     \end{itemize}
 \end{itemize}
 
+\subsubsection{Stack vs. Heap}
+\begin{itemize}
+    \item The \textbf{stack} is used for static memory allocation, which includes local variables.
+    \item The \textbf{heap} is used for dynamic memory allocation, accessed via pointers and memory allocation functions like \texttt{malloc}.
+\end{itemize}
 
-% Here begins the LaTeX transcription of the lecture content
+\paragraph{Code Example Analysis}
+\begin{lstlisting}[language=C]
+int a = 0;
 
-\subsubsection{Heap}
-All the memory that is not on stack is sometimes called the "heap".
+int f(char *b) {
+    char c[2];
+    c[0] = b[a] * 3;
+    return printf("%s\n", c);
+}
+\end{lstlisting}
+
+\begin{itemize}
+    \item "\texttt{int a}" is a global variable, not allocated  typically neither on the stack nor the heap.
+    \item "\texttt{char c[2]}" in \texttt{f(char *b)} indicates local, stack-based allocation.
+    \item Pointer "\texttt{char *b}" could reference stack or heap memory, depending on its initialization.
+    \item Memory for "\texttt{b}" could be on the heap if allocated via \texttt{malloc} or similar.
+    \item Printing "\texttt{c}" executes a formatted output function, using a stack-allocated string.
+\end{itemize}
+
 
 \subsection{Tools}
 
@@ -2556,10 +2585,6 @@ Generics provide a way to write functions and data structures that can operate o
     Templates allow functions and classes to operate with any type.
 \end{itemize}
 
-\paragraph{Implications}
-Understanding macros and generics is fundamental for writing reusable and efficient code. While macros offer powerful text manipulation at compile-time, generics enable type-agnostic programming, leading to more flexible and maintainable codebases.
-
-% Languages with generics section
 \subsubsection{Languages with generics}
 
 \begin{itemize}
@@ -2632,7 +2657,7 @@ Functional programming treats functions as "first-class" citizens of the program
     \item Functions can be assigned to variables, passed as arguments, or returned from other functions.
 \end{itemize}
 \textbf{A python example}
-\begin{verbatim}
+\begin{lstlisting}
 def map(array, fn):
     r = array.copy()
     for i in range(len(array)):
@@ -2644,7 +2669,7 @@ def double_it(x):
 
 map([0, 1, 2, 3, 4], double_it)
 # -> [0, 2, 4, 6, 8]
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Declarative and logic programming}
 
@@ -2793,64 +2818,48 @@ How do we ship code that work across all platforms?
 
 \subsubsection{Option 5: emulation}
 \begin{itemize}
-    \item an emulator is an \textbf{interpreter} for machine code (e.g. QEmu)
-    \item much slower than running the code
-    \item JIT can mitigate slowness, to some extent
-    \item typically, a full-blown \textbf{operating system} runs inside the interpreter!
+    \item An emulator acts as an interpreter for machine code, simulating another hardware environment entirely.
+    \item It is generally slower than native code execution due to the overhead of interpretation.
+    \item Just-In-Time (JIT) compilation can be used within emulators to improve performance by compiling bytecode to native code at runtime.
+    \item Emulators can run entire operating systems, effectively creating a virtual machine.
 \end{itemize}
 
 \subsubsection{Option 6: virtualization}
 
 \begin{itemize}
-    \item virtualization is essentially hardware-assisted emulation \\
-    (e.g., Xen, KVM, VirtualBox, VMware, Apple Parallels, WSLv2)
-    \item virtualized software must target the same ISA as hardware
-    \item like emulation, runs a full-blown \textbf{operating system}
+    \item Virtualization is a technique that allows multiple operating systems (guest OS) to run on the same physical hardware simultaneously. It is essentially hardware-assisted emulation.
+    \item Virtualized environments must operate under the same Instruction Set Architecture (ISA) as the host hardware.
+    \item The core component of virtualization is the \textbf{hypervisor}, which is responsible for managing the guest operating systems. There are two types of hypervisors:
+    \begin{itemize}
+        \item Type 1: Runs directly on the host's hardware (e.g., Xen, KVM).
+        \item Type 2: Runs as a software layer on top of the host OS (e.g., VMware, VirtualBox, Parallels).
+    \end{itemize}
+    \item Virtualization ensures security by controlling all hardware access through the hypervisor, which presents a virtual interface to each guest OS.
+    \item It enables cloud computing platforms such as Amazon Web Services (using Xen) and Google Cloud Platform (using KVM) to provide virtual machines that customers can rent and use remotely.
 \end{itemize}
 
-
-\subsubsection{Definitions}
-
-\begin{itemize}
-  \item The \textbf{hypervisor} is the software that manages the \textbf{guest OS}.
-  \item It can be the \textbf{host OS} itself (``Type 1": Xen, KVM)
-  \item It can be a process within the \textbf{host OS} (``Type 2": Apple Parallels)
-\end{itemize}
 
 Virtualization is mainly deals with security:
 
 Let \textbf{guest OSs} believe they have direct access to hardware...
 
-... but every hardware access is tightly controlled by the \textbf{hypervisor}
-
-\paragraph{Virtualization is the main technology enabling ``cloud computing''.}
-
-\begin{itemize}
-  \item Amazon Web Services runs \textbf{Xen}
-  \item Google Cloud Platform runs \textbf{KVM}
-  \item Customers rent a virtual machine in a datacenter
-  \begin{itemize}
-    \item They can connect (remotely) to this machine
-    \item It runs their (\textbf{guest}) OS of choice
-    \item It acts as if it was physical hardware
-  \end{itemize}
-\end{itemize}
+... but every hardware access is tightly controlled by the \textbf{hypervisor}.
 
 \subsubsection{Option 7: containers}
 \textbf{Use case:} Same ISA, same kernel, different OS.
 
 \begin{itemize}
-  \item Containers are a lightweight form of virtualization.
-  \item The host's kernel also acts as a kernel for the guest.
-  \item Mainly: filesystems, libraries and applications are separated.
+    \item Containers provide a lightweight alternative to full virtualization and are optimal for isolating applications rather than entire operating systems.
+    \item They share the same kernel of the host OS but can run different distributions or versions of Linux, thanks to the separation of filesystems, libraries, and applications.
+    \item Examples of container use include:
+    \begin{itemize}
+        \item Running a Debian Linux container on a Fedora Linux host.
+        \item Running a Debian 11 Linux container on a Debian 12 host.
+        \item Running a Debian 12 container with specific libraries installed, on a Debian 12 host.
+    \end{itemize}
+    \item Containers are highly portable and efficient, allowing for quick deployment and scaling.
 \end{itemize}
 
-\textbf{Examples:}
-\begin{itemize}
-  \item A Debian Linux guest on a Fedora Linux host
-  \item A Debian 11 Linux guest on a Debian 12 host
-  \item A Debian 12 guest with specific libraries installed, on a Debian 12 host
-\end{itemize}
 
 \subsection{Application Programming Interfaces (API)}
 
@@ -3052,12 +3061,14 @@ Format:
 \end{itemize}
 
 Examples:
-\begin{verbatim}
+\begin{lstlisting}
+
 >>> f'pi = {math.pi:+6.2f}'
 'pi = +3.14'
 >>> f'pi = {math.pi:<+6.2f}'
 'pi = +3.14 '
-\end{verbatim}
+\end{lstlisting}
+
 
 
 \paragraph{Documentation:}
@@ -3145,7 +3156,6 @@ Traceback (most recent call last):
 ZeroDivisionError: division by zero
 \end{lstlisting}
 
-% Section: Appropriate value evaluated (example)
 \paragraph{Only the appropriate value is evaluated (example)}
 
 \begin{lstlisting}
@@ -3159,18 +3169,10 @@ ZeroDivisionError: division by zero
 inf
 \end{lstlisting}
 
-% Footer: hint to documentation
 \textgreater{} documentation
 
-
-
-% Use the 'article' class for basic document formatting
-
-
-% Title of the lecture slide
 \subsection{List comprehensions}
 
-% Description of list comprehension syntax in itemized list format
 \subsubsection{List comprehension syntax:}
 The general syntax for a list comprehension in Python is:
 \begin{center}
@@ -3183,8 +3185,8 @@ The general syntax for a list comprehension in Python is:
   \item result becomes one list entry
 \end{itemize}
 
-% The Python examples are included using verbatim to preserve whitespace and formatting
 \paragraph{Examples}
+
 \begin{lstlisting}
 
 >>> [i * 2 for i in range(8)]
@@ -3215,10 +3217,9 @@ Example:\\
 \verb|{0: '00', 1: '01', 2: '10', 3: '11'}|
 
 
-% Generator Expressions section
+
 \subsection{Generator Expressions}
 
-% Description of generator expression syntax
 Generator expression syntax: \\
 (same as list comprehension, but with parentheses)
 
@@ -3229,21 +3230,19 @@ Generator expression syntax: \\
 
 Same as list comprehension, but creates a generator (iterable)
 
-% Example of generator expressions
 Example:
 
-% Python code demonstration in LaTeX
-\begin{verbatim}
+\begin{lstlisting}
 >>> a = (i * 2 for i in range(2 ** 28))
 >>> a
 <generator object <genexpr> at 0x7fa9195c5d80>
 >>> sum(a)
 72057593769492480
-\end{verbatim}
+\end{lstlisting}
+
 
 Note: there is no tuple comprehension
 
-% Section for Documentation
 \paragraph{Documentation}
 \begin{itemize}
     \item list comprehensions
@@ -3299,8 +3298,8 @@ grep [OPTION...] PATTERNS [FILE...]
 \paragraph{Patterns:}
 Use single-quotes (\texttt{' '}) to avoid shell interference
 
-\paragraph{Files:}
-if no file provided, grep reads its (piped) input
+\paragraph{Files}
+If no file provided, grep reads its (piped) input
 \subsubsection{Piping to grep}
 
 Q: Find all files in the current directory whose name contains the letter L
@@ -3390,12 +3389,12 @@ grep -E 'X.*y'  # matches 'XabcY', 'X-*-y', ...
     grep -E '[0123456789]+'     # matches decimal numbers
     grep -E '[0-9]+'            # equivalent
     grep -E '[0-9a-fA-F]+'      # matches hexadecimal numbers
-    grep -E '[A-Z][a-z]*'       # matches words that start with a capital letter
+    grep -E '[A-Z][a-z]*'       # matches words starting with capital letter
     \end{verbatim}
 
     \item Bracket expressions are negated if the first character is \textasciicircum:
     \begin{verbatim}
-    grep -E '[^A]sprintf'      # matches "printf", "sprintf" ... but not "sprintf"
+    grep -E '[^A]sprintf'    # matches "printf", "sprintf" but not "sprintf"
     \end{verbatim}
 \end{itemize}
 
@@ -3404,7 +3403,8 @@ grep -E 'X.*y'  # matches 'XabcY', 'X-*-y', ...
 Multiple options can be given using the ``|'' character:
 
 \begin{verbatim}
-grep -E 'system_(startup|shutdown)'  # matches "system_startup" or "system_shutdown"
+grep -E 'system_(startup|shutdown)' 
+# matches "system_startup" or "system_shutdown"
 \end{verbatim}
 
 \subsubsection{Special characters}
@@ -3445,7 +3445,8 @@ sed -E 's/REGEX/REPLACEMENT/'
   \item Examples:
   \begin{verbatim}
   sed -E 's/python/Python/'    # replace "python" with "Python"
-  sed -E 's/printf\(/\fprintf\(stderr, /' # replace "printf(" with "fprintf(stderr, "
+  sed -E 's/printf\(/\fprintf\(stderr, /' 
+  # replace "printf(" with "fprintf(stderr, "
   \end{verbatim}
   
   \item Allow multiple replacements per line:
@@ -3478,7 +3479,7 @@ sed -E 's/REGEX/REPLACEMENT/'
 \end{itemize}
 \subsection{Regular Expressions in Programming Languages}
 \subsubsection{Using regular expressions in C}
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 #include <stdio.h>
 #include <regex.h>
 
@@ -3505,16 +3506,16 @@ int main()
 
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 See: \texttt{man regex}
 
 \subsubsection{Using regular expressions in Python}
-\begin{verbatim}
+\begin{lstlisting}
 >>> import re
 >>> m = re.search(r'0[xX][0-9a-fA-F]+', 'Does this contain a hex number, like 0xff ?')
 >>> m.group(0)
 '0xff'
-\end{verbatim}
+\end{lstlisting}
 
 \textgreater{} \href{https://docs.python.org/3/library/re.html}{documentation}
 
@@ -3570,10 +3571,10 @@ See: \texttt{man regex}
 
 \subsubsection{Version Control Systems (VCS) / Source Code Management (SCM)}
 \begin{itemize}
-    \item \textbf{Revision Control System (RCS), 1982}: Early system, operated on single files.
-    \item \textbf{Concurrent Versions System (CVS), 1986}: Introduced the concept of repositories.
-    \item \textbf{Apache Subversion ("SVN"), 2000}: Centralized VCS, allowed versioning of directories.
-    \item \textbf{Mercurial ("Hg"), 2005} and \textbf{Git, 2005}:
+    \item Revision Control System (RCS), 1982: Early system, operated on single files.
+    \item Concurrent Versions System (CVS), 1986: Introduced the concept of repositories.
+    \item Apache Subversion ("SVN"), 2000: Centralized VCS, allowed versioning of directories.
+    \item Mercurial ("Hg"), 2005 and \textbf{Git, 2005}:
     \begin{itemize}
         \item Distributed VCS, enabling workflows with local repositories.
         \item Git has spawned a large hosting industry (e.g., GitHub, GitLab).
