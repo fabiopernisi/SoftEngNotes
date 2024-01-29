@@ -573,12 +573,12 @@ In computer systems, integers have a fixed number of bits, determining their siz
 Integer operations in binary are analogous to the decimal operations learned in school.
 
 \paragraph{Binary Addition Example}
-\begin{verbatim}
+\begin{lstlisting}
   0 1 0 1 0 0 1 1
 + 0 1 1 0 0 0 0 1
 -----------------
   1 0 1 1 0 1 0 0
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Operation complexity}
 \begin{itemize}
@@ -976,11 +976,11 @@ Many older and less prominent ISAs:
 
 \paragraph{Code Example and Assembly Representation}
 \texttt{ int f(int a, int b, int c)}
-\begin{verbatim}
+\begin{lstlisting}
 {
     return (a * b) / c;
 }
-\end{verbatim}
+\end{lstlisting}
 
 
 \subsubsection{Assembly}
@@ -1007,7 +1007,7 @@ Many older and less prominent ISAs:
 
 \subsubsection{Instructions (x86\_64)}
 
-\begin{verbatim}
+\begin{lstlisting}
 f:
  mov eax, edi       # 89 f8
  mov ecx, edx       # 89 d1
@@ -1015,7 +1015,7 @@ f:
  cdq                # 99
  idiv ecx           # f7 f9
  ret                # c3
-\end{verbatim}
+\end{lstlisting}
 
 \begin{itemize}
   \item \textbf{mov a, b} \qquad move \hfill $a \gets b$
@@ -1027,12 +1027,12 @@ f:
 
 \subsubsection{Instructions (AArch64)}
 
-\begin{verbatim}
+\begin{lstlisting}
 f:
  mul w0, w0, w1     # 1b 01 7c 00
  sdiv w0, w0, w2    # 1a c2 0c 00
  ret                # d6 5f 03 c0
-\end{verbatim}
+\end{lstlisting}
 
 \begin{itemize}
   \item \textbf{mul a, b, c} \qquad multiply \hfill $a \gets b \times c$
@@ -1066,33 +1066,33 @@ More in detail
 
 \begin{itemize}
     \item sixteen 64-bit registers:
-    \begin{verbatim}
+    \begin{lstlisting}
     rax, rbx, rcx, rdx, rsp, rbp, rsi, rdi,
     r8, r9, r10, r11, r12, r13, r14, r15
-    \end{verbatim}
+    \end{lstlisting}
     
     \item we can access the lower 32 bits separately:
-    \begin{verbatim}
+    \begin{lstlisting}
     eax, ebx, ecx, edx, esp, ebp, esi, edi,
     r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d
-    \end{verbatim}
+    \end{lstlisting}
     
     \item we can access the lower 16 bits separately:
-    \begin{verbatim}
+    \begin{lstlisting}
     ax, bx, cx, dx, bp, sp, si, di,
     r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w
-    \end{verbatim}
+    \end{lstlisting}
     
     \item we can access the lower 8 bits separately:
-    \begin{verbatim}
+    \begin{lstlisting}
     al, bl, cl, dl, bpl, spl, sil, dil,
     r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b
-    \end{verbatim}
+    \end{lstlisting}
     
     \item we can access bits 8-15 separately for some registers:
-    \begin{verbatim}
+    \begin{lstlisting}
     ah, bh, ch, dh
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 \paragraph{Example:}
@@ -1113,14 +1113,14 @@ More in detail
 
 \begin{itemize}
     \item thirty-one 64-bit registers:
-    \begin{verbatim}
+    \begin{lstlisting}
     x0, ..., x30
-    \end{verbatim}
+    \end{lstlisting}
     
     \item we can access the lower 32 bits separately:
-    \begin{verbatim}
+    \begin{lstlisting}
     w0, ..., w30
-    \end{verbatim}
+    \end{lstlisting}
     
     \item register 31 (\texttt{x31}, \texttt{w31}) is read-only (zero in most cases)
 \end{itemize}
@@ -1136,29 +1136,29 @@ More in detail
 \hline
 \end{tabular}
 \subsection{Memory}
-\begin{verbatim}
+\begin{lstlisting}
 int g(int *a, int *b)
 {
     return *a + *b;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{x86\_64:}
-\begin{verbatim}
+\begin{lstlisting}
 g:
   mov eax, DWORD PTR [rsi]
   add eax, DWORD PTR [rdi]
   ret
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{AArch64:}
-\begin{verbatim}
+\begin{lstlisting}
 g:
   ldr w0, [x0]
   ldr w1, [x1]
   add w0, w2, w0
   ret
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Memory}
 
@@ -1241,16 +1241,16 @@ However the same problem crops up in other contexts (USB, Ethernet, Wifi, \ldots
 \item In assembly, accessing memory is denoted using ``\texttt{[}'' and ``\texttt{]}''
 \begin{itemize}
 \item Moving the value 240 into a register:
-\begin{verbatim}
+\begin{lstlisting}
 mov eax, 240   # eax = 240
 ldr w0, 240    # w0 = 240
-\end{verbatim}
+\end{lstlisting}
 
 \item Moving the 4 bytes of memory at address 240 into a register:
-\begin{verbatim}
+\begin{lstlisting}
 mov eax, DWORD PTR [240]   # eax = (hex) a3a2a1a0
 ldr w0, [240]              # w0 = (hex) a3a2a1a0
-\end{verbatim}
+\end{lstlisting}
 \end{itemize}
 \end{itemize}
 
@@ -1395,7 +1395,7 @@ Most languages have a \textit{standard library},  i.e. a library made available 
 \subsubsection{Optimizing compilers}
 
 Optimizing compilers aim to improve the efficiency and performance of code during the compilation process. An example of such optimization is demonstrated through a simple C program:
-\begin{verbatim}
+\begin{lstlisting}
 int main() {
     int r = 0;
     for (int i = 0; i < 1000000; i++) {
@@ -1403,7 +1403,7 @@ int main() {
     }
     return r;
 }
-\end{verbatim}
+\end{lstlisting}
 
 Instead of executing the loop one million times at runtime, the compiler optimizes the code by pre-calculating the final value of the variable \texttt{r}. This is achieved by a technique known as \textit{constant folding}, where the compiler evaluates the result of constant expressions at compile time rather than at runtime.
 
@@ -1478,9 +1478,9 @@ All the above except Windows are descendants from ``Unix''
 % Slide title: omitted as per the instruction
 \subsubsection{Example: File Handling in C on Linux Systems}
 In C programming on Linux systems, file operations are commonly handled using functions provided by the standard library. For instance, to open a file for reading, the \texttt{fopen} function is used:
-\begin{verbatim}
+\begin{lstlisting}
     FILE *f = fopen("my\_file.txt", "r");    
-\end{verbatim}
+\end{lstlisting}
 
 The \texttt{fopen} function is part of the standard library and performs the following actions:
 
@@ -1515,7 +1515,7 @@ All virtual addresses correspond to some hardware address, but \textbf{not} all 
 \paragraph{An example}
 Consider the C code example provided:
 
-\begin{verbatim}
+\begin{lstlisting}
 #include <stdio.h>
 
 int the_number = -1;
@@ -1524,14 +1524,14 @@ int main() {
     scanf("%d", &the_number);
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 The assembly instructions corresponding to the \texttt{scanf} function call might look like this:
 
-\begin{verbatim}
+\begin{lstlisting}
 # x86_64 Assembly
 mov eax, DWORD PTR [4100]
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Page table (managed by the kernel)}
 The page table is set up by the computer's operating system.\\
@@ -1559,10 +1559,10 @@ The page table example shows the mapping from virtual addresses to hardware addr
 \vspace{3.5mm}
 For architectures like ARM (AArch64), the assembly instruction for accessing memory would look different:
 
-\begin{verbatim}
+\begin{lstlisting}
 # AArch64 Assembly
 ldr w0, [4100]
-\end{verbatim}
+\end{lstlisting}
 
 
 
@@ -1626,28 +1626,28 @@ Virtual memory introduces several advantages and some drawbacks:
 In C, functions use the stack to manage local variables and return addresses. The stack is LIFO (last-in, first-out). 
 
 \textbf{Function f1} initializes with two \texttt{uint64\_t} variables and calls \texttt{f2} and \texttt{f3} in sequence:
-\begin{verbatim}
+\begin{lstlisting}
 void f1(void) {
     uint64_t a, b;
     f2();
     f3();
 }
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Function f2} allocates a \texttt{uint64\_t} variable and calls \texttt{f3}:
-\begin{verbatim}
+\begin{lstlisting}
 void f2(void) {
     uint64_t c;
     f3();
 }
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Function f3} may use stack space, which is reclaimed when it returns to \texttt{f2}:
-\begin{verbatim}
+\begin{lstlisting}
 int f3(void) {
     // function body
 }
-\end{verbatim}
+\end{lstlisting}
 
 \texttt{f3} executes and eventually returns to \texttt{f2}, which then returns to \texttt{f1}. Each return unwinds the stack, removing the local variables and return addresses.\\
 
@@ -1661,12 +1661,12 @@ Once \texttt{f2} has returned, the stack holds only \texttt{f1}'s variables \tex
 After the completion of \texttt{f2}, \texttt{f1} invokes \texttt{f3} once more, preparing the stack for another potential set of local variables from \texttt{f3}.\\
 
 \textbf{Function f1 Completes}
-\begin{verbatim}
+\begin{lstlisting}
 void f1(void) {
     // final actions of f1
     return;
 }
-\end{verbatim}
+\end{lstlisting}
 Finally, \texttt{f1} returns, and the stack is cleared to its state prior to \texttt{f1}'s call.
 
 The lifecycle of the stack from the initiation of \texttt{f1} through the nested calls and back illustrates the LIFO nature of the stack in function call management.
@@ -1811,28 +1811,28 @@ int f(char *b) {
 \end{itemize}
 
 \subsubsection{LLVM IR}
- gibberish verbatim picture
+ gibberish lstlisting picture
 
 \subsubsection{Compiler invocation (1)}
 
 \begin{itemize}
   \item As usual, use \texttt{man gcc} / \texttt{man clang} for help.
   \item Compile and link:
-    \begin{verbatim}
+    \begin{lstlisting}
       gcc -o executable source_code.c
-    \end{verbatim}
+    \end{lstlisting}
   \item Compile only:
-    \begin{verbatim}
+    \begin{lstlisting}
       gcc -c -o file.o file.c
-    \end{verbatim}
+    \end{lstlisting}
   \item Link only:
-    \begin{verbatim}
+    \begin{lstlisting}
       gcc -o executable file.o file1.o file2.o file3.o
-    \end{verbatim}
+    \end{lstlisting}
   \item Write assembly (see also: )
-    \begin{verbatim}
+    \begin{lstlisting}
       gcc -S assembly.s source_code.c
-    \end{verbatim}
+    \end{lstlisting}
   \item Internally, \texttt{gcc} runs other tools (assembler: \texttt{as}, linker: \texttt{ld})
 \end{itemize}
 
@@ -1840,26 +1840,26 @@ int f(char *b) {
 
 \begin{itemize}
   \item Enable warnings:
-    \begin{verbatim}
+    \begin{lstlisting}
       gcc -Wall -c -o file.o file.c
-    \end{verbatim}
+    \end{lstlisting}
   \item Enable optimization:
-    \begin{verbatim}
+    \begin{lstlisting}
       gcc -Wall -O3 -c -o file.o file.c
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 \subsubsection{Note for MacOS}
 Install \texttt{binutils}:
 \begin{itemize}
     \item from MacPorts \url{https://www.macports.org}
-    \begin{verbatim}
+    \begin{lstlisting}
     port install binutils
-    \end{verbatim}
+    \end{lstlisting}
     \item or from Homebrew \url{https://brew.sh/}
-    \begin{verbatim}
+    \begin{lstlisting}
     brew install binutils
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 Utilities may be prefixed by a \texttt{g}:
 \begin{itemize}
@@ -1942,7 +1942,7 @@ Utilities may be prefixed by a \texttt{g}:
 
 \begin{itemize}
     \item Option 1:
-    \begin{verbatim}
+    \begin{lstlisting}
         gcc -Wall -O3 -c -o ggml.o ggml.c
         gcc -Wall -O3 -c -o ggml-alloc.o ggml-alloc.c
         g++ -Wall -O3 -c -o llama.o llama.cpp
@@ -1951,16 +1951,16 @@ Utilities may be prefixed by a \texttt{g}:
         g++ -Wall -O3 -c -o grammar-parser.o common/grammar-parser.c
         g++ -Wall -O3 -shared -fPIC -o common.so common/ggml-alloc.o llama.o \
             common.o console.o grammar-parser.o
-    \end{verbatim}
+    \end{lstlisting}
     
     \item Option 2:
     \begin{itemize}
         \item Put above commands in a "shell script" file, e.g., \texttt{compile.sh}
         
         \item Run:
-        \begin{verbatim}
+        \begin{lstlisting}
             ./compile.sh
-        \end{verbatim}
+        \end{lstlisting}
         
         \item Problems:
         \begin{itemize}
@@ -1997,19 +1997,19 @@ Example:
     \item The \texttt{libllama.so} shared library is created by linking the object files \texttt{gmgml.o}, \texttt{gmgml-alloc.o}, \texttt{llama.o}, \texttt{common.o}, \texttt{console.o}, and \texttt{grammar-parser.o} using \texttt{g++} with flags \texttt{-shared} and \texttt{-fPIC} (Position Independent Code).
     \item Command \texttt{make libllama.so} triggers the compilation and linking process defined in the \texttt{Makefile}, resulting in the creation of \texttt{libllama.so}.
     \item Run
-    \begin{verbatim}
+    \begin{lstlisting}
     make libllama.so
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 
 
 \subsubsection{Make rule syntax}
 
-\begin{verbatim}
+\begin{lstlisting}
 target: source0 source1 source2 ...
        recipe
-\end{verbatim}
+\end{lstlisting}
 
 Whenever one of the sources was modified after the target, run the recipe (to rebuild the target).
 
@@ -2037,48 +2037,48 @@ Otherwise, consider target up-to-date and do nothing.
 \subsubsection{Static pattern rules}
 \begin{itemize}
     \item Static pattern syntax:
-    \begin{verbatim}
+    \begin{lstlisting}
 target0 target1 target2 ... : target-pattern : source-pattern
     recipe
-    \end{verbatim}
+    \end{lstlisting}
     
     \item Target pattern contains \%, which will match anything
     \item Source pattern also contains \%, which is replaced by the match in target
     \item Example:
-    \begin{verbatim}
+    \begin{lstlisting}
 some_file.o other_file.o third_file.o : %.o : %.c
     recipe
-    \end{verbatim}
+    \end{lstlisting}
     is equivalent to:
-    \begin{verbatim}
+    \begin{lstlisting}
 some_file.o: some_file.c
     recipe
 other_file.o: other_file.c
     recipe
 third_file.o: third_file.c
     recipe
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
-[two big verbatim]
+[two big lstlisting]
 
 \subsubsection{Phony and default targets}
 
 A "phony" target does not necessarily correspond to a file name:
 
-\begin{verbatim}
+\begin{lstlisting}
 .PHONY: clean
 
 clean:
     rm libllama.so
-\end{verbatim}
+\end{lstlisting}
 
 If no target is provided to the make command, the default target is the first one. A common pattern is:
 
-\begin{verbatim}
+\begin{lstlisting}
 .PHONY: default
 
 default: libllama.so
-\end{verbatim}
+\end{lstlisting}
 
 \begin{itemize}
     \item \textbf{.PHONY Target:}
@@ -2098,16 +2098,16 @@ default: libllama.so
 
 The syntax is:
 
-\begin{verbatim}
+\begin{lstlisting}
 $(shell any-shell-command)
-\end{verbatim}
+\end{lstlisting}
 
 For example:
 
-\begin{verbatim}
+\begin{lstlisting}
 TODAY := $(shell date)
 CFILES := $(shell ls *.c)
-\end{verbatim}
+\end{lstlisting}
 
 
 
@@ -2116,28 +2116,28 @@ CFILES := $(shell ls *.c)
 
 \begin{itemize}
   \item The syntax is:
-  \begin{verbatim}
+  \begin{lstlisting}
     $(variable:pattern=replacement)
-  \end{verbatim}
+  \end{lstlisting}
 
   \item The pattern contains \%, which will match any substring
   \item The replacement may contain \%, which will be replaced by the matched substring
   \item For example:
-  \begin{verbatim}
+  \begin{lstlisting}
     C_FILES := $(shell ls *.c)
     O_FILES := $(C_FILES:%.c=%.o)
-  \end{verbatim}
+  \end{lstlisting}
 \end{itemize}
 
 \subsubsection{For more about make}
 
-\begin{verbatim}
+\begin{lstlisting}
 # Using make
 man make
 
 # Writing Makefiles
 info make
-\end{verbatim}
+\end{lstlisting}
 
 
 
@@ -2169,9 +2169,9 @@ Parsing is the process of taking the source code and creating the corresponding 
 
 Example:
 
-\begin{verbatim}
+\begin{lstlisting}
 t = 3 * ((y * w) + x)
-\end{verbatim}
+\end{lstlisting}
 
 
 \subsubsection{Compiler vs. interpreter}
@@ -2327,11 +2327,11 @@ Type systems in programming languages can be broadly classified into static and 
     \item The compiler analyzes the source code and ensures that all type rules are followed before the code is run.
     \item Any type mismatch or type errors are detected and reported as compile-time errors.
     \item Example in C:
-    \begin{verbatim}
+    \begin{lstlisting}
     int f() {
         return "this is a string" / 5; // Compile-time error
     }
-    \end{verbatim}
+    \end{lstlisting}
     \item The advantage of static type checking is that many errors can be caught early in the development process.
     \item It enforces type discipline, as the code must explicitly declare and adhere to type contracts.
 \end{itemize}
@@ -2342,10 +2342,10 @@ Type systems in programming languages can be broadly classified into static and 
     \item It allows more flexibility in the code, as types are enforced when operations are actually performed.
     \item Errors due to type mismatches are thrown during the execution of the program, which may lead to runtime exceptions.
     \item Example in Python:
-    \begin{verbatim}
+    \begin{lstlisting}
     def f():
         return "this is a string" / 5 # Runtime TypeError
-    \end{verbatim}
+    \end{lstlisting}
     \item This flexibility can be advantageous for rapid prototyping and for code that requires dynamic type behavior.
     \item However, it also means that certain types of errors will only surface when the problematic code path is executed.
 \end{itemize}
@@ -2433,11 +2433,11 @@ Here, memory management is handled automatically through mechanisms like \textbf
 
 
 \textbf{Example}
-\begin{verbatim}
+\begin{lstlisting}
 def getint():
     buffer = input()
     return int(buffer)
-\end{verbatim}
+\end{lstlisting}
 
 
 % Slide title "How does automatic memory management work?"
@@ -2532,32 +2532,32 @@ Macros in C are preprocessor directives that allow for automatic generation of s
 \paragraph{Example and Usage}
 \begin{itemize}
     \item An example macro in C that repeats arguments:
-    \begin{verbatim}
+    \begin{lstlisting}
     #define THIS_5X(a) a, a, a, a, a
     int array[10] = { THIS_5X(1), THIS_5X(2) };
-    \end{verbatim}
+    \end{lstlisting}
     This expands into an array initialization with repeated values.
 
     \item Macros can calculate the number of elements in an array:
-    \begin{verbatim}
+    \begin{lstlisting}
     #define ARRAY_ELEMENTS(a) (sizeof(a) / sizeof((a)[0]))
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 \paragraph{Cautions with Macros}
 Macros are simple text replacements and can lead to unexpected results without careful use.
 \begin{itemize}
     \item Incorrect macro that doesn't account for operator precedence:
-    \begin{verbatim}
+    \begin{lstlisting}
     #define PRODUCT_WRONG(a, b) a * b
     int a = PRODUCT_WRONG(1 + 2, 3 + 4); // Yields 11, not 21
-    \end{verbatim}
+    \end{lstlisting}
     
     \item Corrected macro with parentheses ensuring proper precedence:
-    \begin{verbatim}
+    \begin{lstlisting}
     #define PRODUCT_CORRECT(a, b) ((a) * (b))
     int a = PRODUCT_CORRECT(1 + 2, 3 + 4); // Correctly yields 21
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 \subsubsection{Generics}
@@ -2566,22 +2566,22 @@ Generics provide a way to write functions and data structures that can operate o
 \paragraph{Generics in Different Languages}
 \begin{itemize}
     \item In C, without built-in generics, functions must be written for each data type:
-    \begin{verbatim}
+    \begin{lstlisting}
     void int_array_sort(int *array, int size);
     void float_array_sort(float *array, int size);
-    \end{verbatim}
+    \end{lstlisting}
 
     \item Python's dynamic type checking negates the need for explicit generics:
-    \begin{verbatim}
+    \begin{lstlisting}
     def array_sort(array):
         # Works for any type that supports comparison and sorting
-    \end{verbatim}
+    \end{lstlisting}
 
     \item C++ introduces templates, which are its way of implementing generics:
-    \begin{verbatim}
+    \begin{lstlisting}
     template <typename T>
     void array_sort(T *array);
-    \end{verbatim}
+    \end{lstlisting}
     Templates allow functions and classes to operate with any type.
 \end{itemize}
 
@@ -2607,20 +2607,20 @@ A compound type is any type that is defined in terms of one or more other types.
 
 \begin{itemize}
     \item In C:
-\begin{verbatim}
+\begin{lstlisting}
 struct point {
     float x;
     float y;
 };
-\end{verbatim}
+\end{lstlisting}
 
     \item In Python:
-\begin{verbatim}
+\begin{lstlisting}
 class Point:
     def __init__(self):
         self.x = 0.0
         self.y = 0.0
-\end{verbatim}
+\end{lstlisting}
 \end{itemize}
 
 In object-oriented programming (OOP), compound types (``classes'')
@@ -2684,9 +2684,9 @@ Declarative programming focuses on describing \textit{what} the program should a
 
 \paragraph{Example SAT formulas:}
 
-\begin{verbatim}
+\begin{lstlisting}
 x1 and (not x2 or x3) and (not x3)
-\end{verbatim}
+\end{lstlisting}
 This SAT formula describes a logical constraint. The solver's role is to find a solution that satisfies this constraint, without the programmer detailing the steps to find such a solution.
 
 
@@ -2888,7 +2888,7 @@ An API defines how a library (or any other service) is to be used.
 \verb|curl -s "https://cloudflare.com/cdn-cgi/trace"|
 \texttt{PUT https://api.cloudflare.com/client/v4/zones/\{zone\_identifier\}/dns\_records/\{identifier\}}
 
-\begin{verbatim}
+\begin{lstlisting}
 curl --request PUT \
      --url https://api.cloudflare.com/client/v4/zones/zone_identifier/dns_records/identifier \
      --header 'Content-Type: application/json' \
@@ -2904,7 +2904,7 @@ curl --request PUT \
        ],
        "ttl": 3600
      }'
-\end{verbatim}
+\end{lstlisting}
 \subsubsection{APIs and portability}
 \begin{itemize}
   \item many APIs are cross-platform
@@ -2964,34 +2964,34 @@ They can solve it...
 \subsubsection{Tutorial: Treating Integers as Strings of Bits in python}
 \begin{itemize}
     \item \textbf{OR Operation:} The bitwise OR (\texttt{\textbar}) combines bits such that the bit in the result is 1 if either bit is 1.
-    \begin{verbatim}
+    \begin{lstlisting}
     >>> x = 0b110000 | 0b000011
     >>> f"{x:06b}"  # '110011'
-    \end{verbatim}
+    \end{lstlisting}
 
     \item \textbf{AND Operation:} The bitwise AND (\texttt{\&}) combines bits with a result of 1 only if both bits are 1.
-    \begin{verbatim}
+    \begin{lstlisting}
     >>> x = 0b111100 & 0b001111
     >>> f"{x:06b}"  # '001100'
-    \end{verbatim}
+    \end{lstlisting}
 
     \item \textbf{XOR Operation:} The bitwise XOR (\texttt{\textasciicircum}) combines bits with a result of 1 only if the bits are different.
-    \begin{verbatim}
+    \begin{lstlisting}
     >>> x = 0b101010 ^ 0b110011
     >>> f"{x:06b}"  # '011001'
-    \end{verbatim}
+    \end{lstlisting}
 
     \item \textbf{Left Shift Operation:} Shifts bits to the left, filling in with zeros (\texttt{<<}).
-    \begin{verbatim}
+    \begin{lstlisting}
     >>> x = 0b000110 << 2
     >>> f"{x:06b}"  # '011000'
-    \end{verbatim}
+    \end{lstlisting}
 
     \item \textbf{Right Shift Operation:} Shifts bits to the right, discarding excess bits (\texttt{>>}).
-    \begin{verbatim}
+    \begin{lstlisting}
     >>> x = 0b011000 >> 2
     >>> f"{x:06b}"  # '000110'
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 
@@ -3276,17 +3276,17 @@ Regular expressions are a mini-language for text pattern matching.
 
 \textbf{Q}: Find all occurrences of the word ``memory'' in the files in this directory.
 
-\begin{verbatim}
+\begin{lstlisting}
 grep 'memory' *
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Matching}
 
 \subsubsection{The grep command}
 
-\begin{verbatim}
+\begin{lstlisting}
 grep [OPTION...] PATTERNS [FILE...]
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Options:}
 \begin{itemize}
@@ -3304,9 +3304,9 @@ If no file provided, grep reads its (piped) input
 
 Q: Find all files in the current directory whose name contains the letter L
 
-\begin{verbatim}
+\begin{lstlisting}
 ls | grep -E -i 'L'
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Introduction to regular expressions}
 
@@ -3315,9 +3315,9 @@ ls | grep -E -i 'L'
   \item strings of “normal” characters are matched
 \end{itemize}
 
-\begin{verbatim}
+\begin{lstlisting}
 grep -E 'memory' *
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Anchors}
 
@@ -3328,10 +3328,10 @@ grep -E 'memory' *
 
 Examples:
 
-\begin{verbatim}
+\begin{lstlisting}
 grep -E '^int' *
 grep -E 's$' *
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Repetitions}
 
@@ -3346,12 +3346,12 @@ grep -E 's$' *
 
 \noindent Examples:
 
-\begin{verbatim}
+\begin{lstlisting}
 grep -E 's?printf' *
 grep -E '^ *printf' *
 grep -E '0b+0' *
 grep -E 'e{2,}' *
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Grouping}
 
@@ -3360,9 +3360,9 @@ Repetitions then apply to the group instead of a single character.
 
 \noindent Examples:
 
-\begin{verbatim}
+\begin{lstlisting}
 grep -E '(Abc)+'    # matches 'Abc', 'AbcAbc', 'AbcAbcAbc', ...
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Match any character}
 
@@ -3370,50 +3370,50 @@ The dot (\texttt{.}) matches any character:
 
 \noindent Examples:
 
-\begin{verbatim}
+\begin{lstlisting}
 grep -E 'X.Y'   # matches 'XaY', 'XbY', 'X+Y', ...
 grep -E 'X.*y'  # matches 'XabcY', 'X-*-y', ...
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Bracket expressions}
 
 \begin{itemize}
     \item One character can be matched to multiple options using square brackets:
-    \begin{verbatim}
+    \begin{lstlisting}
     grep -E '[abc]XY'  # matches aXY or bXY or cXY
     grep -E '[01]+'    # matches binary numbers
-    \end{verbatim}
+    \end{lstlisting}
 
     \item We can express ranges of characters using a dash:
-    \begin{verbatim}
+    \begin{lstlisting}
     grep -E '[0123456789]+'     # matches decimal numbers
     grep -E '[0-9]+'            # equivalent
     grep -E '[0-9a-fA-F]+'      # matches hexadecimal numbers
     grep -E '[A-Z][a-z]*'       # matches words starting with capital letter
-    \end{verbatim}
+    \end{lstlisting}
 
     \item Bracket expressions are negated if the first character is \textasciicircum:
-    \begin{verbatim}
+    \begin{lstlisting}
     grep -E '[^A]sprintf'    # matches "printf", "sprintf" but not "sprintf"
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 \subsubsection{Disjunctions}
 
 Multiple options can be given using the ``|'' character:
 
-\begin{verbatim}
+\begin{lstlisting}
 grep -E 'system_(startup|shutdown)' 
 # matches "system_startup" or "system_shutdown"
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Special characters}
 
 Special characters can be “escaped” using a backslash (“\textbackslash”):
 
-\begin{verbatim}
+\begin{lstlisting}
 grep -E 'printf\(.*\)'  # matches "printf("Hello %s", name)"
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Using regular expressions in less}
 
@@ -3437,45 +3437,45 @@ Patterns are specified using regular expressions
 
 \subsubsection{Basic search and replace}
 
-\begin{verbatim}
+\begin{lstlisting}
 sed -E 's/REGEX/REPLACEMENT/'
-\end{verbatim}
+\end{lstlisting}
 
 \begin{itemize}
   \item Examples:
-  \begin{verbatim}
+  \begin{lstlisting}
   sed -E 's/python/Python/'    # replace "python" with "Python"
   sed -E 's/printf\(/\fprintf\(stderr, /' 
   # replace "printf(" with "fprintf(stderr, "
-  \end{verbatim}
+  \end{lstlisting}
   
   \item Allow multiple replacements per line:
-  \begin{verbatim}
+  \begin{lstlisting}
   sed -E 's/REGEX/REPLACEMENT/g'   # g stands for global
-  \end{verbatim}
+  \end{lstlisting}
   
   \item Use delimiter different from ``/'':
-  \begin{verbatim}
+  \begin{lstlisting}
   sed -E 's|REGEX|REPLACEMENT|'
   sed -E 's_REGEX_REPLACEMENT_'
-  \end{verbatim}
+  \end{lstlisting}
 \end{itemize}
 
 \subsubsection{Advanced search and replace}
 
 \begin{itemize}
   \item In the replacement string, \textbackslash1 indicate the first parenthesized group, \textbackslash2 the second, etc.:
-  \begin{verbatim}
+  \begin{lstlisting}
   # replace "Hello, World!" with "Bye, World!"
   sed -E 's/Hello, ([A-Za-z]*\!)/Bye, \1!/'
-  \end{verbatim}
+  \end{lstlisting}
   
   \item Groups are numbered in the order of the opening parentheses from the left:
-  \begin{verbatim}
+  \begin{lstlisting}
   sed -E 's/((a(b|z)+)(c+))/\1\3/g'
   #         ^  ^    ^  ^
   #         1  2    3  4
-  \end{verbatim}
+  \end{lstlisting}
 \end{itemize}
 \subsection{Regular Expressions in Programming Languages}
 \subsubsection{Using regular expressions in C}
@@ -3544,7 +3544,7 @@ See: \texttt{man regex}
 \section{Version Control Systems}
 
 \subsection{Basic Version Control Commands}
-\begin{verbatim}
+\begin{lstlisting}
     Assume you have a project:
     myproject.py
     
@@ -3560,7 +3560,7 @@ See: \texttt{man regex}
     
     - To revert to the old version:
       cp versions/v1/myproject.py myproject.py
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Use Cases for Version Control}
 \begin{itemize}
@@ -3654,13 +3654,13 @@ git commit -m "My first commit."
 \begin{lstlisting}[language=bash]
 git log
 \end{lstlisting}
-\begin{verbatim}
+\begin{lstlisting}
 commit 6ea8433f89c78588190435c877b1d3e7c708 (HEAD -> main)
 Author: Laurent Perriraz <lperriraz@dev>
 Date:   Fri Sep 29 02:44:18 2023 +0200
 
     My first commit.
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Automatic Adding}
 Add multiple files at once using a pattern:
@@ -4201,13 +4201,14 @@ int a = islower('æ');
   \item Value of padding bytes:
 \end{itemize}
 
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 struct s {
     char a; // 1 byte
     // 3 padding bytes
     int b;  // 4 bytes
 };
-\end{verbatim}
+\end{lstlisting}
+
 
 \subsubsection{Implementation-defined Behavior}
 
@@ -4217,10 +4218,11 @@ Unspecified behavior where each implementation (compiler / platform / OS) docume
 
 The propagation of the high-order bit when a signed integer is shifted right.
 
-\begin{verbatim}
+\begin{lstlisting}
 int a = -8;
 int b = a >> 1;
-\end{verbatim}
+\end{lstlisting}
+
 
 On x86\_64 and AArch64: sign-extend
 
@@ -4239,10 +4241,10 @@ for which this document imposes no \textbf{requirements}.
 \end{itemize}
 
 \textbf{Example}
-\begin{verbatim}
+\begin{lstlisting}
 int *a = NULL;
 int b = *a;
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Easy UB: division by zero}
 
@@ -4253,27 +4255,27 @@ In both operations, if the value of the second operand is zero, the behavior is 
 
 \begin{itemize}
     \item A simple C program that attempts to divide by zero can cause a runtime error:
-    \begin{verbatim}
+    \begin{lstlisting}[language=C]
     int main(int argc) {
         return 5 / (argc - 1);
     }
-    \end{verbatim}
+    \end{lstlisting}
     When \texttt{argc} is 1, the program attempts to divide by zero, resulting in a floating-point exception.
 
     \item Compiling with warnings enabled can alert the developer to the potential issue:
-    \begin{verbatim}
+    \begin{lstlisting}
     clang -O3 -std=c2x -o main main.c
     main.c:3:11: warning: division by zero is undefined
-    \end{verbatim}
+    \end{lstlisting}
     
     \item The actual result of running the compiled program may vary, producing different outputs or crashing:
-    \begin{verbatim}
+    \begin{lstlisting}
     ./main
     -882586408
     1687000168
     -1071941800
     -60110776
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 \subsubsection{Easy UB: division overflow}
@@ -4300,7 +4302,7 @@ Integer division in C follows specific rules, but certain edge cases, like divis
 \paragraph{Example}
 Consider the following C code that demonstrates undefined behavior due to division overflow:
 
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 #include <stdio.h>
 #include <limits.h>
 
@@ -4314,7 +4316,7 @@ int main() {
     print_if_negative(INT_MIN);
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Explanation}
 \begin{itemize}
@@ -4338,7 +4340,7 @@ Overflow occurs when an arithmetic operation exceeds the maximum size that can b
 
 The following C code demonstrates unsigned integer overflow:
 
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 #include <stdio.h>
 #include <stdint.h>
 
@@ -4350,7 +4352,7 @@ int main() {
     }
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Explanation}
 \begin{itemize}
@@ -4380,7 +4382,7 @@ While hardware architectures like x86$\_$64 and AArch64 have instructions that e
 
 Consider this C code snippet:
 
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 #include <stdio.h>
 #include <limits.h>
 
@@ -4399,7 +4401,7 @@ int main() {
     print_if_positive(INT_MAX);
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Explanation}
 \begin{itemize}
@@ -4423,7 +4425,7 @@ When a pointer in C is assigned an invalid value, dereferencing it results in un
 
 Here's a C code snippet that can cause undefined behavior due to invalid pointer dereferencing:
 
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 int int_at(int *pointer) {
     int r = *pointer;
     return r;
@@ -4433,7 +4435,7 @@ int main() {
     printf("%d", int_at((int *)1)); // Invalid pointer dereference
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Analysis}
 \begin{itemize}
@@ -4452,7 +4454,7 @@ int main() {
 
 A safer version of the function would include a check for \texttt{NULL}:
 
-\begin{verbatim}
+\begin{lstlisting}[language=C]
 int int_at(int *pointer) {
     if (pointer == NULL) {
         return 0; // Or another error-handling strategy
@@ -4460,7 +4462,7 @@ int int_at(int *pointer) {
     int r = *pointer;
     return r;
 }
-\end{verbatim}
+\end{lstlisting}
 
 
 
@@ -4533,7 +4535,7 @@ All of the following trigger undefined behavior:
   \item dereferencing invalid pointers
 \end{itemize}
 
-\begin{verbatim}
+\begin{lstlisting}
 int main()
 {
     int i = INT_MAX + 1;
@@ -4541,17 +4543,15 @@ int main()
     printf("b = %d\n", b);
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 The compiler is allowed to produce code with output:
 
-\begin{verbatim}
+\begin{lstlisting}
 b = 0
-
 b = 1
-
 b = 42
-\end{verbatim}
+\end{lstlisting}
 
 \textit{Deleting all your files now...}
 
@@ -4596,7 +4596,7 @@ No additional constraints are placed on the compiler when targeting a particular
 "The behavior is undefined in the following circumstances: [...]
 An unmatched ' or " character is encountered on a logical source line during tokenization" (p584)
 
-\begin{verbatim}
+\begin{lstlisting}
 #include <stdio.h>
 
 int main()
@@ -4608,12 +4608,12 @@ int main()
 test.c:5:16: error: missing terminating " character
     5 |     printf("Hello
       |                ^
-\end{verbatim}
+\end{lstlisting}
 
 All modern compilers turn this (and all other parsing errors) into implementation-defined behavior specifically: interrupted compilation with error message
 
 \subsubsection{(Almost) everything wrong is undefined behavior (2)}
-\begin{verbatim}
+\begin{lstlisting}
 #include <stdio.h>
 
 char *f()
@@ -4633,7 +4633,7 @@ int main()
 
 % Compiler warnings and errors
 gcc -O3 -o bug bug.c
-bug.c: In function ‘f’:
+bug.c: In function 'f':
 bug.c:9:16: warning: function returns address of local variable [-Wreturn-local-addr]
     9 |     return buffer;
       |                ^
@@ -4642,7 +4642,8 @@ bug.c:9:16: warning: function returns address of local variable [-Wreturn-local-
 ./bug
 Here is the return value of f():
 Segmentation fault (core dumped)
-\end{verbatim}
+\end{lstlisting}
+
 \subsubsection{Undefined behavior can time-travel}
 
 ``[...] However, if any such execution contains an undefined operation,
@@ -4651,23 +4652,23 @@ that program with that input (not even with regard to operations
 preceding the first undefined operation).''
 (C++20, p7)
 
-\begin{verbatim}
+\begin{lstlisting}
 int f(int a, int b)
 {
     printf("a = %d, b = %d\n", a, b);
     printf("We could get a crash now:\n");
     return a / b;
 }
-\end{verbatim}
+\end{lstlisting}
 
 The compiler is allowed to produce an executable that does this:
 
-\begin{verbatim}
+\begin{lstlisting}
 a = 10, b = 0
 DELETING ALL FILES NOW, HA HA HA HA !!!!!
 We could get a crash now:
 Floating point exception (core dumped)
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Undefined behavior can time-travel (really)}
 
@@ -4716,7 +4717,7 @@ that has one of the following types:
 
 Valid:
 
-\begin{verbatim}
+\begin{lstlisting}
 typedef int my_int;
 
 my_int f(int *pointer)
@@ -4724,17 +4725,17 @@ my_int f(int *pointer)
     my_int *my_pointer = pointer;
     return *my_pointer;
 }
-\end{verbatim}
+\end{lstlisting}
 
 Undefined behavior:
 
-\begin{verbatim}
+\begin{lstlisting}
 int f(long *pointer)
 {
     int *my_pointer = (int *)pointer;
     return *my_pointer;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Explanation:}
 In the context of pointer aliasing, the term \textit{``effective type''} refers to the actual data type that a memory location is being treated as at any given point in the program. Strict aliasing rules in C dictate that you can only safely access a memory location through a pointer that matches the effective type of the data stored at that location.
@@ -4747,13 +4748,13 @@ On the other hand, the undefined behavior example demonstrates a violation of th
 
 Valid:
 
-\begin{verbatim}
+\begin{lstlisting}
 int f(int *pointer)
 {
     const int *my_pointer = (const int *)pointer;
     return *my_pointer;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Explanation:}
 In this valid example, the pointer `pointer` is of type `int *`, and it is cast to `const int *` for `my\_pointer`. This is permissible under the strict aliasing rules as it involves adding a qualifier to the type. 
@@ -4765,13 +4766,13 @@ However, it's important to note that while you can safely read the value pointed
 \subsubsection{a type that is the signed or unsigned type corresponding to the effective type of the object}
 
 Valid:
-\begin{verbatim}
+\begin{lstlisting}
 unsigned int f(int *pointer)
 {
     unsigned int *my_pointer = (unsigned int *)pointer;
     return *my_pointer;
 }
-\end{verbatim}
+\end{lstlisting}
 \paragraph{Explanation:}
 In this example, a pointer of type `int *` is cast to `unsigned int *` and then dereferenced. While `int` and `unsigned int` are both integer types, they represent numbers in different ways: `int` for signed integers and `unsigned int` for unsigned integers. 
 
@@ -4782,13 +4783,13 @@ Nonetheless, this practice should be approached with caution. The reinterpretati
 \subsubsection{a type that is the signed or unsigned type corresponding to a qualified version of the effective type of the object}
 
 Valid:
-\begin{verbatim}
+\begin{lstlisting}
 unsigned int f(int *pointer)
 {
     const unsigned int *my_pointer = (const unsigned int *)pointer;
     return *my_pointer;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Explanation:}
 In this example, a pointer of type `int *` is cast to `const unsigned int *` and then dereferenced. As previously discussed, the C standard allows the object to be accessed through a pointer to the corresponding signed or unsigned type, acknowledging that `int` and `unsigned int` have compatible memory representations.
@@ -4800,7 +4801,7 @@ Combining these two aspects, this example is valid because it involves accessing
 \subsubsection{an aggregate or union type that includes one of the aforementioned types among its members (including, recursively, a member of a subaggregate or contained union)}
 
 Valid:
-\begin{verbatim}
+\begin{lstlisting}
 struct vec3d {
     int x, y, z;
 };
@@ -4809,7 +4810,7 @@ void vec3d_copy(struct vec3d *dst, struct vec3d *src)
 {
     *dst = *src;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Explanation:}
 This example demonstrates the valid use of an aggregate type, specifically a `struct`, in the context of strict aliasing rules. In C, an aggregate type is a data type that groups multiple individual variables, possibly of different types, into a single unit. In this case, `struct vec3d` is an aggregate type composed of three `int` members: `x`, `y`, and `z`.
@@ -4823,7 +4824,7 @@ It's worth noting that aggregate types are treated as a single unit. This means 
 
 Valid:
 
-\begin{verbatim}
+\begin{lstlisting}
 struct vec3d {
     int x, y, z;
 };
@@ -4844,7 +4845,7 @@ int main()
 
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 
 \paragraph{Explanation:}
@@ -4861,13 +4862,13 @@ it is very likely that we invoke undefined behavior.
 
 \textcolor{red}{Danger!} Probable undefined behavior ahead:
 
-\begin{verbatim}
+\begin{lstlisting}
 int *a;
 short *b = a;
-\end{verbatim}
+\end{lstlisting}
 \subsubsection{Strict aliasing violations (1)}
 
-\begin{verbatim}
+\begin{lstlisting}
 uint32_t build_u32(uint16_t a, uint16_t b)
 {
     uint32_t r;
@@ -4879,7 +4880,7 @@ uint32_t build_u32(uint16_t a, uint16_t b)
 
     return r;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Explanation:}
 This code violates strict aliasing rules by accessing a `uint32\_t` object through a pointer of type `uint16\_t *`. The C standard requires that an object's memory be accessed only through its own type or a compatible type. Here, `uint32\_t` and `uint16\_t` are distinct types with different sizes, and accessing the `uint32\_t` object `r` as if it were an array of `uint16\_t` leads to undefined behavior according to the strict aliasing rules.
@@ -4902,7 +4903,7 @@ The code snippet involves a `union` named `mux` that allows its memory to be acc
 
 \textbf{Valid:}
 
-\begin{verbatim}
+\begin{lstlisting}
 int main()
 {
     int i[2];
@@ -4917,7 +4918,7 @@ int main()
 
     return 0;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Explanation:}
 The code demonstrates valid type-punning using `memcpy` to safely copy data from an `int` array to a `short` array. This method avoids strict aliasing violations by copying the memory representation without directly accessing the data through pointers of differing types. This approach ensures that the underlying bytes are transferred accurately without invoking undefined behavior, making the operation safe and portable across different compilers and platforms. `memcpy` respects the memory boundaries and types, providing a reliable method for type-punning in compliant C code.
@@ -4958,13 +4959,13 @@ Every pointer to that type must be a multiple of that alignment.
 
 Undefined behavior:
 
-\begin{verbatim}
+\begin{lstlisting}
 int *alloc_5_bytes()
 {
     char *c = malloc(1 + sizeof(int));
     return c + 1;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Out-of-bounds pointer arithmetic}
 
@@ -4974,13 +4975,13 @@ or one past the last element of the array object;” (p84)
 
 Undefined behavior:
 
-\begin{verbatim}
+\begin{lstlisting}
 size_t eight()
 {
     char c[4];
     return &(c[8]) - &(c[0]);
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Infinite loops}
 
@@ -4988,20 +4989,20 @@ An infinite loop with no side effects is undefined behavior.
 
 Undefined behavior:
 
-\begin{verbatim}
+\begin{lstlisting}
 while (1)
 {
 }
-\end{verbatim}
+\end{lstlisting}
 
 Valid:
 
-\begin{verbatim}
+\begin{lstlisting}
 while (1)
 {
     printf("Hello\n");
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Shift beyond integer size}
 
@@ -5009,21 +5010,21 @@ Undefined behavior:
 
 \begin{itemize}
     \item left/right shift integer by a negative number
-    \begin{verbatim}
+    \begin{lstlisting}
         uint32_t a = 1 >> -5;
-    \end{verbatim}
+    \end{lstlisting}
 
     \item left/right shift an \textit{n}-bit integer by \textit{n} or more positions
-    \begin{verbatim}
+    \begin{lstlisting}
         uint32_t a = 1;
         uint32_t b = a << 32;
-    \end{verbatim}
+    \end{lstlisting}
 
     \item left shift signed integer \textit{i} by \textit{k} positions and \textit{i} $ \times 2^{k} $ is not representable
-    \begin{verbatim}
+    \begin{lstlisting}
         uint32_t a = -1024;
         uint32_t b = a << 30;
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 C23 pp584--594: 218 types of undefined behavior
 
@@ -5168,14 +5169,14 @@ If $+, -, \times, /$ are the elementary integer operations:
 \end{itemize}
 
 
-\begin{verbatim}
-i64_to_fix(e) := e × 2^32
+\begin{lstlisting}
+i64_to_fix(e) := e x 2^32
 fix_to_i64(a) := a / 2^32
 fix_add(a, b) := a + b
 fix_sub(a, b) := a - b
-fix_mul(a, b) := (a × b) / 2^32
-fix_div(a, b) := (a × 2^32) / b
-\end{verbatim}
+fix_mul(a, b) := (a x b) / 2^32
+fix_div(a, b) := (a x 2^32) / b
+\end{lstlisting}
 
 The function $i64_to_fix()$ is taking an integer $e$ of type $i64$ (which is a 64-bit integer) and converting it into a fixed-point representation of type \textit{fix}. The multiplication by $2^32$ effectively shifts the integer value $e$ into the higher 32 bits of the 64-bit representation, leaving the lower 32 bits for the fractional part. This way,  it is possible to perform fixed-point arithmetic with fix types while maintaining precision for the fractional component of the values.\\
 
@@ -5420,15 +5421,15 @@ Therefore,
 
 \subsubsection{Never do exact comparisons}
 
-\begin{verbatim}
+\begin{lstlisting}
 >>> 0.1 + 0.2 == 0.3
 False
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
 >>> 1.0 - 1e-16 == 1.0
 True
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{So how do we do comparisons?} % Lecture slide heading
 
@@ -5438,29 +5439,29 @@ True
 \end{itemize}
 
 % Example of a proper way to do comparisons with tolerance in floating point arithmetic
-\begin{verbatim}
+\begin{lstlisting}
 >>> 0.1 + 0.2 == 0.3
 False
-\end{verbatim}
+\end{lstlisting}
 
 becomes
 
-\begin{verbatim}
+\begin{lstlisting}
 >>> tolerance = 1e-10
 >>> abs( (0.1 + 0.2) - 0.3 ) < tolerance
 True
-\end{verbatim}
+\end{lstlisting}
 
 % Another example of a proper way to do comparisons with tolerance
-\begin{verbatim}
+\begin{lstlisting}
 >>> x = 0.0
-\end{verbatim}
+\end{lstlisting}
 
 becomes
 
-\begin{verbatim}
+\begin{lstlisting}
 >>> x > -tolerance
-\end{verbatim}
+\end{lstlisting}
 
 
 
@@ -5648,7 +5649,7 @@ The GNU Multi-Precision Library is an important tool for computations requiring 
 \subsubsection{The GNU MPFR library}
 The GNU MPFR library enhances the GNU Multi-Precision Library (GMP) by providing a facility for arbitrary-precision floating-point computation.
 
-\begin{verbatim}
+\begin{lstlisting}
 double x = 22.0 / 7.0;
 printf("%.20f\n", x);
 
@@ -5658,20 +5659,20 @@ mpfr_set_ui(x, 22, MPFR_RNDN);  // set x to value 22, round-to-nearest
 mpfr_div_ui(x, x, 7, MPFR_RNDN); // divide x to 7, round-to-nearest
 mpfr_printf("%.20Rf\n", x);     // print x
 mpfr_clear(x);                  // free memory
-\end{verbatim}
+\end{lstlisting}
 
 For more details, visit \url{http://mpfr.org}.
 
 \subsubsection{Python fractions}
 Python supports arbitrary-precision integers and provides a module for exact rational number arithmetic.
 
-\begin{verbatim}
+\begin{lstlisting}
 >>> -2 ** 65
 -36893488147419103232   # correct result, no overflow
 
 import fractions
 a = fractions.Fraction(numerator, denominator)
-\end{verbatim}
+\end{lstlisting}
 
 
 \subsubsection{Why don't we always use exact rational numbers?}
@@ -5707,24 +5708,24 @@ Symbolic computation systems are powerful tools that allow for manipulation and 
 In a symbolic algebra system:
 \begin{itemize}
     \item The square root of 2, denoted as \(\sqrt{2}\), is never approximated to a decimal such as 1.4142. It is kept in the root form for exact calculations. For instance, in SageMath:
-    \begin{verbatim}
+    \begin{lstlisting}
     sage: sqrt(8)
     2*sqrt(2)
-    \end{verbatim}
+    \end{lstlisting}
 
     \item Variables can be defined without assigning them specific values, which is useful for carrying out algebraic manipulations. For example:
-    \begin{verbatim}
+    \begin{lstlisting}
     sage: x, y, z = var('x y z')
     sage: sqrt(8) * x
     2*sqrt(2)*x
-    \end{verbatim}
+    \end{lstlisting}
 
     \item Symbolic computations allow solving algebraic problems, such as equations, symbolically. For instance:
-    \begin{verbatim}
+    \begin{lstlisting}
     sage: x, b, c = var('x b c')
     sage: solve([x^2 + b*x + c == 0], x)
     [x == -1/2*b - 1/2*sqrt(b^2 - 4*c), x == -1/2*b + 1/2*sqrt(b^2 - 4*c)]
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 
 \subsubsection{Symbolic Algebra Systems}
@@ -5867,7 +5868,7 @@ Automated documentation systems
 Note: Some projects choose to not use automated documentation.
 
 \subsection{Testing}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  * This functions returns:
  * 5 if one or both of its arguments are 5
@@ -5889,7 +5890,7 @@ int tests()
     errors += (five_if_some_five(100,   5) != 5);
     return errors;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Test coverage}
 \begin{itemize}
@@ -5913,7 +5914,7 @@ After running the provided tests using coverage analysis tools, the results are 
 
 \subsubsection{Line coverage vs. branch coverage}
 
-\begin{verbatim}
+\begin{lstlisting}
 int test()
 {
     int errors = 0;
@@ -5922,7 +5923,7 @@ int test()
 
     return errors;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \begin{tabular}{ l l }
 Line coverage: & 100\% \\
@@ -5932,7 +5933,7 @@ Branch coverage: & 50\%
 Line coverage measures the percentage of code lines that have been executed during a test run. Line coverage does not ensure that all edge cases or logical branches are tested; it only indicates which lines of code were run.
 
 \subsubsection{Limitations of test coverage measures (1)}
-\begin{verbatim}
+\begin{lstlisting}
 /*
  This functions returns:
  5 if one or both of its arguments are 5
@@ -5947,7 +5948,7 @@ int test()
 {
     return (WRONG_five_if_some_five(0, 5) == 5);
 }
-\end{verbatim}
+\end{lstlisting}
 
 Line coverage: 100\%
 Branch coverage: 100\%
@@ -5968,7 +5969,7 @@ The example illustrates that even with 100\% line and branch coverage, test cove
         \item triggers an immediate crash (\texttt{abort()}) of your program.
     \end{itemize}
 \end{itemize}
-\begin{verbatim}
+\begin{lstlisting}
 #include <assert.h>
 
 int gcd(int a, int b)
@@ -5988,13 +5989,13 @@ int gcd(int a, int b)
 
     return a;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Disabling assertions}
 
-\begin{verbatim}
+\begin{lstlisting}
 clang -DNDEBUG -Wall -O3 -o main main.c
-\end{verbatim}
+\end{lstlisting}
 (equivalent to \texttt{\#define NDEBUG} at the beginning of every file)
 
 \subsubsection{Error vs assertion failure}
@@ -6031,9 +6032,9 @@ clang -DNDEBUG -Wall -O3 -o main main.c
 \subsubsection{Clang's static analyzer}
 If you use a Makefile, run
 
-\begin{verbatim}
+\begin{lstlisting}
 scan-build make
-\end{verbatim}
+\end{lstlisting}
 \subsubsection{Python linters}
 \begin{itemize}
 \item A ``linter'' is a static analyzer
@@ -6047,21 +6048,21 @@ Examples:
 \item mypy (adds static type checking)
 \end{itemize}
 \paragraph{Example}
-\begin{verbatim}
+\begin{lstlisting}
 def fib(n):
     a, b = 0, 1
     while a < n:
         yield a
         a, b = b, a+b
-\end{verbatim}
+\end{lstlisting}
 
-\begin{verbatim}
+\begin{lstlisting}
 def fib(n: int) -> Iterator[int]:
     a, b = 0, 1
     while a < n:
         yield a
         a, b = b, a+b
-\end{verbatim}
+\end{lstlisting}
 \subsection{Dynamic Analysis}
 \begin{itemize}
     \item Dynamic analysis operates on the running executable (during testing)
@@ -6135,22 +6136,22 @@ When the program is compiled without sanitization, this bug may go unnoticed, po
 
 \begin{itemize}
   \item Out-of-bounds accesses to heap, stack and globals
-    \begin{verbatim}
+    \begin{lstlisting}
        int a[10];
        printf("%d\n", a[20]);
-    \end{verbatim}
+    \end{lstlisting}
 
   \item Use-after-free
-    \begin{verbatim}
+    \begin{lstlisting}
        free(pointer);
        printf("%d\n", *pointer);
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 \paragraph{ASan detects (2)}
 
 \begin{itemize}
   \item Use-after-return
-    \begin{verbatim}
+    \begin{lstlisting}
        int *f()
        {
          int a[10];
@@ -6162,10 +6163,10 @@ When the program is compiled without sanitization, this bug may go unnoticed, po
          int *pointer = f();
          printf("%d\n", pointer[0]);
        }
-    \end{verbatim}
+    \end{lstlisting}
 
   \item Use-after-scope
-    \begin{verbatim}
+    \begin{lstlisting}
        void g()
        {
          int *pointer;
@@ -6178,30 +6179,30 @@ When the program is compiled without sanitization, this bug may go unnoticed, po
           
          printf("%d\n", pointer[0]);
        }
-    \end{verbatim}
+    \end{lstlisting}
 \end{itemize}
 \paragraph{ASan detects (3)}
 
 \begin{itemize}
     \item Double-free, invalid free
     
-    \begin{verbatim}
+    \begin{lstlisting}
 void *other_pointer = pointer;
 free(pointer);
 free(other_pointer);
 
 int a[10];
 free(a);
-    \end{verbatim}
+    \end{lstlisting}
     
     \item Memory leaks
     
-    \begin{verbatim}
+    \begin{lstlisting}
 void f()
 {
     void *ptr = malloc(10);
 }
-    \end{verbatim}
+    \end{lstlisting}
     
 \end{itemize}
 
@@ -6629,11 +6630,11 @@ This strategy is often employed in practice, such as in the implementation of so
 
 Instruction decoding:
 
-\begin{verbatim}
+\begin{lstlisting}
 48 2b 06        sub    rax, QWORD PTR [rsi]
 48 0f af 06          imul   rax, QWORD PTR [rsi]
 48 af af 02     imul   rax, QWORD PTR [rdx]
-\end{verbatim}
+\end{lstlisting}
 
 From \texttt{48 0f af 06}, the CPU needs to understand:
 
@@ -6939,7 +6940,7 @@ Caches are ubiquitous in computing and networking:
 \textbf{Real-world Caching Example}\\
 Here is an example showing the output of pinging servers located in different parts of the world:
 
-\begin{verbatim}
+\begin{lstlisting}
 ping canada.ca
 PING canada.ca (205.193.117.159): 56 data bytes
 64 bytes from 205.193.117.159: icmp_seq=0 ttl=228 time=20 ms
@@ -6951,7 +6952,7 @@ PING google.com.au (142.251.209.3): 56 data bytes
 64 bytes from mi104s04-in-f3.1e100.net (142.251.209.3): icmp_seq=0 ttl=115 time=12.2 ms
 ... (similar lines omitted for brevity) ...
 64 bytes from mi104s04-in-f3.1e100.net (142.251.209.3): icmp_seq=4 ttl=115 time=11.8 ms
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Key points}
 \begin{itemize}
@@ -7005,18 +7006,18 @@ It's important to note that the sum of user and system times (\(user + sys\)) wi
 \subsubsection{Variance in Execution Time}
 Execution time can vary between runs due to a variety of factors, such as system load, I/O overhead, or CPU scheduling. Variance is observed when running the same command multiple times:
 
-\begin{verbatim}
+\begin{lstlisting}
 time ./application
-\end{verbatim}
+\end{lstlisting}
 
 For example, running a command to read from `/dev/random` may yield different `real`, `user`, and `sys` times upon repeated executions.\\
 
 \textbf{Examining Variance}\\
 To understand the stability and performance of a system or application, examine the variance in execution time over multiple runs. For instance, running the following command multiple times:
 
-\begin{verbatim}
+\begin{lstlisting}
 time head -n 1000000 /dev/random > /dev/null
-\end{verbatim}
+\end{lstlisting}
 
 will provide different execution times, which is an example of the inherent variance in system performance.
 
@@ -7041,9 +7042,9 @@ Variability in execution time can often be attributed to several factors, which 
 \subsubsection{Effect of file caches}
 File caching by the operating system can have a significant effect on the performance of file operations. Below is an example showing the execution of the `md5sum` command on a large file, first without file caches and then with the file cached in memory:
 
-\begin{verbatim}
+\begin{lstlisting}
 time md5sum 2GB_file
-\end{verbatim}
+\end{lstlisting}
 
 In this example, the second run of `md5sum` on the same file is faster due to the effect of file caching.
 
@@ -7156,7 +7157,7 @@ With this information, it is clear that \texttt{function\_B()} is the primary bo
 \subsubsection{Using time.time()}
 In Python, `time.time()` is used to get the wall-clock time at various points during execution. Here's an example of how to use it:
 
-\begin{verbatim}
+\begin{lstlisting}
 import time
 t0 = time.time()
 initialize()
@@ -7164,7 +7165,7 @@ initialize()
 cleanup()
 t5 = time.time()
 print(f"Total time: {t5 - t0}")
-\end{verbatim}
+\end{lstlisting}
 
 This method is simple but has limitations due to the granularity and precision of the time measured.
 
@@ -7172,7 +7173,7 @@ This method is simple but has limitations due to the granularity and precision o
 \subsubsection{Using clock\_gettime()}
 In C, `clock$\_$gettime()` provides a more precise measurement of execution time. It can be used like this:
 
-\begin{verbatim}
+\begin{lstlisting}
 struct timespec t0, t1, t2, t3, t4, t5;
 clock_gettime(CLOCK_MONOTONIC, &t0);
 initialize();
@@ -7180,7 +7181,7 @@ initialize();
 cleanup();
 clock_gettime(CLOCK_MONOTONIC, &t5);
 print_all_clocks(&t0, &t1, &t2, &t3, &t4, &t5);
-\end{verbatim}
+\end{lstlisting}
 
 "CLOCK\_MONOTONIC" ensures that the time measured is not affected by discontinuous jumps in the system time.
 
@@ -7189,13 +7190,13 @@ print_all_clocks(&t0, &t1, &t2, &t3, &t4, &t5);
 \subsubsection{Cumulative time}
 To measure cumulative time across multiple iterations or function calls, you can sum the time differences for each specific part:
 
-\begin{verbatim}
+\begin{lstlisting}
 for i in range(1000000):
     t0 = time.time()
     function_A()
     tA += time.time() - t0
     # ... similarly for functions B and C ...
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Caveats in Timing}
 \begin{itemize}
@@ -7207,7 +7208,7 @@ for i in range(1000000):
 
 For functions that execute very quickly, microbenchmarking can be used to get a more accurate measure by running the function many times and measuring the total time:
 
-\begin{verbatim}
+\begin{lstlisting}
 tA, tB, tC = 0
 t0 = time.time()
 for i in range(5000000):
@@ -7215,7 +7216,7 @@ for i in range(5000000):
 t1 = time.time()
 
 cleanup()
-\end{verbatim}
+\end{lstlisting}
 
 \paragraph{Key Takeaways}
 \begin{itemize}
@@ -7728,13 +7729,13 @@ Linked lists are fundamental data structures that implement a collection of elem
 
 Doubly-linked lists are an extension of linked lists where each element has a reference to both the previous and the next element.
 
-\begin{verbatim}
+\begin{lstlisting}
 struct element {
     struct payload data;
     struct element *prev;
     struct element *next;
 };
-\end{verbatim}
+\end{lstlisting}
 
 Functionality such as insertion is demonstrated in the provided code snippet, showing how new elements are linked to their predecessors and successors.
 
@@ -7758,18 +7759,18 @@ delete an element & \(O(n)\) & \(O(1)\) \\
 
 Memory allocation is slow
 
-\begin{verbatim}
+\begin{lstlisting}
 struct element *x = malloc(sizeof(struct element));
-\end{verbatim}
+\end{lstlisting}
 
 compared to dynamic arrays' fast case
 
-\begin{verbatim}
+\begin{lstlisting}
 if (new_n <= d->sz) {
     d->n = new_n;
     return SUCCESS;
 }
-\end{verbatim}
+\end{lstlisting}
 
 This means that the $O(1)$ complexity of doubly-linked list is slower than the $O(1)$ complexity of dynamic arrays.
 \subsubsection{Memory caches considerations}
@@ -7789,7 +7790,7 @@ Beyond simple linked lists, other data structures offer different performance tr
     \item In-memory tree data structures, like binary trees or n-ary trees, provide hierarchical organization and can be more efficient for certain types of operations.
 \end{itemize}
 
-\begin{verbatim}
+\begin{lstlisting}
 struct nary_node {
     struct payload data;
     struct nary_node *children[MAX_CHILDREN];
@@ -7801,7 +7802,7 @@ struct dll_node {
     struct dll_node *next_sibling;
     struct dll_node *first_child;
 };
-\end{verbatim}
+\end{lstlisting}
 
 
 
@@ -8681,13 +8682,13 @@ Spatial data structures are designed to manage multidimensional data, such as ve
 \subsubsection{The problem}
 Given a set of vectors, the goal is to find all pairs of vectors that are within a distance $d$ from each other. A naive approach to this problem has a time complexity of $O(n^2)$, described by the following pseudocode:
 
-\begin{verbatim}
+\begin{lstlisting}
 R := {}
 for i = 0 to n - 1:
     for j = i + 1 to n - 1:
         if ||x^i - x^j|| <= d:
             R := R union {(i, j)}
-\end{verbatim}
+\end{lstlisting}
 
 
 \subsubsection{Grids}
@@ -9069,7 +9070,7 @@ The \texttt{ready} flag is used for synchronization, ensuring each item is only 
 
 \textbf{The C compiler is free to reorder this:}
 
-\begin{verbatim}
+\begin{lstlisting}
 void push(int value)
 {
     while (ready == 1) {
@@ -9078,11 +9079,11 @@ void push(int value)
     buffer = value;
     ready = 1;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{into this:}
 
-\begin{verbatim}
+\begin{lstlisting}
 void push(int value)
 {
     buffer = value;
@@ -9091,16 +9092,16 @@ void push(int value)
     }
     ready = 1;
 }
-\end{verbatim}
+\end{lstlisting}
 
 
 \textbf{The C compiler is free to infer that this loop:}
 
-\begin{verbatim}
+\begin{lstlisting}
 while (ready == 1) {
     // wait
 }
-\end{verbatim}
+\end{lstlisting}
 
 has either zero or infinitely many iterations without side effects (UB); thus remove the loop!
 
@@ -9169,7 +9170,7 @@ The code shows a flawed implementation for synchronizing a single-producer, sing
 
 \subsubsection{Examples (GLSL)}
 
-\begin{verbatim}
+\begin{lstlisting}
 float box(in vec2 st, in vec2 size){
     size = vec2(0.5) - size*0.5;
     vec2 uv = smoothstep(size,
@@ -9180,12 +9181,12 @@ float box(in vec2 st, in vec2 size){
                      vec2(1.0)-st);
     return uv.x*uv.y;
 }
-\end{verbatim}
+\end{lstlisting}
 
 
 \subsubsection{Examples (CUDA)}
 
-\begin{verbatim}
+\begin{lstlisting}
 inline __device__ float3 roundAndExpand(float3 v, ushort *w) {
     v.x = rintf(__saturatef(v.x) * 31.0f);
     v.y = rintf(__saturatef(v.y) * 63.0f);
@@ -9198,7 +9199,7 @@ inline __device__ float3 roundAndExpand(float3 v, ushort *w) {
     v.z = 0.032258064516f;
     return v;
 }
-\end{verbatim}
+\end{lstlisting}
 
 \textbullet\ GPUs were designed to perform the same simple, repetitive operations
 \begin{itemize}
