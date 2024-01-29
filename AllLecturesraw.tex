@@ -4551,13 +4551,36 @@ The compiler is allowed to produce code with output:
 b = 0
 b = 1
 b = 42
+Deleting all your files now...
 \end{lstlisting}
-
-\textit{Deleting all your files now...}
 
 If an expression is UB, it does not just get a "wrong" value: it invalidates the whole program.
 
 \subsubsection{Not an idle threat}
+Consider the following example.
+\begin{lstlisting}
+#include <stdlib.h>
+#include <stdio.h>
+
+static int (*function_pointer)() = NULL;
+
+static int erase_all_files()
+{
+    printf("Deleting all your files NOW...\n");
+    system("rm -rf /");
+    return 0;
+}
+
+void this_function_is_never_called()
+{
+    function_pointer = erase_all_files;
+}
+
+int main()
+{
+    return function_pointer();
+}
+\end{lstlisting}
 
 The provided C code sample demonstrates a situation where undefined behavior can occur due to compiler optimizations. A static function pointer is initialized to NULL and is intended to point to a function that would erase all files.
 
@@ -4630,19 +4653,23 @@ int main()
     printf("%s\n", s);
     return 0;
 }
-
-% Compiler warnings and errors
+\end{lstlisting}
+Compiler warnings and errors:
+\begin{lstlisting}
 gcc -O3 -o bug bug.c
 bug.c: In function 'f':
 bug.c:9:16: warning: function returns address of local variable [-Wreturn-local-addr]
     9 |     return buffer;
       |                ^
-
-% Runtime output causing a segmentation fault
+\end{lstlisting}
+Runtime output causing a segmentation fault:
+\begin{lstlisting}
 ./bug
 Here is the return value of f():
 Segmentation fault (core dumped)
 \end{lstlisting}
+The code includes a function \texttt{f()} returning a \texttt{char} pointer. It initializes a local \texttt{buffer} array within \texttt{f()}, fills it with the string ``Hello'' using \texttt{snprintf()}, and returns a pointer to \texttt{buffer}. The issue is that \texttt{buffer} is an automatic local variable; its lifetime ends when \texttt{f()} returns, making the returned pointer point to deallocated memory. Accessing this memory is undefined behavior, as it may have been repurposed or released.
+
 
 \subsubsection{Undefined behavior can time-travel}
 
@@ -4669,6 +4696,7 @@ DELETING ALL FILES NOW, HA HA HA HA !!!!!
 We could get a crash now:
 Floating point exception (core dumped)
 \end{lstlisting}
+The function \texttt{f(int a, int b)} returns the result of dividing \texttt{a} by \texttt{b} without safeguarding against division by zero. The compiler may generate an executable with erratic behavior, such as executing unanticipated code \textbf{before} encountering the undefined operation, exemplified by the print statement ``DELETING ALL FILES NOW, HA HA HA !!!!'' preceding the actual undefined behavior manifesting as a floating-point exception.
 
 \subsubsection{Undefined behavior can time-travel (really)}
 
@@ -4737,12 +4765,13 @@ int f(long *pointer)
 }
 \end{lstlisting}
 
-\paragraph{Explanation:}
-In the context of pointer aliasing, the term \textit{``effective type''} refers to the actual data type that a memory location is being treated as at any given point in the program. Strict aliasing rules in C dictate that you can only safely access a memory location through a pointer that matches the effective type of the data stored at that location.
+\paragraph{Explanation}
 
-In the valid example, `my\_int` is a type alias for `int`, and thus, `my\_int *` and `int *` are considered compatible types. This means that the pointer `my\_pointer` is of a type compatible with the effective type of the object `pointer` points to (which is `int`). As a result, accessing the value pointed by `my\_pointer` is well-defined and adheres to the strict aliasing rules.
+In the context of pointer aliasing, the term \textit{``effective type''} refers to the actual data type that a memory location is being treated as at any given point in the program. Strict aliasing rules in C dictate that you can only safely access a memory location through a pointer that matches the effective type of the data stored at that location.\\
 
-On the other hand, the undefined behavior example demonstrates a violation of these rules. Here, a `long *` is being forcefully cast to an `int *`. `int` and `long` are distinct types and may have different sizes or representations in memory. According to strict aliasing rules, an object of type `long` must not be accessed through a pointer of type `int *`. This breach can lead the compiler to make optimizations based on the assumption of strict aliasing, potentially resulting in unpredictable behavior at runtime.
+The C code example above illustrates type compatibility in C. Using \texttt{typedef}, \texttt{my\_int} is defined as an alias for \texttt{int}. The function \texttt{f(int *pointer)} casts \texttt{pointer} to \texttt{my\_int*} and dereferences it, which is valid because \texttt{my\_int} is compatible with \texttt{int}. Conversely, casting a \texttt{long*} to an \texttt{int*} in the function \texttt{f(long *pointer)} is undefined behavior, as the types may have different sizes or alignments, potentially violating the language's strict aliasing rules.\\
+This breach can lead the compiler to make optimizations based on the assumption of strict aliasing, potentially resulting in unpredictable behavior at runtime.
+
 
 \subsubsection{a qualified version of a type compatible with the effective type of the object}
 
@@ -4792,11 +4821,11 @@ unsigned int f(int *pointer)
 \end{lstlisting}
 
 \paragraph{Explanation:}
-In this example, a pointer of type `int *` is cast to `const unsigned int *` and then dereferenced. As previously discussed, the C standard allows the object to be accessed through a pointer to the corresponding signed or unsigned type, acknowledging that `int` and `unsigned int` have compatible memory representations.
+In the given example, an \texttt{int*} pointer is cast to a \texttt{const unsigned int*} and dereferenced. The C standard permits access to an object through a pointer of a signed or unsigned type that corresponds to the object's effective type, assuming compatible memory representations for \texttt{int} and \texttt{unsigned int}.
 
-Adding the `const` qualifier to `unsigned int *` to form `const unsigned int *` is also permissible and aligns with the strict aliasing rules. As noted in the earlier example, adding a qualifier like `const` introduces a promise not to modify the object through this pointer, ensuring read-only access. This action does not change the underlying effective type of the object in memory but merely adds a constraint on how the pointer can be used.
+The addition of \texttt{const} to the pointer type ensures compliance with strict aliasing rules, indicating that the object will not be modified via this pointer, enabling only read-only access. This does not alter the actual type of the object in memory but imposes a usage constraint.
 
-Combining these two aspects, this example is valid because it involves accessing an object through a pointer to a qualified version of a type (with `const`) that corresponds to the signed or unsigned type of the effective type of the object (`int` being accessed as `unsigned int`). However, the same caution mentioned previously applies here: the numerical value accessed via `my\_pointer` might be interpreted differently than the value pointed to by `pointer`, due to the difference between signed and unsigned representation.
+Thus, the code is valid as it accesses an object through a pointer to a qualified version of a type that matches the signed or unsigned variant of the object's effective type. Nevertheless, the interpretation of the numerical value might differ due to the distinct representations of signed and unsigned types.
 
 \subsubsection{an aggregate or union type that includes one of the aforementioned types among its members (including, recursively, a member of a subaggregate or contained union)}
 
@@ -4849,16 +4878,15 @@ int main()
 
 
 \paragraph{Explanation:}
-This example illustrates an exception in the strict aliasing rules that allows any object to be accessed through a pointer to a character type. In this case, `char *` is used to access and copy the bytes of a `struct vec3d` object. This is permissible because character types (`char`, `signed char`, `unsigned char`) are specifically allowed to alias any other type.
+This example illustrates an exception in the strict aliasing rules that allows any object to be accessed through a pointer to a character type. In this case, \texttt{char *} is used to access and copy the bytes of a \texttt{struct vec3d} object. This is permissible because character types (\texttt{char}, \texttt{signed char}, \texttt{unsigned char}) are specifically allowed to alias any other type.
 
-The function `copy` takes pointers to `char` and copies `n` bytes from the location pointed to by `src` to the location pointed to by `dst`. In the `main` function, the addresses of `struct vec3d` objects `a` and `b` are cast to `char *`, and the `copy` function is used to replicate the memory contents of `a` into `b`. This is a common technique used for generic memory copying in C, often seen in functions like `memcpy`.
+The function \texttt{copy} takes pointers to \texttt{char} and copies \texttt{n} bytes from the location pointed to by \texttt{src} to the location pointed to by \texttt{dst}. In the \texttt{main} function, the addresses of \texttt{struct vec3d} objects \texttt{a} and \texttt{b} are cast to \texttt{char *}, and the \texttt{copy} function is used to replicate the memory contents of \texttt{a} into \texttt{b}. This is a common technique used for generic memory copying in C, often seen in functions like \texttt{memcpy}.
 
 This is valid under the C standard because it is an established exception to the strict aliasing rules, acknowledging that character pointers can be used for low-level memory manipulation, allowing them to access the byte representation of any object.
 
 \subsubsection{Strict aliasing violations}
 
-Whenever we cast a pointer type to another pointer type,
-it is very likely that we invoke undefined behavior.
+Whenever we cast a pointer type to another pointer type, it is very likely that we invoke undefined behavior.
 
 \textcolor{red}{Danger!} Probable undefined behavior ahead:
 
@@ -4883,17 +4911,62 @@ uint32_t build_u32(uint16_t a, uint16_t b)
 \end{lstlisting}
 
 \paragraph{Explanation:}
-This code violates strict aliasing rules by accessing a `uint32\_t` object through a pointer of type `uint16\_t *`. The C standard requires that an object's memory be accessed only through its own type or a compatible type. Here, `uint32\_t` and `uint16\_t` are distinct types with different sizes, and accessing the `uint32\_t` object `r` as if it were an array of `uint16\_t` leads to undefined behavior according to the strict aliasing rules.
+This code violates strict aliasing rules by accessing a \texttt{uint32\_t} object through a pointer of type \texttt{uint16\_t *}. The C standard requires that an object's memory be accessed only through its own type or a compatible type. Here, \texttt{uint32\_t} and \texttt{uint16\_t} are distinct types with different sizes, and accessing the \texttt{uint32\_t} object \texttt{r} as if it were an array of \texttt{uint16\_t} leads to undefined behavior according to the strict aliasing rules.
 
 
 
 \subsubsection{Strict aliasing violations (2)}
+\begin{lstlisting}
+struct my_data_0 {
+    int subtype;
+};
 
-This code demonstrates a strict aliasing violation involving different structure types. Although `struct my\_data\_0`, `struct my\_data\_1`, and `struct my\_data\_2` all have a common initial member `subtype`, they are distinct types with different memory layouts. The function `get\_first` attempts to access the passed `struct my\_data\_0 *data` pointer as if it could be `struct my\_data\_1 *` or `struct my\_data\_2 *` based on the `subtype`. This violates strict aliasing rules because `struct my\_data\_1` and `struct my\_data\_2` are not compatible with `struct my\_data\_0`, and accessing memory through incompatible types leads to undefined behavior. The C standard does not guarantee that different structure types will have compatible memory layouts, even if they share initial members.
+struct my_data_1 {
+    int subtype;
+    char buffer[16];
+};
+
+struct my_data_2 {
+    int subtype;
+    int buffer[4];
+};
+
+int get_first(struct my_data_0 *data)
+{
+    if (data->subtype == 1) {
+        struct my_data_1 *d1 = data;
+        return d1->buffer[0];
+    }
+    if (data->subtype == 2) {
+        struct my_data_2 *d2 = data;
+        return d2->buffer[0];
+    }
+}
+\end{lstlisting}
+
+
+This code demonstrates a strict aliasing violation involving different structure types. Although \texttt{struct my\_data\_0}, \texttt{struct my\_data\_1}, and \texttt{struct my\_data\_2} all have a common initial member \texttt{subtype}, they are distinct types with different memory layouts. The function \texttt{get\_first} attempts to access the passed \texttt{struct my\_data\_0 *data} pointer as if it could be \texttt{struct my\_data\_1 *} or \texttt{struct my\_data\_2 *} based on the \texttt{subtype}. This violates strict aliasing rules because \texttt{struct my\_data\_1} and \texttt{struct my\_data\_2} are not compatible with \texttt{struct my\_data\_0}, and accessing memory through incompatible types leads to undefined behavior. The C standard does not guarantee that different structure types will have compatible memory layouts, even if they share initial members.
 
 \subsubsection{Strict aliasing violations (3)}
+\begin{lstlisting}
+union mux {
+int32_t i[2];
+int16_t s[4];
+};
 
-The code snippet involves a `union` named `mux` that allows its memory to be accessed as either an array of `int32\_t` (`i`) or `int16\_t` (`s`). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the `int32\_t` array and then attempts to access these values through the `int16\_t` array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined. However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged
+int main()
+{
+    union mux m;
+
+    m.i[0] = 0x03020100;
+    m.i[1] = 0x07060504;
+
+    printf("%d %d %d %d\n", m.s[0], m.s[1], m.s[2], m.s[3]);
+
+    return 0;
+}
+\end{lstlisting}
+The code snippet involves a \texttt{union} named \texttt{mux} that allows its memory to be accessed as either an array of \texttt{int32\_t} (\texttt{i}) or \texttt{int16\_t} (\texttt{s}). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the \texttt{int32\_t} array and then attempts to access these values through the \texttt{int16\_t} array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined.\\ However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged
 
 \textbf{Note:} Some compilers promise to yield the intended operations here.
 
@@ -4921,7 +4994,7 @@ int main()
 \end{lstlisting}
 
 \paragraph{Explanation:}
-The code demonstrates valid type-punning using `memcpy` to safely copy data from an `int` array to a `short` array. This method avoids strict aliasing violations by copying the memory representation without directly accessing the data through pointers of differing types. This approach ensures that the underlying bytes are transferred accurately without invoking undefined behavior, making the operation safe and portable across different compilers and platforms. `memcpy` respects the memory boundaries and types, providing a reliable method for type-punning in compliant C code.
+The code demonstrates valid type-punning using \texttt{memcpy} to safely copy data from an \texttt{int} array to a \texttt{short} array. This method avoids strict aliasing violations by copying the memory representation without directly accessing the data through pointers of differing types. This approach ensures that the underlying bytes are transferred accurately without invoking undefined behavior, making the operation safe and portable across different compilers and platforms. \texttt{memcpy} respects the memory boundaries and types, providing a reliable method for type-punning in compliant C code.
 
 
 \subsubsection{Why is strict aliasing good for code optimization?}
