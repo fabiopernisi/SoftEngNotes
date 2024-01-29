@@ -592,15 +592,15 @@ Representing negative numbers in binary requires special encoding:
 \begin{itemize}
     \item One bit is reserved for the sign (most significant bit).
     \item Drawback: Zero has two representations: $+0$ and $-0$.
-    \item Drawback: Arithmetic with sign-magnitude is not
+    \item Drawback: Boolean logic for + and - must handle many cases
 \end{itemize}
 
 \subsubsection{One's Complement Representation}
 \begin{itemize}
-    \item The sign bit is also the most significant bit.
+    \item The sign bit is also the most significant bit, must be zero for positive number.
     \item Negative numbers are represented by flipping all bits of the positive value.
     \item Drawback: Zero still has two representations: $+0$ and $-0$.
-    \item Drawback: Arithmetic is simpler than sign-magnitude but 
+    \item Drawback: Boolean logic for + and - is simpler but still affected
 \end{itemize}
 
 
@@ -609,9 +609,9 @@ It is the approach adopted by most current computers.
 \begin{itemize}
     \item In two's complement representation, a negative number \( x \) is represented by \( 2^n - x \) for an \( n \)-bit number.
     \item The most significant bit (MSB) is the sign bit, where \( 1 \) indicates a negative number.
-    \item Drawback: Flipping the sign requires inverting all bits and adding \( 1 \).
-    \item Drawback: This representation gives zero a single unique representation.
-    \item Drawback: Arithmetic operations for addition and subtraction are the same as for unsigned integers.
+    \item Drawback: Flipping sign slightly more complex (flip all non-sign bits then add one).
+    \item Advantage: This representation gives zero a single unique representation.
+    \item Advantage: Arithmetic operations for addition and subtraction are the same as for unsigned integers.
 \end{itemize}
 
 
@@ -826,7 +826,7 @@ How do we map bit patterns to characters in order to form text?
 \subsubsection{ASCII (1963-)}
 \begin{itemize}
     \item American Standard Code for Information Interchange
-    \item Each character stored stored in 1 byte (8 bits, 256 possible characters)
+    \item Each character stored in 1 byte (8 bits, 256 possible characters)
     \item 128 standardized characters
     \item Many derivatives specify the remaining 128
 \end{itemize}
@@ -985,7 +985,7 @@ Many older and less prominent ISAs:
 \subsubsection{Assembly}
 \begin{itemize}
     \item Assembly language has a strong correspondence with the machine code instructions of the architecture.
-    \item Generally, it follows a one-to-one relationship between statements and machine instructions.
+    \item Assembly is in 1:1 correspondence with binary encoding of instructions (typically one line per instruction).
 \end{itemize}
 
 \textbf{Architecture Specificity:}
@@ -1366,7 +1366,7 @@ A linker reads ``object'' files and writes an executable file.
 
 \subsubsection{Libraries}
 
-Libraries are collections of functions (and data) that can be used by different executables
+Libraries are collections of functions (and data) that can be used by different executables.
 Examples:
 \begin{itemize}
     \item \texttt{libjpeg}: read/write jpeg files
@@ -1485,7 +1485,7 @@ The \texttt{open} system call in the Linux kernel uses the filesystem and storag
 
 \subsubsection{Levels of abstraction}
 \begin{itemize}
-    \item the processor only does elementary operations (move 64-bit to/from memory)
+    \item the \textit{processor} only does elementary operations (move 64-bit to/from memory)
     \item the \textit{kernel} implements basic functionality (managing devices, reading data from a file)
     \item the \textit{standard library} provides more, OS-independent functionality (buffering, parsing data)
     \item other \textit{libraries} may allow even more (e.g., decompressing a video file)
@@ -1990,7 +1990,7 @@ Otherwise, consider target up-to-date and do nothing.
 \subsubsection{Special make variables}
 \begin{itemize}
     \item \verb|$(@)| the target of the current rule
-    \item \verb|$<)| the first source of the current rule
+    \item \verb|$(<)| the first source of the current rule
     \item \verb|$(^)| all the sources of the current rule
 \end{itemize}
 
@@ -2021,7 +2021,6 @@ third_file.o: third_file.c
     recipe
     \end{verbatim}
 \end{itemize}
-[two big verbatim]
 
 \subsubsection{Phony and default targets}
 
@@ -2354,7 +2353,7 @@ Weak typing indicates a language where types may be implicitly converted and ope
 \end{itemize}
 
 \begin{verbatim}
-int a = -1.8; // Implicitly converted to int, truncated to -1
+int a = -1.8; // Implicitly converted to int towards zero, truncated to -1
 int *p = (int *)((long int)"abc" + 5); // Compiles, but unsafe
 *p = 3; // Dereferencing p could lead to a crash
 \end{verbatim}
@@ -2617,7 +2616,7 @@ class Point:
 \end{verbatim}
 \end{itemize}
 
-In object-oriented programming (OOP), compound types (``classes'')
+In object-oriented programming (OOP), like Python and C++, compound types (``classes'')
 can have functions attached to them (``methods'').
 
 As a consequence, in OOP, \emph{data} and the \emph{methods} that operate on them are usually defined close together.
@@ -2644,7 +2643,7 @@ We can construct complex type hierarchies:
 
 \subsubsection{Functional programming}
 
-Functional programming treats functions as "first-class" citizens of the programming language.
+Functional programming treats functions as "first-class" types of the programming language.
 
 \begin{itemize}
     \item Functions can be used within expressions.
@@ -2754,7 +2753,7 @@ For \textbf{MSVC/Windows/AArch64}, similar to the clang/MacOS assembly, we see t
 
 \subsection{Portable Code}
 
-How do we ship code that work across all platforms?
+How do we ship code that works across all platforms?
 
 
 \subsubsection{Option 1: interpreters}
@@ -3425,7 +3424,7 @@ grep -E 'X.*y'  # matches 'XabcY', 'X-*-y', ...
 
 \subsubsection{Disjunctions}
 
-Multiple options can be given using the ``|'' character:
+Multiple options can be given using the ``\texttt{|}'' character:
 
 \begin{verbatim}
 grep -E 'system_(startup|shutdown)'  # matches "system_startup" or "system_shutdown"
@@ -3495,9 +3494,9 @@ sed -E 's/REGEX/REPLACEMENT/'
   
   \item Groups are numbered in the order of the opening parentheses from the left:
   \begin{verbatim}
-  sed -E 's/((a(b|z)+)(c+))/\1\3/g'
-  #         ^  ^    ^  ^
-  #         1  2    3  4
+  sed -E 's/(a(b|z)+)(c+))/\1\3/g'
+  #         ^  ^      ^
+  #         1  2      3
   \end{verbatim}
 \end{itemize}
 \subsection{Regular Expressions in Programming Languages}
@@ -4283,13 +4282,13 @@ In both operations, if the value of the second operand is zero, the behavior is 
     \end{verbatim}
     When \texttt{argc} is 1, the program attempts to divide by zero, resulting in a floating-point exception.
 
-    \item Compiling with warnings enabled can alert the developer to the potential issue:
+    \item Compiling with warnings enabled can alert the developer to the potential issue, when dividing by zero explicitly:
     \begin{verbatim}
     clang -O3 -std=c2x -o main main.c
     main.c:3:11: warning: division by zero is undefined
     \end{verbatim}
     
-    \item The actual result of running the compiled program may vary, producing different outputs or crashing:
+    \item The actual result of printing the value obtained by a division of zero may vary, producing different outputs:
     \begin{verbatim}
     ./main
     -882586408
@@ -4524,9 +4523,7 @@ Examples:
   
   \item Unspecified behavior: Behavior for which there are multiple possibilities. (e.g., \texttt{qsort()})
   
-  \begin{itemize}
     \item Implementation-defined behavior: Unspecified behavior where each implementation (compiler / platform / OS) documents which choice is made. (e.g., \texttt{byte})
-  \end{itemize}
   
   \item Undefined behavior
 \end{itemize}
@@ -4802,8 +4799,6 @@ In this example, a pointer of type `int *` is cast to `unsigned int *` and then 
 
 According to the strict aliasing rules, it is generally not safe to access an object through a pointer of a different type. However, `int` and `unsigned int` are an exception to this rule. The C standard allows objects to be accessed by pointers of their corresponding signed or unsigned types because the memory representation is the same for both signed and unsigned variants of the same size. This means that the bit pattern in memory is interpreted differently but not modified when accessing an `int` as an `unsigned int` or vice versa.
 
-Nonetheless, this practice should be approached with caution. The reinterpretation of the bit pattern means that the numerical value accessed via `my\_pointer` may differ significantly from the value pointed to by `pointer`. For instance, a negative `int` value, when accessed as an `unsigned int`, will be interpreted as a large positive number. Such behavior is well-defined but can lead to unexpected results if not carefully managed.
-
 \subsubsection{a type that is the signed or unsigned type corresponding to a qualified version of the effective type of the object}
 
 Valid:
@@ -4917,7 +4912,7 @@ This code demonstrates a strict aliasing violation involving different structure
 
 \subsubsection{Strict aliasing violations (3)}
 
-The code snippet involves a `union` named `mux` that allows its memory to be accessed as either an array of `$int32_t$` (`i`) or `$int16_t$` (`s`). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the `$int32_t$` array and then attempts to access these values through the `$int16_t$` array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined. However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged
+The code snippet involves a `union` named `mux` that allows its memory to be accessed as either an array of `$int32_t$` (`i`) or `$int16_t$` (`s`). While unions are designed to provide a way to treat the same memory location in multiple ways, this specific usage may lead to a strict aliasing violation. The code assigns values to the `$int32_t$` array and then attempts to access these values through the `$int16_t$` array. According to strict aliasing rules, accessing a memory location as a different type than it was written with (excluding character types) is undefined. However, it's worth noting that some compilers provide extensions or options to allow this kind of access, potentially yielding the intended operations. Nevertheless, this practice is not portable and relies on compiler-specific behavior, which is generally discouraged.
 
 \textbf{Note:} Some compilers promise to yield the intended operations here.
 
@@ -5202,7 +5197,7 @@ fix_mul(a, b) := (a × b) / 2^32
 fix_div(a, b) := (a × 2^32) / b
 \end{verbatim}
 
-The function $i64_to_fix()$ is taking an integer $e$ of type $i64$ (which is a 64-bit integer) and converting it into a fixed-point representation of type \textit{fix}. The multiplication by $2^32$ effectively shifts the integer value $e$ into the higher 32 bits of the 64-bit representation, leaving the lower 32 bits for the fractional part. This way,  it is possible to perform fixed-point arithmetic with fix types while maintaining precision for the fractional component of the values.\\
+The function i64\_to\_fix() is taking an integer $e$ of type $i64$ (which is a 64-bit integer) and converting it into a fixed-point representation of type \textit{fix}. The multiplication by $2^{32}$ effectively shifts the integer value $e$ into the higher 32 bits of the 64-bit representation, leaving the lower 32 bits for the fractional part. This way,  it is possible to perform fixed-point arithmetic with fix types while maintaining precision for the fractional component of the values.\\
 
 These operations are implemented using integer arithmetic, providing precise control over the scaling and range of the values.
 
@@ -5315,7 +5310,7 @@ Binary floating-point numbers allow for a wide range of values to be represented
     \hline
     $\pm$ sign bit & 1 & 1 & 1 \\
     $mmmmm...$ mantissa bits & 10 & 23 & 52 \\
-    $xxxx...$ exponent bits & 5 & 8 & 11 \\
+    $\pm xxxx...$ exponent bits & 5 & 8 & 11 \\
     exponent range & -14..15 & -126...127 & -1022...1023 \\
 \end{tabular}
 
@@ -5714,7 +5709,7 @@ While exact rational numbers provide precision, their use is not always practica
 
 \textbf{Speed:}
 \begin{itemize}
-    \item Operations on arbitrary-sized integers or exact rationals are slower (often by an order of magnitude) compared to fixed-size native types, due to lack of native hardware support.
+    \item Operations on arbitrary-sized integers or exact rationals are slower (often by an order of magnitude, 10x) compared to fixed-size native types, due to lack of native hardware support.
 \end{itemize}
 
 \subsubsection{The Case for Exact Rational Numbers}
@@ -6827,7 +6822,7 @@ Out-of-order execution is an advanced CPU technique that improves the utilizatio
     
     \item The memory read instruction may be dispatched to the memory unit independently if the memory address is ready, potentially allowing all three instructions to be in various stages of execution simultaneously.
     
-    \item This results in improved overall throughput as the CPU does not idle waiting for instructions to complete in program order. However, the CPU must ensure that the results are written back in the correct order to preserve the program's logical flow.
+    \item This results in improved overall throughput as the CPU does not idle waiting for instructions to complete in program order.
 \end{itemize}
 
 \subsection{Memory}
@@ -6967,9 +6962,9 @@ Here is an example showing the output of pinging servers located in different pa
 \begin{verbatim}
 ping canada.ca
 PING canada.ca (205.193.117.159): 56 data bytes
-64 bytes from 205.193.117.159: icmp_seq=0 ttl=228 time=20 ms
+64 bytes from 205.193.117.159: icmp_seq=0 ttl=228 time=200 ms
 ... (similar lines omitted for brevity) ...
-64 bytes from 205.193.117.159: icmp_seq=4 ttl=228 time=18 ms
+64 bytes from 205.193.117.159: icmp_seq=4 ttl=228 time=181 ms
 
 ping google.com.au
 PING google.com.au (142.251.209.3): 56 data bytes
@@ -7071,14 +7066,6 @@ time md5sum 2GB_file
 \end{verbatim}
 
 In this example, the second run of `md5sum` on the same file is faster due to the effect of file caching.\\
-
-\textbf{Key Points}\\
-\begin{itemize}
-    \item Understand how CPU power management can affect execution times.
-    \item Be aware of the role of the OS and hardware in caching data, and how it impacts performance measurements.
-    \item Remember that concurrent processes compete for resources and can cause measurable differences in performance.
-    \item Practice interpreting output from system monitoring tools to diagnose performance issues.
-\end{itemize}
 
 % Inaccuracies section
 \subsubsection{Inaccuracies}
@@ -7187,7 +7174,7 @@ With this information, it is clear that \texttt{function\_B()} is the primary bo
 
 
 \subsubsection{Using time.time()}
-In Python, `time.time()` is used to get the wall-clock time at various points during execution. Here's an example of how to use it:
+In Python, `time.time()` is used to get the wall-clock time at various points during and before execution of functions. Here's an example of how to use it:
 
 \begin{verbatim}
 import time
@@ -7196,14 +7183,12 @@ initialize()
 # ... run various functions ...
 cleanup()
 t5 = time.time()
-print(f"Total time: {t5 - t0}")
+print(f"Total time: {t5 - t0}")m
 \end{verbatim}
-
-This method is simple but has limitations due to the granularity and precision of the time measured.
 
 
 \subsubsection{Using clock\_gettime()}
-In C, `clock$\_$gettime()` provides a more precise measurement of execution time. It can be used like this:
+In C, `clock$\_$gettime()` provides a precise measurement of execution time. It can be used like this:
 
 \begin{verbatim}
 struct timespec t0, t1, t2, t3, t4, t5;
@@ -7241,7 +7226,6 @@ for i in range(1000000):
 For functions that execute very quickly, microbenchmarking can be used to get a more accurate measure by running the function many times and measuring the total time:
 
 \begin{verbatim}
-tA, tB, tC = 0
 t0 = time.time()
 for i in range(5000000):
     function_A()
@@ -7317,13 +7301,6 @@ The `gprof` output report contains:
 \begin{itemize}
     \item The overhead can increase when bottlenecks are in small, short functions due to the granularity of the profiling.
     \item The accuracy of time measurement may be limited, and the actual time spent can be affected by the profiling itself.
-\end{itemize}
-
-\paragraph{Key Takeaways}
-\begin{itemize}
-    \item Understand how to compile and run a program with `gprof` to collect profiling data.
-    \item Be familiar with interpreting the `gprof` report to identify performance bottlenecks.
-    \item Recognize the advantages of using automated tools like `gprof` for profiling, as well as their limitations.
 \end{itemize}
 
 
@@ -7485,7 +7462,7 @@ Since then, Intel and ARM have added many more performance counters:
 
 
 \newpage
-\section{Data structures: Arrays, Linkned Lists}
+\section{Data structures: Arrays, Linked Lists}
 
 \subsection{Abstract Data Types and Data Strucutres}
 
@@ -7507,7 +7484,7 @@ Lists represent one of the simplest forms of ADTs, essentially a collection of o
 \begin{itemize}
     \item Storing multiple elements together.
     \item Optionally appending, inserting, or deleting elements.
-    \item Optinally accessing or modifying all elements in sequence or at a specific index (with varying efficiency).
+    \item Optionally accessing or modifying all elements in sequence or at a specific index (with varying efficiency).
 \end{itemize}
 
 \subsection{Arrays}
