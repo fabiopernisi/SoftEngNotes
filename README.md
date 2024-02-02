@@ -69,5 +69,5 @@ The final (cleaned + enhanced) Latex code is present in the `CompleteLectureNote
 
 Here:
 - ✅ file is finished, even though furhter additions/examples are always beneficial :)
-- ⚙️ The file is updated and cleaned, including all notes except unrenderable images, with some examples (e.g. long chuncks of code) removed; it requires further additions/explanations.
+- ⚙️ The file is updated and cleaned, including all notes except images that cannot be rendered by GPT-4, with some examples (e.g. long chuncks of code) removed; it requires further additions/explanations.
 - ❌ still requires most of the work
