@@ -91,13 +91,13 @@
 \subsubsection{Boolean expressions}
 
 % The table for Boolean operators
-\begin{tabular}{l l l l l}
-\textbf{Boolean operators:}         &               &       &       & \\
+\begin{tabular}{l l l l}
+\textbf{Boolean operators:}         &               &              & \\
 \hline
-operator    & math      & pseudocode & C code & logic gate \\
-negation    & $\neg$    & not        & !      & [TBD]      \\
-conjunction & $\land, \times$  & and         & \&\&, \&     & [TBD]      \\
-disjunction & $\lor, +$ & or          & \texttt{||, |}      & [TBD]      \\
+operator    & math      & pseudocode & C code  \\
+negation    & $\neg$    & not        & !           \\
+conjunction & $\land, \times$  & and         & \&\&, \&            \\
+disjunction & $\lor, +$ & or          & \texttt{||, |}             \\
 \end{tabular}
 \vspace{4.5mm}
 
@@ -458,11 +458,6 @@ $(x2 \land (\neg x4) \land (\neg x6))
     \item Done.
 \end{enumerate}
 
-
-
-
-% The following LaTeX code is meant to transcribe the text content of the provided image.
-% Since LaTeX doesn't handle images within code, [TBD] is used to represent them.
 
 \subsection{Integer Arithmetic}
 
@@ -831,7 +826,6 @@ How do we map bit patterns to characters in order to form text?
     \item 128 standardized characters
     \item Many derivatives specify the remaining 128
 \end{itemize}
-[TBD] % This is a placeholder for the ASCII table image
 
 \subsubsection{Unicode (1988-)}
 \begin{itemize}
@@ -1366,12 +1360,6 @@ A linker reads ``object'' files and writes an executable file.
     \end{itemize}
 \end{itemize}
 
-% The [TBD] tokens represent non-textual elements in the original image that are not transcribed to LaTeX.
-
-
-
-
-% Start of LaTeX content for transcribing the lecture notes
 
 \subsubsection{Libraries}
 
@@ -7550,11 +7538,6 @@ Since then, Intel and ARM have added many more performance counters:
   \item AMD-specific: uProf
 \end{itemize}
 
-\subsubsection{Bottom-up analysis}
-[TBD] - Placeholder for the bottom-up analysis image from the Intel VTune Profiler
-
-\subsubsection{Flame graphs}
-[TBD] - Placeholder for the flame graphs image
 
 
 
@@ -8198,9 +8181,16 @@ As we enqueue elements, they take their place at the tail end of the queue. When
 \end{itemize}
 
 \subsubsection{Binary heap implementation of a priority queue}
-
-% [TBD] replaces the tree diagram from the image
-[TBD]
+A simplified tree:
+\begin{verbatim}
+       30
+      /  \
+    25    15
+   /  \
+  5   18 
+        \
+         9
+\end{verbatim}
 
 \begin{itemize}
     \item Binary heaps represent a priority queue as
@@ -8236,16 +8226,6 @@ As we enqueue elements, they take their place at the tail end of the queue. When
 
 
 \subsubsection{Binary heap pop}
-A simplified tree:
-\begin{verbatim}
-       30
-     /    \
-    25    15
-   /  \
-  5   18 
-         \
-         9
-\end{verbatim}
 
 \begin{itemize}
     \item Step 0: Replace root with last element (on deepest level)
@@ -8290,16 +8270,6 @@ A simplified tree:
 
 
 \subsubsection{Storage scheme}
-
-    \begin{center}
-        \begin{tabular}{|c|ccccccccccccccc|}
-        \hline
-        depth & 0 & 1 & 1 & 2 & 2 & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 3 & 3 & 3\\
-        index & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
-        \hline
-        \end{tabular}
-    \end{center}
-
 \begin{itemize}
   \item If a node has index \( j \)
   \item its children are stored at indices \( 2j + 1 \) and \( 2j + 2 \)
@@ -8932,7 +8902,6 @@ Locality-Sensitive Hashing (LSH) is an algorithmic technique that hashes similar
 
 \newpage
 \section{SIMD, threads, distributed computing, hardware acceleration}
-\subsection{Parallel Computation}
 
 \subsection{Paralleism that does not require programmer intervention}
 
@@ -8950,7 +8919,7 @@ Locality-Sensitive Hashing (LSH) is an algorithmic technique that hashes similar
     \item Regularly, the \textbf{scheduler} (part of the OS kernel) decides which task gets to run on a processor.
 \end{itemize}
 
-\subsection{Multitasking on a single-core processor}
+\subsubsection{Multitasking on a single-core processor}
 
 \begin{itemize}
     \item Multitasking on a single-core processor allows multiple tasks to be handled seemingly in parallel by quickly switching between them. This is known as context switching.
@@ -9063,7 +9032,7 @@ Locality-Sensitive Hashing (LSH) is an algorithmic technique that hashes similar
 \end{itemize}
 
 
-\subsection{Simultaneous Multithreading {SMT}}
+\subsubsection{Simultaneous Multithreading {SMT}}
     \begin{itemize}
         \item From a hardware perspective:
         \begin{itemize}
@@ -9106,7 +9075,7 @@ bits                   & 255..224             & 223..192             & 191..160 
     \end{itemize}
 \end{itemize}
 
-\subsection{SIMD registers}
+\subsubsection{SIMD registers}
 \begin{itemize}
     \item On Intel (and AMD) ISAs:
     \begin{itemize}
@@ -9120,7 +9089,7 @@ bits                   & 255..224             & 223..192             & 191..160 
     \end{itemize}
 \end{itemize}
 
-\subsection{Example}
+\subsubsection{Example}
 
 The code example illustrates the concept of SIMD (Single Instruction, Multiple Data) in the context of vectorized operations for performance optimization in computing.
 
@@ -9136,18 +9105,21 @@ The code example illustrates the concept of SIMD (Single Instruction, Multiple D
     \item This SIMD approach is beneficial for computational efficiency, as it minimizes the number of sequential operations and leverages the processor's ability to handle multiple data points in a single instruction cycle.
 \end{itemize}
 
-\subsection{Counter-example}
+\subsubsection{Counter-example}
+Consider the following C code:
+\begin{lstlisting}
+void many_ops(float v[4])
+{
+    v[0] += 1.0;
+    v[1] -= 2.0;
+    v[2] *= 3.0;
+    v[3] /= v[2];
+}
+\end{lstlisting}
+The counter-example demonstrates a scenario where SIMD (Single Instruction, Multiple Data) instructions are not sufficient to handle all operations in a vectorized manner due to the fact that the arithmetic operations are all different (addition, subtraction, multiplication, division) and due to dependency of some operations (the last one more precisely) on the result of the previous one.
 
-The counter-example demonstrates a scenario where SIMD (Single Instruction, Multiple Data) instructions are not sufficient to handle all operations in a vectorized manner due to the dependency of each operation on the result of the previous one.
 
-\begin{itemize}
-    \item In the C function \texttt{many\_ops}, different arithmetic operations are applied to the elements of a float array, with each operation depending on the result of the previous one, which introduces data dependencies.
-    \item The assembly code shows a sequence of SIMD instructions corresponding to the C code operations. However, due to the dependencies, each operation must be completed before the next can begin, preventing the full utilization of SIMD parallelism.
-    \item The instructions include \texttt{vaddss} and \texttt{vdivss} for addition and division on scalar single-precision floating point values, respectively. These operations require the results from previous instructions, hence they cannot be parallelized.
-    \item This example illustrates that while SIMD is powerful for operations that can be performed in parallel without dependencies, it is not universally applicable to all types of data processing, especially those with a sequence of dependent operations.
-\end{itemize}
-
-\subsection{How to use SIMD}
+\subsubsection{How to use SIMD}
 \begin{itemize}
     \item Rely on compilers (\textit{``autovectorization''})
     \item Write assembly code
@@ -9163,7 +9135,7 @@ The counter-example demonstrates a scenario where SIMD (Single Instruction, Mult
 $\implies \text{refer to the intrinsics guide}$
 \subsection{Thread-level concurrency}
 
-\subsection{Processes and threads}
+\subsubsection{Processes and threads}
 \begin{itemize}
     \item When the OS runs an executable, it gets its own \textit{process}
     \item A single executable (if run multiple times) can have multiple independent processes
@@ -9281,7 +9253,7 @@ The code shows a flawed implementation for synchronizing a single-producer, sing
   \end{itemize}
 \end{itemize}
 
-\subsection{4. Hardware Acceleration}
+\subsection{Hardware Acceleration}
 \subsubsection{Graphics processing units (GPUs)}
 
 \begin{itemize}
@@ -9384,4 +9356,14 @@ matmul\_8 & OpenBLAS, 24 threads & 50.577 s \quad 11x \\
 matmul\_9 & cuBLAS, \textit{nVidia} A100 (Apr 2021) & 13.152 s \quad 42x \\
 matmul\_9 & cuBLAS, \textit{nVidia} H100 (Mar 2022) & ? s \quad 84x? \\
 \end{tabular}
+
+
+
+
+
+
+
+
+
+
 \end{document}
