@@ -1,6 +1,7 @@
 # SoftEngNotes
 This repository contains the file with the lecture notes for the course "20875 - Software Engineering" taught in the MSc in Artificial Intelligence at Bocconi University.\
 These notes are a student effort by Giosuè Castellano and Fabio Pernisi and are intended as a supplementary resource, not an official course guide.\
+
 The content is derived from materials provided by Professor [Laurent Poirrier](https://www.poirrier.ca/courses/softeng/) (also see the `slides` folder), with an effort to retain the original strucutre. However, we replaced images with descriptive texts and summarized or expanded coding examples for (hopefully) a better understanding. Our aim was to transform the slides into more detailed (yet concise) study materials, ideal for exam prep.
 
 ## Contributing & Repo Structure
